@@ -42,7 +42,7 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 | P00-11 | P00-14 Privacy, consent, guardianship, and data governance |
 | P00-12 | P00-15 Regulatory obligations and source register |
 | P00-13 | P00-16 Payments, ledger, claims, and commercial rules |
-| P00-14 | P00-17 Non-functional requirements and browser-testing strategy |
+| P00-14 | P00-17 Non-functional requirements and browser-test strategy |
 | P00-15 | P00-18 Metrics, service levels, and operational readiness |
 | P00-16 | P00-19 Risks, assumptions, dependencies, and ADRs |
 | P00-17 | P00-20 Traceability, review, and phase gate |
@@ -111,7 +111,7 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 | Artifact set | Prompt owner | Current status |
 |---|---|---|
 | Governance and status | P00-00 | completed (current) |
-| Product charter / scope | P00-01 | not started |
+| Product charter / scope | P00-01 | completed (pending independent review) |
 | Journeys / architecture | P00-05, P00-07 | not started |
 | Privacy / legal / finance / metrics / risks | P00-11..P00-16 | not started |
 | Phase 0 gate and completion report | P00-17 | not started |

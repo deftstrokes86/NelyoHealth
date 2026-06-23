@@ -4,7 +4,7 @@
 
 - **Program:** NelyoHealth Platform Build
 - **Active phase:** Phase 0 (Product, clinical, regulatory, and delivery foundation)
-- **Current issue:** `P00-00` (remediation pass after independent verification)
+- **Current issue:** `P00-01` (product charter and principles completed; pending independent review)
 - **Date:** 2026-06-23
 - **Mode:** Planning / Documentation only
 
@@ -17,16 +17,20 @@
 - `REQUIRES_CLINICAL_REVIEW`: clinical review required before approval.
 - `SUPERSEDED`: replaced by a later decision.
 
-## Documents generated and edited in this pass
+## Documents generated and edited in this phase
 
-- [docs/STATUS.md](docs/STATUS.md)
-- [docs/exec-plans/P00-product-clinical-regulatory-foundation.md](docs/exec-plans/P00-product-clinical-regulatory-foundation.md)
-- [docs/governance/document-register.md](docs/governance/document-register.md)
-- [docs/governance/decision-register.md](docs/governance/decision-register.md)
-- [docs/governance/open-questions.md](docs/governance/open-questions.md)
-- [docs/governance/assumptions-register.md](docs/governance/assumptions-register.md)
-- [docs/governance/change-log.md](docs/governance/change-log.md)
-- [docs/governance/traceability-conventions.md](docs/governance/traceability-conventions.md)
+- [docs/STATUS.md](./STATUS.md)
+- [docs/exec-plans/P00-product-clinical-regulatory-foundation.md](./exec-plans/P00-product-clinical-regulatory-foundation.md)
+- [docs/governance/document-register.md](./governance/document-register.md)
+- [docs/governance/decision-register.md](./governance/decision-register.md)
+- [docs/governance/open-questions.md](./governance/open-questions.md)
+- [docs/governance/assumptions-register.md](./governance/assumptions-register.md)
+- [docs/governance/change-log.md](./governance/change-log.md)
+- [docs/governance/traceability-conventions.md](./governance/traceability-conventions.md)
+- [docs/product/product-charter.md](./product/product-charter.md)
+- [docs/product/value-propositions.md](./product/value-propositions.md)
+- [docs/product/business-model-hypotheses.md](./product/business-model-hypotheses.md)
+- [docs/product/product-principles.md](./product/product-principles.md)
 
 ## Source precedence
 
@@ -43,7 +47,7 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 
 - [x] Required planning documents are readable and present.
 - [x] P00-00 source-preflight completed.
-- [x] Locked requirement count reconciled: **13** approved locked decisions.
+- [x] Locked decisions are reconciled.
 - [x] Pre-payment provider disclosure limits are explicit in the decision register.
 - [x] Order- and actor-scoped disclosure enforcement is explicit in the decision register.
 - [x] Deny-by-default payment states and non-success unlock behavior are explicit in the decision register.
@@ -51,17 +55,27 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - [x] Prompt-to-work-package crosswalk added to plan and traceability conventions.
 - [ ] External approvals for legal, clinical, payment, and operational questions remain pending.
 
-## Completion summary for this remediation pass
+## Completion summary for this phase
 
-- **Files changed in this pass:** 8
-- **Newly added/updated locked decisions:** 3 (disclosure and unlock-boundary controls retained and clarified)
-- **Open questions normalized:** 19
-- **Document register corrections:** review-state values corrected and duplicate entry removed.
-- **Assumptions corrected:** pre-payment disclosure moved out of assumptions as a locked decision.
-- **Next action:** Independent read-only `P00-00` verification only; do not execute `P00-01` in this pass.
+- **Files changed this prompt:** 8
+- **Locked decisions preserved:** inherited from P00-00 and unchanged in this prompt
+- **Open questions:** carried forward where unresolved and owned.
+- **Document register updates:** product artifact rows added.
+- **Next action:** Independent read-only review of P00-01 output only; do not begin `P00-02`.
+
+## Phase status
+
+- **P00-00:** PASS
+- **P00-01:** COMPLETED (pending independent review)
+- **P00-02:** NOT STARTED
+- **Current blocker:** external approvals and legal/clinical clarifications remain open as tracked.
 
 ## Readiness checks
 
-- [x] `P00-01` remains `NOT STARTED`.
-- [x] `P00-00` has not been marked PASS.
-- [ ] Independent verification of full Phase 0 artifacts is complete and recorded.
+- [x] `P00-01` deliverables are created.
+- [x] `P00-00` is marked PASS.
+- [ ] Independent review for P00-01 is not yet completed.
+- [ ] External approvals for legal, clinical, and finance remain open.
+
+
+

@@ -60,6 +60,26 @@
 - Open approvals still required:
   - Legal disclosure minima, payer role scope, payment unlock/failure/refund/reversal/chargeback behaviors.
 
+### Entry P00-01-001 - Product charter and principles authoring
+- Date: 2026-06-23
+- Files changed:
+  - `docs/product/product-charter.md`
+  - `docs/product/value-propositions.md`
+  - `docs/product/business-model-hypotheses.md`
+  - `docs/product/product-principles.md`
+  - `docs/STATUS.md`
+  - `docs/governance/document-register.md`
+  - `docs/governance/change-log.md`
+- Decisions and controls:
+  - Preserved all locked product, payer-separation, disclosure, emergency, and clinical-integrity constraints.
+  - Added explicit issue linkage for P00-01 and P00-PRD-001.
+  - Added product and commercial hypotheses as non-final, non-binding assumptions.
+  - Updated status to mark `P00-00` as PASS and `P00-01` as completed pending review.
+- Validation notes:
+  - No source code or configuration changes.
+  - No production dependencies installed.
+  - No unsupported claims of being insurer, provider, lab, hospital, HMO, emergency service.
+
 ## Template for future entries
 
 For all future phase updates:
