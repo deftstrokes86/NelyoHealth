@@ -80,6 +80,46 @@
   - No production dependencies installed.
   - No unsupported claims of being insurer, provider, lab, hospital, HMO, emergency service.
 
+### Entry P00-02-001 - MVP and pilot boundary planning
+- Date: 2026-06-23
+- Files changed:
+  - `docs/product/mvp-scope.md`
+  - `docs/product/pilot-operating-boundary.md`
+  - `docs/product/service-catalogue-boundary.md`
+  - `docs/product/non-goals.md`
+  - `docs/product/expansion-gates.md`
+  - `docs/product/business-model-hypotheses.md` (added BM-12 + scope note)
+  - `docs/governance/document-register.md`
+  - `docs/governance/decision-register.md`
+  - `docs/governance/open-questions.md`
+  - `docs/governance/assumptions-register.md`
+  - `docs/governance/change-log.md`
+  - `docs/STATUS.md`
+  - `docs/exec-plans/P00-product-clinical-regulatory-foundation.md`
+- Decisions and controls:
+  - Added explicit P00-02 scope decision matrix entries: launch geography, age, consultation scope, pharmacy/lab scope, employer/HMO, home-care, and payment-method gating.
+  - Added BM-12 to business-model-hypotheses as a non-approved pilot-coordination hypothesis.
+  - Added `OQ-00-20` and `OQ-00-21` for unresolved launch geography and payment-method scope.
+  - Updated `docs/governance/document-register.md` rows for the five P00-02 documents.
+  - Updated execution status in `docs/STATUS.md` to `P00-02 COMPLETE, READY FOR ORCHESTRATION ACCEPTANCE`.
+- Validation notes:
+  - No production code or dependency changes.
+  - All five required P00-02 artifacts created with required scope-label framing.
+  - No unsupported treatment claims for home-care scope were included in pilot documents.
+
+### Entry P00-02-002 - Service catalogue boundary completion
+- Date: 2026-06-23
+- Files changed:
+  - `docs/product/service-catalogue-boundary.md`
+  - `docs/governance/change-log.md`
+- Corrections made:
+  - Added explicit **Deferred employer and HMO services** section required by P00-02 catalogue structure.
+  - Added explicit **Deferred home-care services** section required by P00-02 catalogue structure.
+  - Aligned each new service row with existing scope labels, approval ownership, and P00-02 ownership mapping.
+- Risk notes:
+  - No scope expansion decisions were introduced by these additions; entries are all non-live pilot artifacts.
+  - All non-pilot services remain documented as design-only or deferred.
+
 ## Template for future entries
 
 For all future phase updates:

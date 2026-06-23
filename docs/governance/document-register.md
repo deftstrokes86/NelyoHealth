@@ -17,7 +17,7 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 | Governance | [docs/STATUS.md](../STATUS.md) | P00-00 | Execution lead | DONE | REQUIRES_APPROVAL | Current phase status and next action |
 | Governance | [docs/exec-plans/P00-product-clinical-regulatory-foundation.md](../exec-plans/P00-product-clinical-regulatory-foundation.md) | P00-00 | Execution lead | DONE | APPROVED | Execution plan + gates |
 | Governance | [docs/governance/document-register.md](../governance/document-register.md) | P00-00 | Execution lead | DONE | APPROVED | This register |
-| Governance | [docs/governance/decision-register.md](../governance/decision-register.md) | P00-00 | Product + clinical + security | IN_PROGRESS | REQUIRES_APPROVAL | Locked requirements and pending payment-specific decisions |
+| Governance | [docs/governance/decision-register.md](../governance/decision-register.md) | P00-00 | Product + clinical + security | DONE | REQUIRES_APPROVAL | Locked requirements and P00-02 pilot scope decisions updated |
 | Governance | [docs/governance/open-questions.md](../governance/open-questions.md) | P00-00 | Execution lead | IN_PROGRESS | APPROVED | Normalized open questions and approval links |
 | Governance | [docs/governance/assumptions-register.md](../governance/assumptions-register.md) | P00-00 | Execution lead | IN_PROGRESS | APPROVED | Defaults pending owner confirmation |
 | Governance | [docs/governance/change-log.md](../governance/change-log.md) | P00-00 | Execution lead | DONE | APPROVED | Baseline lock entries |
@@ -26,11 +26,11 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 | Product | [docs/product/value-propositions.md](../product/value-propositions.md) | P00-01 | Product + clinical + legal review | DONE | PROPOSED | Authored in P00-01 |
 | Product | [docs/product/business-model-hypotheses.md](../product/business-model-hypotheses.md) | P00-01 | Product + finance + legal review | DONE | PROPOSED | Authored in P00-01 |
 | Product | [docs/product/product-principles.md](../product/product-principles.md) | P00-01 | Product + clinical + security | DONE | PROPOSED | Authored in P00-01 |
-| Product | [docs/product/mvp-scope.md](../product/mvp-scope.md) | P00-02 | Product + clinical + engineering | NOT_STARTED | PROPOSED | To be authored in P00-02 |
-| Product | [docs/product/pilot-operating-boundary.md](../product/pilot-operating-boundary.md) | P00-02 | Product + operations | NOT_STARTED | PROPOSED | To be authored in P00-02 |
-| Product | [docs/product/service-catalogue-boundary.md](../product/service-catalogue-boundary.md) | P00-02 | Product + clinical + engineering | NOT_STARTED | PROPOSED | To be authored in P00-02 |
-| Product | [docs/product/non-goals.md](../product/non-goals.md) | P00-02 | Product + clinical | NOT_STARTED | PROPOSED | To be authored in P00-02 |
-| Product | [docs/product/expansion-gates.md](../product/expansion-gates.md) | P00-02 | Product + operations | NOT_STARTED | PROPOSED | To be authored in P00-02 |
+| Product | [docs/product/mvp-scope.md](../product/mvp-scope.md) | P00-02 | Product + clinical + engineering | DONE | PROPOSED | Authored in P00-02 |
+| Product | [docs/product/pilot-operating-boundary.md](../product/pilot-operating-boundary.md) | P00-02 | Product + operations + clinical | DONE | PROPOSED | Authored in P00-02 |
+| Product | [docs/product/service-catalogue-boundary.md](../product/service-catalogue-boundary.md) | P00-02 | Product + clinical + engineering | DONE | PROPOSED | Authored in P00-02 |
+| Product | [docs/product/non-goals.md](../product/non-goals.md) | P00-02 | Product + clinical | DONE | PROPOSED | Authored in P00-02 |
+| Product | [docs/product/expansion-gates.md](../product/expansion-gates.md) | P00-02 | Product + operations | DONE | PROPOSED | Authored in P00-02 |
 | Product | [docs/product/personas.md](../product/personas.md) | P00-03 | Product + clinical | NOT_STARTED | PROPOSED | To be authored in P00-03 |
 | Product | [docs/product/actor-catalogue.md](../product/actor-catalogue.md) | P00-03 | Security + clinical | NOT_STARTED | PROPOSED | To be authored in P00-03 |
 | Product | [docs/product/relationship-model.md](../product/relationship-model.md) | P00-03 | Product + privacy | NOT_STARTED | PROPOSED | To be authored in P00-03 |

@@ -8,7 +8,7 @@
 
 | Assumption ID | Assumption | Status | Owner | Target decision | Risk if wrong |
 |---|---|---|---|---|---|
-| ASSUMPT-01 | Initial pilot geography is Lagos-only. | PROPOSED | Product owner | P00-02 | Incorrect launch readiness and legal review scope |
+| ASSUMPT-01 | Initial pilot geography is one controlled Nigerian market and one approved service area; exact state/city remains pending legal and clinical approval. | PROPOSED | Product owner + Legal counsel + Clinical lead | P00-02 | Incorrect launch readiness and legal review scope if not validated. |
 | ASSUMPT-02 | Initial minimum patient age is 18+ with full parent/guardian flow for minors. | PROPOSED | Clinical lead | P00-02 / P00-03 | Minor consent and access policy gaps |
 | ASSUMPT-03 | Initial service focus is scheduled consultation plus pharmacy/lab loops before specialist/hospital expansion. | PROPOSED | Clinical lead + operations | P00-02 / P00-05 | Scope mismatch and incomplete closure states |
 | ASSUMPT-04 | Native mobile apps are post-pilot and initially out of scope for implementation. | PROPOSED | Product owner | P00-02 / P01 | Overbuild on unplanned surfaces |

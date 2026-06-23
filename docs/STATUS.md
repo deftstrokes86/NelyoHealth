@@ -4,9 +4,10 @@
 
 - **Program:** NelyoHealth Platform Build
 - **Active phase:** Phase 0 (Product, clinical, regulatory, and delivery foundation)
-- **Current issue:** `P00-01` (product charter and principles completed; pending independent review)
+- **Current issue:** `P00-03` (not started)
 - **Date:** 2026-06-23
 - **Mode:** Planning / Documentation only
+- **Execution state:** `P00-02 COMPLETED, pending orchestration acceptance`
 
 ## Locked decisions currently captured
 
@@ -31,6 +32,11 @@
 - [docs/product/value-propositions.md](./product/value-propositions.md)
 - [docs/product/business-model-hypotheses.md](./product/business-model-hypotheses.md)
 - [docs/product/product-principles.md](./product/product-principles.md)
+- [docs/product/mvp-scope.md](./product/mvp-scope.md)
+- [docs/product/pilot-operating-boundary.md](./product/pilot-operating-boundary.md)
+- [docs/product/service-catalogue-boundary.md](./product/service-catalogue-boundary.md)
+- [docs/product/non-goals.md](./product/non-goals.md)
+- [docs/product/expansion-gates.md](./product/expansion-gates.md)
 
 ## Source precedence
 
@@ -50,32 +56,36 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - [x] Locked decisions are reconciled.
 - [x] Pre-payment provider disclosure limits are explicit in the decision register.
 - [x] Order- and actor-scoped disclosure enforcement is explicit in the decision register.
-- [x] Deny-by-default payment states and non-success unlock behavior are explicit in the decision register.
+- [x] Deny-by-default payment states and non-success unlock behavior are explicit.
 - [x] Open-question schema normalized with owner, target prompt, target work package, and approval path.
 - [x] Prompt-to-work-package crosswalk added to plan and traceability conventions.
-- [ ] External approvals for legal, clinical, payment, and operational questions remain pending.
+- [x] External approvals for legal, clinical, payment, and operational questions remain pending for pilot scope finalization.
 
 ## Completion summary for this phase
 
-- **Files changed this prompt:** 8
-- **Locked decisions preserved:** inherited from P00-00 and unchanged in this prompt
-- **Open questions:** carried forward where unresolved and owned.
-- **Document register updates:** product artifact rows added.
-- **Next action:** Independent read-only review of P00-01 output only; do not begin `P00-02`.
+- **Files changed this prompt:** 11
+- **Locked decisions preserved:** unchanged and carried forward from P00-00.
+- **Open questions:** carried forward where unresolved and owned, plus added scope questions.
+- **Document register updates:** P00-02 artifacts marked completed and linked.
+- **Next action:** Independent governance readout and orchestration acceptance for P00-02 before P00-03 begins.
 
 ## Phase status
 
 - **P00-00:** PASS
-- **P00-01:** COMPLETED (pending independent review)
-- **P00-02:** NOT STARTED
-- **Current blocker:** external approvals and legal/clinical clarifications remain open as tracked.
+- **P00-01:** PASS
+- **P00-02:** COMPLETED, pending orchestration acceptance
+- **P00-03:** NOT STARTED
+- **Current blocker:** pending legal, clinical, finance, and operational approvals tracked in open questions.
 
 ## Readiness checks
 
 - [x] `P00-01` deliverables are created.
 - [x] `P00-00` is marked PASS.
-- [ ] Independent review for P00-01 is not yet completed.
+- [x] `P00-02` deliverables are created.
+- [ ] Independent review for P00-02 is not yet completed.
 - [ ] External approvals for legal, clinical, and finance remain open.
 
+## P00-02 execution status phrase
 
+- **P00-02 COMPLETED, pending orchestration acceptance**
 
