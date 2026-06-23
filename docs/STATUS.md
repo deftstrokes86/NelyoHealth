@@ -4,21 +4,22 @@
 
 - **Program:** NelyoHealth Platform Build
 - **Active phase:** Phase 0 (Product, clinical, regulatory, and delivery foundation)
-- **Current issue:** `P00-00` (Phase 0 preflight and execution plan)
+- **Current issue:** `P00-00` (remediation pass after independent verification)
 - **Date:** 2026-06-23
 - **Mode:** Planning / Documentation only
 
-## Review-state conventions
+## Locked decisions currently captured
 
-- `APPROVED`: Decision explicitly approved by the named owner and safe to use in downstream execution.
-- `PROPOSED`: Drafted for planning, requires external approval before implementation reliance.
-- `REQUIRES_LEGAL_REVIEW`: Requires legal review before approval.
-- `REQUIRES_CLINICAL_REVIEW`: Requires clinical lead review before approval.
-- `SUPPLEMENTARY`: Helpful but optional context, not required for execution.
-- `BLOCKED`: Requires missing owner/decision before next issue can proceed.
+- `APPROVED`: explicit and safe for planning execution.
+- `PROPOSED`: planning defaults pending external approval.
+- `REQUIRES_APPROVAL`: explicit approvals still required before implementation.
+- `REQUIRES_LEGAL_REVIEW`: legal interpretation required before approval.
+- `REQUIRES_CLINICAL_REVIEW`: clinical review required before approval.
+- `SUPERSEDED`: replaced by a later decision.
 
-## Documents generated in this pass
+## Documents generated and edited in this pass
 
+- [docs/STATUS.md](docs/STATUS.md)
 - [docs/exec-plans/P00-product-clinical-regulatory-foundation.md](docs/exec-plans/P00-product-clinical-regulatory-foundation.md)
 - [docs/governance/document-register.md](docs/governance/document-register.md)
 - [docs/governance/decision-register.md](docs/governance/decision-register.md)
@@ -27,39 +28,40 @@
 - [docs/governance/change-log.md](docs/governance/change-log.md)
 - [docs/governance/traceability-conventions.md](docs/governance/traceability-conventions.md)
 
-## Source-precedence handling
+## Source precedence
 
-For Phase 0 execution, conflict resolution is fixed at:
+For this repository, conflict handling is fixed at:
 
 1. `NelyoHealth_Phase_0_Complete_Breakdown.md`
 2. `NelyoHealth_Phase_0_Codex_Prompt_Pack.md`
 3. `NelyoHealth_Build_Implementation_Map_for_Codex.md`
-4. Existing repository implementation (when compatible)
+4. Existing repository implementation, when compatible
 
-Any conflict with lower-priority sources is blocked for implementation unless explicitly approved by external owner.
+Any conflict with lower-priority sources is blocked until explicitly resolved with owners and approvals.
 
-## P00-00 checkpoints
+## P00-00 status and checkpoints
 
-- ✅ Required planning documents are readable and present.
-- ✅ Repository preflight completed.
-- ✅ Planned work breakdown `P00-01` through `P00-17` has been mapped to execution sequence.
-- ✅ Locked product requirements are carried in approved decision register.
-- ⚠️ Source conflict log captured (build-map orchestration recommendations vs Phase 0 constraints).
-- ⚠️ External approvals required for legal/clinical/operational questions.
+- [x] Required planning documents are readable and present.
+- [x] P00-00 source-preflight completed.
+- [x] Locked requirement count reconciled: **13** approved locked decisions.
+- [x] Pre-payment provider disclosure limits are explicit in the decision register.
+- [x] Order- and actor-scoped disclosure enforcement is explicit in the decision register.
+- [x] Deny-by-default payment states and non-success unlock behavior are explicit in the decision register.
+- [x] Open-question schema normalized with owner, target prompt, target work package, and approval path.
+- [x] Prompt-to-work-package crosswalk added to plan and traceability conventions.
+- [ ] External approvals for legal, clinical, payment, and operational questions remain pending.
 
-## Completion summary
+## Completion summary for this remediation pass
 
-- **Files changed:** 7
-- **Decisions recorded:** 12 locked requirements captured as approved assumptions + multiple proposed defaults.
-- **Conflicts captured:** 3 material conflicts moved to `docs/governance/open-questions.md`.
-- **Questions remaining:** 14 (primarily legal interpretation, clinical scope, and payment-event finalization).
-- **Next issue:** `P00-01` (Product charter and product principles).
+- **Files changed in this pass:** 8
+- **Newly added/updated locked decisions:** 3 (disclosure and unlock-boundary controls retained and clarified)
+- **Open questions normalized:** 19
+- **Document register corrections:** review-state values corrected and duplicate entry removed.
+- **Assumptions corrected:** pre-payment disclosure moved out of assumptions as a locked decision.
+- **Next action:** Independent read-only `P00-00` verification only; do not execute `P00-01` in this pass.
 
-## Review readiness for P00-00
+## Readiness checks
 
-- [x] Lock decisions captured and marked `APPROVED` only where source-bound.
-- [x] Proposed assumptions marked explicitly as `PROPOSED`.
-- [x] Open questions have owners and target issue/phase.
-- [x] No clinical/legal claim is marked approved without an approver.
-- [x] No non-empty `TODO`/`TBD` remains in P00-00 outputs without owner tags.
-- [ ] External approvals for legal and clinical items pending.
+- [x] `P00-01` remains `NOT STARTED`.
+- [x] `P00-00` has not been marked PASS.
+- [ ] Independent verification of full Phase 0 artifacts is complete and recorded.

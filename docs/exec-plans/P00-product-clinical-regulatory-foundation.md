@@ -19,6 +19,34 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 - No browser tool installation or CI wiring.
 - No clinical, legal, or financial decisions being enforced as approved unless explicitly approved by named roles.
 
+## Canonical source precedence and crosswalk model
+
+- Complete Breakdown defines scope, outcomes, and work-package content.
+- Codex Prompt Pack defines executable prompt order.
+- A prompt may cover more than one Complete Breakdown work package.
+- Execution tools must identify both IDs when referencing scope in future prompts.
+
+| Codex Prompt Pack | Complete Breakdown coverage |
+|---|---|
+| P00-00 | P00-01 Document control and decision system |
+| P00-01 | P00-02 Product charter and business model |
+| P00-02 | P00-03 MVP and pilot boundary |
+| P00-03 | P00-04 Actors, personas, relationships, and tenancy |
+| P00-04 | P00-05 Plans, sponsorship, coverage, and funding |
+| P00-05 | P00-06 User journeys and service blueprints |
+| P00-06 | P00-07 Domain glossary and data classification, plus P00-08 Conceptual domain model and boundaries |
+| P00-07 | P00-09 Workflow state machines |
+| P00-08 | P00-10 Pharmacy and laboratory disclosure contract |
+| P00-09 | P00-11 Clinical scope and safety model, plus P00-12 Emergency, urgent, referral, and critical-result protocols |
+| P00-10 | P00-13 Prescription, laboratory, pharmacy, and delivery policies |
+| P00-11 | P00-14 Privacy, consent, guardianship, and data governance |
+| P00-12 | P00-15 Regulatory obligations and source register |
+| P00-13 | P00-16 Payments, ledger, claims, and commercial rules |
+| P00-14 | P00-17 Non-functional requirements and browser-testing strategy |
+| P00-15 | P00-18 Metrics, service levels, and operational readiness |
+| P00-16 | P00-19 Risks, assumptions, dependencies, and ADRs |
+| P00-17 | P00-20 Traceability, review, and phase gate |
+
 ## Canonical execution order
 
 1. `P00-00` Preflight and execution governance skeleton.
@@ -46,14 +74,14 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 - Never allow payer/subscriber relationships to imply clinical record visibility by default.
 - Emergency escalation never blocked by payment, marketplace comparison, ordinary registration, or provider-discovery logic.
 - Signed clinical records are amended only.
-- Browser testing strategy defined in Phase 0; implementation deferred to Phase 1.
+- Browser testing strategy is defined in Phase 0; implementation deferred to Phase 1.
 
 ## Review and checkpoint policy
 
 - Each prompt is a separate changelog chunk.
 - Diff must be reviewed before moving to the next issue.
 - Mandatory reread at the start of new execution context: the three source documents + latest `docs/STATUS.md`.
-- No accidental automatic continuation between prompts.
+- Do not continue automatically between prompts.
 
 ## Gates
 

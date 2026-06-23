@@ -13,7 +13,7 @@
 | ASSUMPT-03 | Initial service focus is scheduled consultation plus pharmacy/lab loops before specialist/hospital expansion. | PROPOSED | Clinical lead + operations | P00-02 / P00-05 | Scope mismatch and incomplete closure states |
 | ASSUMPT-04 | Native mobile apps are post-pilot and initially out of scope for implementation. | PROPOSED | Product owner | P00-02 / P01 | Overbuild on unplanned surfaces |
 | ASSUMPT-05 | Native mobile experience can be deferred until web loops stabilize. | PROPOSED | Product owner | P00-02 / P01 | Missed channel coverage assumptions |
-| ASSUMPT-06 | Pre-payment provider identity can use providerDisplayName without location, contacts, branch, map, or derivable data. | APPROVED | Product + privacy + security | P00-08 | Privacy leakage if exposed in any channel |
+| ASSUMPT-06 | Pre-payment provider identity can use providerDisplayName without location, contacts, branch, map, or derivable data. | REJECTED | Product + privacy + security | P00-00 | Superseded by REQ-LOCK-003 and REQ-LOCK-004 in `docs/governance/decision-register.md`; this rule remains locked there. |
 | ASSUMPT-07 | Payment event for unlocking provider details is settlement/capture by default. | PROPOSED | Finance owner + security | P00-13 | Unauthorized disclosure on failed/authorization-only states |
 | ASSUMPT-08 | No user-facing features are implemented before P00 completion and gate completion. | APPROVED | Execution lead | P00-00 | Violates planning and safety sequencing |
 | ASSUMPT-09 | Browser automation strategy will be validated in Phase 1 only. | APPROVED | Engineering lead | P00-14 / P01 | Over-implementation before base docs done |
