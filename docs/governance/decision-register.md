@@ -525,3 +525,36 @@
 | REQ-NFR-048 | Tests must remain traceable to locked requirements, decisions, risks, and journeys. | PROPOSED | QA + Architecture | P00-14 / P00-17 | docs/testing/test-strategy.md |
 | REQ-NFR-049 | Flaky tests require ownership, repair path, and approval before quarantine. | PROPOSED | QA + Engineering | P00-14 / Phase 1 | docs/testing/test-strategy.md |
 | REQ-NFR-050 | Phase 1 must include a Codex-operated interactive browser smoke test and matching deterministic Playwright smoke test. | PROPOSED | QA + Architecture | Phase 1 | docs/testing/browser-validation-strategy.md |
+
+## P00-14 revision design, motion, UI UX Pro Max, and content decisions
+
+| Decision ID | Decision text | Status | Owner | Review phase | Evidence |
+|---|---|---|---|---|---|
+| REQ-NFR-051 | Visual quality is a release requirement for major user-facing surfaces. | REQUIRES_APPROVAL | Product Owner + Design Owner | P00-14 / P00-14A | docs/design/experience-quality-requirements.md |
+| REQ-NFR-052 | All portals and dashboards must use one coherent design language. | REQUIRES_APPROVAL | Design Owner + Product Owner | P00-14 / P00-14A | docs/design/experience-quality-requirements.md |
+| REQ-NFR-053 | Design tokens are the canonical source for visual system values after P00-14A approval. | REQUIRES_APPROVAL | Design Owner + Architecture Owner | P00-14A | docs/adr/ADR-0004-design-motion-and-content-governance.md |
+| REQ-NFR-054 | Arbitrary visual values require review and must not become the default implementation pattern. | REQUIRES_APPROVAL | Design Owner + Frontend Owner | P00-14A / Phase 1 | docs/design/experience-quality-requirements.md |
+| REQ-NFR-055 | Every major UI state must be intentionally designed. | REQUIRES_APPROVAL | Design Owner + QA Owner | P00-14A / Phase 1 | docs/design/experience-quality-requirements.md |
+| REQ-NFR-056 | Motion for React is the planned motion library. | REQUIRES_APPROVAL | Architecture Owner + Design Owner | P00-14 / Phase 1 | docs/design/motion-requirements.md |
+| REQ-NFR-057 | Motion behavior must use centralized motion tokens after P00-14A defines them. | REQUIRES_APPROVAL | Design Owner + Architecture Owner | P00-14A / Phase 1 | docs/design/motion-requirements.md |
+| REQ-NFR-058 | Motion must respect reduced-motion preferences. | REQUIRES_APPROVAL | Accessibility Reviewer + Design Owner | P00-14 / Phase 1 | docs/design/motion-requirements.md |
+| REQ-NFR-059 | Motion cannot delay safety, urgent, or emergency actions. | APPROVED | Source docs + Clinical Safety Owner | P00-14 | docs/design/motion-requirements.md |
+| REQ-NFR-060 | Motion cannot communicate required information by itself. | REQUIRES_APPROVAL | Accessibility Reviewer + Content Owner | P00-14 / Phase 1 | docs/design/motion-requirements.md |
+| REQ-NFR-061 | UI UX Pro Max is an advisory third-party design skill, not an authority. | REQUIRES_APPROVAL | Design Owner + Security Owner | P00-14 | docs/design/ui-ux-pro-max-governance.md |
+| REQ-NFR-062 | UI UX Pro Max requires reviewed project-local installation before use. | REQUIRES_APPROVAL | Security Owner + Architecture Owner | Phase 1 | docs/design/ui-ux-pro-max-governance.md |
+| REQ-NFR-063 | UI UX Pro Max version or commit must be pinned before use. | REQUIRES_APPROVAL | Security Owner | Phase 1 | docs/design/ui-ux-pro-max-governance.md |
+| REQ-NFR-064 | UI UX Pro Max requires pre-implementation design pass and post-implementation browser review pass. | REQUIRES_APPROVAL | Design Owner + Product Owner | P00-14A / Phase 1 | docs/design/ui-ux-pro-max-governance.md |
+| REQ-NFR-065 | Skill output cannot approve clinical, legal, privacy, accessibility, regulatory, or financial copy. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14 / Phase 1 | docs/design/ui-ux-pro-max-governance.md |
+| REQ-NFR-066 | Every page must have a stable Page ID and page contract. | REQUIRES_APPROVAL | Content Owner + Product Owner | P00-14A / Phase 1 | docs/content/content-alignment-requirements.md |
+| REQ-NFR-067 | Every governed section must have a stable Section ID and section contract. | REQUIRES_APPROVAL | Content Owner + Design Owner | P00-14A / Phase 1 | docs/content/content-alignment-requirements.md |
+| REQ-NFR-068 | Every CTA must declare its actual action and required authorization. | REQUIRES_APPROVAL | Product Owner + Content Owner | P00-14A / Phase 1 | docs/content/content-alignment-requirements.md |
+| REQ-NFR-069 | Content classes must have explicit approval owners. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A | docs/content/content-alignment-requirements.md |
+| REQ-NFR-070 | Only approved content may ship. | REQUIRES_APPROVAL | Content Owner + Product Owner | Phase 1 | docs/content/content-alignment-requirements.md |
+| REQ-NFR-071 | State-specific content is required for major sections. | REQUIRES_APPROVAL | Content Owner + QA Owner | P00-14A / Phase 1 | docs/content/content-alignment-requirements.md |
+| REQ-NFR-072 | Role, patient, and tenant content must be isolated. | APPROVED | Source docs + Privacy Owner | P00-14 | docs/content/content-alignment-requirements.md |
+| REQ-NFR-073 | Content-to-component alignment must be automatically validated before release. | REQUIRES_APPROVAL | QA Owner + Content Owner | Phase 1 | docs/testing/design-content-validation-strategy.md |
+| REQ-NFR-074 | Major pages require real-browser visual review. | REQUIRES_APPROVAL | Design Owner + QA Owner | Phase 1 | docs/testing/design-content-validation-strategy.md |
+| REQ-NFR-075 | Reduced-motion behavior must be tested. | REQUIRES_APPROVAL | Accessibility Reviewer + QA Owner | Phase 1 | docs/testing/design-content-validation-strategy.md |
+| REQ-NFR-076 | Visual tests do not replace human design review. | REQUIRES_APPROVAL | Design Owner + QA Owner | Phase 1 | docs/testing/design-content-validation-strategy.md |
+| REQ-NFR-077 | Human review does not replace automated validation. | REQUIRES_APPROVAL | QA Owner + Design Owner | Phase 1 | docs/testing/design-content-validation-strategy.md |
+| REQ-NFR-078 | P00-14A must complete and be accepted before P00-15 begins. | REQUIRES_APPROVAL | External Orchestration + Execution Lead | P00-14 | docs/exec-plans/P00-product-clinical-regulatory-foundation.md |

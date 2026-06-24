@@ -157,3 +157,14 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 | Testing | [docs/testing/browser-validation-strategy.md](../testing/browser-validation-strategy.md) | P00-14 | QA + Architecture + Security | DONE | REQUIRES_APPROVAL | Interactive Codex IDE browser and Playwright Test strategy; no tooling installed. |
 | Testing | [docs/testing/privacy-boundary-tests.md](../testing/privacy-boundary-tests.md) | P00-14 | Privacy + Security + QA | DONE | REQUIRES_APPROVAL | Negative privacy-boundary test design for provider disclosure and access separation. |
 | ADR | [docs/adr/ADR-0003-codex-browser-validation.md](../adr/ADR-0003-codex-browser-validation.md) | P00-14 | Architecture + Security + QA | DONE | REQUIRES_APPROVAL | Browser validation architecture accepted in principle, implementation pending Phase 1. |
+
+## P00-14 revision document registrations
+
+| Scope | Document path | Prompt | Owner | Status | Review state | Notes |
+|---|---|---|---|---|---|---|
+| Design | [docs/design/experience-quality-requirements.md](../design/experience-quality-requirements.md) | P00-14 revision | Design + Product | DONE | REQUIRES_APPROVAL | Experience-quality release requirements; final design deferred to P00-14A. |
+| Design | [docs/design/motion-requirements.md](../design/motion-requirements.md) | P00-14 revision | Design + Architecture + Accessibility | DONE | REQUIRES_APPROVAL | Motion for React requirements; no dependency installed. |
+| Design | [docs/design/ui-ux-pro-max-governance.md](../design/ui-ux-pro-max-governance.md) | P00-14 revision | Design + Security + Architecture | DONE | REQUIRES_APPROVAL | UI UX Pro Max advisory skill governance; no skill installed. |
+| Content | [docs/content/content-alignment-requirements.md](../content/content-alignment-requirements.md) | P00-14 revision | Content + Product + Domain Owners | DONE | REQUIRES_APPROVAL | Page, section, CTA, state-copy, and approval contract requirements. |
+| Testing | [docs/testing/design-content-validation-strategy.md](../testing/design-content-validation-strategy.md) | P00-14 revision | QA + Design + Content | DONE | REQUIRES_APPROVAL | Design/content browser, automation, visual, and review validation strategy. |
+| ADR | [docs/adr/ADR-0004-design-motion-and-content-governance.md](../adr/ADR-0004-design-motion-and-content-governance.md) | P00-14 revision | Architecture + Design + Content | DONE | REQUIRES_APPROVAL | Accepted-in-principle design, motion, skill, and content governance decision. |

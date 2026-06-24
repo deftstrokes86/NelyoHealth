@@ -123,7 +123,7 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 | P00-10 prescription/pharmacy/lab/delivery policies | P00-10 | COMPLETED, pending orchestration acceptance; covers Complete Breakdown P00-13 |
 | P00-11 privacy, consent, guardianship, delegation, and data governance | P00-11 | COMPLETED, pending orchestration acceptance; covers Complete Breakdown P00-14. |
 | P00-12 regulatory source and obligations register | P00-12 | COMPLETED, pending orchestration acceptance; covers Complete Breakdown P00-15. |
-| Finance / operations / NFRs / risk | P00-13..P00-16 | P00-13 PASS; P00-14 completed pending orchestration acceptance; P00-15 and P00-16 not started. |
+| Finance / operations / NFRs / risk | P00-13..P00-16 | P00-13 PASS; P00-14 completed pending orchestration acceptance; P00-14A not started; P00-15 and P00-16 not started. |
 | Phase 0 gate and completion | P00-17 | not started |
 
 ## Validation checklist
@@ -146,14 +146,14 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 - P00-11 created ten privacy/security governance artifacts and aligned status, execution planning, document registration, decisions, open questions, assumptions, traceability conventions, event catalogue entries, and workflow privacy sections.
 - P00-11 did not finalize lawful bases, statutory retention periods, breach deadlines, cross-border transfer mechanisms, subprocessor approvals, vendor selections, age thresholds, or final guardianship rules.
 - P00-12 completed regulatory source register, obligations register, legal-question log, licence/registration matrix, contract inventory, monitoring plan, and governance alignment; orchestration acceptance remains pending.
-- P00-13 completed the Complete Breakdown P00-16 payments, ledger, claims, refunds, provider settlement, and commercial rules package in draft form. P00-14 completed the Complete Breakdown P00-17 non-functional requirements and browser-test strategy package in draft form; P00-15 remains NOT STARTED.
+- P00-13 completed the Complete Breakdown P00-16 payments, ledger, claims, refunds, provider settlement, and commercial rules package in draft form. P00-14 completed the Complete Breakdown P00-17 non-functional requirements and browser-test strategy package in draft form; P00-14A remains NOT STARTED; P00-15 remains NOT STARTED and is blocked until P00-14A acceptance.
 
 ## P00-12 completion note
 
 - P00-12 completed the Complete Breakdown P00-15 regulatory obligations and source register package in draft form.
 - P00-12 created six compliance artifacts and aligned status, execution planning, document registration, decisions, open questions, assumptions, traceability conventions, and change log.
 - P00-12 did not finalize legal interpretations, compliance status, licence status, registration status, payment-provider selection, pilot geography, vendor selection, contractual language, or production implementation controls.
-- P00-13 completed the Complete Breakdown P00-16 payments, ledger, claims, refunds, provider settlement, and commercial rules package in draft form. P00-14 completed the Complete Breakdown P00-17 non-functional requirements and browser-test strategy package in draft form; P00-15 remains NOT STARTED.
+- P00-13 completed the Complete Breakdown P00-16 payments, ledger, claims, refunds, provider settlement, and commercial rules package in draft form. P00-14 completed the Complete Breakdown P00-17 non-functional requirements and browser-test strategy package in draft form; P00-14A remains NOT STARTED; P00-15 remains NOT STARTED and is blocked until P00-14A acceptance.
 
 
 ## P00-13 completion note
@@ -162,11 +162,25 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 - P00-13 created seven finance/ADR artifacts and aligned status, execution planning, document registration, decisions, open questions, assumptions, traceability conventions, event catalogue entries, workflow references, and provider-disclosure cross-links.
 - P00-13 proposed `OrderFundingSecured` as the finance input to disclosure policy, but kept it separate from `ProviderDetailDisclosureDecision` and `ProviderDetailDisclosureEligibilityEstablished`.
 - P00-13 did not finalize a payment provider, custody model, wallet/stored-value model, tax treatment, accounting classification, currency, FX provider, HMO live operation, employer guarantee, payout cadence, refund period, settlement period, chargeback period, production code, API, database schema, dependency, or browser tooling.
-- P00-14 completed pending orchestration acceptance; P00-15 remains NOT STARTED.
+- P00-14 completed pending orchestration acceptance; P00-14A NOT STARTED; P00-15 remains NOT STARTED and is blocked until P00-14A acceptance.
 
 ## P00-14 completion note
 
 - P00-14 completed the Complete Breakdown P00-17 non-functional requirements and browser-test strategy package in draft form.
 - P00-14 created eight artifacts covering security, reliability, accessibility, performance, test strategy, browser validation strategy, privacy-boundary tests, and ADR-0003.
 - P00-14 did not implement application code, install dependencies, create browser tooling, create `.codex/config.toml`, create Playwright configuration, create smoke routes, create fixtures, or run a browser.
-- P00-15 remains NOT STARTED and must not begin until orchestration accepts P00-14.
+- P00-14A remains NOT STARTED. P00-15 remains NOT STARTED and must not begin until P00-14A is accepted.
+
+## P00-14 revision sequencing update
+
+Canonical sequence after the P00-14 revision:
+
+`P00-14 -> P00-14A -> P00-15`
+
+| Prompt | Title | Complete Breakdown relationship | Status |
+|---|---|---|---|
+| P00-14 | Non-functional requirements and browser-test strategy, including experience quality, Motion, UI UX Pro Max, and content-alignment requirements | Complete Breakdown P00-17 plus external orchestration revision | COMPLETED, pending orchestration acceptance |
+| P00-14A | Experience design, visual system, motion system, and content architecture | Supplemental work required before P00-15 | NOT STARTED |
+| P00-15 | Metrics, SLOs, operations readiness | Original next prompt after P00-14 | NOT STARTED; blocked until P00-14A acceptance |
+
+P00-14A must not be executed automatically. P00-15 must not begin until P00-14A is externally accepted.

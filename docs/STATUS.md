@@ -223,17 +223,25 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 
 - **P00-13 COMPLETE, READY FOR ORCHESTRATION ACCEPTANCE**
 - **Finance artifacts created:** funds flow, payment state model, ledger principles, refund and dispute policy, provider settlement policy, claims and remittance boundary, and ADR-0002 wallet-as-ledger-backed-balance.
-- **Completion state:** P00-00 through P00-12 are PASS; P00-13 is PASS; P00-14 is completed pending orchestration acceptance; P00-15 is NOT STARTED.
+- **Completion state:** P00-00 through P00-13 are PASS; P00-14 is COMPLETED, pending orchestration acceptance; P00-14A is NOT STARTED; P00-15 is NOT STARTED.
 - **OrderFundingSecured:** proposed as the finance fact consumed by disclosure policy, but not approved for implementation until finance, legal/regulatory, accounting/tax, privacy, security, pharmacy, lab, product, and engineering review.
 - **Provider disclosure:** payment/funding facts do not directly expose provider details; ProviderDetailDisclosureDecision remains separately authoritative and exact-order scoped.
 - **Phase boundary:** no production application code, API implementation, database schema, migration, dependency, configuration, payment integration, payment provider, browser tooling, currency, FX provider, tax rate, percentage, payout interval, settlement interval, refund interval, or chargeback period was created or approved.
-- **Next action:** orchestration review of P00-14 only; do not execute P00-15 until accepted.
+- **Next action:** Orchestration review of P00-14 only; do not execute P00-14A automatically; do not execute P00-15. P00-15 must not begin until P00-14A is accepted.
 
 ## P00-14 completion summary
 
-- **Completion state:** P00-00 through P00-13 are PASS; P00-14 is completed pending orchestration acceptance; P00-15 is NOT STARTED.
+- **Completion state:** P00-00 through P00-13 are PASS; P00-14 is COMPLETED, pending orchestration acceptance; P00-14A is NOT STARTED; P00-15 is NOT STARTED.
 - **Scope:** P00-14 produced non-functional requirements and browser-testing strategy documentation only. No production application features, dependency installs, browser binaries, Playwright configuration, `.codex/config.toml`, smoke route, fixtures, or automated test code were created.
 - **Browser validation:** Interactive Codex IDE browser inspection and deterministic Playwright Test remain separate mandatory Phase 1 implementation paths. Both use synthetic data only and trusted local/test/staging origins only.
 - **Provider disclosure:** Pre-payment provider-detail privacy remains a network-boundary and artifact-boundary requirement, not UI masking. Post-payment release remains exact-authorized-order scoped.
 - **Approvals:** P00-14 artifacts are DRAFT-PENDING-SECURITY-ARCHITECTURE-QA-ACCESSIBILITY-PRIVACY-AND-OPERATIONS-APPROVAL.
-- **Next action:** Orchestration review of P00-14 only; do not execute P00-15 until accepted.
+- **Next action:** Orchestration review of P00-14 only; do not execute P00-14A automatically; do not execute P00-15. P00-15 must not begin until P00-14A is accepted.
+
+## P00-14 revision completion summary
+
+- **Completion state:** P00-00 through P00-13 are PASS; P00-14 is COMPLETED, pending orchestration acceptance; P00-14A is NOT STARTED; P00-15 is NOT STARTED.
+- **Revision scope:** Experience quality, Motion for React requirements, UI UX Pro Max governance, page/section content alignment, design/content validation, and ADR-0004 were added to P00-14.
+- **P00-14A gate:** P00-14A is the next required supplemental work package after P00-14 and before P00-15. P00-15 must not begin before P00-14A is accepted.
+- **Implementation exclusions:** No Motion dependency, UI UX Pro Max install, Playwright install, browser tooling, UI components, routes, design tokens, visual fixtures, final colors, final fonts, final motion values, production copy, or AGENTS.md workflow were introduced.
+- **Next action:** Orchestration review of P00-14.

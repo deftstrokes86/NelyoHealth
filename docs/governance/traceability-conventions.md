@@ -154,3 +154,13 @@ For each significant requirement, include:
 | PBT-REQ- | Privacy-boundary test requirement | P00-14 | Covers provider-disclosure and sensitive-data negative tests. |
 | NFR-TST- | Future non-functional test anchor | P00-14 | Reserved for Phase 1/later implementation; no test code created in Phase 0. |
 | REQ-NFR- | Non-functional governance decision | P00-14 | Recorded in decision register. |
+
+## P00-14 revision identifier families
+
+| Prefix | Meaning | Owning prompt | Notes |
+|---|---|---|---|
+| DES-NFR- | Experience and visual quality non-functional requirement | P00-14 revision / P00-14A | Final values and system specs deferred to P00-14A. |
+| MOT-NFR- | Motion requirement | P00-14 revision / P00-14A | Motion for React planned; package/version pinned only in Phase 1. |
+| UXP-REQ- | UI UX Pro Max governance requirement | P00-14 revision | Third-party advisory skill; project-local reviewed install only after approval. |
+| CNT-NFR- | Content alignment non-functional requirement | P00-14 revision / P00-14A | Page/section/content/CTA contracts; final registry format deferred. |
+| DCT-TST- | Design and content validation scenario | P00-14 revision | Future tests and browser review requirements only. |

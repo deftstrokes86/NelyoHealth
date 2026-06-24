@@ -157,3 +157,7 @@ Required Phase 1 controls: trusted project loading only, local/test/staging orig
 ## Review and Change Control
 
 Any change that removes one browser layer, allows routine production testing, permits personal browser profiles, weakens provider-disclosure privacy, removes synthetic-data-only restrictions, or treats automated accessibility checks as conformance requires external approval and an ADR update.
+
+## P00-14 revision design and content browser-validation alignment
+
+Browser validation now also covers experience quality, motion, UI UX Pro Max review evidence, and page-section content alignment. Phase 1 browser validation must include visual hierarchy, spacing, typography, density, responsive layout, overflow, truncation, content placement, CTA alignment, required state copy, reduced motion, motion interruption, accessibility-tree structure, screenshots, viewport review, and visual evidence using synthetic data only. Visual and content browser review does not replace deterministic Playwright tests, and deterministic tests do not replace human design/content review.
