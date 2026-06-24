@@ -113,6 +113,7 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 | Governance and status | P00-00 | completed (current) |
 | Product charter / principles | P00-01 | PASS |
 | P00-01 + P00-02 scope boundary | P00-01, P00-02 | COMPLETED, pending orchestration acceptance |
+| P00-03 actor-tenancy model | P00-03 | COMPLETED, pending orchestration acceptance |
 | Journeys / architecture | P00-05, P00-07 | not started |
 | Privacy / legal / finance / metrics / risks | P00-11..P00-16 | not started |
 | Phase 0 gate and completion report | P00-17 | not started |
@@ -120,6 +121,7 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 ## Milestone state
 
 - **Milestone 1:** Clinical and product scope synchronized across documents for P00-02.
+- **Milestone 2:** Actor and tenancy model synchronized across `P00-03` outputs and governance links.
 
 ## Validation checklist
 

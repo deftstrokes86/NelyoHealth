@@ -120,6 +120,37 @@
   - No scope expansion decisions were introduced by these additions; entries are all non-live pilot artifacts.
   - All non-pilot services remain documented as design-only or deferred.
 
+### Entry P00-03-001 - Actor-tenancy model completion
+- Date: 2026-06-24
+- Prompt ID: P00-03
+- Files changed:
+  - `docs/product/personas.md`
+  - `docs/product/actor-catalogue.md`
+  - `docs/product/relationship-model.md`
+  - `docs/architecture/tenancy-concept.md`
+  - `docs/security/access-intent-matrix.md`
+  - `docs/STATUS.md`
+  - `docs/exec-plans/P00-product-clinical-regulatory-foundation.md`
+  - `docs/governance/document-register.md`
+  - `docs/governance/open-questions.md`
+  - `docs/governance/change-log.md`
+- Decisions added/updated:
+  - Added P00-03 conceptual decisions in `docs/governance/decision-register.md` (REQ-GOV-001 through REQ-GOV-018).
+  - Recorded canonicalization of disclosure and order-lock decisions (`REQ-LOCK-006`, `REQ-LOCK-007`, `REQ-LOCK-009`) and superseding lock scope notes.
+  - Confirmed no implementation-facing RBAC, database, or dependency changes during actor-tenancy documentation.
+- Assumptions added/updated:
+  - Preserved `ASSUMPT-11` and linked no-new-continuity assumptions for account lifecycle transitions.
+  - Reaffirmed approved synthetic-test and non-production constraint assumptions for this phase.
+- Open questions added:
+  - Added OQ-00-34 through OQ-00-43 to cover actor-tenancy conflict resolution, context switching, and matrix completion.
+- Review/validation status:
+  - Documentation-only constraints preserved.
+  - No production code or dependency changes.
+  - Updated status and register rows for P00-03 completion state.
+- External approvals obtained or blocked:
+  - BLOCKED / required for implementation: role-overlap precedence, overlap of sponsor/clinical proxy authority, multi-organization context semantics.
+  - APPROVED: no-claim constraints, payer-clinical separation, and pre-payment/ordered-provider disclosure boundaries remain locked from earlier phase outputs.
+
 ## Template for future entries
 
 For all future phase updates:

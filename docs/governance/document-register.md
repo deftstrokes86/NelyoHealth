@@ -31,15 +31,16 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 | Product | [docs/product/service-catalogue-boundary.md](../product/service-catalogue-boundary.md) | P00-02 | Product + clinical + engineering | DONE | PROPOSED | Authored in P00-02 |
 | Product | [docs/product/non-goals.md](../product/non-goals.md) | P00-02 | Product + clinical | DONE | PROPOSED | Authored in P00-02 |
 | Product | [docs/product/expansion-gates.md](../product/expansion-gates.md) | P00-02 | Product + operations | DONE | PROPOSED | Authored in P00-02 |
-| Product | [docs/product/personas.md](../product/personas.md) | P00-03 | Product + clinical | NOT_STARTED | PROPOSED | To be authored in P00-03 |
-| Product | [docs/product/actor-catalogue.md](../product/actor-catalogue.md) | P00-03 | Security + clinical | NOT_STARTED | PROPOSED | To be authored in P00-03 |
-| Product | [docs/product/relationship-model.md](../product/relationship-model.md) | P00-03 | Product + privacy | NOT_STARTED | PROPOSED | To be authored in P00-03 |
+| Product | [docs/product/personas.md](../product/personas.md) | P00-03 | Product + clinical | DONE | PROPOSED | Actor and scope model completed in P00-03 |
+| Product | [docs/product/actor-catalogue.md](../product/actor-catalogue.md) | P00-03 | Security + clinical | DONE | PROPOSED | Actor model completed in P00-03 |
+| Product | [docs/product/relationship-model.md](../product/relationship-model.md) | P00-03 | Product + privacy | DONE | PROPOSED | Relationship model completed in P00-03 |
 | Product | [docs/product/funding-and-coverage-model.md](../product/funding-and-coverage-model.md) | P00-04 | Finance + legal | NOT_STARTED | PROPOSED | To be authored in P00-04 |
 | Product | [docs/product/family-plan-rules.md](../product/family-plan-rules.md) | P00-04 | Product + legal | NOT_STARTED | PROPOSED | To be authored in P00-04 |
 | Product | [docs/product/diaspora-plan-rules.md](../product/diaspora-plan-rules.md) | P00-04 | Product + legal + finance | NOT_STARTED | PROPOSED | To be authored in P00-04 |
 | Product | [docs/product/employer-benefit-rules.md](../product/employer-benefit-rules.md) | P00-04 | Product + legal | NOT_STARTED | PROPOSED | To be authored in P00-04 |
 | Product | [docs/product/hmo-coverage-rules.md](../product/hmo-coverage-rules.md) | P00-04 | Product + legal + finance | NOT_STARTED | PROPOSED | To be authored in P00-04 |
-| Security | [docs/security/access-intent-matrix.md](../security/access-intent-matrix.md) | P00-03 | Security + privacy | NOT_STARTED | PROPOSED | To be authored in P00-03 |
+| Architecture | [docs/architecture/tenancy-concept.md](../architecture/tenancy-concept.md) | P00-03 | Architecture + security | DONE | PROPOSED | Tenant boundaries completed in P00-03 |
+| Security | [docs/security/access-intent-matrix.md](../security/access-intent-matrix.md) | P00-03 | Security + privacy | DONE | PROPOSED | Access intent matrix completed in P00-03 |
 | Security | [docs/security/payer-visibility-matrix.md](../security/payer-visibility-matrix.md) | P00-04 | Finance + security | NOT_STARTED | PROPOSED | To be authored in P00-04 |
 | Architecture | [docs/glossary.md](../glossary.md) | P00-06 | Product + clinical + engineering | NOT_STARTED | PROPOSED | To be authored in P00-06 |
 | Architecture | [docs/architecture/domain-boundaries.md](../architecture/domain-boundaries.md) | P00-08 | Architecture + engineering | NOT_STARTED | PROPOSED | Not created yet |

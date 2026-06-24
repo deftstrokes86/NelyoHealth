@@ -4,10 +4,11 @@
 
 - **Program:** NelyoHealth Platform Build
 - **Active phase:** Phase 0 (Product, clinical, regulatory, and delivery foundation)
-- **Current issue:** `P00-03` (not started)
-- **Date:** 2026-06-23
+- **Current issue:** `P00-03` (COMPLETED, pending orchestration acceptance)
+- **Date:** 2026-06-24
 - **Mode:** Planning / Documentation only
-- **Execution state:** `P00-02 COMPLETED, pending orchestration acceptance`
+- **Execution state:** `P00-03 COMPLETED, pending orchestration acceptance`
+- **Approved-lock decisions captured:** `13` (`REQ-LOCK-001` ... `REQ-LOCK-013`)
 
 ## Locked decisions currently captured
 
@@ -37,6 +38,11 @@
 - [docs/product/service-catalogue-boundary.md](./product/service-catalogue-boundary.md)
 - [docs/product/non-goals.md](./product/non-goals.md)
 - [docs/product/expansion-gates.md](./product/expansion-gates.md)
+- [docs/product/personas.md](./product/personas.md)
+- [docs/product/actor-catalogue.md](./product/actor-catalogue.md)
+- [docs/product/relationship-model.md](./product/relationship-model.md)
+- [docs/architecture/tenancy-concept.md](./architecture/tenancy-concept.md)
+- [docs/security/access-intent-matrix.md](./security/access-intent-matrix.md)
 
 ## Source precedence
 
@@ -65,16 +71,16 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 
 - **Files changed this prompt:** 11
 - **Locked decisions preserved:** unchanged and carried forward from P00-00.
-- **Open questions:** carried forward where unresolved and owned, plus added scope questions.
-- **Document register updates:** P00-02 artifacts marked completed and linked.
-- **Next action:** Independent governance readout and orchestration acceptance for P00-02 before P00-03 begins.
+- **Open questions:** carried forward where unresolved and owned, including the new P00-03-specific actor-tenancy questions.
+- **Document register updates:** P00-03 artifacts marked completed and linked.
+- **Next action:** Independent governance review and orchestration acceptance for P00-03 before P00-04 begins.
 
 ## Phase status
 
 - **P00-00:** PASS
 - **P00-01:** PASS
 - **P00-02:** COMPLETED, pending orchestration acceptance
-- **P00-03:** NOT STARTED
+- **P00-03:** COMPLETED, pending orchestration acceptance
 - **Current blocker:** pending legal, clinical, finance, and operational approvals tracked in open questions.
 
 ## Readiness checks
@@ -84,8 +90,8 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - [x] `P00-02` deliverables are created.
 - [ ] Independent review for P00-02 is not yet completed.
 - [ ] External approvals for legal, clinical, and finance remain open.
+- [ ] Independent review for P00-03 is not yet completed.
 
-## P00-02 execution status phrase
+## P00-03 execution status phrase
 
-- **P00-02 COMPLETED, pending orchestration acceptance**
-
+- **P00-03 COMPLETED, pending orchestration acceptance**

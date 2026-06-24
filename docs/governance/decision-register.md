@@ -27,6 +27,29 @@
 | REQ-LOCK-012 | Codex interactive IDE browser validation and deterministic automated Playwright tests are both mandatory for user-facing work; both must use synthetic data only. | APPROVED | Source docs + engineering | P00-00 / P00-14 | NelyoHealth_Phase_0_Codex_Prompt_Pack.md |
 | REQ-LOCK-013 | Browser testing controls are non-production validation assets; they must not expose production PHI and must be implemented outside clinical record delivery paths. | APPROVED | Source docs + QA + privacy | P00-00 / P00-14 | NelyoHealth_Phase_0_Codex_Prompt_Pack.md |
 
+## P00-03 conceptual decisions
+
+| Decision ID | Decision text | Status | Owner | Review phase | Conditions |
+|---|---|---|---|---|---|
+| REQ-GOV-001 | `Person`, `UserAccount`, `Patient`, and `Practitioner` are distinct concepts; one `Person` may be associated with one or more `UserAccount` records over time for the same underlying person. | APPROVED | Source docs + governance baseline | P00-03 | Uses concept definitions in locked decisions and P00-04 funding prompt outputs. |
+| REQ-GOV-002 | A `Person` may exist before account creation and remain accountless while conceptually modeled in accountless-support scenarios. | PROPOSED | Product + Clinical + Security | P00-03 | Requires identity discovery criteria and activation workflow. |
+| REQ-GOV-003 | During account activation, existing continuity identities are linked rather than creating a new patient identity; duplicates are not created by default. | REQUIRES_APPROVAL | Product + Security + Clinical | P00-03 | Requires identity proofing, merge authority, and audit policy definition. |
+| REQ-GOV-004 | One patient continuity identity is preserved across organizations, coverage arrangements, and role/member context changes. | APPROVED | Source docs + governance baseline | P00-03 | Mirrors REQ-LOCK-001. |
+| REQ-GOV-005 | Role and relationship are separate from membership and coverage; one concept does not imply the others by default. | PROPOSED | Product + Clinical + Security | P00-03 | Requires explicit matrix and relationship bindings in downstream prompts. |
+| REQ-GOV-006 | A person may hold multiple roles and memberships with explicit boundaries; membership context is visible and explicit. | PROPOSED | Product + Operations | P00-03 | Requires tenant-switch controls and workflow-level context signalling. |
+| REQ-GOV-007 | There is exactly one active organization context for a workflow task, and context switches require explicit intent by the actor. | PROPOSED | Security + Architecture | P00-03 | Requires tenant-switch controls and audit capture. |
+| REQ-GOV-008 | No privilege carries across context switches without explicit re-authorization in the next context. | PROPOSED | Security + Architecture | P00-03 | Mirrors REQ-LOCK-008 and cross-tenant safeguards. |
+| REQ-GOV-009 | Offboarding immediately removes active organization or role access for that context and does not silently re-enable access through other roles. | PROPOSED | Security | P00-03 | Requires session invalidation and role revocation workflow. |
+| REQ-GOV-010 | Clinical records, prescriptions, and audit events remain attributable to historical authorized actors after staff offboarding. | PROPOSED | Clinical + Security | P00-03 | Requires append-only audit and continuity safeguards. |
+| REQ-GOV-011 | Personal patient access continuity is preserved when coverage, sponsor, or organization relationships change or end. | PROPOSED | Product + Clinical | P00-03 | Requires continuity policy in journeys, workflows, and state handling. |
+| REQ-GOV-012 | Organization or admin role alone does not grant unrestricted patient-clinical access. | APPROVED | Source docs + clinical governance | P00-03 | Mirrors REQ-LOCK-004 and locked payer-separation rules. |
+| REQ-GOV-013 | Support-access privileges are purpose-bound, capability-limited, and revocable; support does not receive unrestricted clinical data access. | PROPOSED | Product + Security + Clinical | P00-03 | Requires support-role policy and exception model. |
+| REQ-GOV-014 | Break-glass access is exceptional, clinically justified, time-bound, reasoned, and audited. | REQUIRES_APPROVAL | Clinical lead + Security owner | P00-03 | Requires clinical and security policy before approved implementation. |
+| REQ-GOV-015 | Relationship capabilities are granular by function (paying, scheduling, joining, logistics, updates) and not an all-or-nothing bundle. | PROPOSED | Product + Clinical + Security | P00-03 | Requires downstream matrix and journey updates in later prompts. |
+| REQ-GOV-016 | Cross-tenant collaboration for a patient uses minimum necessary access and does not imply tenant-wide data sharing. | PROPOSED | Security + Architecture | P00-03 | Requires explicit cross-tenant interaction contract. |
+| REQ-GOV-017 | Facility, branch, and organization scopes are distinct; facility-level membership is not global patient authority. | PROPOSED | Architecture + Security | P00-03 | Requires facility-context policy and practitioner mapping. |
+| REQ-GOV-018 | Account linking and merge operations require explicit policy and cannot be automatic on name/email similarity only. | REQUIRES_APPROVAL | Product + Clinical + Security | P00-03 | Requires duplicate-identity governance and audit evidence. |
+
 ## P00-02 pilot-boundary scope decisions
 
 | Decision ID | Decision text | Status | Owner | Review phase | Conditions |
@@ -46,7 +69,7 @@
 | REQ-SCOPE-013 | Initial supported channels are responsive patient web, doctor/provider web, and operations/admin web; all must support desktop, tablet, and mobile layouts. | PROPOSED | Engineering + QA + Product | P00-02 | Must preserve responsive behavior and accessible interaction in all channels. |
 | REQ-SCOPE-014 | Native mobile clients are POST-PILOT. | PROPOSED | Product + Engineering | P00-02 | Native clients remain shells only in early architecture planning. |
 | REQ-SCOPE-015 | Final payment methods in the pilot remain BLOCKED-PENDING-REVIEW until explicit payment policy approval. | REQUIRES_APPROVAL | Finance owner + Legal counsel | P00-02 / P00-13 | Method set to be explicitly approved in payment-state prompt. |
-| REQ-SCOPE-016 | Native payment-related disclosures and client fields before payment are restricted to approved non-identifying fields only; all protected channels are blocked. | APPROVED | Product + Security + Clinical | P00-02 / P00-08 / P00-14 | Enforced by REQ-LOCK-003 through REQ-LOCK-005. |
+| REQ-SCOPE-016 | Native payment-related disclosures and client fields before payment are restricted to approved non-identifying fields only; all protected channels are blocked. | SUPERSEDED | Product + Security + Clinical | P00-02 / P00-08 / P00-14 | Canonicalized into REQ-LOCK-003 through REQ-LOCK-005 and REQ-GOV decisions. |
 | REQ-SCOPE-017 | English-first release language is the pilot standard. | PROPOSED | Product owner + Legal counsel | P00-02 / P00-14 | Additional languages require legal, clinical, and operational approvals. |
 | REQ-SCOPE-018 | The pilot provider network is controlled and limited to verified providers, pharmacies, and laboratories within approved launch boundaries. | PROPOSED | Product + Operations + Clinical lead | P00-02 | Expansion requires explicit evidence and operational readiness. |
 | REQ-SCOPE-019 | Pilot payment-provider dependency is on a licensed provider; no unapproved stored-value custody. | REQUIRES_APPROVAL | Finance owner + Legal counsel + Security lead | P00-02 / P00-13 | Payment provider selection and contractual terms are pending approval. |
