@@ -1,13 +1,13 @@
-# NelyoHealth Phase 0 Status
+﻿# NelyoHealth Phase 0 Status
 
 ## Current phase
 
 - **Program:** NelyoHealth Platform Build
 - **Active phase:** Phase 0 (Product, clinical, regulatory, and delivery foundation)
-- **Current issue:** `P00-06` (COMPLETED, pending orchestration acceptance)
+- **Current issue:** `P00-07` (COMPLETED, pending orchestration acceptance)
 - **Date:** 2026-06-24
 - **Mode:** Planning / Documentation only
-- **Execution state:** `P00-06 COMPLETED, pending orchestration acceptance`
+- **Execution state:** `P00-07 COMPLETED, pending orchestration acceptance`
 - **Approved-lock decisions captured:** `13` (`REQ-LOCK-001` ... `REQ-LOCK-013`)
 
 ## Locked decisions currently captured
@@ -47,6 +47,33 @@
 - [docs/architecture/conceptual-domain-model.md](./architecture/conceptual-domain-model.md)
 - [docs/architecture/source-of-truth-matrix.md](./architecture/source-of-truth-matrix.md)
 - [docs/architecture/event-catalogue-draft.md](./architecture/event-catalogue-draft.md)
+- [docs/workflows/state-machine-index.md](./workflows/state-machine-index.md)
+- [docs/workflows/cross-workflow-invariants.md](./workflows/cross-workflow-invariants.md)
+- [docs/workflows/identity-verification.md](./workflows/identity-verification.md)
+- [docs/workflows/guardian-verification.md](./workflows/guardian-verification.md)
+- [docs/workflows/practitioner-credential-review.md](./workflows/practitioner-credential-review.md)
+- [docs/workflows/facility-credential-review.md](./workflows/facility-credential-review.md)
+- [docs/workflows/appointment.md](./workflows/appointment.md)
+- [docs/workflows/encounter.md](./workflows/encounter.md)
+- [docs/workflows/prescription.md](./workflows/prescription.md)
+- [docs/workflows/pharmacy-quote.md](./workflows/pharmacy-quote.md)
+- [docs/workflows/stock-reservation.md](./workflows/stock-reservation.md)
+- [docs/workflows/pharmacy-order.md](./workflows/pharmacy-order.md)
+- [docs/workflows/delivery.md](./workflows/delivery.md)
+- [docs/workflows/diagnostic-order.md](./workflows/diagnostic-order.md)
+- [docs/workflows/laboratory-appointment.md](./workflows/laboratory-appointment.md)
+- [docs/workflows/specimen.md](./workflows/specimen.md)
+- [docs/workflows/diagnostic-result.md](./workflows/diagnostic-result.md)
+- [docs/workflows/referral.md](./workflows/referral.md)
+- [docs/workflows/home-care-visit.md](./workflows/home-care-visit.md)
+- [docs/workflows/payment-intent.md](./workflows/payment-intent.md)
+- [docs/workflows/refund.md](./workflows/refund.md)
+- [docs/workflows/payout.md](./workflows/payout.md)
+- [docs/workflows/prior-authorization.md](./workflows/prior-authorization.md)
+- [docs/workflows/claim.md](./workflows/claim.md)
+- [docs/workflows/consent.md](./workflows/consent.md)
+- [docs/workflows/complaint.md](./workflows/complaint.md)
+- [docs/workflows/clinical-incident.md](./workflows/clinical-incident.md)
 
 ## Source precedence
 
@@ -70,17 +97,17 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - [x] Open-question schema normalized with owner, target prompt, target work-package, and approval path.
 - [x] Prompt-to-work-package crosswalk added to plan and traceability conventions.
 - [x] External approvals for legal, clinical, payment, and operational questions remain pending for pilot scope finalization.
-- [ ] Independent review and closure checklist for P00-06.
+- [ ] Independent review and closure checklist for P00-07.
 
 ## Completion summary for this phase
 
-- **Files changed this prompt:** 15
+- **Files changed this prompt:** 34
 - **Locked decisions preserved:** unchanged and carried forward from P00-00.
-- **New decisions:** P00-06 domain and architecture decisions added (`REQ-DOM-001` to `REQ-DOM-012`; `REQ-ARC-001` to `REQ-ARC-018`).
-- **Open questions:** carried forward where unresolved and owned, with domain/architecture uncertainties added (`OQ-00-90` through `OQ-00-110`).
-- **Assumptions:** added explicit P00-06 assumptions for modular-monolith modules, rebuildable read models, adapters, orchestration, and analytics consistency.
-- **Document register updates:** P00-06 artifacts marked DONE and linked.
-- **Next action:** Orchestration review and acceptance for `P00-06` before starting `P00-07`.
+- **New decisions:** P00-07 workflow decisions added (`REQ-WFL-001` to `REQ-WFL-025`).
+- **Open questions:** carried forward where unresolved and owned, with workflow-policy uncertainties added (`OQ-00-111` through `OQ-00-136`).
+- **Assumptions:** added explicit P00-07 assumptions for conceptual state machines, timeout configuration, authoritative state, stale projections, out-of-order callbacks, and explicit orchestration.
+- **Document register updates:** P00-07 workflow artifacts marked DONE and linked.
+- **Next action:** Orchestration review and acceptance for `P00-07` before starting `P00-08`.
 
 ## Phase status
 
@@ -90,10 +117,12 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - **P00-03:** PASS
 - **P00-04:** PASS
 - **P00-05:** PASS
-- **P00-06:** COMPLETED, pending orchestration acceptance
-- **P00-07:** NOT STARTED
+- **P00-06:** PASS
+- **P00-07:** COMPLETED, pending orchestration acceptance
+- **P00-08:** NOT STARTED
 - **Current blocker:** pending legal, clinical, finance, and operations approvals tracked in open questions.
 
-## P00-06 execution status phrase
+## P00-07 execution status phrase
 
-- **P00-06 COMPLETED, pending orchestration acceptance**
+- **P00-07 COMPLETED, pending orchestration acceptance**
+

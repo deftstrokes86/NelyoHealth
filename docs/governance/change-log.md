@@ -291,3 +291,70 @@ For all future phase updates:
   - P00-06 documentation-only scope preserved.
   - No P00-07 workflow state machines were created.
   - No application code, database schema, dependency, configuration, or browser-tooling changes were introduced.
+
+### Entry P00-07-001 - Workflow state-machine documentation
+- Date: 2026-06-24
+- Prompt ID: P00-07
+- Files created:
+  - `docs/workflows/state-machine-index.md`
+  - `docs/workflows/cross-workflow-invariants.md`
+  - `docs/workflows/identity-verification.md`
+  - `docs/workflows/guardian-verification.md`
+  - `docs/workflows/practitioner-credential-review.md`
+  - `docs/workflows/facility-credential-review.md`
+  - `docs/workflows/appointment.md`
+  - `docs/workflows/encounter.md`
+  - `docs/workflows/prescription.md`
+  - `docs/workflows/pharmacy-quote.md`
+  - `docs/workflows/stock-reservation.md`
+  - `docs/workflows/pharmacy-order.md`
+  - `docs/workflows/delivery.md`
+  - `docs/workflows/diagnostic-order.md`
+  - `docs/workflows/laboratory-appointment.md`
+  - `docs/workflows/specimen.md`
+  - `docs/workflows/diagnostic-result.md`
+  - `docs/workflows/referral.md`
+  - `docs/workflows/home-care-visit.md`
+  - `docs/workflows/payment-intent.md`
+  - `docs/workflows/refund.md`
+  - `docs/workflows/payout.md`
+  - `docs/workflows/prior-authorization.md`
+  - `docs/workflows/claim.md`
+  - `docs/workflows/consent.md`
+  - `docs/workflows/complaint.md`
+  - `docs/workflows/clinical-incident.md`
+- Files updated:
+  - `docs/STATUS.md`
+  - `docs/exec-plans/P00-product-clinical-regulatory-foundation.md`
+  - `docs/governance/document-register.md`
+  - `docs/governance/decision-register.md`
+  - `docs/governance/open-questions.md`
+  - `docs/governance/assumptions-register.md`
+  - `docs/governance/change-log.md`
+- Coverage counts:
+  - State machines: 25 (`WFL-001` through `WFL-025`).
+  - Workflow states: 273 conceptual states.
+  - Allowed transitions: 248 conceptual transition rows.
+  - Illegal transitions: 125 illegal-transition rows.
+  - Mermaid diagrams: 25 workflow state diagrams.
+  - Cross-workflow invariants: 25 (`INV-WFL-001` through `INV-WFL-025`).
+- Decisions added:
+  - Added `REQ-WFL-001` through `REQ-WFL-025`.
+- Open questions added:
+  - Added `OQ-00-111` through `OQ-00-136` for workflow policy, clinical timing, finance, disclosure, retry, expiry, and operational ownership gaps.
+- Assumptions added:
+  - Added `ASSUMPT-25` through `ASSUMPT-30` for conceptual state names, configuration-controlled timing, authoritative state/version/history, stale projections, duplicate/out-of-order callbacks, and explicit orchestration.
+- Event-catalogue reconciliation:
+  - Inspected `docs/architecture/event-catalogue-draft.md`.
+  - No file change was required because P00-07 workflows reference existing draft events or transition-history/audit intent.
+  - `ProviderDetailDisclosureEligibilityEstablished` remains `REQUIRES_APPROVAL` and is not treated as a generic payment-success event.
+- Provider-disclosure safeguards:
+  - Payment intent states do not unlock provider details.
+  - Pharmacy quote and laboratory appointment workflows preserve server-side sanitization and `providerDisplayName`-only pre-payment provider identity.
+  - Post-payment disclosure remains exact-order, selected-provider, actor, patient, tenant, and server-authorized.
+- Clinical-record integrity safeguards:
+  - Prescription, diagnostic result, encounter, referral, and clinical incident workflows preserve amendment/replacement/correction/supersession rather than silent overwrite.
+- Emergency safeguards:
+  - Emergency escalation remains independent of payment, coverage, registration, prior authorization, marketplace comparison, and provider-detail obscuration.
+- Remaining approvals:
+  - Numeric timeouts, retry limits, clinical escalation intervals, payment unlock event, refund/reversal/chargeback disclosure effects, operational queue targets, and regulatory reporting obligations remain pending.

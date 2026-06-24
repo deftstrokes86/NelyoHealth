@@ -1,4 +1,4 @@
-# Phase 0 Exec Plan: Product, Clinical, Regulatory, and Governance Foundation
+﻿# Phase 0 Exec Plan: Product, Clinical, Regulatory, and Governance Foundation
 
 ## Objective
 
@@ -116,8 +116,9 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 | P00-03 actor-tenancy model | P00-03 | COMPLETED, pending orchestration acceptance |
 | P00-04 funding models | P00-04 | PASS |
 | P00-05 journeys and service blueprints | P00-05 | PASS |
-| P00-06 glossary, classification, and conceptual boundaries | P00-06 | **COMPLETED, pending orchestration acceptance**; covers Complete Breakdown P00-07 and P00-08 |
-| P00-07 workflow state machines | P00-07 | not started |
+| P00-06 glossary, classification, and conceptual boundaries | P00-06 | PASS; covers Complete Breakdown P00-07 and P00-08 |
+| P00-07 workflow state machines | P00-07 | **COMPLETED, pending orchestration acceptance**; covers Complete Breakdown P00-09 |
+| P00-08 provider-disclosure contract | P00-08 | not started |
 | Privacy / legal / finance / operations | P00-11..P00-16 | not started |
 | Phase 0 gate and completion | P00-17 | not started |
 
@@ -128,3 +129,4 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 - All open questions have owner, target phase, and approval path.
 - Decisions are tagged and versioned in `docs/governance/decision-register.md`.
 - Required links, matrix entries, and scope boundaries are reviewed before each phase transition.
+
