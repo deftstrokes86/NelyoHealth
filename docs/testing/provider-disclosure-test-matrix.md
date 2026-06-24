@@ -180,3 +180,9 @@ All tests use synthetic patients, providers, orders, locations, and payments. Co
 - Refund, reversal, chargeback, cancellation, provider replacement, reconciliation exception, and legal/safety/support purpose changes trigger recomputation; final post-refund retrieval outcomes remain approval-gated.
 - No finance event, ledger entry, analytics event, log, trace, screenshot, browser payload, map request, cache entry, hidden DOM, or accessibility tree may contain protected pre-payment provider details.
 - P00-12 legal conflict around provider display and minimum disclosure remains unresolved and launch-gated; P00-13 does not alter the locked providerDisplayName-only pre-payment rule.
+
+## P00-14 browser and artifact-boundary alignment
+
+P00-14 extends the provider-disclosure tests into `docs/testing/privacy-boundary-tests.md` and `docs/testing/browser-validation-strategy.md`. The existing P00-08 disclosure tests remain authoritative for the disclosure contract; P00-14 adds future verification surfaces for HTML, API responses, GraphQL responses if used, JavaScript state, hydration payloads, browser storage, source output, network requests, map-provider requests, analytics events, error-reporting events, logs, cache entries, accessibility trees, hidden DOM elements, image metadata, test fixtures, screenshots, browser traces, and configured videos.
+
+The P00-14 strategy does not permit UI-only hiding. A pre-payment provider privacy test passes only if prohibited provider details are absent from the client-facing surface and from captured artifacts.

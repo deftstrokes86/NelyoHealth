@@ -85,3 +85,18 @@
 | ASSUMPT-68 | External financial callbacks may be duplicated or delivered out of order. | PROPOSED | Security Lead + Engineering Lead | REQ-FIN-005; REQ-FIN-006 | Duplicate or stale callbacks could corrupt state if idempotency and ordering are weak. |
 | ASSUMPT-69 | Unresolved financial exceptions require owner review and reconciliation before sensitive financial conclusions close. | PROPOSED | Finance/Payments Owner + Operations Lead | REQ-FIN-026; REQ-FIN-046 | Mismatched evidence could unlock details, distort balances, or misstate payable/refund status. |
 | ASSUMPT-70 | The operational subledger will require later mapping to statutory accounting systems and professional accounting classifications. | PROPOSED | Accounting Reviewer + Finance/Payments Owner | REQ-FIN-009 through REQ-FIN-012 | Operational records could be mistaken for final accounting records. |
+
+## P00-14 non-functional and browser-validation assumptions
+
+| Assumption ID | Assumption | Status | Owner | Target decision | Risk if wrong |
+|---|---|---|---|---|---|
+| ASSUMPT-71 | Phase 1 starts browser validation with Chromium smoke coverage before broader cross-browser release coverage. | PROPOSED | QA Owner + Architecture Owner | REQ-NFR-013; REQ-NFR-047; REQ-NFR-050 | Cross-browser gaps may persist longer than expected if not explicitly scheduled. |
+| ASSUMPT-72 | Official Playwright MCP is the preferred Codex IDE browser integration unless Phase 1 compatibility verification fails. | PROPOSED | Architecture Owner + Security Owner | REQ-NFR-030; REQ-NFR-031 | Browser integration design may require a replacement ADR. |
+| ASSUMPT-73 | Playwright Test remains the deterministic browser-test runner for Phase 1 unless an approved ADR supersedes it. | PROPOSED | QA Owner + Architecture Owner | REQ-NFR-027 | Test architecture would need rework if an alternative is approved. |
+| ASSUMPT-74 | The selected Codex IDE surface supports project-scoped configuration suitable for browser integration. | PROPOSED | Architecture Owner | REQ-NFR-030; OQ-00-552 | Browser setup may require a different project-scoped control mechanism. |
+| ASSUMPT-75 | Browser validation can use isolated synthetic profiles without relying on a personal browser profile. | PROPOSED | Security Owner + QA Owner | REQ-NFR-034; REQ-NFR-035 | Personal-state leakage risk would require stronger compensating controls. |
+| ASSUMPT-76 | Production origin blocking can be enforced in the Phase 1 browser setup. | PROPOSED | Security Owner + Architecture Owner | REQ-NFR-033 | Routine browser validation could accidentally target production. |
+| ASSUMPT-77 | Browser artifacts can be stored under ignored paths and scanned before sharing. | PROPOSED | Security Owner + Privacy Owner + QA Owner | REQ-NFR-039; REQ-NFR-040; REQ-NFR-046 | Screenshots, traces, or videos could leak sensitive synthetic or protected values. |
+| ASSUMPT-78 | Pull-request browser breadth can be narrower than release-candidate breadth if release gates preserve full coverage. | PROPOSED | QA Owner + Architecture Owner | REQ-NFR-047 | CI may either be too slow or insufficiently protective. |
+| ASSUMPT-79 | Automated accessibility checks will be supplemented by manual accessibility review before any conformance claim. | PROPOSED | Accessibility Reviewer + QA Owner | REQ-NFR-018; REQ-NFR-019 | Automated-only evidence could be mistaken for WCAG conformance. |
+| ASSUMPT-80 | Numeric NFR targets will be supplied or approved during P00-15, P00-17, or Phase 1 before becoming release commitments. | PROPOSED | Product Owner + Operations Owner + Architecture Owner | REQ-NFR-002; REQ-NFR-024 | Teams may treat unapproved estimates as commitments. |

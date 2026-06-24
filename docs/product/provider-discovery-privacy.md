@@ -104,3 +104,7 @@ Hospital referral, urgent facility guidance, emergency facility guidance, emerge
 - Refund, reversal, chargeback, cancellation, provider replacement, reconciliation exception, and legal/safety/support purpose changes trigger recomputation; final post-refund retrieval outcomes remain approval-gated.
 - No finance event, ledger entry, analytics event, log, trace, screenshot, browser payload, map request, cache entry, hidden DOM, or accessibility tree may contain protected pre-payment provider details.
 - P00-12 legal conflict around provider display and minimum disclosure remains unresolved and launch-gated; P00-13 does not alter the locked providerDisplayName-only pre-payment rule.
+
+## P00-14 browser-validation alignment
+
+Provider discovery privacy remains stricter than ordinary UI privacy. Before successful payment, the patient-facing client may receive only `providerDisplayName` and explicitly approved non-identifying commercial information. Browser validation must prove that prohibited provider details are absent from rendered and non-rendered surfaces, including source, hydration state, storage, network calls, analytics, error reporting, maps, accessibility trees, screenshots, traces, and cache entries.

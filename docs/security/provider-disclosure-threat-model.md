@@ -198,3 +198,7 @@ Each threat entry includes: threat ID, name, threat actor, asset, trust boundary
 - Refund, reversal, chargeback, cancellation, provider replacement, reconciliation exception, and legal/safety/support purpose changes trigger recomputation; final post-refund retrieval outcomes remain approval-gated.
 - No finance event, ledger entry, analytics event, log, trace, screenshot, browser payload, map request, cache entry, hidden DOM, or accessibility tree may contain protected pre-payment provider details.
 - P00-12 legal conflict around provider display and minimum disclosure remains unresolved and launch-gated; P00-13 does not alter the locked providerDisplayName-only pre-payment rule.
+
+## P00-14 browser artifact threat alignment
+
+Browser validation artifacts are treated as sensitive because screenshots, traces, videos, network logs, console logs, source snapshots, and accessibility snapshots may capture protected provider details, PHI, payment data, or secrets. P00-14 requires artifact scanning and controlled storage before sharing. A browser artifact containing prohibited pre-payment provider details is a blocking privacy defect and potential incident candidate.

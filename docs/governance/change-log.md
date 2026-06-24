@@ -466,3 +466,12 @@ For all future phase updates:
 - **Remaining approvals:** finance, Nigerian legal/regulatory, accounting, tax, privacy/DPO, security, pharmacy operations, laboratory operations, product, architecture, operations, and external orchestration acceptance.
 
 
+
+## Entry 014 - P00-14 non-functional requirements and browser-validation strategy
+
+- **Prompt:** P00-14
+- **Date:** 2026-06-24
+- **Change type:** Documentation implementation
+- **Summary:** Added draft security, reliability, accessibility, performance, test strategy, browser validation strategy, privacy-boundary testing, and ADR-0003 artifacts.
+- **Constraints preserved:** No production code, dependency installation, browser tooling, `.codex/config.toml`, Playwright configuration, smoke route, fixtures, or browser execution.
+- **Approval status:** DRAFT-PENDING-SECURITY-ARCHITECTURE-QA-ACCESSIBILITY-PRIVACY-AND-OPERATIONS-APPROVAL.

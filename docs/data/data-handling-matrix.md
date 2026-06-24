@@ -125,3 +125,7 @@ This summary does not replace `docs/security/access-intent-matrix.md` or `docs/s
 | Seed data | Synthetic only; no real providers, patients, payment instruments, or credentials. |
 
 No production data may be copied into tests. Protected provider fields must not be exported to client fixtures, traces, screenshots, logs, reports, browser storage, or accessibility snapshots before payment.
+
+## P00-14 browser artifact handling alignment
+
+Browser validation artifacts, including screenshots, traces, videos, network logs, console logs, source snapshots, storage dumps, accessibility snapshots, and failure bundles, are sensitive test evidence. They must use synthetic data only, be stored under approved ignored paths in Phase 1, be scanned before sharing, and must not contain pre-payment protected provider details, PHI, secrets, or payment data outside approved synthetic evidence boundaries.

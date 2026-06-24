@@ -276,3 +276,7 @@ Conceptual audit events include PrePaymentOfferGenerated, PrePaymentContractSeri
 - Refund, reversal, chargeback, cancellation, provider replacement, reconciliation exception, and legal/safety/support purpose changes trigger recomputation; final post-refund retrieval outcomes remain approval-gated.
 - No finance event, ledger entry, analytics event, log, trace, screenshot, browser payload, map request, cache entry, hidden DOM, or accessibility tree may contain protected pre-payment provider details.
 - P00-12 legal conflict around provider display and minimum disclosure remains unresolved and launch-gated; P00-13 does not alter the locked providerDisplayName-only pre-payment rule.
+
+## P00-14 verification alignment
+
+The disclosure contract must be verified at server and browser boundaries. Pre-payment contract compliance cannot be established by masking or omitting visible UI elements only; prohibited fields must be absent from responses, serialized state, browser storage, network traffic, telemetry, accessibility trees, caches, screenshots, traces, and other artifacts. Post-payment disclosure remains exact-authorized-order scoped.

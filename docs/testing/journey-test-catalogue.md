@@ -215,3 +215,7 @@ Each implemented pilot journey must include:
 - Synthetic provider names may use realistic display-name patterns, but test fixtures must not contain real provider addresses, coordinates, phone numbers, branch identifiers, maps, or pickup/collection instructions before payment.
 - No production screenshots, logs, traces, browser storage dumps, analytics payloads, or error events may be used.
 - Synthetic records must include adverse paths: duplicate identity, wrong payer, wrong tenant, failed payment, cancelled payment, expired authorization, refund, reversal, emergency, critical result, provider suspension, and privacy incident.
+
+## P00-14 browser-validation alignment
+
+Each user-facing journey that reaches Phase 1 implementation must map to both interactive Codex IDE browser inspection and deterministic Playwright Test coverage where browser behavior is relevant. Browser coverage must use synthetic data only and must include registration, authentication, onboarding, family and guardian relationships, diaspora sponsorship, appointment booking, payment, consultation, pharmacy matching, laboratory matching, provider-detail obscuration before payment, post-payment order-scoped disclosure, failed payment, refunded payment, expired authorization, unauthorized order access, emergency escalation, role and tenant isolation, keyboard navigation, focus behavior, mobile/tablet/desktop layouts, failed network requests, browser-console errors, and accessibility checks.

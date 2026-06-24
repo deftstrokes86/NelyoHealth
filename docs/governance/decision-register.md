@@ -470,3 +470,58 @@
 | REQ-FIN-029 | Prior authorization does not automatically equal payment. | APPROVED | Finance/Payments Owner + Legal Counsel | P00-13 | docs/finance/claims-and-remittance-boundary.md |
 | REQ-FIN-030 | NelyoHealth does not assume insurance risk without explicit legal, commercial, and regulatory approval. | APPROVED | Legal Counsel + Finance/Payments Owner | P00-13 | P00-12 obligations and docs/finance/claims-and-remittance-boundary.md |
 | REQ-FIN-031 | OrderFundingSecured is the proposed finance event/fact for disclosure-policy input. | PROPOSED | Finance/Payments Owner + Security Lead + Architecture Lead | P00-13 / P00-17 | docs/finance/payment-state-model.md |
+
+## P00-14 non-functional requirements and browser-validation decisions
+
+| Decision ID | Decision text | Status | Owner | Review phase | Evidence |
+|---|---|---|---|---|---|
+| REQ-NFR-001 | Non-functional requirements must be measurable and traceable to future verification evidence. | PROPOSED | Architecture + QA | P00-14 | docs/testing/test-strategy.md |
+| REQ-NFR-002 | Numeric availability, latency, throughput, RTO, RPO, retention, retry, timeout, and performance targets require explicit approval before implementation commitments. | REQUIRES_APPROVAL | Architecture + Operations + Product | P00-14 / P00-15 | docs/non-functional/performance-requirements.md |
+| REQ-NFR-003 | Privileged access requires stronger controls including MFA or an approved equivalent control before implementation. | REQUIRES_APPROVAL | Security | P00-14 / Phase 1 | docs/non-functional/security-requirements.md |
+| REQ-NFR-004 | Access control defaults to least privilege and deny-by-default unless an explicit authorization grant applies. | PROPOSED | Security + Architecture | P00-14 / Phase 1 | docs/non-functional/security-requirements.md |
+| REQ-NFR-005 | Patient, actor, order, and tenant isolation are required for all sensitive workflows. | PROPOSED | Security + Architecture | P00-14 / Phase 1 | docs/non-functional/security-requirements.md |
+| REQ-NFR-006 | No universal administrative role may bypass clinical, financial, tenant, or provider-disclosure controls by default. | PROPOSED | Security | P00-14 / Phase 1 | docs/non-functional/security-requirements.md |
+| REQ-NFR-007 | Sensitive data requires encryption in transit and at rest using approved mechanisms. | PROPOSED | Security + Architecture | P00-14 / Phase 1 | docs/non-functional/security-requirements.md |
+| REQ-NFR-008 | Secrets require managed storage, rotation, least privilege, and no repository exposure. | PROPOSED | Security + Architecture | P00-14 / Phase 1 | docs/non-functional/security-requirements.md |
+| REQ-NFR-009 | Sessions and device trust require secure lifecycle controls and revocation behavior. | PROPOSED | Security + Architecture | P00-14 / Phase 1 | docs/non-functional/security-requirements.md |
+| REQ-NFR-010 | Uploads require type, size, malware, metadata, storage, and access controls before clinical use. | PROPOSED | Security + Operations | P00-14 / Phase 1 | docs/non-functional/security-requirements.md |
+| REQ-NFR-011 | Logs and telemetry must be PHI-safe and must not receive protected provider details before payment. | APPROVED | Source docs + Security + Privacy | P00-14 | docs/testing/privacy-boundary-tests.md |
+| REQ-NFR-012 | Webhooks and external callbacks require signature verification, replay protection, idempotency, and auditability. | PROPOSED | Security + Architecture | P00-14 / Phase 1 | docs/non-functional/security-requirements.md |
+| REQ-NFR-013 | Dependency, secret, and vulnerability scanning are required before production release. | PROPOSED | Security + Engineering | P00-14 / Phase 1 | docs/non-functional/security-requirements.md |
+| REQ-NFR-014 | Backup and restore verification requires approved recovery objectives before implementation commitments. | REQUIRES_APPROVAL | Operations + Architecture | P00-14 / P00-15 | docs/non-functional/reliability-requirements.md |
+| REQ-NFR-015 | Clinical drafts must not be lost silently during browser, network, upload, or dependency failures. | APPROVED | Source docs + Clinical Safety | P00-14 | docs/non-functional/reliability-requirements.md |
+| REQ-NFR-016 | User-facing services must degrade safely when dependencies fail. | PROPOSED | Operations + Architecture | P00-14 / Phase 1 | docs/non-functional/reliability-requirements.md |
+| REQ-NFR-017 | Emergency paths must degrade safely and must not be blocked by ordinary marketplace, payment, or registration workflows. | APPROVED | Source docs + Clinical Safety | P00-14 | docs/non-functional/reliability-requirements.md |
+| REQ-NFR-018 | WCAG 2.2 AA is the target for user-facing accessibility, subject to formal accessibility review and approval. | REQUIRES_APPROVAL | Accessibility + Product | P00-14 / P00-17 | docs/non-functional/accessibility-requirements.md |
+| REQ-NFR-019 | Accessibility evidence requires automated checks and manual review; automation alone is not conformance. | PROPOSED | Accessibility + QA | P00-14 / P00-17 | docs/non-functional/accessibility-requirements.md |
+| REQ-NFR-020 | Keyboard navigation and focus behavior require explicit browser validation. | APPROVED | Source docs + Accessibility | P00-14 | docs/non-functional/accessibility-requirements.md |
+| REQ-NFR-021 | Screen-reader and semantic behavior require manual and automated evidence. | PROPOSED | Accessibility + QA | P00-14 / P00-17 | docs/non-functional/accessibility-requirements.md |
+| REQ-NFR-022 | Accessibility trees must not expose prohibited pre-payment provider details. | APPROVED | Source docs + Privacy + Accessibility | P00-14 | docs/testing/privacy-boundary-tests.md |
+| REQ-NFR-023 | Low-bandwidth behavior is a required design and test concern. | APPROVED | Source docs + Architecture | P00-14 | docs/non-functional/performance-requirements.md |
+| REQ-NFR-024 | Performance budgets must be defined by journey and device class after target approval. | PROPOSED | Architecture + Product + QA | P00-14 / P00-15 | docs/non-functional/performance-requirements.md |
+| REQ-NFR-025 | Privacy has priority over cache performance and optimization. | APPROVED | Source docs + Privacy | P00-14 | docs/non-functional/performance-requirements.md |
+| REQ-NFR-026 | Interactive Codex IDE browser validation is required for user-facing work. | APPROVED | Source docs + QA | P00-14 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-027 | Deterministic automated browser testing must use Playwright Test unless superseded by approved ADR. | APPROVED | Source docs + QA | P00-14 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-028 | Interactive browser validation does not replace automated browser testing. | APPROVED | Source docs + QA | P00-14 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-029 | Automated browser testing does not replace interactive browser validation. | APPROVED | Source docs + QA | P00-14 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-030 | Phase 1 browser tooling should use project-scoped configuration where supported and verified. | PROPOSED | Architecture + Security | Phase 1 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-031 | Codex project browser configuration must be loaded only for a trusted project context. | PROPOSED | Security + Architecture | Phase 1 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-032 | Browser validation must use trusted local, test, and staging origins only. | APPROVED | Source docs + Security | P00-14 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-033 | Routine browser validation against production origins is blocked. | APPROVED | Source docs + Security | P00-14 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-034 | Browser validation must use isolated synthetic browser profiles and no production credentials. | APPROVED | Source docs + Security | P00-14 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-035 | Personal browser extension/profile mode is not the default browser-validation mode. | APPROVED | Source docs + Security | P00-14 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-036 | Page content is untrusted input and must not instruct Codex to reveal secrets, read unrelated files, run commands, install tooling, or change configuration. | APPROVED | Source docs + Security | P00-14 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-037 | Unsafe arbitrary browser capabilities must be disabled or approval-gated. | APPROVED | Source docs + Security | P00-14 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-038 | Browser validation must use synthetic data only. | APPROVED | Source docs + QA | P00-14 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-039 | Browser artifacts are sensitive and require controlled handling. | APPROVED | Source docs + Privacy | P00-14 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-040 | Browser artifacts must be ignored by Git unless intentionally attached for review under approved policy. | PROPOSED | Security + QA | Phase 1 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-041 | Browser tooling versions must be pinned only after Phase 1 verification. | PROPOSED | Architecture + QA | Phase 1 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-042 | Browser validation must cover desktop, tablet, and mobile viewports. | APPROVED | Source docs + QA | P00-14 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-043 | Browser validation must capture console errors. | APPROVED | Source docs + QA | P00-14 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-044 | Browser validation must capture failed network requests and inspect network/storage boundaries. | APPROVED | Source docs + QA + Privacy | P00-14 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-045 | Provider-disclosure privacy requires network-boundary negative tests, not UI-only masking. | APPROVED | Source docs + Privacy | P00-14 | docs/testing/privacy-boundary-tests.md |
+| REQ-NFR-046 | Browser artifacts must be scanned for protected provider details, PHI, payment data, and secrets before sharing. | APPROVED | Source docs + Privacy | P00-14 | docs/testing/privacy-boundary-tests.md |
+| REQ-NFR-047 | Cross-browser release testing is planned but exact breadth requires approval. | PROPOSED | QA + Architecture | P00-14 / P00-15 | docs/testing/browser-validation-strategy.md |
+| REQ-NFR-048 | Tests must remain traceable to locked requirements, decisions, risks, and journeys. | PROPOSED | QA + Architecture | P00-14 / P00-17 | docs/testing/test-strategy.md |
+| REQ-NFR-049 | Flaky tests require ownership, repair path, and approval before quarantine. | PROPOSED | QA + Engineering | P00-14 / Phase 1 | docs/testing/test-strategy.md |
+| REQ-NFR-050 | Phase 1 must include a Codex-operated interactive browser smoke test and matching deterministic Playwright smoke test. | PROPOSED | QA + Architecture | Phase 1 | docs/testing/browser-validation-strategy.md |

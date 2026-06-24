@@ -140,3 +140,17 @@ For each significant requirement, include:
 | CLM-POL | P00-13 | Claims, remittance, employer, and HMO-boundary policy rules. |
 | FIN-TST | P00-13 | Future financial test requirements, including browser and Playwright coverage delegated to P00-14. |
 | REQ-FIN | P00-13 | Decision-register finance decisions. |
+
+## P00-14 identifier families
+
+| Prefix | Meaning | Owning prompt | Notes |
+|---|---|---|---|
+| SEC-NFR- | Security non-functional requirement | P00-14 | Draft until security and architecture approval. |
+| REL-NFR- | Reliability non-functional requirement | P00-14 | Numeric targets remain approval-controlled. |
+| A11Y-NFR- | Accessibility non-functional requirement | P00-14 | WCAG 2.2 AA is a target, not a conformance claim. |
+| PERF-NFR- | Performance non-functional requirement | P00-14 | Budgets require approved targets before implementation gates. |
+| TST-REQ- | Testing strategy requirement | P00-14 | Defines future verification requirements only. |
+| BRW-REQ- | Browser validation requirement | P00-14 | Covers interactive Codex IDE browser and deterministic Playwright Test strategy. |
+| PBT-REQ- | Privacy-boundary test requirement | P00-14 | Covers provider-disclosure and sensitive-data negative tests. |
+| NFR-TST- | Future non-functional test anchor | P00-14 | Reserved for Phase 1/later implementation; no test code created in Phase 0. |
+| REQ-NFR- | Non-functional governance decision | P00-14 | Recorded in decision register. |
