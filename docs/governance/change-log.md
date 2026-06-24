@@ -209,3 +209,36 @@ For all future phase updates:
 - Validation impact:
   - No new requirements were approved during this follow-up.
   - No governance status transitions were changed; this is a documentation completeness update within `P00-04`.
+
+### Entry P00-05-001 - End-to-end journeys and service blueprints
+- Date: 2026-06-24
+- Prompt ID: P00-05
+- Files created:
+  - `docs/product/user-journeys.md`
+  - `docs/product/service-blueprints.md`
+  - `docs/product/exception-journeys.md`
+  - `docs/testing/journey-test-catalogue.md`
+- Files updated:
+  - `docs/STATUS.md`
+  - `docs/exec-plans/P00-product-clinical-regulatory-foundation.md`
+  - `docs/governance/document-register.md`
+  - `docs/governance/decision-register.md`
+  - `docs/governance/open-questions.md`
+  - `docs/governance/assumptions-register.md`
+  - `docs/governance/change-log.md`
+- Decisions added/updated:
+  - Added `REQ-JRN-001` through `REQ-JRN-012` for journey closure, exception ownership, conceptual state-language boundaries, provider-disclosure testing, browser validation, emergency precedence, and traceability identifiers.
+- Assumptions added/updated:
+  - Added `ASSUMPT-17` through `ASSUMPT-19` for functional journey ownership, conceptual state-language boundaries, and non-vendor external handoffs.
+- Open questions added/closed:
+  - Added `OQ-00-70` through `OQ-00-89` for operational queue targets, after-hours support, consultation failures, no-show handling, delivery failures, specimen recollection, delayed/critical lab results, referral follow-up, emergency fallback, account recovery, provider suspension, incident severity, privacy notification, direct-DB-edit prohibition, and browser artifact retention.
+- Review/validation status:
+  - Documented all 20 journeys (`JRN-001` through `JRN-020`) with scope labels and journey-level closure/reopening expectations.
+  - Documented 20 service blueprints (`BP-JRN-001` through `BP-JRN-020`) with frontstage/backstage and human-operations boundaries.
+  - Documented 54 exception journeys (`EXC-001` through `EXC-054`), including a provider-disclosure incident flow and prohibited direct-production-DB-edit escalation.
+  - Documented 70 journey test scenarios with mandatory interactive IDE browser and deterministic Playwright coverage as strategy only.
+  - Preserved pharmacy and laboratory pre-payment disclosure restrictions as server-side filtering and non-visual negative proof obligations.
+  - Preserved emergency escalation outside payment, registration, plan authorization, marketplace comparison, and provider-detail obscuration.
+- External approvals obtained or blocked:
+  - No new clinical, legal, finance, vendor, payment, or operational approvals were claimed.
+  - Operational SLOs, clinical escalation intervals, payment refund/reversal behavior, privacy incident notification, and browser artifact retention remain open for later prompts and external owners.

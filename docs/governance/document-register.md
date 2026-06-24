@@ -39,6 +39,10 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 | Product | [docs/product/diaspora-plan-rules.md](../product/diaspora-plan-rules.md) | P00-04 | Product + legal + finance | DONE | PROPOSED | Authored in P00-04 |
 | Product | [docs/product/employer-benefit-rules.md](../product/employer-benefit-rules.md) | P00-04 | Product + legal | DONE | PROPOSED | Authored in P00-04 |
 | Product | [docs/product/hmo-coverage-rules.md](../product/hmo-coverage-rules.md) | P00-04 | Product + legal + finance | DONE | PROPOSED | Authored in P00-04 |
+| Product | [docs/product/user-journeys.md](../product/user-journeys.md) | P00-05 | Product + operations + clinical | DONE | PROPOSED | Authored in P00-05 |
+| Product | [docs/product/service-blueprints.md](../product/service-blueprints.md) | P00-05 | Product + operations | DONE | PROPOSED | Authored in P00-05 |
+| Product | [docs/product/exception-journeys.md](../product/exception-journeys.md) | P00-05 | Operations + clinical + security | DONE | PROPOSED | Authored in P00-05 |
+| Testing | [docs/testing/journey-test-catalogue.md](../testing/journey-test-catalogue.md) | P00-05 | QA + product + security | DONE | PROPOSED | Authored in P00-05 |
 | Architecture | [docs/architecture/tenancy-concept.md](../architecture/tenancy-concept.md) | P00-03 | Architecture + security | DONE | PROPOSED | Tenant boundaries completed in P00-03 |
 | Security | [docs/security/access-intent-matrix.md](../security/access-intent-matrix.md) | P00-03 | Security + privacy | DONE | PROPOSED | Access intent matrix completed in P00-03 |
 | Security | [docs/security/payer-visibility-matrix.md](../security/payer-visibility-matrix.md) | P00-04 | Finance + security | DONE | PROPOSED | Payer/funding intent model for P00-04 |
