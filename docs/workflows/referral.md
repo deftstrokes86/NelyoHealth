@@ -1,4 +1,4 @@
-# Referral State Machine
+﻿# Referral State Machine
 
 ## Document Control
 
@@ -189,4 +189,10 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Notification minimization.
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
+## P00-09 Clinical Safety Alignment
+
+- Routine, priority, urgent, and emergency referrals are distinct conceptual categories pending approved criteria.
+- Referral is closed-loop: creation alone is not closure; acceptance, attendance, outcome return where supported, clinician review, follow-up, failed-contact handling, and closure evidence are required.
+- Hospital and specialist referral details are not governed by pharmacy/laboratory pre-payment provider-detail obscuration, and emergency facility guidance must not wait for payment.
+- Related clinical protocols: `docs/clinical/referral-standard.md`, `docs/clinical/emergency-protocol.md`, and `docs/clinical/urgent-care-protocol.md`.
 

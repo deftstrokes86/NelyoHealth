@@ -1,4 +1,4 @@
-# Diagnostic result State Machine
+﻿# Diagnostic result State Machine
 
 ## Document Control
 
@@ -173,4 +173,11 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Notification minimization.
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
+## P00-09 Clinical Safety Alignment
+
+- Critical-result notification is distinct from explicit acknowledgment.
+- Uploading or releasing a result is not critical-result closure.
+- Failed clinician contact, failed patient contact, backup clinical ownership, corrected-result re-evaluation, renotification, and documented resolution are required policy areas.
+- Finalized verified results are corrected or versioned; they are never silently overwritten.
+- Related clinical protocol: `docs/clinical/critical-result-protocol.md` and runbook `docs/runbooks/critical-result-draft.md`.
 

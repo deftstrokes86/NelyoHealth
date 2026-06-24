@@ -1,4 +1,4 @@
-# Diagnostic order State Machine
+﻿# Diagnostic order State Machine
 
 ## Document Control
 
@@ -168,4 +168,10 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Notification minimization.
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
+## P00-09 Clinical Safety Alignment
+
+- Diagnostic ordering remains clinician-controlled and cannot be created autonomously by the platform.
+- A diagnostic order must preserve patient, clinician, specimen, and order identity linkage for downstream result verification.
+- Laboratory-result policy detail remains P00-10; P00-09 only defines safety boundary and critical-result loop expectations.
+- Related clinical protocols: `docs/clinical/consultation-standard.md` and `docs/clinical/critical-result-protocol.md`.
 

@@ -78,3 +78,11 @@
 - Payment failure, payment cancellation, incomplete authorization, authorization without the approved success event, unverified payment, wrong-order payment, wrong-patient payment, wrong-tenant payment, refund, reversal, chargeback, or reconciliation exception does not unlock provider details.
 - Provider-detail disclosure is order-scoped, patient-scoped, tenant-scoped, actor-scoped, and selected-provider-scoped; one paid order must not unlock details for another provider, quotation, patient, tenant, or order.
 - The approval-gated `ProviderDetailDisclosureEligibilityEstablished` fact remains a separate server-authorized decision. Generic payment state, client success screens, browser navigation, cached responses, direct URL access, guessed internal identifiers, and support projections must not create disclosure eligibility.
+## P00-09 Clinical Safety Invariants
+
+- `INV-CLN-001`: Emergency escalation is independent of payment, funding, sponsor approval, HMO/employer authorization, ordinary registration, marketplace comparison, and pharmacy/laboratory provider-detail obscuration.
+- `INV-CLN-002`: NelyoHealth does not autonomously diagnose, prescribe, order tests, interpret results for action, determine that emergency is absent, or decide remote care is sufficient.
+- `INV-CLN-003`: Telemedicine suitability is continuous and may redirect to in-person assessment, urgent escalation, emergency escalation, diagnostics, or follow-up.
+- `INV-CLN-004`: Finalized clinical notes, prescriptions, diagnostic results, referral summaries, and safety-event documentation use amendments, corrections, replacements, or supersession with provenance.
+- `INV-CLN-005`: Critical-result notification, acknowledgment, failed-contact handling, escalation, resolution, audit, and incident review where applicable are separate closure requirements.
+- `INV-CLN-006`: Accessibility, low bandwidth, failed upload, reconnect, and inability to communicate safely are clinical safety concerns, not only usability concerns.

@@ -1,13 +1,13 @@
-﻿# NelyoHealth Phase 0 Status
+# NelyoHealth Phase 0 Status
 
 ## Current phase
 
 - **Program:** NelyoHealth Platform Build
 - **Active phase:** Phase 0 (Product, clinical, regulatory, and delivery foundation)
-- **Current issue:** `P00-08` (COMPLETED, pending orchestration acceptance)
+- **Current issue:** `P00-09` (COMPLETED, pending orchestration acceptance)
 - **Date:** 2026-06-24
 - **Mode:** Planning / Documentation only
-- **Execution state:** `P00-08 COMPLETED, pending orchestration acceptance`
+- **Execution state:** `P00-09 COMPLETED, pending orchestration acceptance`
 - **Approved-lock decisions captured:** `13` (`REQ-LOCK-001` ... `REQ-LOCK-013`)
 
 ## Locked decisions currently captured
@@ -80,6 +80,18 @@
 - [docs/testing/provider-disclosure-test-matrix.md](./testing/provider-disclosure-test-matrix.md)
 - [docs/adr/ADR-0001-provider-detail-release-after-payment.md](./adr/ADR-0001-provider-detail-release-after-payment.md)
 
+- [docs/clinical/clinical-scope.md](./clinical/clinical-scope.md)
+- [docs/clinical/clinical-safety-model.md](./clinical/clinical-safety-model.md)
+- [docs/clinical/telemedicine-suitability.md](./clinical/telemedicine-suitability.md)
+- [docs/clinical/consultation-standard.md](./clinical/consultation-standard.md)
+- [docs/clinical/safety-netting-standard.md](./clinical/safety-netting-standard.md)
+- [docs/clinical/clinical-incident-policy.md](./clinical/clinical-incident-policy.md)
+- [docs/clinical/emergency-protocol.md](./clinical/emergency-protocol.md)
+- [docs/clinical/urgent-care-protocol.md](./clinical/urgent-care-protocol.md)
+- [docs/clinical/referral-standard.md](./clinical/referral-standard.md)
+- [docs/clinical/critical-result-protocol.md](./clinical/critical-result-protocol.md)
+- [docs/runbooks/emergency-escalation-draft.md](./runbooks/emergency-escalation-draft.md)
+- [docs/runbooks/critical-result-draft.md](./runbooks/critical-result-draft.md)
 ## Source precedence
 
 For this repository, conflict handling is fixed at:
@@ -102,9 +114,9 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - [x] Open-question schema normalized with owner, target prompt, target work-package, and approval path.
 - [x] Prompt-to-work-package crosswalk added to plan and traceability conventions.
 - [x] External approvals for legal, clinical, payment, and operational questions remain pending for pilot scope finalization.
-- [ ] Independent review and closure checklist for P00-08.
+- [ ] Independent review and closure checklist for P00-09.
 
-## Completion summary for this phase
+## Previous P00-08 completion summary
 
 - **Files changed this prompt:** 13
 - **Locked decisions preserved:** unchanged and carried forward from P00-00.
@@ -112,7 +124,19 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - **Open questions:** carried forward where unresolved and owned, with provider-disclosure uncertainties added (`OQ-00-137` through `OQ-00-160`) and linked to existing finance/support/privacy questions.
 - **Assumptions:** added P00-08 assumptions for conceptual contracts, on-demand retrieval, token implementation deferral, generic service-area visualization, and browser-artifact retention dependency.
 - **Document register updates:** five P00-08 provider-disclosure artifacts marked DONE and linked.
-- **Next action:** Orchestration review and acceptance for `P00-08` before starting `P00-09`.
+- **Next action:** Orchestration review and acceptance for `P00-09` before starting `P00-10`.
+
+
+## P00-09 completion summary
+
+- **Files changed this prompt:** 27 documentation files.
+- **Clinical artifacts created:** 12 P00-09 artifacts with clinical status `DRAFT-PENDING-CLINICAL-APPROVAL` and effective date `NOT EFFECTIVE UNTIL APPROVED`.
+- **New decisions:** P00-09 clinical decisions added (`REQ-CLN-001` to `REQ-CLN-035`).
+- **Open questions:** clinical and operational questions added (`OQ-00-161` through `OQ-00-204`).
+- **Assumptions:** added P00-09 assumptions (`ASSUMPT-36` through `ASSUMPT-40`).
+- **Document register updates:** 12 P00-09 artifacts marked DONE and requiring approval.
+- **Workflow/event alignment:** narrow P00-09 alignment notes added to clinical workflows and minimum-necessary draft clinical events added where missing.
+- **Next action:** Orchestration review and acceptance for `P00-09` before starting `P00-10`.
 
 ## Phase status
 
@@ -124,13 +148,14 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - **P00-05:** PASS
 - **P00-06:** PASS
 - **P00-07:** PASS
-- **P00-08:** COMPLETED, pending orchestration acceptance
-- **P00-09:** NOT STARTED
-- **Current blocker:** pending legal, privacy, security, finance, pharmacy, laboratory, and operational approvals tracked in open questions.
+- **P00-08:** PASS
+- **P00-09:** COMPLETED, pending orchestration acceptance
+- **P00-10:** NOT STARTED
+- **Current blocker:** pending clinical, legal, privacy, security, finance, pharmacy, laboratory, and operational approvals tracked in open questions.
 
 ## P00-08 execution status phrase
 
-- **P00-08 COMPLETED, pending orchestration acceptance**
+- **P00-08 PASS**
+## P00-09 execution status phrase
 
-
-
+- **P00-09 COMPLETED, pending orchestration acceptance**

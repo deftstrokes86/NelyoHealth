@@ -1,4 +1,4 @@
-# Clinical incident State Machine
+﻿# Clinical incident State Machine
 
 ## Document Control
 
@@ -168,4 +168,11 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Notification minimization.
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
+## P00-09 Clinical Safety Alignment
+
+- Clinical incidents include immediate containment, patient-safety action, clinical leadership, investigation, privacy/security crossover, corrective action, monitoring, closure approval, reopening, learning, and prevention.
+- Severity remains separate from lifecycle state.
+- Clinical incident closure requires authorized clinical-owner approval and audit evidence.
+- Operations staff must not directly edit clinical records to resolve incidents.
+- Related clinical policy: `docs/clinical/clinical-incident-policy.md`.
 

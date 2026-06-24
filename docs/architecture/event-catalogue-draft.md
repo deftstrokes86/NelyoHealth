@@ -1,4 +1,4 @@
-﻿# NelyoHealth Event Catalogue Draft
+# NelyoHealth Event Catalogue Draft
 
 ## Document Control
 
@@ -111,6 +111,18 @@ Every draft event row records event ID, event name, event type, owning context, 
 | EVT-080 | ClinicalIncidentOpened | Operational signal | Support and Operations | Clinical incident opened. | incidentRef, severity, patientRef | Full record body | Clinical review, Audit | Ordered per incident | Clinical audit | PROPOSED | OQ-00-86 |
 | EVT-081 | PrivacyIncidentOpened | Operational signal | Support and Operations | Privacy incident opened. | incidentRef, affectedClass, severity | Excess personal data | Privacy, Security | Ordered per incident | Privacy audit | PROPOSED | OQ-00-87 |
 | EVT-082 | SecurityIncidentOpened | Operational signal | Support and Operations | Security incident opened. | incidentRef, severity, systemArea | Secrets | Security | Ordered per incident | Security audit | PROPOSED | OQ-00-86 |
+
+| EVT-083 | TelemedicineSuitabilityReassessed | Domain event | Consultations and Encounters | Telemedicine suitability was reassessed. | encounterRef, patientRef, assessmentStage, outcomeCode | Full clinical note or red-flag detail in generic payload | Clinical Records, Support, Audit | Ordered per encounter; idempotent by assessmentRef | Clinical audit | REQUIRES_APPROVAL | REQ-CLN-004 |
+| EVT-084 | InPersonAssessmentRequired | Domain event | Consultations and Encounters | Clinician determined in-person assessment is required. | encounterRef, patientRef, dispositionCode | Full clinical note | Referrals, Notifications, Audit | Ordered per encounter | Clinical audit | REQUIRES_APPROVAL | REQ-CLN-004 |
+| EVT-085 | UrgentEscalationTriggered | Domain event | Consultations and Encounters | Urgent-care path triggered outside ordinary flow. | escalationRef, patientRef, triggerCategory | Payment demand, marketplace comparison, full clinical note | Referrals, Support, Audit | Idempotent by escalationRef | Clinical audit | REQUIRES_APPROVAL | REQ-CLN-005 |
+| EVT-086 | EmergencyTransferSummaryPrepared | Domain event | Referrals | Minimum-necessary emergency transfer summary prepared. | transferSummaryRef, patientRef, escalationRef | Full longitudinal record, unrelated diagnoses | Receiving facility workflow, Audit | Ordered per escalation | Clinical audit | REQUIRES_APPROVAL | REQ-CLN-025 |
+| EVT-087 | ReferralFollowUpRequired | Domain event | Referrals | Referral requires follow-up or outcome chase. | referralRef, patientRef, followUpReasonCode | Full referral packet | Support, Clinical supervisor, Audit | Ordered per referral | Clinical audit | REQUIRES_APPROVAL | REQ-CLN-022 |
+| EVT-088 | ReferralOutcomeReceived | Domain event | Referrals | Referral outcome returned or recorded. | referralRef, outcomeRef, patientRef | Full external report unless approved | Clinical Records, Support, Audit | Ordered per referral | Clinical audit | REQUIRES_APPROVAL | REQ-CLN-022 |
+| EVT-089 | CriticalResultNotificationSent | Domain event | Diagnostics | Critical-result notification was sent. | criticalRef, resultRef, recipientRole, channelClass | Result value in insecure notification | Clinical escalation, Audit | Ordered per criticalRef | Clinical audit | REQUIRES_APPROVAL | REQ-CLN-028 |
+| EVT-090 | CriticalResultAcknowledgmentOverdue | Operational signal | Diagnostics | Critical-result acknowledgment is overdue under approved policy. | criticalRef, resultRef, ownerRole | Full result body in queue summary | Clinical supervisor, Operations, Audit | Idempotent by criticalRef + policyVersion | Clinical audit | REQUIRES_APPROVAL | REQ-CLN-029 |
+| EVT-091 | CriticalResultPatientContactFailed | Operational signal | Diagnostics | Patient contact failed for critical result. | criticalRef, patientRef, contactPolicyRef | Result value in notification metadata | Operations, Clinical supervisor, Audit | Ordered per criticalRef | Clinical audit | REQUIRES_APPROVAL | REQ-CLN-029 |
+| EVT-092 | CriticalResultResolved | Domain event | Diagnostics | Critical-result loop reached documented resolution. | criticalRef, resolutionRef, patientRef | Full result body unless specifically authorized | Clinical Records, Audit | Ordered per criticalRef | Clinical audit | REQUIRES_APPROVAL | REQ-CLN-028 |
+| EVT-093 | ClinicalSafetyConfigurationActivated | Domain event | Clinical Governance | Versioned clinical safety configuration activated. | configRef, versionRef, effectiveDate, ownerRole | Clinical rule body unless approved for consumers | Clinical contexts, Audit | Ordered per configRef | Governance audit | REQUIRES_APPROVAL | REQ-CLN-035 |
 
 ## Payload Minimization
 

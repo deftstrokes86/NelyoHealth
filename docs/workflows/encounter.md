@@ -1,4 +1,4 @@
-# Encounter State Machine
+﻿# Encounter State Machine
 
 ## Document Control
 
@@ -158,4 +158,11 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Notification minimization.
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
+## P00-09 Clinical Safety Alignment
+
+- Telemedicine suitability is reassessed before booking where possible, during intake, at consultation start, during the encounter, after disconnection, and when new information appears.
+- Disconnection does not equal clinical completion; draft documentation is preserved and emergency concern still escalates.
+- Patient identity, clinician identity, current location, emergency contact where provided, and additional participants are confirmed or routed to safe escalation.
+- Finalized clinical notes use amendment, correction, replacement, or supersession with provenance.
+- Related clinical protocols: `docs/clinical/telemedicine-suitability.md`, `docs/clinical/consultation-standard.md`, and `docs/clinical/safety-netting-standard.md`.
 

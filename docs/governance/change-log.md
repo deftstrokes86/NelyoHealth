@@ -376,4 +376,26 @@ For all future phase updates:
 - **Assumptions added:** `ASSUMPT-31` through `ASSUMPT-35`
 - **Summary:** Added allow-list/deny-list provider-disclosure contract, exact-order authorization model, map/cache/telemetry/support restrictions, threat model, negative test matrix, and remaining approval map.
 - **Next prompt status:** P00-09 NOT STARTED.
+### Entry P00-09-001 - Clinical scope, safety, emergency, referral, and critical-result protocols
+
+- **Date:** 2026-06-24
+- **Prompt:** P00-09
+- **Files created:** 12
+- **Files updated:** 15
+- **Clinical requirement count:** `CLN-REQ-001` through `CLN-REQ-035` = 35
+- **Scope-rule count:** `CLN-SCP-001` through `CLN-SCP-013` = 13
+- **Hazard count:** `CLN-SAF-001` through `CLN-SAF-025` = 25 hazards
+- **Emergency-rule count:** `CLN-EMR-001` through `CLN-EMR-012` = 12
+- **Urgent-rule count:** `CLN-URG-001` through `CLN-URG-005` = 5
+- **Referral-rule count:** `CLN-REF-001` through `CLN-REF-008` = 8
+- **Critical-result-rule count:** `CLN-CRT-001` through `CLN-CRT-009` = 9
+- **Incident-rule count:** `CLN-INC-001` through `CLN-INC-007` = 7
+- **Runbook-step count:** `CLN-RUN-001` through `CLN-RUN-040` = 40
+- **Decisions added:** `REQ-CLN-001` through `REQ-CLN-035`
+- **Open questions added:** `OQ-00-161` through `OQ-00-204`
+- **Assumptions added:** `ASSUMPT-36` through `ASSUMPT-40`
+- **Workflow alignment:** P00-09 clinical guard sections added to appointment, encounter, diagnostic order, diagnostic result, referral, clinical incident, and cross-workflow invariants.
+- **Event alignment:** Added minimum-necessary draft clinical events `EVT-083` through `EVT-093`; existing `EVT-027 EmergencyEscalationTriggered` was not duplicated.
+- **Remaining approvals:** Clinical, legal, privacy, security, operations, laboratory, pharmacy, finance, accessibility, and regulatory approvals remain required before the documents become effective.
+- **Next prompt status:** P00-10 NOT STARTED.
 

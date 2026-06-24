@@ -1,4 +1,4 @@
-# Appointment State Machine
+﻿# Appointment State Machine
 
 ## Document Control
 
@@ -164,4 +164,10 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Notification minimization.
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
+## P00-09 Clinical Safety Alignment
+
+- Appointment must not block urgent or emergency escalation; suspected emergency leaves ordinary booking and commercial flow.
+- Clinician lateness, patient no-show, clinician no-show, rescheduling, and refund consequences remain approval-gated open questions and must not invent timing thresholds.
+- Appointment readiness must support identity, credential, location, accessibility, and low-bandwidth checks before Encounter starts.
+- Related clinical protocols: `docs/clinical/consultation-standard.md`, `docs/clinical/emergency-protocol.md`, and `docs/clinical/urgent-care-protocol.md`.
 
