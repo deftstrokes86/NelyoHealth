@@ -169,3 +169,11 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
 
+
+## P00-10 Policy Alignment
+
+- Aligns with `docs/operations/pharmacy-fulfilment-policy.md`, `docs/clinical/laboratory-ordering-policy.md`, and future P00-13 refund policy.
+- Guard: refund, reversal, or chargeback never creates initial provider-detail disclosure eligibility.
+- Guard: future retrieval after a prior valid disclosure is recomputed and remains approval-gated by P00-13.
+- Guard: stock failure, provider rejection, specimen rejection, recollection, delivery failure, and return can create refund handoff but do not silently alter clinical records or provider disclosure decisions.
+- Future tests: refund handoff after stock failure, pharmacist rejection, delivery return, specimen rejection, no initial disclosure after refund/reversal/chargeback.

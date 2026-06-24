@@ -181,3 +181,12 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Finalized verified results are corrected or versioned; they are never silently overwritten.
 - Related clinical protocol: `docs/clinical/critical-result-protocol.md` and runbook `docs/runbooks/critical-result-draft.md`.
 
+
+## P00-10 Policy Alignment
+
+- Aligns with `docs/clinical/result-release-policy.md` and `docs/clinical/critical-result-protocol.md`.
+- Guard: result verification requires patient-order-specimen association, authorized verifier, quality checks, units, reference context, version, signature/equivalent, criticality assessment, and audit.
+- Guard: release to clinician, release to patient, clinician review, notification, acknowledgment, and diagnostic-loop closure are separate facts.
+- Guard: corrected results preserve earlier versions, require re-evaluation and renotification where required, and never silently overwrite.
+- Guard: a result does not automatically create a prescription, start pharmacy search, purchase medication, change treatment, or close the diagnostic loop.
+- Future tests: verification, unauthorized verification, structured result, signed human-readable result, clinician release, patient release, critical result, failed contact, corrected result, no auto-prescription, no auto-pharmacy search, closed-loop follow-up.

@@ -120,8 +120,8 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 | P00-07 workflow state machines | P00-07 | PASS; covers Complete Breakdown P00-09 |
 | P00-08 provider-disclosure contract | P00-08 | PASS; covers Complete Breakdown P00-10 |
 | P00-09 clinical scope, safety, emergency, referral, and critical-result protocols | P00-09 | COMPLETED, pending orchestration acceptance; covers Complete Breakdown P00-11 and P00-12 |
-| P00-10 prescription/pharmacy/lab/delivery policies | P00-10 | NOT STARTED |
-| Privacy / legal / finance / operations | P00-11..P00-16 | not started |
+| P00-10 prescription/pharmacy/lab/delivery policies | P00-10 | COMPLETED, pending orchestration acceptance; covers Complete Breakdown P00-13 |
+| Privacy / legal / finance / operations | P00-11..P00-16 | not started; P00-11 remains NOT STARTED |
 | Phase 0 gate and completion | P00-17 | not started |
 
 ## Validation checklist
@@ -131,3 +131,10 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 - All open questions have owner, target phase, and approval path.
 - Decisions are tagged and versioned in `docs/governance/decision-register.md`.
 - Required links, matrix entries, and scope boundaries are reviewed before each phase transition.
+
+## P00-10 completion note
+
+- P00-10 completed the Complete Breakdown P00-13 prescription, pharmacy, laboratory, result-release, and delivery policy work package.
+- P00-10 created five draft policy artifacts and updated governance registers.
+- Final payment, capture, refund, reversal, chargeback, and provider-detail disclosure eligibility remain deferred to P00-13.
+- P00-11 remains NOT STARTED.

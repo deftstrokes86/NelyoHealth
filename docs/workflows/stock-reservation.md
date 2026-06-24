@@ -161,3 +161,12 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
 
+
+## P00-10 Policy Alignment
+
+- Aligns with `docs/operations/pharmacy-fulfilment-policy.md`.
+- Guard: reservation requires exact medicine, strength, form, quantity, selected pharmacy, intended order, available-stock guard, atomic reserve, and audit.
+- Guard: reservation consume, release, expiry, and cancellation are idempotent and prevent two patients from consuming the same final unit.
+- Guard: stock reservation or approved firm confirmation precedes payment capture, but does not itself unlock provider details.
+- Guard: no numeric reservation period is approved in P00-10.
+- Future tests: stale stock, atomic reservation, concurrent last-unit reservation, duplicate consume, duplicate release, reservation expiry, reservation failure.

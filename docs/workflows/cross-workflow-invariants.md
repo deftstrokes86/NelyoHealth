@@ -86,3 +86,16 @@
 - `INV-CLN-004`: Finalized clinical notes, prescriptions, diagnostic results, referral summaries, and safety-event documentation use amendments, corrections, replacements, or supersession with provenance.
 - `INV-CLN-005`: Critical-result notification, acknowledgment, failed-contact handling, escalation, resolution, audit, and incident review where applicable are separate closure requirements.
 - `INV-CLN-006`: Accessibility, low bandwidth, failed upload, reconnect, and inability to communicate safely are clinical safety concerns, not only usability concerns.
+
+## P00-10 Fulfilment Invariants
+
+| Invariant ID | Invariant | Related workflows | Source |
+|---|---|---|---|
+| INV-FUL-001 | Clinical authorization, commercial quotation, provider selection, stock reservation, payment/coverage evidence, provider acceptance, dispensing, delivery/collection, laboratory processing, result verification, release, clinician review, follow-up, and closure are distinct facts. | WFL-007 through WFL-015; WFL-018; WFL-019 | REQ-FUL-001 through REQ-FUL-040 |
+| INV-FUL-002 | A prescription is not pharmacy fulfilment, payment, delivery, stock guarantee, provider disclosure, or pharmacist acceptance. | WFL-007; WFL-008; WFL-009; WFL-010; WFL-011 | FUL-REQ-002 |
+| INV-FUL-003 | A laboratory result never automatically creates a prescription, starts pharmacy search, purchases medication, changes treatment, selects a hospital/pharmacy, or closes the diagnostic loop. | WFL-015; WFL-007; WFL-010; WFL-016 | FUL-REQ-004; REQ-FUL-036 |
+| INV-FUL-004 | Pharmacy and laboratory pre-payment offers expose only `providerDisplayName` plus approved non-identifying commercial/workflow fields; protected provider details are removed server-side before serialization. | WFL-008; WFL-013 | FUL-REQ-007; REQ-FUL-018 |
+| INV-FUL-005 | Stock reservation or approved firm confirmation is required before payment capture, but reservation alone does not unlock provider details. | WFL-009; WFL-018 | FUL-REQ-012; REQ-FUL-014 |
+| INV-FUL-006 | Emergency safety action is independent of pharmacy, laboratory, stock, quote, payment, coverage, sponsor/HMO authorization, provider-detail protection, and delivery availability. | WFL-006; WFL-010; WFL-011; WFL-012; WFL-015; WFL-016; WFL-018 | FUL-REQ-020 |
+| INV-FUL-007 | Signed prescriptions and verified results preserve history by amendment, replacement, correction, cancellation, supersession, and versioning, never silent overwrite. | WFL-007; WFL-015 | FUL-REQ-005 |
+| INV-FUL-008 | Routine recovery uses commands, queues, reviews, amendments, replacements, cancellations, refunds, or reconciliation, never direct production database editing. | All fulfilment workflows | FUL-REQ-021 |

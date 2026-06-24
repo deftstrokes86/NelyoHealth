@@ -4,10 +4,10 @@
 
 - **Program:** NelyoHealth Platform Build
 - **Active phase:** Phase 0 (Product, clinical, regulatory, and delivery foundation)
-- **Current issue:** `P00-09` (COMPLETED, pending orchestration acceptance)
+- **Current issue:** `P00-10` (COMPLETED, pending orchestration acceptance)
 - **Date:** 2026-06-24
 - **Mode:** Planning / Documentation only
-- **Execution state:** `P00-09 COMPLETED, pending orchestration acceptance`
+- **Execution state:** `P00-10 COMPLETED, pending orchestration acceptance`
 - **Approved-lock decisions captured:** `13` (`REQ-LOCK-001` ... `REQ-LOCK-013`)
 
 ## Locked decisions currently captured
@@ -92,7 +92,11 @@
 - [docs/clinical/critical-result-protocol.md](./clinical/critical-result-protocol.md)
 - [docs/runbooks/emergency-escalation-draft.md](./runbooks/emergency-escalation-draft.md)
 - [docs/runbooks/critical-result-draft.md](./runbooks/critical-result-draft.md)
-## Source precedence
+- [docs/clinical/prescription-policy.md](./clinical/prescription-policy.md)
+- [docs/operations/pharmacy-fulfilment-policy.md](./operations/pharmacy-fulfilment-policy.md)
+- [docs/operations/medicine-delivery-policy.md](./operations/medicine-delivery-policy.md)
+- [docs/clinical/laboratory-ordering-policy.md](./clinical/laboratory-ordering-policy.md)
+- [docs/clinical/result-release-policy.md](./clinical/result-release-policy.md)## Source precedence
 
 For this repository, conflict handling is fixed at:
 
@@ -114,7 +118,7 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - [x] Open-question schema normalized with owner, target prompt, target work-package, and approval path.
 - [x] Prompt-to-work-package crosswalk added to plan and traceability conventions.
 - [x] External approvals for legal, clinical, payment, and operational questions remain pending for pilot scope finalization.
-- [ ] Independent review and closure checklist for P00-09.
+- [ ] Independent review and closure checklist for P00-10.
 
 ## Previous P00-08 completion summary
 
@@ -138,6 +142,20 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - **Workflow/event alignment:** narrow P00-09 alignment notes added to clinical workflows and minimum-necessary draft clinical events added where missing.
 - **Next action:** Orchestration review and acceptance for `P00-09` before starting `P00-10`.
 
+
+## P00-10 completion summary
+
+- **Files changed this prompt:** 25 documentation files.
+- **Policy artifacts created:** 5 P00-10 artifacts with status `DRAFT-PENDING-APPROVAL` and effective date `NOT EFFECTIVE UNTIL APPROVED`.
+- **Policy rule counts:** cross-cutting fulfilment requirements `FUL-REQ-001` through `FUL-REQ-021`; prescription rules `RX-POL-001` through `RX-POL-014`; pharmacy rules `PHA-POL-001` through `PHA-POL-020`; delivery rules `DLV-POL-001` through `DLV-POL-016`; laboratory-ordering rules `LAB-POL-001` through `LAB-POL-016`; result-release rules `RES-POL-001` through `RES-POL-016`.
+- **New decisions:** P00-10 fulfilment decisions added (`REQ-FUL-001` through `REQ-FUL-040`).
+- **Open questions:** fulfilment questions added (`OQ-00-205` through `OQ-00-264`).
+- **Assumptions:** added P00-10 assumptions (`ASSUMPT-41` through `ASSUMPT-48`).
+- **Document register updates:** 5 P00-10 artifacts marked DONE and requiring approval.
+- **Workflow/event alignment:** P00-10 guard sections added to fulfilment workflows and draft fulfilment/result events added where missing.
+- **Provider-disclosure safeguards:** preserved providerDisplayName-only pre-payment offers, backend projection controls, and exact-order post-payment disclosure.
+- **Reservation/payment safeguard:** recorded reservation-before-capture guard while leaving final payment, capture, and disclosure-unlock evidence for P00-13.
+- **Next action:** Orchestration review and acceptance for `P00-10` before starting `P00-11`.
 ## Phase status
 
 - **P00-00:** PASS
@@ -149,9 +167,10 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - **P00-06:** PASS
 - **P00-07:** PASS
 - **P00-08:** PASS
-- **P00-09:** COMPLETED, pending orchestration acceptance
-- **P00-10:** NOT STARTED
-- **Current blocker:** pending clinical, legal, privacy, security, finance, pharmacy, laboratory, and operational approvals tracked in open questions.
+- **P00-09:** PASS
+- **P00-10:** COMPLETED, pending orchestration acceptance
+- **P00-11:** NOT STARTED
+- **Current blocker:** pending clinical, legal, privacy, security, finance, pharmacy, laboratory, delivery, and operational approvals tracked in open questions.
 
 ## P00-08 execution status phrase
 
@@ -159,3 +178,7 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 ## P00-09 execution status phrase
 
 - **P00-09 COMPLETED, pending orchestration acceptance**
+
+## P00-10 execution status phrase
+
+- **P00-10 COMPLETE, READY FOR ORCHESTRATION ACCEPTANCE**

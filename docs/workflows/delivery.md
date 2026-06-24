@@ -181,3 +181,12 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
 
+
+## P00-10 Policy Alignment
+
+- Aligns with `docs/operations/medicine-delivery-policy.md`.
+- Guard: delivery creation requires exact PharmacyOrder, selected pharmacy, authorized destination/recipient, approved delivery method, and order-authorized provider details.
+- Guard: delivery participant receives minimum necessary task data only and does not receive diagnosis, consultation note, full prescription, laboratory result, sponsor, HMO, employer, family-plan, or unrelated patient history.
+- Guard: route or rideshare deep links occur only after authorization and contain no unnecessary clinical data or alternative-provider locations.
+- Guard: proof, tamper evidence, handover evidence, failed delivery, return, and incident handling are explicit; no attempt counts or temperature ranges are approved.
+- Future tests: courier minimum data, handover proof, tamper evidence, recipient verification, wrong recipient, failed delivery, return, route deep link after authorization, no clinical data in route link, cold-chain unsupported block.

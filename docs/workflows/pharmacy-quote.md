@@ -170,3 +170,12 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
 
+
+## P00-10 Policy Alignment
+
+- Aligns with `docs/operations/pharmacy-fulfilment-policy.md` and `docs/contracts/provider-disclosure-contract.md`.
+- Guard: matching starts with 4 km server-side search and controlled server-side expansion only.
+- Guard: pre-payment offer exposes only `providerDisplayName`, approved non-identifying commercial/workflow information, opaque selection token, quote version, and quote expiry.
+- Guard: address, branch, coordinates, distance, map, contact, directions, pickup/collection instructions, internal identifiers, and derivable metadata do not reach the patient-facing client before the approved disclosure event.
+- Guard: quote withdrawal or supersession uses privacy-safe communication and does not enumerate alternative providers.
+- Future tests: 4 km search, radius expansion, no match, providerDisplayName-only offer, protected-field absence, quote expiry, stale stock, provider quote withdrawal.

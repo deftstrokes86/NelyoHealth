@@ -170,3 +170,12 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
 
+
+## P00-10 Policy Alignment
+
+- Aligns with `docs/clinical/laboratory-ordering-policy.md` and `docs/contracts/provider-disclosure-contract.md`.
+- Guard: laboratory matching starts with 4 km server-side search and controlled server-side expansion only.
+- Guard: pre-payment laboratory offer exposes only `providerDisplayName`, approved non-identifying price/workflow information, and opaque selection token.
+- Guard: preparation or collection instructions that reveal provider location are not sent before approved provider-detail disclosure.
+- Guard: home collection is blocked or manual-review unless explicitly approved.
+- Future tests: 4 km search, radius expansion, providerDisplayName-only offer, protected-field absence, booking hold, preparation, home collection disabled when unapproved.

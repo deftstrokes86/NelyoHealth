@@ -173,3 +173,12 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
 
+
+## P00-10 Policy Alignment
+
+- Aligns with `docs/operations/pharmacy-fulfilment-policy.md` and `docs/clinical/prescription-policy.md`.
+- Guard: pharmacist acceptance precedes dispensing and may route to clarification, rejection, cancellation, refund handoff, or provider replacement.
+- Guard: dispensing records exact order, exact prescription, exact quantity, substitution or partial fulfilment where approved, handover mode, timestamp, and audit.
+- Guard: provider-detail disclosure remains exact-order, selected-provider, actor, patient, tenant, and server-decision bound; provider replacement requires a fresh disclosure decision.
+- Guard: partial fulfilment and substitution remain approval-gated and cannot silently alter the prescription.
+- Future tests: pharmacist rejection, provider suspension, provider replacement, dispensing, partial fulfilment, duplicate dispensing, payment failure, refund handoff.

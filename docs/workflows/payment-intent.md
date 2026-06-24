@@ -178,3 +178,11 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
 
+
+## P00-10 Policy Alignment
+
+- Aligns with `docs/operations/pharmacy-fulfilment-policy.md`, `docs/clinical/laboratory-ordering-policy.md`, and future P00-13 payment policy.
+- Guard: stock reservation or approved firm confirmation must precede payment capture, but P00-10 does not approve authorization, capture, settlement, coverage, or client success as the provider-detail unlock event.
+- Guard: payment state alone does not disclose provider details; disclosure remains a separate ProviderDetailDisclosureDecision tied to exact order, selected provider, actor, patient, and tenant.
+- Guard: failed, cancelled, expired, pending, authorization-only, wrong-binding, refund, reversal, or chargeback states do not create initial provider-detail eligibility.
+- Future tests: payment failure, authorization-only no unlock, capture sequence approval dependency, wrong-order payment no unlock, client-success no unlock.

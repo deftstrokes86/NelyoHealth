@@ -181,3 +181,11 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
 
+
+## P00-10 Policy Alignment
+
+- Aligns with `docs/clinical/laboratory-ordering-policy.md`.
+- Guard: specimen identity requires correct patient, diagnostic order, order item, label/identifier, collector, collection timestamp, specimen type, transport condition, receipt/accession, acceptance or rejection, and audit.
+- Guard: wrong-patient, wrong-order, identity mismatch, rejected, lost, damaged, contaminated, delayed, or unapproved-handling specimens route to containment, communication, recollection ownership, incident review, and audit.
+- Guard: recollection cost responsibility remains approval-gated and is not assigned in P00-10.
+- Future tests: correct specimen identity, identity mismatch, rejection, recollection, lost specimen, laboratory suspension.

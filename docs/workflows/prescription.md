@@ -162,3 +162,12 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
 
+
+## P00-10 Policy Alignment
+
+- Aligns with `docs/clinical/prescription-policy.md`.
+- Guard: prescription issuance requires authorized clinician, valid credential, clinical assessment, allergy/current-medication review, signature/equivalent, and audit.
+- Guard: issued prescriptions are immutable; correction uses amendment, cancellation, replacement, supersession, or linked versioning, never silent overwrite.
+- Guard: pharmacist clarification, substitution, and partial fulfilment cannot edit the clinical prescription and route to explicit review.
+- Guard: restricted, cold-chain, controlled, dangerous, compounded, high-risk, and cross-border medicine categories remain blocked or manual-review until approved.
+- Future tests: authorized/unauthorized issuance, expired credential, required fields, allergy warning, duplicate therapy, cancellation, replacement, expiry, refill, substitution, partial dispensing, restricted category, clarification, duplicate dispensing.

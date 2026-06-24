@@ -399,3 +399,28 @@ For all future phase updates:
 - **Remaining approvals:** Clinical, legal, privacy, security, operations, laboratory, pharmacy, finance, accessibility, and regulatory approvals remain required before the documents become effective.
 - **Next prompt status:** P00-10 NOT STARTED.
 
+
+### Entry P00-10-001 - Prescription, pharmacy, laboratory, result-release, and delivery policies
+
+- **Date:** 2026-06-24
+- **Prompt:** P00-10
+- **Complete Breakdown work package:** P00-13
+- **Files created:** 5
+- **Files updated:** 20
+- **Prescription-rule count:** `RX-POL-001` through `RX-POL-014` = 14
+- **Pharmacy-rule count:** `PHA-POL-001` through `PHA-POL-020` = 20
+- **Delivery-rule count:** `DLV-POL-001` through `DLV-POL-016` = 16
+- **Laboratory-ordering-rule count:** `LAB-POL-001` through `LAB-POL-016` = 16
+- **Result-release-rule count:** `RES-POL-001` through `RES-POL-016` = 16
+- **Cross-cutting fulfilment requirements:** `FUL-REQ-001` through `FUL-REQ-021` = 21
+- **Decisions added:** `REQ-FUL-001` through `REQ-FUL-040`
+- **Open questions added:** `OQ-00-205` through `OQ-00-264`
+- **Assumptions added:** `ASSUMPT-41` through `ASSUMPT-48`
+- **Workflow alignment:** P00-10 alignment notes added to prescription, pharmacy quote, stock reservation, pharmacy order, delivery, diagnostic order, laboratory appointment, specimen, diagnostic result, payment intent, refund, and cross-workflow invariants.
+- **Event alignment:** Added draft fulfilment/result events `EVT-094` through `EVT-110` with minimum-necessary payloads.
+- **Reservation-before-capture safeguard:** recorded stock reservation or approved firm confirmation before capture, while leaving final sequencing for P00-13.
+- **Provider-disclosure safeguards:** preserved `providerDisplayName`-only pre-payment provider identity, server-side field removal, exact-order post-payment disclosure, and fresh disclosure decision on provider replacement.
+- **Critical-result safeguards:** result release policy references P00-09 and keeps notification, acknowledgment, escalation, clinical action, and closure distinct.
+- **Result-to-treatment boundary:** laboratory result verification or release does not create prescriptions, start pharmacy search, purchase medicine, change treatment, or close diagnostic loop.
+- **Remaining approvals:** clinical, pharmacy, laboratory, legal, privacy, security, finance, regulatory, operations, delivery, and architecture approvals remain required before policy effectiveness or implementation.
+- **Next prompt status:** P00-11 NOT STARTED.

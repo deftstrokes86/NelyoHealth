@@ -175,3 +175,11 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Laboratory-result policy detail remains P00-10; P00-09 only defines safety boundary and critical-result loop expectations.
 - Related clinical protocols: `docs/clinical/consultation-standard.md` and `docs/clinical/critical-result-protocol.md`.
 
+
+## P00-10 Policy Alignment
+
+- Aligns with `docs/clinical/laboratory-ordering-policy.md`.
+- Guard: diagnostic order requires authorized clinician, valid credential, clinical assessment, correct patient, clinical reason, required test/panel, priority, specimen/preparation requirements, signature/equivalent, version, and audit.
+- Guard: diagnostic order is not a result, specimen collection, verification, clinician review, patient follow-up, or diagnostic-loop closure.
+- Guard: test catalogue is versioned and approval-controlled; no unapproved test catalogue is created in P00-10.
+- Future tests: authorized diagnostic order, required fields, order replacement, wrong patient, wrong test, unsupported test, order cancellation.
