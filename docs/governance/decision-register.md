@@ -224,3 +224,36 @@
 | REQ-WFL-023 | Workflow notifications use minimum-necessary content and must not expose protected clinical, payment, credential, or pre-payment provider-location data. | APPROVED | Source docs + privacy/security | P00-14 | Restates notification minimization requirements. |
 | REQ-WFL-024 | Browser-visible status is derived from server-authoritative workflow state, not URL parameters, local flags, hidden DOM, stale cache, or client payment screens. | APPROVED | Source docs + security/QA | P00-14 | Required for future browser tests. |
 | REQ-WFL-025 | Future state-machine tests must cover legal transitions, illegal transitions, unauthorized/wrong-tenant/wrong-patient commands, stale versions, duplicates, callbacks, timeouts, compensation, audit, notifications, and browser back/refresh behavior using synthetic data. | APPROVED | Source docs + QA/security | P00-14 | Test implementation deferred. |
+## P00-08 provider-detail disclosure decisions
+
+| Decision ID | Decision text | Status | Owner | Review phase | Conditions |
+|---|---|---|---|---|---|
+| REQ-PRV-001 | Separate pre-payment MarketplaceQuoteView and post-payment AuthorizedFulfilmentLocationView resources are required. | APPROVED | Source docs + Architecture lead + Security lead | P00-08 / P00-10 | Implements locked server-side separation rule. |
+| REQ-PRV-002 | Provider disclosure serialization uses server-side allow-lists before any client-facing payload is created. | APPROVED | Source docs + Security lead | P00-08 / P00-10 | Frontend hiding is not a control. |
+| REQ-PRV-003 | Patient-facing pre-payment responses must never contain a full provider, facility, branch, or location object. | APPROVED | Source docs + Security lead | P00-08 / P00-10 | Contract regression tests required. |
+| REQ-PRV-004 | providerDisplayName is the only pre-payment provider identity field. | APPROVED | Source docs + Product owner + Security lead | P00-08 / P00-10 | Restates locked rule. |
+| REQ-PRV-005 | providerDisplayName must pass display-safe validation and locality/branch wording requires approval where ambiguous. | APPROVED | Security lead + Privacy counsel | P00-08 / P00-12 | Legal-name locality case remains open. |
+| REQ-PRV-006 | Opaque selection token is required for pre-payment quote selection. | APPROVED | Security lead + Architecture lead | P00-08 / P00-10 | No token format selected. |
+| REQ-PRV-007 | Opaque selection token is not authorization, payment evidence, or provider-detail unlock evidence. | APPROVED | Source docs + Security lead | P00-08 / P00-10 | Must be enforced server-side. |
+| REQ-PRV-008 | Post-payment provider-detail retrieval is order-based, not provider-ID-based. | APPROVED | Source docs + Security lead | P00-08 / P00-10 | No raw provider ID retrieval endpoint. |
+| REQ-PRV-009 | Provider-detail authorization is exact-order scoped. | APPROVED | Source docs + Security lead | P00-08 / P00-10 | One order cannot unlock another. |
+| REQ-PRV-010 | Provider-detail authorization is exact selected-provider scoped. | APPROVED | Source docs + Security lead | P00-08 / P00-10 | Replacement requires fresh decision. |
+| REQ-PRV-011 | Actor, patient, and tenant binding are required for protected retrieval. | APPROVED | Source docs + Security lead | P00-08 / P00-10 | Wrong context denied. |
+| REQ-PRV-012 | Authorization is recomputed on each protected retrieval. | APPROVED | Source docs + Security lead | P00-08 / P00-10 | No permanent entitlement. |
+| REQ-PRV-013 | Generic payment success, browser success routes, and client-side paid flags do not unlock details. | APPROVED | Source docs + Finance owner + Security lead | P00-08 / P00-13 | Final event deferred. |
+| REQ-PRV-014 | Final financial evidence for disclosure remains deferred to P00-13. | REQUIRES_APPROVAL | Finance owner + Legal counsel + Security lead | P00-13 / P00-16 | Do not treat capture, settlement, transfer, guarantee, or coverage as approved yet. |
+| REQ-PRV-015 | No provider-specific map is permitted before payment authorization. | APPROVED | Source docs + Security lead | P00-08 / P00-10 | No map pin, coordinates, route, distance, or provider bounds. |
+| REQ-PRV-016 | Map requests occur only after authorization and only for the selected order/provider. | APPROVED | Source docs + Security lead | P00-08 / P00-10 | Vendor choice deferred. |
+| REQ-PRV-017 | Protected post-payment responses require private non-shared no-store handling. | APPROVED | Security lead + Architecture lead | P00-08 / P00-14 | Framework API deferred. |
+| REQ-PRV-018 | Protected provider details are prohibited in local storage, URLs, route params, stale client state, and service-worker caches. | APPROVED | Security lead + QA lead | P00-08 / P00-14 | Browser tests required. |
+| REQ-PRV-019 | Telemetry, analytics, logs, traces, screenshots, videos, session replay, and error reports use minimized allow-lists. | APPROVED | Security lead + Privacy counsel | P00-08 / P00-14 | Retention policy deferred. |
+| REQ-PRV-020 | Error responses must not enumerate providers, locations, or internal identifiers. | APPROVED | Security lead | P00-08 / P00-10 | Status code policy deferred. |
+| REQ-PRV-021 | Support and administrator access is purpose-specific, order-specific, and audited; no universal provider-detail browsing. | APPROVED | Security lead + Operations lead | P00-08 / P00-15 | Break-glass policy deferred. |
+| REQ-PRV-022 | Provider replacement requires disclosure recomputation and privacy-safe user notice. | APPROVED | Security lead + Operations lead | P00-08 / P00-10 | Financial adjustment deferred. |
+| REQ-PRV-023 | Refund, reversal, and chargeback require future-access recomputation and cannot create initial eligibility. | REQUIRES_APPROVAL | Finance owner + Legal counsel + Security lead | P00-13 / P00-16 | Exact future retrieval rule deferred. |
+| REQ-PRV-024 | MarketplaceQuoteView field expansion requires privacy, security, contract, data-classification, negative-test, and traceability review. | APPROVED | Security lead + Privacy counsel + Architecture lead | P00-08 / P00-10 | ADR supersession rule applies. |
+| REQ-PRV-025 | Disclosure audit records allowed and denied access with minimized payloads. | APPROVED | Security lead + Privacy counsel | P00-08 / P00-14 | Audit retention deferred. |
+| REQ-PRV-026 | Search and indexing restrictions apply to authenticated disclosure pages and payloads. | APPROVED | Security lead + Privacy counsel | P00-08 / P00-14 | robots.txt is not security control. |
+| REQ-PRV-027 | Provider-disclosure testing uses synthetic data and synthetic artifacts only. | APPROVED | Source docs + QA lead + Security lead | P00-08 / P00-14 | No real provider or patient data. |
+| REQ-PRV-028 | Future implementation requires both interactive IDE browser inspection and deterministic Playwright coverage for provider disclosure. | APPROVED | Source docs + QA lead + Engineering lead | P00-14 / P01 | No browser tooling installed in P00-08. |
+

@@ -1,4 +1,4 @@
-# Traceability Conventions for Phase 0
+﻿# Traceability Conventions for Phase 0
 
 ## Purpose
 
@@ -56,6 +56,17 @@ Provide a deterministic linking format from requirement -> issue -> implementati
 - `REQ-TECH-*` -- state machines, workflows, NFR, testing strategy.
 - `REQ-RISK-*` -- risks, dependencies, ADRs, assumptions.
 
+## P00-08 PRV identifier families
+
+- Disclosure requirements: `PRV-REQ-<NNN>`
+- Disclosure contract fields: `PRV-FLD-<NNN>`
+- Disclosure policy rules: `PRV-POL-<NNN>`
+- Disclosure threat cases: `PRV-THR-<NNN>`
+- Disclosure test scenarios: `PRV-TST-<NNN>`
+- Governance decisions: `REQ-PRV-<NNN>`
+
+These are documentation traceability identifiers only. They are not database identifiers, URL identifiers, API route names, provider identifiers, order identifiers, or implementation-generated IDs.
+
 ## Linkage obligations
 
 For each significant requirement, include:
@@ -68,7 +79,7 @@ For each significant requirement, include:
 
 ## Review-state rules
 
-- A non-empty `[ ] TODO` / `[ ] TBD` in active output requires:
+- A non-empty unresolved open item in active output requires:
   - an owner
   - target phase
   - risk assessment
@@ -84,3 +95,5 @@ For each significant requirement, include:
 - **P00-08 to P00-13:** map disclosure/clinical/finance decisions to workflow states.
 - **P00-14 to P00-15:** map NFR and browser-test expectations.
 - **P00-16 to P00-17:** map risks, owners, traceability matrix, and completion approval status.
+
+

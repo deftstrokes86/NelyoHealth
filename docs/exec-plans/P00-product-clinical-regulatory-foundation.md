@@ -35,8 +35,8 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 | P00-04 | P00-05 Plans, sponsorship, coverage, and funding |
 | P00-05 | P00-06 User journeys and service blueprints |
 | P00-06 | P00-07 Domain glossary and data classification, plus P00-08 Conceptual domain model and boundaries |
-| P00-07 | P00-09 Workflow state machines |
-| P00-08 | P00-10 Pharmacy and laboratory disclosure contract |
+| P00-07 | Workflow state machines | PASS | State-machine index, cross-workflow invariants, and per-workflow state docs completed. | Completed before P00-08. |
+| P00-08 | Provider-detail disclosure contract and threat model | COMPLETED, pending orchestration acceptance | Created provider discovery privacy policy, disclosure contract, threat model, test matrix, and ADR-0001. | Do not begin P00-09 until orchestration acceptance. |
 | P00-09 | P00-11 Clinical scope and safety model, plus P00-12 Emergency, urgent, referral, and critical-result protocols |
 | P00-10 | P00-13 Prescription, pharmacy, laboratory, and delivery policies |
 | P00-11 | P00-14 Privacy, consent, guardianship, and data governance |
@@ -103,7 +103,7 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 - All required docs in scope and traceable to requirement IDs.
 - Pre-payment provider-disclosure policy consistent in legal, clinical, operational, and technical docs.
 - Emergency escalation, signed-record amendment, and one-longitudinal-identity rules are explicit in all related outputs.
-- No unresolved ownerless high-risk TODO/TBD in required outputs.
+- No unresolved high-risk open item without owner, target phase, and approval path in required outputs.
 - External approval status recorded for each mandatory external domain.
 
 ## Work breakdown and status
@@ -117,8 +117,8 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 | P00-04 funding models | P00-04 | PASS |
 | P00-05 journeys and service blueprints | P00-05 | PASS |
 | P00-06 glossary, classification, and conceptual boundaries | P00-06 | PASS; covers Complete Breakdown P00-07 and P00-08 |
-| P00-07 workflow state machines | P00-07 | **COMPLETED, pending orchestration acceptance**; covers Complete Breakdown P00-09 |
-| P00-08 provider-disclosure contract | P00-08 | not started |
+| P00-07 workflow state machines | P00-07 | PASS; covers Complete Breakdown P00-09 |
+| P00-08 provider-disclosure contract | P00-08 | COMPLETED, pending orchestration acceptance; covers Complete Breakdown P00-10 |
 | Privacy / legal / finance / operations | P00-11..P00-16 | not started |
 | Phase 0 gate and completion | P00-17 | not started |
 
@@ -129,4 +129,6 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 - All open questions have owner, target phase, and approval path.
 - Decisions are tagged and versioned in `docs/governance/decision-register.md`.
 - Required links, matrix entries, and scope boundaries are reviewed before each phase transition.
+
+
 

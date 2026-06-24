@@ -1,4 +1,4 @@
-# Phase 0 Assumptions Register
+﻿# Phase 0 Assumptions Register
 
 ## Assumption status
 
@@ -38,3 +38,9 @@
 | ASSUMPT-28 | Read-model and browser-visible workflow status may lag but cannot authorize sensitive actions or provider-detail disclosure. | APPROVED | Security lead + QA lead | P00-14 | Stale projections could otherwise leak data or permit invalid transitions. |
 | ASSUMPT-29 | External callbacks may arrive more than once or out of order and must be idempotently processed without regressing authoritative state. | PROPOSED | Architecture lead + security lead | P00-14 | Duplicate or out-of-order callbacks could duplicate payments, refunds, deliveries, results, or audit. |
 | ASSUMPT-30 | Cross-workflow process coordination occurs through explicit commands, events, projections, audit/outbox intent, and operations queues rather than hidden storage mutation. | PROPOSED | Architecture lead + operations lead | P00-07 / P01 | Hidden mutation would break auditability and source-of-truth boundaries. |
+| ASSUMPT-31 | P00-08 contract resources are conceptual and implementation-neutral; they are not final URL paths, database schemas, GraphQL types, TypeScript types, or framework serializers. | APPROVED | Architecture lead | P00-08 / P01 | Implementation could freeze conceptual names as code contracts without review. |
+| ASSUMPT-32 | Provider fulfilment details are retrieved through a protected on-demand resource rather than embedded in payment-success responses. | PROPOSED | Security lead + Finance owner | P00-13 / P01 | Embedding details in payment success payloads could bypass recomputation and cache controls. |
+| ASSUMPT-33 | Opaque selection-token format, signing, encryption, storage, and rotation are implementation decisions deferred beyond P00-08. | APPROVED | Security lead + Architecture lead | P00-14 / P01 | Premature cryptographic selection could create vendor or implementation coupling. |
+| ASSUMPT-34 | A generic service-area visualization can be designed later without revealing any pharmacy or laboratory provider location. | PROPOSED | Product owner + Security lead | P00-14 / P01 | Unsafe visualization could reveal provider position through bounds, radius, or proximity cues. |
+| ASSUMPT-35 | Browser artifact retention for provider-disclosure validation will be finalized in P00-14; until then P00-08 treats all such artifacts as sensitive and synthetic-only. | PROPOSED | QA lead + Privacy counsel + Security lead | P00-14 | Artifacts could retain protected provider details without an approved retention/redaction policy. |
+

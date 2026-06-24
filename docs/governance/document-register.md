@@ -1,4 +1,4 @@
-# Phase 0 Document Register
+﻿# Phase 0 Document Register
 
 ## Purpose
 
@@ -66,10 +66,10 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 | Workflow | [docs/workflows/pharmacy-quote.md](../workflows/pharmacy-quote.md) | P00-07 | Pharmacy operations + security | DONE | PROPOSED | WFL-008 pharmacy quote lifecycle with pre-payment provider-detail obscuration and authorized-order disclosure guard |
 | Workflow | [docs/workflows/stock-reservation.md](../workflows/stock-reservation.md) | P00-07 | Pharmacy operations + finance | DONE | PROPOSED | WFL-009 stock reservation lifecycle, release, expiry, and reconciliation paths |
 | Workflow | [docs/workflows/pharmacy-order.md](../workflows/pharmacy-order.md) | P00-07 | Pharmacy operations + finance + security | DONE | PROPOSED | WFL-010 pharmacy order lifecycle with payment-scoped provider disclosure and fulfilment paths |
-| Workflow | [docs/workflows/delivery.md](../workflows/delivery.md) | P00-07 | Logistics + pharmacy operations | DONE | PROPOSED | WFL-011 delivery lifecycle, failed delivery, return, and proof-of-delivery policy placeholders |
+| Workflow | [docs/workflows/delivery.md](../workflows/delivery.md) | P00-07 | Logistics + pharmacy operations | DONE | PROPOSED | WFL-011 delivery lifecycle, failed delivery, return, and proof-of-delivery policy decision points |
 | Workflow | [docs/workflows/diagnostic-order.md](../workflows/diagnostic-order.md) | P00-07 | Clinical governance + laboratory operations | DONE | PROPOSED | WFL-012 diagnostic order lifecycle and cancellation/result dependency paths |
 | Workflow | [docs/workflows/laboratory-appointment.md](../workflows/laboratory-appointment.md) | P00-07 | Laboratory operations + security | DONE | PROPOSED | WFL-013 laboratory appointment lifecycle with pre-payment provider-detail obscuration and preparation-instruction guard |
-| Workflow | [docs/workflows/specimen.md](../workflows/specimen.md) | P00-07 | Laboratory operations + clinical governance | DONE | PROPOSED | WFL-014 specimen lifecycle, chain-of-custody, rejection, recollection, and retention policy placeholders |
+| Workflow | [docs/workflows/specimen.md](../workflows/specimen.md) | P00-07 | Laboratory operations + clinical governance | DONE | PROPOSED | WFL-014 specimen lifecycle, chain-of-custody, rejection, recollection, and retention policy decision points |
 | Workflow | [docs/workflows/diagnostic-result.md](../workflows/diagnostic-result.md) | P00-07 | Clinical governance + laboratory QA | DONE | PROPOSED | WFL-015 diagnostic result lifecycle, verification, amendment/versioning, critical-result escalation, and release guard |
 | Workflow | [docs/workflows/referral.md](../workflows/referral.md) | P00-07 | Clinical governance + operations | DONE | PROPOSED | WFL-016 referral lifecycle, acceptance, completion, closure, and escalation paths |
 | Workflow | [docs/workflows/home-care-visit.md](../workflows/home-care-visit.md) | P00-07 | Operations + clinical governance | DONE | PROPOSED | WFL-017 home-care visit lifecycle; DESIGN-NOW-IMPLEMENT-LATER pilot status; visit safety constraints |
@@ -80,7 +80,7 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 | Workflow | [docs/workflows/claim.md](../workflows/claim.md) | P00-07 | Finance + HMO operations | DONE | PROPOSED | WFL-022 claim lifecycle; DESIGN-NOW-IMPLEMENT-LATER pilot status; remittance and denial paths |
 | Workflow | [docs/workflows/consent.md](../workflows/consent.md) | P00-07 | Privacy + security + clinical governance | DONE | PROPOSED | WFL-023 consent lifecycle, withdrawal, supersession, audit preservation, and lawful-basis separation |
 | Workflow | [docs/workflows/complaint.md](../workflows/complaint.md) | P00-07 | Operations + compliance | DONE | PROPOSED | WFL-024 complaint lifecycle, escalation, resolution, appeal, and closure paths |
-| Workflow | [docs/workflows/clinical-incident.md](../workflows/clinical-incident.md) | P00-07 | Clinical safety + compliance | DONE | REQUIRES_CLINICAL_REVIEW | WFL-025 clinical incident lifecycle, severity/reporting placeholders, investigation, CAPA, and closure paths |
+| Workflow | [docs/workflows/clinical-incident.md](../workflows/clinical-incident.md) | P00-07 | Clinical safety + compliance | DONE | REQUIRES_CLINICAL_REVIEW | WFL-025 clinical incident lifecycle, severity/reporting decision points, investigation, CAPA, and closure paths |
 | Compliance | [docs/compliance/official-source-register.md](../compliance/official-source-register.md) | P00-12 | Legal counsel | NOT_STARTED | PROPOSED | To be authored in P00-12 |
 | Finance | [docs/finance/payment-state-model.md](../finance/payment-state-model.md) | P00-13 | Finance + legal + engineering | NOT_STARTED | PROPOSED | To be authored in P00-13 |
 | Testing | [docs/testing/test-strategy.md](../testing/test-strategy.md) | P00-14 | QA + accessibility + security | NOT_STARTED | PROPOSED | To be authored in P00-14 |
@@ -94,3 +94,10 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 - Update this register at each prompt completion.
 - Add newly created files immediately and set status transitions from `NOT_STARTED` to `IN_PROGRESS` and `DONE`.
 - Mark blockers and owners for all newly added open questions.
+| Product | [docs/product/provider-discovery-privacy.md](../product/provider-discovery-privacy.md) | P00-08 | Product owner + Security lead | DONE | PROPOSED | P00-10 provider discovery privacy policy; requires product/security/privacy/legal/pharmacy/lab review |
+| Contract | [docs/contracts/provider-disclosure-contract.md](../contracts/provider-disclosure-contract.md) | P00-08 | Security lead + Architecture lead | DONE | PROPOSED | P00-10 pre-payment and post-payment provider disclosure contract; financial evidence remains P00-13 dependency |
+| Security | [docs/security/provider-disclosure-threat-model.md](../security/provider-disclosure-threat-model.md) | P00-08 | Security lead | DONE | PROPOSED | P00-10 threat model for browser, API, cache, map, telemetry, support, and partner leakage |
+| Testing | [docs/testing/provider-disclosure-test-matrix.md](../testing/provider-disclosure-test-matrix.md) | P00-08 | QA lead + Security lead | DONE | PROPOSED | P00-10 future test matrix with interactive IDE browser and Playwright coverage; no tooling installed |
+| ADR | [docs/adr/ADR-0001-provider-detail-release-after-payment.md](../adr/ADR-0001-provider-detail-release-after-payment.md) | P00-08 | Architecture lead + Security lead | DONE | APPROVED | Core server-side separation decision accepted; exact financial evidence remains REQUIRES_APPROVAL for P00-13 |
+
+

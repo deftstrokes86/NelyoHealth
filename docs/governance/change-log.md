@@ -1,4 +1,4 @@
-# NelyoHealth Phase 0 Change Log
+﻿# NelyoHealth Phase 0 Change Log
 
 ## 2026-06-23
 
@@ -205,7 +205,7 @@ For all future phase updates:
   - Added explicit overlap-resolve policy options and overlap examples in the funding-and-coverage model.
   - Added waiting period and grace period semantics to funding lifecycle and re-authorization behavior.
   - Expanded diaspora cross-border boundary section with settlement currency and failed-payment constraints.
-  - Added sponsor boundary failure case for attempts to access another beneficiary’s order.
+  - Added sponsor boundary failure case for attempts to access another beneficiaryâ€™s order.
 - Validation impact:
   - No new requirements were approved during this follow-up.
   - No governance status transitions were changed; this is a documentation completeness update within `P00-04`.
@@ -358,3 +358,22 @@ For all future phase updates:
   - Emergency escalation remains independent of payment, coverage, registration, prior authorization, marketplace comparison, and provider-detail obscuration.
 - Remaining approvals:
   - Numeric timeouts, retry limits, clinical escalation intervals, payment unlock event, refund/reversal/chargeback disclosure effects, operational queue targets, and regulatory reporting obligations remain pending.
+### Entry P00-08-001 - Provider-detail disclosure contract and threat model
+
+- **Date:** 2026-06-24
+- **Prompt:** P00-08
+- **Files created:** 5
+- **Files updated:** 8
+- **Requirements added:** `PRV-REQ-001` through `PRV-REQ-040`
+- **Contract fields added:** `PRV-FLD-001` through `PRV-FLD-034`
+- **Policy rules added:** `PRV-POL-001` through `PRV-POL-033`
+- **Threat scenarios added:** `PRV-THR-001` through `PRV-THR-065`
+- **Test scenarios added:** `PRV-TST-001` through `PRV-TST-035`
+- **ADR:** `ADR-0001` accepts server-side provider-detail release after order-scoped eligibility; final financial evidence remains `REQUIRES_APPROVAL` for P00-13.
+- **Decisions added:** `REQ-PRV-001` through `REQ-PRV-028`
+- **Open questions added:** `OQ-00-137` through `OQ-00-160`
+- **Open questions linked:** `OQ-00-087`, `OQ-00-089`, `OQ-00-097`, `OQ-00-098`, `OQ-00-101`, `OQ-00-129`, `OQ-00-130`
+- **Assumptions added:** `ASSUMPT-31` through `ASSUMPT-35`
+- **Summary:** Added allow-list/deny-list provider-disclosure contract, exact-order authorization model, map/cache/telemetry/support restrictions, threat model, negative test matrix, and remaining approval map.
+- **Next prompt status:** P00-09 NOT STARTED.
+

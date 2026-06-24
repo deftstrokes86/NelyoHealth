@@ -4,10 +4,10 @@
 
 - **Program:** NelyoHealth Platform Build
 - **Active phase:** Phase 0 (Product, clinical, regulatory, and delivery foundation)
-- **Current issue:** `P00-07` (COMPLETED, pending orchestration acceptance)
+- **Current issue:** `P00-08` (COMPLETED, pending orchestration acceptance)
 - **Date:** 2026-06-24
 - **Mode:** Planning / Documentation only
-- **Execution state:** `P00-07 COMPLETED, pending orchestration acceptance`
+- **Execution state:** `P00-08 COMPLETED, pending orchestration acceptance`
 - **Approved-lock decisions captured:** `13` (`REQ-LOCK-001` ... `REQ-LOCK-013`)
 
 ## Locked decisions currently captured
@@ -74,6 +74,11 @@
 - [docs/workflows/consent.md](./workflows/consent.md)
 - [docs/workflows/complaint.md](./workflows/complaint.md)
 - [docs/workflows/clinical-incident.md](./workflows/clinical-incident.md)
+- [docs/product/provider-discovery-privacy.md](./product/provider-discovery-privacy.md)
+- [docs/contracts/provider-disclosure-contract.md](./contracts/provider-disclosure-contract.md)
+- [docs/security/provider-disclosure-threat-model.md](./security/provider-disclosure-threat-model.md)
+- [docs/testing/provider-disclosure-test-matrix.md](./testing/provider-disclosure-test-matrix.md)
+- [docs/adr/ADR-0001-provider-detail-release-after-payment.md](./adr/ADR-0001-provider-detail-release-after-payment.md)
 
 ## Source precedence
 
@@ -97,17 +102,17 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - [x] Open-question schema normalized with owner, target prompt, target work-package, and approval path.
 - [x] Prompt-to-work-package crosswalk added to plan and traceability conventions.
 - [x] External approvals for legal, clinical, payment, and operational questions remain pending for pilot scope finalization.
-- [ ] Independent review and closure checklist for P00-07.
+- [ ] Independent review and closure checklist for P00-08.
 
 ## Completion summary for this phase
 
-- **Files changed this prompt:** 34
+- **Files changed this prompt:** 13
 - **Locked decisions preserved:** unchanged and carried forward from P00-00.
-- **New decisions:** P00-07 workflow decisions added (`REQ-WFL-001` to `REQ-WFL-025`).
-- **Open questions:** carried forward where unresolved and owned, with workflow-policy uncertainties added (`OQ-00-111` through `OQ-00-136`).
-- **Assumptions:** added explicit P00-07 assumptions for conceptual state machines, timeout configuration, authoritative state, stale projections, out-of-order callbacks, and explicit orchestration.
-- **Document register updates:** P00-07 workflow artifacts marked DONE and linked.
-- **Next action:** Orchestration review and acceptance for `P00-07` before starting `P00-08`.
+- **New decisions:** P00-08 provider-disclosure decisions added (`REQ-PRV-001` to `REQ-PRV-028`).
+- **Open questions:** carried forward where unresolved and owned, with provider-disclosure uncertainties added (`OQ-00-137` through `OQ-00-160`) and linked to existing finance/support/privacy questions.
+- **Assumptions:** added P00-08 assumptions for conceptual contracts, on-demand retrieval, token implementation deferral, generic service-area visualization, and browser-artifact retention dependency.
+- **Document register updates:** five P00-08 provider-disclosure artifacts marked DONE and linked.
+- **Next action:** Orchestration review and acceptance for `P00-08` before starting `P00-09`.
 
 ## Phase status
 
@@ -118,11 +123,14 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - **P00-04:** PASS
 - **P00-05:** PASS
 - **P00-06:** PASS
-- **P00-07:** COMPLETED, pending orchestration acceptance
-- **P00-08:** NOT STARTED
-- **Current blocker:** pending legal, clinical, finance, and operations approvals tracked in open questions.
+- **P00-07:** PASS
+- **P00-08:** COMPLETED, pending orchestration acceptance
+- **P00-09:** NOT STARTED
+- **Current blocker:** pending legal, privacy, security, finance, pharmacy, laboratory, and operational approvals tracked in open questions.
 
-## P00-07 execution status phrase
+## P00-08 execution status phrase
 
-- **P00-07 COMPLETED, pending orchestration acceptance**
+- **P00-08 COMPLETED, pending orchestration acceptance**
+
+
 
