@@ -163,3 +163,49 @@ For all future phase updates:
 - Open questions added/closed
 - Review/validation status
 - External approvals obtained or blocked
+
+### Entry P00-04-001 - Funding and coverage execution
+- Date: 2026-06-24
+- Files changed:
+  - `docs/product/funding-and-coverage-model.md`
+  - `docs/product/family-plan-rules.md`
+  - `docs/product/diaspora-plan-rules.md`
+  - `docs/product/employer-benefit-rules.md`
+  - `docs/product/hmo-coverage-rules.md`
+  - `docs/security/payer-visibility-matrix.md` (new)
+  - `docs/STATUS.md`
+  - `docs/exec-plans/P00-product-clinical-regulatory-foundation.md`
+  - `docs/governance/document-register.md`
+  - `docs/governance/decision-register.md`
+  - `docs/governance/open-questions.md`
+  - `docs/governance/assumptions-register.md`
+  - `docs/governance/change-log.md`
+  - `docs/governance/traceability-conventions.md`
+- Decisions added:
+  - Added `REQ-COV-001` through `REQ-COV-028` in decision register.
+  - Added approved and review-gated payer-visibility and funding-boundary decisions.
+- Open questions added:
+  - Added `OQ-00-44` through `OQ-00-69` for P00-04 coverage and funding control uncertainties.
+- Assumptions added/updated:
+  - Added explicit pilot-scope and funding-selection assumptions for deferred employer/HMO and adult sponsorship boundaries.
+- Governance and validation status:
+  - Document register rows for P00-04 outputs set to DONE.
+  - `docs/STATUS.md` now marks `P00-04` completed pending orchestration acceptance and `P00-05` not started.
+  - Matrix and role visibility now explicitly represented in `docs/security/payer-visibility-matrix.md` with lock-bound protected disclosure constraints.
+- External approvals/constraints:
+  - No final payer/funding visibility or payment unlock behavior marked approved without external review.
+  - Several questions remain open and blocking at finance/legal/privacy boundaries.
+
+### Entry P00-04-002 - Funding and coverage follow-up refinements
+- Date: 2026-06-24
+- Files changed:
+  - `docs/product/funding-and-coverage-model.md`
+  - `docs/product/diaspora-plan-rules.md`
+- Refinements:
+  - Added explicit overlap-resolve policy options and overlap examples in the funding-and-coverage model.
+  - Added waiting period and grace period semantics to funding lifecycle and re-authorization behavior.
+  - Expanded diaspora cross-border boundary section with settlement currency and failed-payment constraints.
+  - Added sponsor boundary failure case for attempts to access another beneficiary’s order.
+- Validation impact:
+  - No new requirements were approved during this follow-up.
+  - No governance status transitions were changed; this is a documentation completeness update within `P00-04`.

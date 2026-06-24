@@ -16,7 +16,7 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 |---|---|---|---|---|---|---|
 | Governance | [docs/STATUS.md](../STATUS.md) | P00-00 | Execution lead | DONE | REQUIRES_APPROVAL | Current phase status and next action |
 | Governance | [docs/exec-plans/P00-product-clinical-regulatory-foundation.md](../exec-plans/P00-product-clinical-regulatory-foundation.md) | P00-00 | Execution lead | DONE | APPROVED | Execution plan + gates |
-| Governance | [docs/governance/document-register.md](../governance/document-register.md) | P00-00 | Execution lead | DONE | APPROVED | This register |
+| Governance | [docs/governance/document-register.md](../governance/document-register.md) | P00-00 | Product + clinical + security | DONE | APPROVED | This register |
 | Governance | [docs/governance/decision-register.md](../governance/decision-register.md) | P00-00 | Product + clinical + security | DONE | REQUIRES_APPROVAL | Locked requirements and P00-02 pilot scope decisions updated |
 | Governance | [docs/governance/open-questions.md](../governance/open-questions.md) | P00-00 | Execution lead | IN_PROGRESS | APPROVED | Normalized open questions and approval links |
 | Governance | [docs/governance/assumptions-register.md](../governance/assumptions-register.md) | P00-00 | Execution lead | IN_PROGRESS | APPROVED | Defaults pending owner confirmation |
@@ -34,14 +34,14 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 | Product | [docs/product/personas.md](../product/personas.md) | P00-03 | Product + clinical | DONE | PROPOSED | Actor and scope model completed in P00-03 |
 | Product | [docs/product/actor-catalogue.md](../product/actor-catalogue.md) | P00-03 | Security + clinical | DONE | PROPOSED | Actor model completed in P00-03 |
 | Product | [docs/product/relationship-model.md](../product/relationship-model.md) | P00-03 | Product + privacy | DONE | PROPOSED | Relationship model completed in P00-03 |
-| Product | [docs/product/funding-and-coverage-model.md](../product/funding-and-coverage-model.md) | P00-04 | Finance + legal | NOT_STARTED | PROPOSED | To be authored in P00-04 |
-| Product | [docs/product/family-plan-rules.md](../product/family-plan-rules.md) | P00-04 | Product + legal | NOT_STARTED | PROPOSED | To be authored in P00-04 |
-| Product | [docs/product/diaspora-plan-rules.md](../product/diaspora-plan-rules.md) | P00-04 | Product + legal + finance | NOT_STARTED | PROPOSED | To be authored in P00-04 |
-| Product | [docs/product/employer-benefit-rules.md](../product/employer-benefit-rules.md) | P00-04 | Product + legal | NOT_STARTED | PROPOSED | To be authored in P00-04 |
-| Product | [docs/product/hmo-coverage-rules.md](../product/hmo-coverage-rules.md) | P00-04 | Product + legal + finance | NOT_STARTED | PROPOSED | To be authored in P00-04 |
+| Product | [docs/product/funding-and-coverage-model.md](../product/funding-and-coverage-model.md) | P00-04 | Finance + legal | DONE | PROPOSED | Authored in P00-04 |
+| Product | [docs/product/family-plan-rules.md](../product/family-plan-rules.md) | P00-04 | Product + legal | DONE | PROPOSED | Authored in P00-04 |
+| Product | [docs/product/diaspora-plan-rules.md](../product/diaspora-plan-rules.md) | P00-04 | Product + legal + finance | DONE | PROPOSED | Authored in P00-04 |
+| Product | [docs/product/employer-benefit-rules.md](../product/employer-benefit-rules.md) | P00-04 | Product + legal | DONE | PROPOSED | Authored in P00-04 |
+| Product | [docs/product/hmo-coverage-rules.md](../product/hmo-coverage-rules.md) | P00-04 | Product + legal + finance | DONE | PROPOSED | Authored in P00-04 |
 | Architecture | [docs/architecture/tenancy-concept.md](../architecture/tenancy-concept.md) | P00-03 | Architecture + security | DONE | PROPOSED | Tenant boundaries completed in P00-03 |
 | Security | [docs/security/access-intent-matrix.md](../security/access-intent-matrix.md) | P00-03 | Security + privacy | DONE | PROPOSED | Access intent matrix completed in P00-03 |
-| Security | [docs/security/payer-visibility-matrix.md](../security/payer-visibility-matrix.md) | P00-04 | Finance + security | NOT_STARTED | PROPOSED | To be authored in P00-04 |
+| Security | [docs/security/payer-visibility-matrix.md](../security/payer-visibility-matrix.md) | P00-04 | Finance + security | DONE | PROPOSED | Payer/funding intent model for P00-04 |
 | Architecture | [docs/glossary.md](../glossary.md) | P00-06 | Product + clinical + engineering | NOT_STARTED | PROPOSED | To be authored in P00-06 |
 | Architecture | [docs/architecture/domain-boundaries.md](../architecture/domain-boundaries.md) | P00-08 | Architecture + engineering | NOT_STARTED | PROPOSED | Not created yet |
 | Architecture | [docs/architecture/context-map.md](../architecture/context-map.md) | P00-06 | Architecture + engineering | NOT_STARTED | PROPOSED | To be authored in P00-06 |
@@ -65,5 +65,3 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 - Update this register at each prompt completion.
 - Add newly created files immediately and set status transitions from `NOT_STARTED` to `IN_PROGRESS` and `DONE`.
 - Mark blockers and owners for all newly added open questions.
-
-

@@ -3,9 +3,10 @@
 ## Objective
 
 Create a complete, reviewable, and externally approvable foundation for all Phase 1+ implementation work by:
+
 - resolving governance and terminology,
 - fixing access and disclosure boundaries,
-- and sequencing all required domain decisions under explicit ownership.
+- sequencing all required domain decisions under explicit ownership.
 
 ## Scope
 
@@ -16,15 +17,14 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 ## Non-goals
 
 - No application scaffolding or stack installation.
-- No browser tool installation or CI wiring.
-- No clinical, legal, or financial decisions being enforced as approved unless explicitly approved by named roles.
+- No browser tool installation or CI wiring in this issue.
+- No clinical, legal, or financial decisions are marked approved unless explicitly approved by named owners.
 
 ## Canonical source precedence and crosswalk model
 
-- Complete Breakdown defines scope, outcomes, and work-package content.
-- Codex Prompt Pack defines executable prompt order.
-- A prompt may cover more than one Complete Breakdown work package.
-- Execution tools must identify both IDs when referencing scope in future prompts.
+- `NelyoHealth_Phase_0_Complete_Breakdown.md` defines scope and work-package outcomes.
+- `NelyoHealth_Phase_0_Codex_Prompt_Pack.md` defines executable order.
+- Prompt mapping to work packages:
 
 | Codex Prompt Pack | Complete Breakdown coverage |
 |---|---|
@@ -38,9 +38,9 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 | P00-07 | P00-09 Workflow state machines |
 | P00-08 | P00-10 Pharmacy and laboratory disclosure contract |
 | P00-09 | P00-11 Clinical scope and safety model, plus P00-12 Emergency, urgent, referral, and critical-result protocols |
-| P00-10 | P00-13 Prescription, laboratory, pharmacy, and delivery policies |
+| P00-10 | P00-13 Prescription, pharmacy, laboratory, and delivery policies |
 | P00-11 | P00-14 Privacy, consent, guardianship, and data governance |
-| P00-12 | P00-15 Regulatory obligations and source register |
+| P00-12 | P00-15 Regulatory source and obligations register |
 | P00-13 | P00-16 Payments, ledger, claims, and commercial rules |
 | P00-14 | P00-17 Non-functional requirements and browser-test strategy |
 | P00-15 | P00-18 Metrics, service levels, and operational readiness |
@@ -49,64 +49,64 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 
 ## Canonical execution order
 
-1. `P00-00` Preflight and execution governance skeleton.
-2. `P00-01` Product charter and principles.
-3. `P00-02` MVP and pilot boundaries.
-4. `P00-03` Actors, roles, relationships, tenancy.
-5. `P00-04` Coverage and funding models.
-6. `P00-05` Journeys and service blueprints.
-7. `P00-06` Glossary and domain data boundaries.
-8. `P00-07` Workflow state machines.
-9. `P00-08` Provider-detail disclosure contract and threat model.
-10. `P00-09` Clinical safety scope and emergency policy.
-11. `P00-10` Prescription/pharmacy/lab/delivery policies.
-12. `P00-11` Privacy, consent, guardian, and governance.
-13. `P00-12` Regulatory source and obligations register.
-14. `P00-13` Payments, ledger, claims, unlock event.
-15. `P00-14` Non-functional and browser-testing strategy.
-16. `P00-15` Metrics, SLOs, operations readiness.
-17. `P00-16` Risks, assumptions, dependencies, ADR set.
-18. `P00-17` Independent review and completion gate.
+1. `P00-00` Preflight and governance foundation
+2. `P00-01` Product charter and principles
+3. `P00-02` MVP and pilot boundaries
+4. `P00-03` Actors, roles, relationships, tenancy
+5. `P00-04` Coverage and funding models
+6. `P00-05` Journeys and service blueprints
+7. `P00-06` Glossary and domain data boundaries
+8. `P00-07` Workflow state machines
+9. `P00-08` Provider-disclosure contract and threat model
+10. `P00-09` Clinical safety and emergency policy
+11. `P00-10` Prescription/pharmacy/lab/delivery policies
+12. `P00-11` Privacy, consent, and governance
+13. `P00-12` Regulatory source and obligations register
+14. `P00-13` Payments, ledger, claims, unlock event
+15. `P00-14` NFRs and browser-test strategy
+16. `P00-15` Metrics, SLOs, operations readiness
+17. `P00-16` Risks, assumptions, dependencies, ADRs
+18. `P00-17` Independent review and completion gate
 
 ## Hard constraints
 
-- Keep all unlocked provider details to backend-enforced projections and release policies.
+- Keep all pre-payment provider details to backend-enforced projections and release policies.
 - Never allow payer/subscriber relationships to imply clinical record visibility by default.
-- Emergency escalation never blocked by payment, marketplace comparison, ordinary registration, or provider-discovery logic.
-- Signed clinical records are amended only.
-- Browser testing strategy is defined in Phase 0; implementation deferred to Phase 1.
+- Emergency escalation is never blocked by payment, registry comparison, routine registration, or non-emergency care flow.
+- Signed clinical records are amended/Versioned, never silently overwritten.
+- Browser testing strategy is defined here; implementation in Phase 1.
 
 ## Review and checkpoint policy
 
 - Each prompt is a separate changelog chunk.
-- Diff must be reviewed before moving to the next issue.
-- Mandatory reread at the start of new execution context: the three source documents + latest `docs/STATUS.md`.
-- Do not continue automatically between prompts.
+- Diff is reviewed before the next prompt is started.
+- Mandatory re-read at new execution context: the three source documents and latest `docs/STATUS.md`.
+- No automatic continuation between prompts without orchestration handoff.
 
 ## Gates
 
-- **Gate A (after `P00-00`)**: Governance artifacts, traceability conventions, and conflict map present.
+- **Gate A (after `P00-00`)**: Governance artifacts and conflict map present.
 - **Gate B (after `P00-08`)**: Disclosure contract and protected field list proven model-level, not UI-only.
-- **Gate C (after `P00-13`)**: Payment and provider-detail unlock events cannot diverge.
+- **Gate C (after `P00-13`)**: Payment unlock and disclosure events are non-divergent.
 - **Gate D (after `P00-15`)**: High-risk gaps have owners and mitigation drafts.
-- **Gate E (after `P00-17`)**: Completion report includes PASS/CONDITIONAL/FAIL and named approval conditions.
+- **Gate E (after `P00-17`)**: Completion report includes PASS/CONDITIONAL/FAIL with named approvals.
 
 ## Milestones
 
-- **Milestone 0:** P00-00 baseline produced and reviewed.
+- **Milestone 0:** `P00-00` baseline produced and reviewed.
 - **Milestone 1:** Clinical and product scope synchronized across documents.
-- **Milestone 2:** Disclosure invariants locked prior to operational policy work.
+- **Milestone 2:** Disclosure invariants locked before operational policy work.
 - **Milestone 3:** Completion artifacts produced with explicit approvals.
 
 ## Exit criteria for Phase 0
 
 - All required docs in scope and traceable to requirement IDs.
 - Pre-payment provider-disclosure policy consistent in legal, clinical, operational, and technical docs.
-- Emergency escalation, signed-record amendment, and one-longitudinal-identity rules preserved in all docs.
+- Emergency escalation, signed-record amendment, and one-longitudinal-identity rules are explicit in all related outputs.
 - No unresolved ownerless high-risk TODO/TBD in required outputs.
 - External approval status recorded for each mandatory external domain.
 
-## Work breakdown summary
+## Work breakdown and status
 
 | Artifact set | Prompt owner | Current status |
 |---|---|---|
@@ -114,18 +114,15 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 | Product charter / principles | P00-01 | PASS |
 | P00-01 + P00-02 scope boundary | P00-01, P00-02 | COMPLETED, pending orchestration acceptance |
 | P00-03 actor-tenancy model | P00-03 | COMPLETED, pending orchestration acceptance |
+| P00-04 funding models | P00-04 | **COMPLETED, pending orchestration acceptance** |
 | Journeys / architecture | P00-05, P00-07 | not started |
-| Privacy / legal / finance / metrics / risks | P00-11..P00-16 | not started |
-| Phase 0 gate and completion report | P00-17 | not started |
-
-## Milestone state
-
-- **Milestone 1:** Clinical and product scope synchronized across documents for P00-02.
-- **Milestone 2:** Actor and tenancy model synchronized across `P00-03` outputs and governance links.
+| Privacy / legal / finance / operations | P00-11..P00-16 | not started |
+| Phase 0 gate and completion | P00-17 | not started |
 
 ## Validation checklist
 
 - Terminology conflicts checked across all source documents.
-- Pre-payment protected fields blocked by design in P00-00 and all linked outputs.
-- All open questions have owner, evidence source target, and target phase.
+- Pre-payment protected fields blocked by design in `P00-00` and all linked outputs.
+- All open questions have owner, target phase, and approval path.
 - Decisions are tagged and versioned in `docs/governance/decision-register.md`.
+- Required links, matrix entries, and scope boundaries are reviewed before each phase transition.
