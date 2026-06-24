@@ -97,3 +97,20 @@ For each significant requirement, include:
 - **P00-16 to P00-17:** map risks, owners, traceability matrix, and completion approval status.
 
 
+
+## P00-11 identifier families
+
+| Prefix | Meaning | Owning prompt | Notes |
+|---|---|---|---|
+| DAT-REQ | Cross-cutting data-governance requirement | P00-11 | Requirement traceability inside privacy artifacts |
+| DFM-FLW | Data-flow map flow | P00-11 | Conceptual data movement, not topology |
+| ROPA-ACT | Draft processing activity | P00-11 | Not a final legally complete ROPA |
+| CNS-POL | Consent policy rule or consent type | P00-11 | Consent is purpose-specific and not blanket lawful basis |
+| GDN-POL | Guardian and delegation policy rule | P00-11 | Minor functionality remains design-only until approved |
+| RET-CAT | Retention category | P00-11 | No statutory period approved in P00-11 |
+| DSR-WFL | Data-subject-rights workflow | P00-11 | No statutory response period approved in P00-11 |
+| XBR-FLW | Cross-border data flow | P00-11 | Transfer mechanism remains legal-review controlled |
+| SUB-REQ | Subprocessor category or due-diligence requirement | P00-11 | No vendor approved without review |
+| BGA-POL | Break-glass policy rule | P00-11 | Exceptional, audited, review-bound access |
+| NTF-POL | Notification data policy rule/type | P00-11 | Minimum-necessary notification content |
+| REQ-DAT | Governance decision for data/privacy | P00-11 | Decision register entries for privacy controls |

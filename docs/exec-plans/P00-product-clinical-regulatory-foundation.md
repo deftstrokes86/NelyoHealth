@@ -121,7 +121,8 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 | P00-08 provider-disclosure contract | P00-08 | PASS; covers Complete Breakdown P00-10 |
 | P00-09 clinical scope, safety, emergency, referral, and critical-result protocols | P00-09 | COMPLETED, pending orchestration acceptance; covers Complete Breakdown P00-11 and P00-12 |
 | P00-10 prescription/pharmacy/lab/delivery policies | P00-10 | COMPLETED, pending orchestration acceptance; covers Complete Breakdown P00-13 |
-| Privacy / legal / finance / operations | P00-11..P00-16 | not started; P00-11 remains NOT STARTED |
+| P00-11 privacy, consent, guardianship, delegation, and data governance | P00-11 | COMPLETED, pending orchestration acceptance; covers Complete Breakdown P00-14. |
+| Regulatory / finance / operations | P00-12..P00-16 | not started; P00-12 remains NOT STARTED. |
 | Phase 0 gate and completion | P00-17 | not started |
 
 ## Validation checklist
@@ -137,4 +138,10 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 - P00-10 completed the Complete Breakdown P00-13 prescription, pharmacy, laboratory, result-release, and delivery policy work package.
 - P00-10 created five draft policy artifacts and updated governance registers.
 - Final payment, capture, refund, reversal, chargeback, and provider-detail disclosure eligibility remain deferred to P00-13.
-- P00-11 remains NOT STARTED.
+- P00-11 completed privacy, consent, guardianship, delegation, cross-border, subprocessor, break-glass, notification, retention, data-subject-rights, workflow, event, decision, open-question, and assumption updates; orchestration acceptance remains pending.
+## P00-11 completion note
+
+- P00-11 completed the Complete Breakdown P00-14 privacy, consent, guardianship, delegation, and data-governance package in draft form.
+- P00-11 created ten privacy/security governance artifacts and aligned status, execution planning, document registration, decisions, open questions, assumptions, traceability conventions, event catalogue entries, and workflow privacy sections.
+- P00-11 did not finalize lawful bases, statutory retention periods, breach deadlines, cross-border transfer mechanisms, subprocessor approvals, vendor selections, age thresholds, or final guardianship rules.
+- P00-12 remains NOT STARTED.

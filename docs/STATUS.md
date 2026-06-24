@@ -4,10 +4,10 @@
 
 - **Program:** NelyoHealth Platform Build
 - **Active phase:** Phase 0 (Product, clinical, regulatory, and delivery foundation)
-- **Current issue:** `P00-10` (COMPLETED, pending orchestration acceptance)
+- **Current issue:** `P00-11` privacy, consent, guardianship, delegation, and data governance completed; orchestration acceptance pending.
 - **Date:** 2026-06-24
 - **Mode:** Planning / Documentation only
-- **Execution state:** `P00-10 COMPLETED, pending orchestration acceptance`
+- **Execution state:** `P00-11 COMPLETE, READY FOR ORCHESTRATION ACCEPTANCE`.
 - **Approved-lock decisions captured:** `13` (`REQ-LOCK-001` ... `REQ-LOCK-013`)
 
 ## Locked decisions currently captured
@@ -169,7 +169,8 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - **P00-08:** PASS
 - **P00-09:** PASS
 - **P00-10:** COMPLETED, pending orchestration acceptance
-- **P00-11:** NOT STARTED
+- **P00-11:** COMPLETED, pending orchestration acceptance
+- **P00-12:** NOT STARTED
 - **Current blocker:** pending clinical, legal, privacy, security, finance, pharmacy, laboratory, delivery, and operational approvals tracked in open questions.
 
 ## P00-08 execution status phrase
@@ -182,3 +183,15 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 ## P00-10 execution status phrase
 
 - **P00-10 COMPLETE, READY FOR ORCHESTRATION ACCEPTANCE**
+## P00-11 completion summary
+
+- **P00-11 COMPLETE, READY FOR ORCHESTRATION ACCEPTANCE**
+- **Privacy artifacts created:** data-flow map, processing activities draft, consent matrix, guardian and delegation policy, retention schedule draft, data-subject-rights workflows, cross-border data register, subprocessor register draft, break-glass policy, and notification data policy.
+- **Governance artifacts updated:** document register, decision register, open questions, assumptions register, change log, traceability conventions, status, execution plan, workflow alignment, and event catalogue.
+- **New decisions:** P00-11 added `REQ-DAT-001` through `REQ-DAT-040`; legal, privacy, clinical, security, transfer, and retention decisions remain draft or require approval unless they restate locked requirements.
+- **Open questions:** added `OQ-00-265` through `OQ-00-346` with owners, target phases, approval authorities, and resolution criteria.
+- **Assumptions:** added P00-11 assumptions `ASSUMPT-49` through `ASSUMPT-56`; all remain proposed implementation assumptions pending owner review.
+- **Provider-disclosure privacy:** P00-11 carries forward the rule that pre-payment clients receive only permitted non-identifying provider display/commercial information and that detailed provider information is released only through the selected authorized paid order.
+- **Phase boundary:** no production application code, database schema, API contract implementation, dependency installation, browser tooling installation, vendor selection, statutory period, breach deadline, transfer mechanism, lawful basis, or final age/guardianship rule was established.
+- **Current blocker:** privacy counsel, legal counsel, security lead, clinical lead, operations lead, finance/payments owner, DPO/privacy owner, and architecture owner approvals remain pending.
+- **Next action:** orchestration review of P00-11 only; do not execute P00-12 until accepted.

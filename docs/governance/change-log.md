@@ -1,4 +1,4 @@
-﻿# NelyoHealth Phase 0 Change Log
+# NelyoHealth Phase 0 Change Log
 
 ## 2026-06-23
 
@@ -424,3 +424,11 @@ For all future phase updates:
 - **Result-to-treatment boundary:** laboratory result verification or release does not create prescriptions, start pharmacy search, purchase medicine, change treatment, or close diagnostic loop.
 - **Remaining approvals:** clinical, pharmacy, laboratory, legal, privacy, security, finance, regulatory, operations, delivery, and architecture approvals remain required before policy effectiveness or implementation.
 - **Next prompt status:** P00-11 NOT STARTED.
+## P00-11 privacy, consent, guardianship, delegation, and data governance
+
+- Created ten draft P00-11 artifacts: data-flow map, processing activities draft, consent matrix, guardian and delegation policy, retention schedule draft, data-subject-rights workflows, cross-border data register, subprocessor register draft, break-glass policy, and notification data policy.
+- Added 32 `DAT-REQ-*` requirements, 56 `DFM-FLW-*` data-flow rows, 42 `ROPA-ACT-*` processing activities, 25 `CNS-POL-*` consent rules, 11 `GDN-POL-*` guardian/delegation rules, 59 `RET-CAT-*` retention categories, 20 `DSR-WFL-*` data-subject-rights workflow entries, 28 `XBR-FLW-*` cross-border flows, 28 `SUB-REQ-*` subprocessor due-diligence categories, 9 `BGA-POL-*` break-glass rules, and 42 `NTF-POL-*` notification rules.
+- Added decisions `REQ-DAT-001` through `REQ-DAT-040`, open questions `OQ-00-265` through `OQ-00-346`, and assumptions `ASSUMPT-49` through `ASSUMPT-56`.
+- Updated document register, decision register, open questions, assumptions register, traceability conventions, status, execution plan, event catalogue, and workflow privacy alignment sections.
+- Preserved locked requirements: one longitudinal patient identity, payer/clinical-access separation, order-scoped provider-detail disclosure after successful payment only, emergency escalation independent of marketplace/payment/registration, signed-record amendment/versioning, synthetic-only browser testing, and Phase 0 documentation-only scope.
+- Remaining approvals: privacy counsel, legal counsel, DPO/privacy owner, security lead, clinical lead, operations lead, finance/payments owner, architecture owner, QA/accessibility owner, pharmacy operations lead, laboratory operations lead, and external regulatory counsel where applicable.

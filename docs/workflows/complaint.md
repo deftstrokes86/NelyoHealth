@@ -172,4 +172,9 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Notification minimization.
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
+## P00-11 Privacy Alignment
 
+- Complaints that include privacy, consent, guardian, delegation, data-subject-rights, provider-disclosure, notification, or subprocessor issues must route to the privacy/legal/security owners named in the P00-11 artifacts.
+- Complaint handling must not grant broad support access to clinical records, payment data, provider details, identity evidence, or guardian evidence outside the minimum approved scope.
+- Data-subject-rights requests must not be handled as informal complaint notes; they must follow `docs/privacy/data-subject-rights-workflows.md`.
+- Complaint evidence, outcomes, restrictions, corrections, and escalations must preserve history through amendment or versioning where records are finalized.

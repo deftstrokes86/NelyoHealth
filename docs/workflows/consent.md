@@ -164,4 +164,10 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Notification minimization.
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
+## P00-11 Privacy Alignment
 
+- Consent records follow `docs/privacy/consent-matrix.md` and must separate consent evidence from final lawful-basis determinations, which remain pending legal/privacy approval.
+- Consent grants, declines, withdrawals, version presentation, delegation, and guardian consent/assent evidence must be versioned and auditable.
+- Withdrawal affects future processing according to the approved policy and must not silently alter signed clinical notes, prescriptions, verified results, invoices, ledger entries, or audit records.
+- Consent UI and APIs must not expose pre-payment pharmacy or laboratory protected details before the selected authorized order has the approved successful-payment disclosure event.
+- Consent analytics and notifications must use minimum necessary metadata and synthetic-only test data in Phase 0/Phase 1 testing contexts.

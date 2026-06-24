@@ -1,4 +1,4 @@
-﻿# Phase 0 Assumptions Register
+# Phase 0 Assumptions Register
 
 ## Assumption status
 
@@ -57,3 +57,11 @@
 | ASSUMPT-46 | Delivery integrations can operate with task-scoped minimum data and do not require diagnosis, full prescription, laboratory result, sponsor, HMO, employer, or family-plan details. | PROPOSED | Operations Lead + Privacy Counsel + Security Lead | P00-14 / P00-15 | A partner requiring excess data would conflict with privacy and payer-clinical separation controls. |
 | ASSUMPT-47 | Structured laboratory data and a signed human-readable result can coexist as separate but linked representations. | PROPOSED | Laboratory Clinical Owner + Architecture Lead | P00-14 / P00-17 | If representation constraints differ, result-release and correction policy must be revised. |
 | ASSUMPT-48 | Result release does not by itself prove clinician review, follow-up, or diagnostic-loop closure. | PROPOSED | Clinical Lead + Laboratory Clinical Owner | P00-15 / P00-17 | If release is treated as closure, abnormal or critical results may remain clinically unowned. |
+| ASSUMPT-49 | Minor clinical activation remains deferred and design-only until legal, privacy, clinical, and guardian evidence rules are approved. | PROPOSED | Clinical Lead + Privacy Counsel + Legal Counsel | P00-12 / P00-17 | Early activation could create unauthorized guardian or minor access behavior. |
+| ASSUMPT-50 | Cross-border vendors remain unselected until the cross-border register and subprocessor due-diligence gates are approved. | PROPOSED | Privacy Counsel + Security Lead + Legal Counsel | P00-12 / P00-17 | Selecting vendors prematurely could create unreviewed transfer and contract risk. |
+| ASSUMPT-51 | Session replay remains disabled on sensitive surfaces unless a later approved policy explicitly permits strict masking. | PROPOSED | Security Lead + Privacy Counsel | P00-14 / P00-17 | Session replay could capture clinical, payment, consent, or provider-disclosure data. |
+| ASSUMPT-52 | Data-subject requests will be handled through dedicated operational workflows rather than ad hoc support access. | PROPOSED | Privacy Counsel + Operations Lead | P00-15 / P01 | Ad hoc handling could expose another patient's data or bypass audit. |
+| ASSUMPT-53 | Privacy rules will be enforced at server, contract, projection, logging, telemetry, notification, and export boundaries. | PROPOSED | Security Lead + Architecture Lead + Privacy Counsel | P00-14 / P01 | UI-only controls could leak protected data through payloads, logs, or artifacts. |
+| ASSUMPT-54 | Retention values remain configuration-controlled only after legal, clinical, finance, security, or contractual approval. | PROPOSED | Legal Counsel + Security Lead | P00-12 / P00-15 | Hard-coded periods could conflict with legal, clinical, or financial obligations. |
+| ASSUMPT-55 | P00-11 future privacy, browser, screenshot, trace, video, and training validation can be represented with synthetic fixtures before Phase 1 tooling exists. | PROPOSED | QA Lead + Security Lead + Privacy Counsel | P00-14 / P01 | If synthetic coverage is incomplete, teams may be tempted to use production data in lower environments. |
+| ASSUMPT-56 | Implementation can centralize detailed provider-location retrieval behind the existing authorized-order disclosure path rather than duplicating retrieval paths. | PROPOSED | Security Lead + Privacy Counsel | P00-08 / P00-14 / P01 | Duplicated retrieval routes could bypass provider-detail disclosure protections. |

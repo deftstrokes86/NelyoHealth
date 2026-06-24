@@ -99,3 +99,12 @@
 | INV-FUL-006 | Emergency safety action is independent of pharmacy, laboratory, stock, quote, payment, coverage, sponsor/HMO authorization, provider-detail protection, and delivery availability. | WFL-006; WFL-010; WFL-011; WFL-012; WFL-015; WFL-016; WFL-018 | FUL-REQ-020 |
 | INV-FUL-007 | Signed prescriptions and verified results preserve history by amendment, replacement, correction, cancellation, supersession, and versioning, never silent overwrite. | WFL-007; WFL-015 | FUL-REQ-005 |
 | INV-FUL-008 | Routine recovery uses commands, queues, reviews, amendments, replacements, cancellations, refunds, or reconciliation, never direct production database editing. | All fulfilment workflows | FUL-REQ-021 |
+## P00-11 Privacy and Data-Governance Invariants
+
+- Privacy, consent, guardian, delegation, DSR, retention, cross-border, subprocessor, notification, and break-glass rules are draft controls pending privacy, legal, security, clinical, operations, finance, architecture, and regulatory approval.
+- A payer, sponsor, employer, HMO, guardian, family-plan administrator, or caregiver receives only explicitly granted permissions and never receives clinical-record access merely because they pay for care.
+- Pre-payment pharmacy/laboratory provider discovery remains schema-level restricted: patient-facing clients may receive only approved provider display name and non-identifying commercial information; no address, coordinate, distance, branch, contact, map, direction, instruction, internal identifier, metadata, analytics, log, cache, storage, or trace data may expose protected details before the approved disclosure event.
+- Post-payment provider-detail disclosure is tied only to the selected authorized paid order and must not unlock other orders, quotations, providers, patients, or family/sponsor/HMO/employer views.
+- Emergency escalation is never blocked by payment, registration, plan authorization, marketplace comparison, provider-detail obscuration, or routine booking workflows.
+- Finalized clinical records, prescriptions, verified laboratory results, incident records, ledger records, consent evidence, and audit records are corrected by amendment/versioning rather than silent overwrite.
+- Data-subject-rights, retention, deletion, restriction, and legal-hold workflows must preserve auditability and must not delete records required for approved clinical, legal, financial, security, or safety purposes without approved authority.

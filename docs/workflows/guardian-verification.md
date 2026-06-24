@@ -172,4 +172,10 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Notification minimization.
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
+## P00-11 Privacy Alignment
 
+- Guardian verification follows `docs/privacy/guardian-and-delegation-policy.md` and remains draft pending privacy, legal, clinical, and operational approval.
+- Guardian authority is scope-limited and does not automatically grant access to all clinical records, payment data, pharmacy details, laboratory details, or notification channels.
+- Disputes, conflicting guardians, expiry, suspension, revocation, safety concerns, minor assent, and age-transition reviews must preserve audit history and route through approved review owners.
+- Emergency escalation must not be blocked by ordinary guardian verification, marketplace comparison, plan authorization, registration, payment, or provider-detail obscuration.
+- Guardian-related data-subject-rights requests must verify requester authority before any data search, export, correction, restriction, or deletion action.

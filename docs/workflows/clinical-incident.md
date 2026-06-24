@@ -1,4 +1,4 @@
-﻿# Clinical incident State Machine
+# Clinical incident State Machine
 
 ## Document Control
 
@@ -175,4 +175,9 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Clinical incident closure requires authorized clinical-owner approval and audit evidence.
 - Operations staff must not directly edit clinical records to resolve incidents.
 - Related clinical policy: `docs/clinical/clinical-incident-policy.md`.
+## P00-11 Privacy Alignment
 
+- Clinical incidents that include privacy or confidentiality exposure must cross-reference `docs/privacy/notification-data-policy.md`, `docs/security/break-glass-policy.md`, and `docs/privacy/data-subject-rights-workflows.md`.
+- Break-glass access is exceptional, audited, scope-limited, time-bounded by approved policy, and must not become a support shortcut or provider-detail disclosure bypass.
+- Privacy notification thresholds, breach deadlines, regulator notifications, and patient communications remain draft pending legal/privacy approval and P00-12 regulatory source review.
+- Clinical incident remediation must preserve signed clinical records through amendment/versioning and must not silently overwrite finalized notes, prescriptions, verified results, or incident records.

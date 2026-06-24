@@ -172,4 +172,10 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Notification minimization.
 - Browser refresh or back-navigation where user-facing.
 - Synthetic-data-only rule.
+## P00-11 Privacy Alignment
 
+- Identity verification evidence is a privacy-governed dataset and must follow `docs/privacy/data-flow-map.md`, `docs/privacy/processing-activities-draft.md`, and `docs/privacy/retention-schedule-draft.md`.
+- Evidence capture, review, rejection, expiry, recovery, and support override rules remain draft pending privacy, legal, security, and clinical approval.
+- Identity proofing must never merge two people into one longitudinal patient identity without controlled review, and must never create more than one longitudinal patient identity for the same person without remediation review.
+- Data-subject-rights requests about identity evidence route through `docs/privacy/data-subject-rights-workflows.md` rather than ad hoc support access.
+- Identity evidence must not be exposed to sponsors, employers, HMOs, family-plan administrators, guardians, or caregivers unless an approved relationship and explicit permission grants that exact access.
