@@ -171,3 +171,12 @@ All tests use synthetic patients, providers, orders, locations, and payments. Co
 | PRV-REQ-031 to PRV-REQ-035 | PRV-TST-020 to PRV-TST-024, PRV-TST-034 | PRV-THR-048 to PRV-THR-064 | Privacy/security/operations approval | P00-14/P00-15 |
 | PRV-REQ-036 to PRV-REQ-040 | PRV-TST-001 to PRV-TST-035 | PRV-THR-001 to PRV-THR-065 | Phase gate and QA approval | P00-14/P00-17 |
 
+
+## P00-13 Finance Alignment
+
+- `OrderFundingSecured` is the PROPOSED finance input to provider-disclosure evaluation, not an approved implementation event and not a provider-detail response.
+- `ProviderDetailDisclosureDecision` remains the separate access authority and must evaluate exact order, selected provider, actor, patient, tenant, current authorization, no-store handling, deny-by-default behavior, and policy version server-side.
+- `ProviderDetailDisclosureEligibilityEstablished` remains separate from payment, ledger, browser success, redirect, webhook, authorization, settlement, claim, remittance, and payout state.
+- Refund, reversal, chargeback, cancellation, provider replacement, reconciliation exception, and legal/safety/support purpose changes trigger recomputation; final post-refund retrieval outcomes remain approval-gated.
+- No finance event, ledger entry, analytics event, log, trace, screenshot, browser payload, map request, cache entry, hidden DOM, or accessibility tree may contain protected pre-payment provider details.
+- P00-12 legal conflict around provider display and minimum disclosure remains unresolved and launch-gated; P00-13 does not alter the locked providerDisplayName-only pre-payment rule.

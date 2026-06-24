@@ -1,4 +1,4 @@
-# Phase 0 Assumptions Register
+﻿# Phase 0 Assumptions Register
 
 ## Assumption status
 
@@ -14,7 +14,7 @@
 | ASSUMPT-04 | Native mobile apps are post-pilot and initially out of scope for implementation. | PROPOSED | Product owner | P00-02 / P01 | Overbuild on unplanned surfaces |
 | ASSUMPT-05 | Native mobile experience can be deferred until web loops stabilize. | PROPOSED | Product owner | P00-02 / P01 | Missed channel coverage assumptions |
 | ASSUMPT-06 | Pre-payment provider identity can use providerDisplayName without location, contacts, branch, map, or derivable data. | REJECTED | Product + privacy + security | P00-00 | Superseded by REQ-LOCK-003 and REQ-LOCK-004 in `docs/governance/decision-register.md`; this rule remains locked there. |
-| ASSUMPT-07 | Payment event for unlocking provider details is settlement/capture by default. | PROPOSED | Finance owner + security | P00-13 | Unauthorized disclosure on failed/authorization-only states |
+| ASSUMPT-07 | Payment event for unlocking provider details is settlement/capture by default. | REJECTED | Finance owner + security | P00-13 | Superseded by proposed OrderFundingSecured; settlement alone is not the ordinary patient-facing unlock point and authorization-only is insufficient. |
 | ASSUMPT-08 | No user-facing features are implemented before P00 completion and gate completion. | APPROVED | Execution lead | P00-00 | Violates planning and safety sequencing |
 | ASSUMPT-09 | Browser automation strategy will be validated in Phase 1 only. | APPROVED | Engineering lead | P00-14 / P01 | Over-implementation before base docs done |
 | ASSUMPT-10 | Synthetic-only test data for privacy and browser testing, including failure and adverse paths. | APPROVED | QA + security | P00-14 | Personal data exposure and false compliance signals |
@@ -72,3 +72,16 @@
 | ASSUMPT-61 | Official sources may change after the P00-12 verification date and require monitoring before launch. | PROPOSED | Compliance Lead | P00-12 / P00-17 | Stale source assumptions could invalidate launch gates. |
 | ASSUMPT-62 | Qualified Nigerian legal advice will be obtained before pilot launch. | PROPOSED | Founder/Product Owner + Legal Counsel | P00-17 | Without counsel, unresolved legal questions remain blocking. |
 | ASSUMPT-63 | Pharmacy launch remains conditional on PCN classification, NEPP, Superintendent Pharmacist, and display-rule resolution. | PROPOSED | Pharmacy Operations Lead + Legal Counsel | P00-12 / external review | The locked provider-disclosure model may conflict with PCN display duties. |
+
+
+## P00-13 finance assumptions
+
+| Assumption ID | Assumption | Status | Owner | Target decision | Risk if wrong |
+|---|---|---|---|---|---|
+| ASSUMPT-64 | The pilot uses licensed payment providers or licensed payment rails rather than NelyoHealth operating a regulated payment role. | PROPOSED | Finance/Payments Owner + Legal Counsel | REQ-FIN-015; OQ-00-405 | Payment pilot may be blocked or require different licence/contract structure. |
+| ASSUMPT-65 | Direct pilot payments require verified capture or confirmed receipt before proposed OrderFundingSecured can be considered. | PROPOSED | Finance/Payments Owner + Security Lead | REQ-FIN-031; REQ-FIN-032 | Provider details could be exposed on authorization-only or unverified states. |
+| ASSUMPT-66 | Settlement may occur after patient-facing fulfilment steps begin, so settlement is not the proposed ordinary unlock point. | PROPOSED | Finance/Payments Owner + Accounting Reviewer | REQ-FIN-034; OQ-00-389 | Waiting for settlement could delay fulfilment; using settlement incorrectly could alter risk. |
+| ASSUMPT-67 | Employer and HMO guarantee evidence profiles remain future scope and are not pilot-valid without external approval. | PROPOSED | Finance/Payments Owner + Legal Counsel | REQ-FIN-027 through REQ-FIN-030 | Coverage eligibility could be misused as payment or insurance risk assumed. |
+| ASSUMPT-68 | External financial callbacks may be duplicated or delivered out of order. | PROPOSED | Security Lead + Engineering Lead | REQ-FIN-005; REQ-FIN-006 | Duplicate or stale callbacks could corrupt state if idempotency and ordering are weak. |
+| ASSUMPT-69 | Unresolved financial exceptions require owner review and reconciliation before sensitive financial conclusions close. | PROPOSED | Finance/Payments Owner + Operations Lead | REQ-FIN-026; REQ-FIN-046 | Mismatched evidence could unlock details, distort balances, or misstate payable/refund status. |
+| ASSUMPT-70 | The operational subledger will require later mapping to statutory accounting systems and professional accounting classifications. | PROPOSED | Accounting Reviewer + Finance/Payments Owner | REQ-FIN-009 through REQ-FIN-012 | Operational records could be mistaken for final accounting records. |

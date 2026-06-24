@@ -1,4 +1,4 @@
-# NelyoHealth Phase 0 Change Log
+﻿# NelyoHealth Phase 0 Change Log
 
 ## 2026-06-23
 
@@ -205,7 +205,7 @@ For all future phase updates:
   - Added explicit overlap-resolve policy options and overlap examples in the funding-and-coverage model.
   - Added waiting period and grace period semantics to funding lifecycle and re-authorization behavior.
   - Expanded diaspora cross-border boundary section with settlement currency and failed-payment constraints.
-  - Added sponsor boundary failure case for attempts to access another beneficiaryâ€™s order.
+  - Added sponsor boundary failure case for attempts to access another beneficiaryÃ¢â‚¬â„¢s order.
 - Validation impact:
   - No new requirements were approved during this follow-up.
   - No governance status transitions were changed; this is a documentation completeness update within `P00-04`.
@@ -450,3 +450,19 @@ For all future phase updates:
 - First-pilot legal blockers include entity/telemedicine posture, PCN aggregator classification, PCN display-rule reconciliation, NEPP, pharmacy partner/SP structure, lab facility and practitioner verification, doctor licensing/practice structure, NDPC registration/DPIA, payment/wallet structure, pilot-state requirements, emergency-treatment responsibilities, and required provider contracts.
 - Access-limited or uncertain sources include MDCN full Code of Medical Ethics, certified National Health Act copy, Child Rights/state laws, Cybercrimes Act/amendment copies, detailed MLSCN standards, ARCON current code/Act copies, and pilot-state materials.
 - Remaining approvals: Nigerian legal/regulatory counsel, clinical lead, privacy/DPO, finance/payments owner, security lead, operations lead, pharmacy operations lead, laboratory operations lead, architecture owner, marketing owner, and external orchestration.
+
+### Entry 013 - Payments, ledger, claims, and commercial rules documented (P00-13)
+
+- **Prompt:** P00-13.
+- **Complete Breakdown work package:** P00-16.
+- **Files created:** `docs/finance/funds-flow.md`, `docs/finance/payment-state-model.md`, `docs/finance/ledger-principles.md`, `docs/finance/refund-and-dispute-policy.md`, `docs/finance/provider-settlement-policy.md`, `docs/finance/claims-and-remittance-boundary.md`, `docs/adr/ADR-0002-wallet-as-ledger-backed-balance.md`.
+- **Files updated:** status, execution plan, document register, decision register, open questions, assumptions register, traceability conventions, event catalogue, payment/refund/payout/prior-authorization/claim/stock-reservation/pharmacy-order/laboratory-appointment workflows, cross-workflow invariants, and provider-disclosure artifacts.
+- **Counts:** 17 `FIN-REQ-*` finance requirement rows, 15 funds flows, 45 finance decisions, 105 finance open questions, 7 finance assumptions, 30 event-catalogue additions, 60 `FIN-TST-*` future test requirements, 20 `LED-POL-*` ledger invariants, 14 `PAY-POL-*` canonical payment concepts, 13 `RFD-POL-*` refund definitions, 8 `STL-POL-*` provider-settlement principles, and 10 `CLM-POL-*` claims/remittance boundary rules.
+- **OrderFundingSecured:** proposed as a finance fact requiring verified capture or confirmed receipt or approved equivalent, exact order/provider/patient/tenant binding, all funding allocations secured, balanced ledger posting, idempotency, correlation, and audit. It remains PROPOSED and is not approved for implementation.
+- **Provider disclosure:** financial facts do not directly expose provider details; `ProviderDetailDisclosureDecision` remains separately authoritative, exact-order scoped, deny-by-default, server-side, and no-store.
+- **Wallet and custody:** ADR-0002 proposes ledger-backed FundingBalanceView and keeps wallet terminology, custody, stored value, FX, tax, and customer-fund handling approval-gated.
+- **P00-12 dependencies:** CBN/PCN/MLSCN/NHIA/data-protection/payment/wallet legal and regulatory issues remain unresolved where P00-12 marked them unresolved.
+- **Phase boundary:** no production code, API, database schema, migration, dependency, payment integration, provider selection, browser tooling, currency, FX provider, tax rate, percentage, settlement interval, payout interval, refund interval, or chargeback period was introduced.
+- **Remaining approvals:** finance, Nigerian legal/regulatory, accounting, tax, privacy/DPO, security, pharmacy operations, laboratory operations, product, architecture, operations, and external orchestration acceptance.
+
+

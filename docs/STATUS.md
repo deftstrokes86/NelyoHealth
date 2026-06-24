@@ -1,4 +1,4 @@
-# NelyoHealth Phase 0 Status
+﻿# NelyoHealth Phase 0 Status
 
 ## Current phase
 
@@ -178,9 +178,9 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - **P00-09:** PASS
 - **P00-10:** PASS
 - **P00-11:** PASS
-- **P00-12:** COMPLETED, pending orchestration acceptance
-- **P00-13:** NOT STARTED
-- **Current blocker:** pending Nigerian legal/regulatory, clinical, privacy/DPO, finance/payments, security, pharmacy, laboratory, operations, marketing, architecture, and external orchestration approvals tracked in P00-12 open questions.
+- **P00-12:** PASS
+- **P00-13:** COMPLETED, pending orchestration acceptance
+- **Current blocker:** pending Nigerian legal/regulatory, finance/payments, accounting, tax, privacy/DPO, security, pharmacy, laboratory, operations, architecture, and external orchestration approvals tracked through P00-13 open questions.
 
 ## P00-08 execution status phrase
 
@@ -216,4 +216,15 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - **Assumptions:** `ASSUMPT-57` through `ASSUMPT-63`.
 - **PCN display conflict:** recorded as unresolved and launch-gated; the locked providerDisplayName-only pre-payment transaction rule was not changed.
 - **Phase boundary:** no production application code, API implementation, database schema, dependency, configuration, browser tooling, vendor selection, final legal agreement, payment provider, pilot geography, final licence, or compliance claim was created.
-- **Next action:** orchestration review of P00-12 only; do not execute P00-13 until accepted.
+- **P00-12 acceptance note:** P00-13 was subsequently executed after external orchestration acceptance.
+
+
+## P00-13 completion summary
+
+- **P00-13 COMPLETE, READY FOR ORCHESTRATION ACCEPTANCE**
+- **Finance artifacts created:** funds flow, payment state model, ledger principles, refund and dispute policy, provider settlement policy, claims and remittance boundary, and ADR-0002 wallet-as-ledger-backed-balance.
+- **Completion state:** P00-00 through P00-12 are PASS; P00-13 is completed pending orchestration acceptance; P00-14 is NOT STARTED.
+- **OrderFundingSecured:** proposed as the finance fact consumed by disclosure policy, but not approved for implementation until finance, legal/regulatory, accounting/tax, privacy, security, pharmacy, lab, product, and engineering review.
+- **Provider disclosure:** payment/funding facts do not directly expose provider details; ProviderDetailDisclosureDecision remains separately authoritative and exact-order scoped.
+- **Phase boundary:** no production application code, API implementation, database schema, migration, dependency, configuration, payment integration, payment provider, browser tooling, currency, FX provider, tax rate, percentage, payout interval, settlement interval, refund interval, or chargeback period was created or approved.
+- **Next action:** orchestration review of P00-13 only; P00-14 remains NOT STARTED.

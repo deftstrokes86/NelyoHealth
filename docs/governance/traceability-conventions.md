@@ -126,3 +126,17 @@ For each significant requirement, include:
 | REG-CTR | Contract inventory category | P00-12 | Inventory only; not legal drafting |
 | REG-MON | Regulatory monitoring source/rule | P00-12 | Official-source monitoring and change workflow |
 | REQ-REG | Governance decision for regulatory research and launch gates | P00-12 | Decision register entries for source hierarchy, legal-review boundaries, and launch-gate rules |
+
+## P00-13 finance identifier families
+
+| Identifier family | Owner prompt | Meaning |
+|---|---|---|
+| FIN-REQ | P00-13 | Finance requirement rows in finance artifacts. |
+| FIN-FLW | P00-13 | Funds-flow records. |
+| PAY-POL | P00-13 | Payment-state and evidence-policy rules. |
+| LED-POL | P00-13 | Ledger and balance-policy rules. |
+| RFD-POL | P00-13 | Refund, reversal, chargeback, and dispute-policy rules. |
+| STL-POL | P00-13 | Provider settlement and payout-policy rules. |
+| CLM-POL | P00-13 | Claims, remittance, employer, and HMO-boundary policy rules. |
+| FIN-TST | P00-13 | Future financial test requirements, including browser and Playwright coverage delegated to P00-14. |
+| REQ-FIN | P00-13 | Decision-register finance decisions. |

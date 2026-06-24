@@ -177,3 +177,11 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Guard: future retrieval after a prior valid disclosure is recomputed and remains approval-gated by P00-13.
 - Guard: stock failure, provider rejection, specimen rejection, recollection, delivery failure, and return can create refund handoff but do not silently alter clinical records or provider disclosure decisions.
 - Future tests: refund handoff after stock failure, pharmacist rejection, delivery return, specimen rejection, no initial disclosure after refund/reversal/chargeback.
+
+## P00-13 Finance Alignment
+
+- Aligns with `docs/finance/funds-flow.md`, `docs/finance/payment-state-model.md`, `docs/finance/ledger-principles.md`, `docs/finance/refund-and-dispute-policy.md`, `docs/finance/provider-settlement-policy.md`, and `docs/finance/claims-and-remittance-boundary.md`.
+- `OrderFundingSecured` is a PROPOSED finance fact only; it requires exact order, selected provider where applicable, patient, tenant, funding allocations, verified capture or confirmed receipt or approved equivalent, balanced ledger posting, correlation, idempotency, and audit.
+- Authorization-only, pending, failed, cancelled, expired, unverified, wrong-order, wrong-actor, wrong-patient, wrong-tenant, expired reservation, ledger failure, unbalanced ledger, reconciliation exception, refund, reversal, chargeback, browser success, and unverified callback states do not create initial provider-detail eligibility.
+- Payment, funding, ledger, claim, remittance, provider payable, and payout facts never grant clinical-record access and never directly return protected provider details.
+- Emergency escalation remains independent of payment, marketplace, provider-detail obscuration, coverage, plan authorization, and registration state.

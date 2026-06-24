@@ -108,3 +108,16 @@
 - Emergency escalation is never blocked by payment, registration, plan authorization, marketplace comparison, provider-detail obscuration, or routine booking workflows.
 - Finalized clinical records, prescriptions, verified laboratory results, incident records, ledger records, consent evidence, and audit records are corrected by amendment/versioning rather than silent overwrite.
 - Data-subject-rights, retention, deletion, restriction, and legal-hold workflows must preserve auditability and must not delete records required for approved clinical, legal, financial, security, or safety purposes without approved authority.
+
+## P00-13 Finance Invariants
+
+| Invariant ID | Invariant | Related workflows | Source |
+|---|---|---|---|
+| INV-FIN-001 | Payment does not grant clinical-record access. | WFL-018 through WFL-022; all clinical workflows | REQ-FIN-035; REQ-LOCK-002 |
+| INV-FIN-002 | `OrderFundingSecured` is PROPOSED and never directly exposes provider details. | WFL-018; WFL-008; WFL-013 | REQ-FIN-031; REQ-FIN-035 |
+| INV-FIN-003 | `ProviderDetailDisclosureDecision` remains separately authoritative and exact-order, selected-provider, actor, patient, and tenant scoped. | WFL-018; WFL-010; WFL-013 | REQ-FIN-036; REQ-FIN-037 |
+| INV-FIN-004 | Authorization-only, client success, unverified callback, failed, pending, cancelled, expired, wrong-binding, reconciliation exception, refund, reversal, or chargeback state cannot create initial disclosure eligibility. | WFL-018; WFL-019 | REQ-FIN-033; REQ-FIN-038; REQ-FIN-041 |
+| INV-FIN-005 | Stock reservation, lab hold, or approved operational acceptance dependency precedes capture for provider-specific orders where required. | WFL-009; WFL-010; WFL-013; WFL-018 | REQ-FIN-021; REQ-FIN-022 |
+| INV-FIN-006 | Refund, reversal, and chargeback recompute future provider-detail retrieval and never create initial eligibility. | WFL-019; WFL-010; WFL-013 | REQ-FIN-038; REQ-FIN-039 |
+| INV-FIN-007 | Claim, eligibility, prior authorization, remittance, provider payable, and payout are distinct and must not silently substitute for payment. | WFL-020; WFL-021; WFL-022 | REQ-FIN-027 through REQ-FIN-030 |
+| INV-FIN-008 | Every displayed financial balance is ledger-derived; budgets and benefit limits are not cash balances. | WFL-018; WFL-021; WFL-022 | REQ-FIN-008; REQ-FIN-013 |

@@ -186,3 +186,11 @@ The diagram is conceptual and omits sensitive provider, clinical, payment, and i
 - Guard: payment state alone does not disclose provider details; disclosure remains a separate ProviderDetailDisclosureDecision tied to exact order, selected provider, actor, patient, and tenant.
 - Guard: failed, cancelled, expired, pending, authorization-only, wrong-binding, refund, reversal, or chargeback states do not create initial provider-detail eligibility.
 - Future tests: payment failure, authorization-only no unlock, capture sequence approval dependency, wrong-order payment no unlock, client-success no unlock.
+
+## P00-13 Finance Alignment
+
+- Aligns with `docs/finance/funds-flow.md`, `docs/finance/payment-state-model.md`, `docs/finance/ledger-principles.md`, `docs/finance/refund-and-dispute-policy.md`, `docs/finance/provider-settlement-policy.md`, and `docs/finance/claims-and-remittance-boundary.md`.
+- `OrderFundingSecured` is a PROPOSED finance fact only; it requires exact order, selected provider where applicable, patient, tenant, funding allocations, verified capture or confirmed receipt or approved equivalent, balanced ledger posting, correlation, idempotency, and audit.
+- Authorization-only, pending, failed, cancelled, expired, unverified, wrong-order, wrong-actor, wrong-patient, wrong-tenant, expired reservation, ledger failure, unbalanced ledger, reconciliation exception, refund, reversal, chargeback, browser success, and unverified callback states do not create initial provider-detail eligibility.
+- Payment, funding, ledger, claim, remittance, provider payable, and payout facts never grant clinical-record access and never directly return protected provider details.
+- Emergency escalation remains independent of payment, marketplace, provider-detail obscuration, coverage, plan authorization, and registration state.
