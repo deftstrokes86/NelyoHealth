@@ -432,3 +432,21 @@ For all future phase updates:
 - Updated document register, decision register, open questions, assumptions register, traceability conventions, status, execution plan, event catalogue, and workflow privacy alignment sections.
 - Preserved locked requirements: one longitudinal patient identity, payer/clinical-access separation, order-scoped provider-detail disclosure after successful payment only, emergency escalation independent of marketplace/payment/registration, signed-record amendment/versioning, synthetic-only browser testing, and Phase 0 documentation-only scope.
 - Remaining approvals: privacy counsel, legal counsel, DPO/privacy owner, security lead, clinical lead, operations lead, finance/payments owner, architecture owner, QA/accessibility owner, pharmacy operations lead, laboratory operations lead, and external regulatory counsel where applicable.
+## P00-12 regulatory source and obligations register
+
+- Executed P00-12 / issue `P00-REG-001` for Complete Breakdown work package P00-15.
+- Created six compliance artifacts: official source register, obligations register, legal question log, licence and registration matrix, contract register draft, and regulatory change monitoring.
+- Official authorities researched: NDPC, PCN, MDCN, MLSCN, NHIA, CBN, Federal Ministry of Health and Social Welfare, NAFDAC, FCCPC, ARCON, NITDA/cybersecurity sources, official gazette/certified legal material sources, and state authorities as state-dependent.
+- Source count: 24 `REG-SRC-*` entries.
+- Obligation count: 46 `REG-OBL-*` entries.
+- Legal-question count: 40 `REG-Q-*` entries.
+- Licence-matrix count: 30 `REG-LIC-*` entries.
+- Contract-category count: 33 `REG-CTR-*` entries.
+- Monitoring-source count: 15 `REG-MON-*` entries.
+- Decisions added: `REQ-REG-001` through `REQ-REG-028`.
+- Open questions added: `OQ-00-347` through `OQ-00-386`.
+- Assumptions added: `ASSUMPT-57` through `ASSUMPT-63`.
+- PCN disclosure conflict recorded: PCN e-pharmacy platform/display duties may conflict with the locked transaction-level providerDisplayName-only pre-payment matching model; pharmacy pilot is launch-gated pending Nigerian legal/regulatory review and likely PCN clarification.
+- First-pilot legal blockers include entity/telemedicine posture, PCN aggregator classification, PCN display-rule reconciliation, NEPP, pharmacy partner/SP structure, lab facility and practitioner verification, doctor licensing/practice structure, NDPC registration/DPIA, payment/wallet structure, pilot-state requirements, emergency-treatment responsibilities, and required provider contracts.
+- Access-limited or uncertain sources include MDCN full Code of Medical Ethics, certified National Health Act copy, Child Rights/state laws, Cybercrimes Act/amendment copies, detailed MLSCN standards, ARCON current code/Act copies, and pilot-state materials.
+- Remaining approvals: Nigerian legal/regulatory counsel, clinical lead, privacy/DPO, finance/payments owner, security lead, operations lead, pharmacy operations lead, laboratory operations lead, architecture owner, marketing owner, and external orchestration.

@@ -387,3 +387,36 @@
 | REQ-DAT-038 | Breach notification decisions require legal and privacy review. | REQUIRES_APPROVAL | Legal Counsel + Privacy Counsel | P00-11 / P00-12 | No trigger or deadline is approved. |
 | REQ-DAT-039 | Data exports require authorization, minimization, secure delivery, expiry, redaction, and audit. | REQUIRES_APPROVAL | Privacy Counsel + Security Lead | P00-11 / P00-14 | Format and delivery controls remain open. |
 | REQ-DAT-040 | Privacy requirements require future browser and API negative tests using synthetic data. | APPROVED | QA Lead + Security Lead + Privacy Counsel | P00-11 / P00-14 | Browser tooling remains deferred; no tooling installed in P00-11. |
+
+## P00-12 regulatory decisions
+
+| Decision ID | Decision text | Status | Owner | Review phase | Evidence |
+|---|---|---|---|---|---|
+| REQ-REG-001 | Official-source hierarchy controls P00-12 evidence. | APPROVED | Legal Counsel + Compliance Lead | P00-12 | Research-governance rule. |
+| REQ-REG-002 | Search snippets are not authoritative evidence when complete official source access is available. | APPROVED | Legal Counsel + Compliance Lead | P00-12 | Research-governance rule. |
+| REQ-REG-003 | Every obligation requires at least one official source ID or is marked access-limited without binding effect. | APPROVED | Legal Counsel + Compliance Lead | P00-12 | Research-governance rule. |
+| REQ-REG-004 | Every source records date checked and source status. | APPROVED | Compliance Lead | P00-12 | Research-governance rule. |
+| REQ-REG-005 | Draft, archived, repealed, superseded, inaccessible, and status-unverified sources are labelled. | APPROVED | Compliance Lead | P00-12 | Research-governance rule. |
+| REQ-REG-006 | Legal conclusions require qualified Nigerian counsel. | APPROVED | Legal Counsel | P00-12 | Legal-advice boundary. |
+| REQ-REG-007 | Regulator clarification is required where source wording is ambiguous or launch-impacting. | APPROVED | Legal Counsel + domain owner | P00-12 | Governance rule. |
+| REQ-REG-008 | Product locks are not silently changed by Codex when official sources create legal questions. | APPROVED | Product Owner + Legal Counsel | P00-12 | Preserves locked requirements. |
+| REQ-REG-009 | Legal conflicts create explicit launch gates and open questions. | APPROVED | Legal Counsel + Product Owner | P00-12 | Governance rule. |
+| REQ-REG-010 | State-level requirements remain unresolved until pilot geography is selected. | APPROVED | Legal Counsel + Operations Lead | P00-12 | Source limitation. |
+| REQ-REG-011 | Partner licences do not automatically license NelyoHealth. | APPROVED | Legal Counsel | P00-12 | Research-governance and licensing boundary. |
+| REQ-REG-012 | Professional credentials and facility licences are separate evidence classes. | APPROVED | Credential Review Lead + Legal Counsel | P00-12 | Licensing matrix rule. |
+| REQ-REG-013 | NelyoHealth must not represent itself as HMO or insurer without approval. | APPROVED | Legal Counsel + Finance Owner | P00-12 | Representation boundary. |
+| REQ-REG-014 | NelyoHealth must not represent itself as PSP, bank, mobile-money operator, remittance operator, or stored-value issuer without approval. | APPROVED | Legal Counsel + Finance Owner | P00-12 | Representation boundary. |
+| REQ-REG-015 | NelyoHealth must not represent itself as pharmacy or laboratory without approval. | APPROVED | Legal Counsel + Pharmacy/Lab Owners | P00-12 | Representation boundary. |
+| REQ-REG-016 | Electronic-pharmacy aggregator status requires formal legal/regulatory review. | REQUIRES_APPROVAL | Legal Counsel + Pharmacy Operations Lead | P00-12 / external review | REG-Q-002. |
+| REQ-REG-017 | PCN platform-display conflict requires formal resolution before pharmacy pilot. | REQUIRES_APPROVAL | Legal Counsel + Pharmacy Operations Lead | P00-12 / external review | REG-Q-005; REG-OBL-015. |
+| REQ-REG-018 | Laboratory public-disclosure rules require separate MLSCN/legal review and are not inferred from PCN pharmacy rules. | REQUIRES_APPROVAL | Legal Counsel + Laboratory Operations Lead | P00-12 / external review | REG-Q-007. |
+| REQ-REG-019 | Medical-practice and telemedicine duties require MDCN/legal review. | REQUIRES_APPROVAL | Legal Counsel + Clinical Lead | P00-12 / external review | REG-Q-001; REG-Q-012. |
+| REQ-REG-020 | Data-protection registration, DPO, DPIA, breach, transfer, processor, and annual-compliance duties require applicability mapping. | REQUIRES_APPROVAL | Privacy Counsel + Legal Counsel | P00-12 / external review | REG-Q-021 through REG-Q-026. |
+| REQ-REG-021 | All provider types require source-backed credential verification before assignment. | REQUIRES_APPROVAL | Credential Review Lead + Legal Counsel | P00-12 / P00-14 | REG-LIC rows. |
+| REQ-REG-022 | Every regulator-facing integration requires identified owner and source-backed obligation. | PROPOSED | Architecture Owner + Compliance Lead | P00-12 / P00-14 | REG-MON and REG-Q-037. |
+| REQ-REG-023 | Regulatory monitoring is continuous and source-verified. | PROPOSED | Compliance Lead | P00-12 / P00-17 | Monitoring design. |
+| REQ-REG-024 | Legal advice and official-source records are recorded separately. | APPROVED | Legal Counsel + Compliance Lead | P00-12 | Research-governance rule. |
+| REQ-REG-025 | No compliance claim may be made from incomplete research. | APPROVED | Legal Counsel + Product Owner | P00-12 | Compliance-claim boundary. |
+| REQ-REG-026 | Regulatory launch blockers must be reflected in product scope before implementation. | PROPOSED | Product Owner + Legal Counsel | P00-12 / P00-17 | Launch-gate control. |
+| REQ-REG-027 | Contract dependencies must link to obligations and legal questions. | PROPOSED | Legal Counsel | P00-12 / P00-13 | Contract register rule. |
+| REQ-REG-028 | Regulatory changes require legal, product, engineering, operations, contract, clinical/privacy, and test impact review. | PROPOSED | Compliance Lead | P00-12 / P00-17 | Monitoring rule. |

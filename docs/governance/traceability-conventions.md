@@ -114,3 +114,15 @@ For each significant requirement, include:
 | BGA-POL | Break-glass policy rule | P00-11 | Exceptional, audited, review-bound access |
 | NTF-POL | Notification data policy rule/type | P00-11 | Minimum-necessary notification content |
 | REQ-DAT | Governance decision for data/privacy | P00-11 | Decision register entries for privacy controls |
+
+## P00-12 identifier families
+
+| Prefix | Meaning | Owning prompt | Notes |
+|---|---|---|---|
+| REG-SRC | Official source register entry | P00-12 | Official source, access status, date checked, source status, and applicability notes |
+| REG-OBL | Regulatory obligation register entry | P00-12 | Source-backed obligation or access-limited issue with owner and launch gate |
+| REG-Q | Legal/regulatory question | P00-12 | Counsel/regulator question; not a legal answer |
+| REG-LIC | Licence, registration, accreditation, or credential matrix entry | P00-12 | Separates platform approvals, facility approvals, professional credentials, partner-held licences, and contractual evidence |
+| REG-CTR | Contract inventory category | P00-12 | Inventory only; not legal drafting |
+| REG-MON | Regulatory monitoring source/rule | P00-12 | Official-source monitoring and change workflow |
+| REQ-REG | Governance decision for regulatory research and launch gates | P00-12 | Decision register entries for source hierarchy, legal-review boundaries, and launch-gate rules |

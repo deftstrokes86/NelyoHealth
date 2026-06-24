@@ -4,10 +4,10 @@
 
 - **Program:** NelyoHealth Platform Build
 - **Active phase:** Phase 0 (Product, clinical, regulatory, and delivery foundation)
-- **Current issue:** `P00-11` privacy, consent, guardianship, delegation, and data governance completed; orchestration acceptance pending.
+- **Current issue:** `P00-12` regulatory source and obligations register completed; orchestration acceptance pending.
 - **Date:** 2026-06-24
 - **Mode:** Planning / Documentation only
-- **Execution state:** `P00-11 COMPLETE, READY FOR ORCHESTRATION ACCEPTANCE`.
+- **Execution state:** `P00-12 COMPLETE, READY FOR ORCHESTRATION ACCEPTANCE`.
 - **Approved-lock decisions captured:** `13` (`REQ-LOCK-001` ... `REQ-LOCK-013`)
 
 ## Locked decisions currently captured
@@ -96,7 +96,15 @@
 - [docs/operations/pharmacy-fulfilment-policy.md](./operations/pharmacy-fulfilment-policy.md)
 - [docs/operations/medicine-delivery-policy.md](./operations/medicine-delivery-policy.md)
 - [docs/clinical/laboratory-ordering-policy.md](./clinical/laboratory-ordering-policy.md)
-- [docs/clinical/result-release-policy.md](./clinical/result-release-policy.md)## Source precedence
+- [docs/clinical/result-release-policy.md](./clinical/result-release-policy.md)
+- [docs/compliance/official-source-register.md](./compliance/official-source-register.md)
+- [docs/compliance/obligations-register.md](./compliance/obligations-register.md)
+- [docs/compliance/legal-question-log.md](./compliance/legal-question-log.md)
+- [docs/compliance/licence-and-registration-matrix.md](./compliance/licence-and-registration-matrix.md)
+- [docs/compliance/contract-register-draft.md](./compliance/contract-register-draft.md)
+- [docs/compliance/regulatory-change-monitoring.md](./compliance/regulatory-change-monitoring.md)
+
+## Source precedence
 
 For this repository, conflict handling is fixed at:
 
@@ -168,10 +176,11 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - **P00-07:** PASS
 - **P00-08:** PASS
 - **P00-09:** PASS
-- **P00-10:** COMPLETED, pending orchestration acceptance
-- **P00-11:** COMPLETED, pending orchestration acceptance
-- **P00-12:** NOT STARTED
-- **Current blocker:** pending clinical, legal, privacy, security, finance, pharmacy, laboratory, delivery, and operational approvals tracked in open questions.
+- **P00-10:** PASS
+- **P00-11:** PASS
+- **P00-12:** COMPLETED, pending orchestration acceptance
+- **P00-13:** NOT STARTED
+- **Current blocker:** pending Nigerian legal/regulatory, clinical, privacy/DPO, finance/payments, security, pharmacy, laboratory, operations, marketing, architecture, and external orchestration approvals tracked in P00-12 open questions.
 
 ## P00-08 execution status phrase
 
@@ -195,3 +204,16 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - **Phase boundary:** no production application code, database schema, API contract implementation, dependency installation, browser tooling installation, vendor selection, statutory period, breach deadline, transfer mechanism, lawful basis, or final age/guardianship rule was established.
 - **Current blocker:** privacy counsel, legal counsel, security lead, clinical lead, operations lead, finance/payments owner, DPO/privacy owner, and architecture owner approvals remain pending.
 - **Next action:** orchestration review of P00-11 only; do not execute P00-12 until accepted.
+
+## P00-12 completion summary
+
+- **P00-12 COMPLETE, READY FOR ORCHESTRATION ACCEPTANCE**
+- **Compliance artifacts created:** official source register, obligations register, legal question log, licence and registration matrix, contract register draft, and regulatory change monitoring.
+- **Source coverage:** 24 `REG-SRC-*` entries across NDPC, PCN, MDCN, MLSCN, NHIA, CBN, FMoH, NAFDAC, FCCPC, ARCON, NITDA/cybersecurity, official gazette/certified legal material sources, and state-dependent sources.
+- **Regulatory artifacts:** 46 obligations, 40 legal questions, 30 licence/registration rows, 33 contract categories, and 15 monitoring sources.
+- **New decisions:** `REQ-REG-001` through `REQ-REG-028`.
+- **Open questions:** `OQ-00-347` through `OQ-00-386`.
+- **Assumptions:** `ASSUMPT-57` through `ASSUMPT-63`.
+- **PCN display conflict:** recorded as unresolved and launch-gated; the locked providerDisplayName-only pre-payment transaction rule was not changed.
+- **Phase boundary:** no production application code, API implementation, database schema, dependency, configuration, browser tooling, vendor selection, final legal agreement, payment provider, pilot geography, final licence, or compliance claim was created.
+- **Next action:** orchestration review of P00-12 only; do not execute P00-13 until accepted.
