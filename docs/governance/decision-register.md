@@ -558,3 +558,48 @@
 | REQ-NFR-076 | Visual tests do not replace human design review. | REQUIRES_APPROVAL | Design Owner + QA Owner | Phase 1 | docs/testing/design-content-validation-strategy.md |
 | REQ-NFR-077 | Human review does not replace automated validation. | REQUIRES_APPROVAL | QA Owner + Design Owner | Phase 1 | docs/testing/design-content-validation-strategy.md |
 | REQ-NFR-078 | P00-14A must complete and be accepted before P00-15 begins. | REQUIRES_APPROVAL | External Orchestration + Execution Lead | P00-14 | docs/exec-plans/P00-product-clinical-regulatory-foundation.md |
+
+## P00-14A design and content decisions
+
+| Decision ID | Decision text | Status | Owner | Review phase | Evidence |
+|---|---|---|---|---|---|
+| REQ-DES-001 | One visual system across portals. | APPROVED | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-002 | Proposed experience character. | REQUIRES_APPROVAL | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-003 | Selected proposed visual direction VIS-DIR-002 Warm Care Grid. | REQUIRES_APPROVAL | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-004 | Semantic design tokens. | REQUIRES_APPROVAL | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-005 | Accessible color-pair validation. | REQUIRES_APPROVAL | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-006 | Proposed typography and licensing review. | REQUIRES_APPROVAL | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-007 | Responsive mobile-first layout. | REQUIRES_APPROVAL | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-008 | Complete page-state design. | REQUIRES_APPROVAL | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-009 | Role-appropriate dashboard density. | REQUIRES_APPROVAL | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-010 | Domain-specific component library. | REQUIRES_APPROVAL | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-011 | Explicit responsive content priority. | REQUIRES_APPROVAL | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-012 | No generic template acceptance. | APPROVED | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-013 | Motion for React direction. | REQUIRES_APPROVAL | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-014 | Central motion tokens. | REQUIRES_APPROVAL | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-015 | Motion profiles. | REQUIRES_APPROVAL | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-016 | Reduced-motion alternatives. | REQUIRES_APPROVAL | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-017 | Immediate emergency presentation. | APPROVED | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-018 | Protected data removed before exit animation. | APPROVED | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-019 | Human design review. | REQUIRES_APPROVAL | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-DES-020 | Controlled visual-regression baselines. | REQUIRES_APPROVAL | Design Owner + Product Owner | P00-14A / Phase 1 | P00-14A design artifacts |
+| REQ-CNT-001 | Stable page and section IDs. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-002 | Page contracts. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-003 | Section contracts. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-004 | Content-to-component contracts. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-005 | CTA action contracts. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-006 | Content classes and approval owners. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-007 | Approved-content-only release rule. | APPROVED | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-008 | State-specific content. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-009 | Clinical content governance. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-010 | Emergency content governance. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-011 | Financial content governance. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-012 | Provider-disclosure content governance. | APPROVED | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-013 | Role patient and tenant content isolation. | APPROVED | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-014 | Content versioning. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-015 | Superseded-content removal. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-016 | Public website claim controls. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-017 | Repository-based content registry recommendation. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-018 | Browser design and content review. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-019 | UI UX Pro Max two-pass use. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+| REQ-CNT-020 | UI UX Pro Max remains advisory. | APPROVED | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |

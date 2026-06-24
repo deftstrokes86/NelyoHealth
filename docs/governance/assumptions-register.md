@@ -100,3 +100,17 @@
 | ASSUMPT-78 | Pull-request browser breadth can be narrower than release-candidate breadth if release gates preserve full coverage. | PROPOSED | QA Owner + Architecture Owner | REQ-NFR-047 | CI may either be too slow or insufficiently protective. |
 | ASSUMPT-79 | Automated accessibility checks will be supplemented by manual accessibility review before any conformance claim. | PROPOSED | Accessibility Reviewer + QA Owner | REQ-NFR-018; REQ-NFR-019 | Automated-only evidence could be mistaken for WCAG conformance. |
 | ASSUMPT-80 | Numeric NFR targets will be supplied or approved during P00-15, P00-17, or Phase 1 before becoming release commitments. | PROPOSED | Product Owner + Operations Owner + Architecture Owner | REQ-NFR-002; REQ-NFR-024 | Teams may treat unapproved estimates as commitments. |
+
+## P00-14A design and content assumptions
+
+| Assumption ID | Assumption | Status | Owner | Target decision | Risk if wrong |
+|---|---|---|---|---|---|
+| ASSUMPT-81 | Pilot begins with a light visual theme only. | PROPOSED | Design Owner + Accessibility Reviewer | REQ-DES-003 through REQ-DES-006 | Dark/system theme work may be required earlier. |
+| ASSUMPT-82 | Public and authenticated experiences use the same design foundations. | PROPOSED | Design Owner + Product Owner | REQ-DES-001 | Separate foundations would fragment the platform. |
+| ASSUMPT-83 | Initial content registry is repository-based with structured schema. | PROPOSED | Content Owner + Architecture Owner | REQ-CNT-017 | CMS needs may arrive before implementation. |
+| ASSUMPT-84 | English is the initial language. | PROPOSED | Content Owner + Product Owner | REQ-CNT-034 | Localization work may be required earlier. |
+| ASSUMPT-85 | Fonts will be self-hosted where licensing and performance permit. | PROPOSED | Design Owner + Legal Counsel + Performance Owner | REQ-DES-006 | Third-party font loading could affect privacy/performance. |
+| ASSUMPT-86 | UI UX Pro Max is installed only in Phase 1 after review. | PROPOSED | Security Owner + Architecture Owner | REQ-DES-039 | Unreviewed install could create supply-chain risk. |
+| ASSUMPT-87 | Design tokens later map to CSS custom properties and TypeScript objects. | PROPOSED | Architecture Owner + Design Owner | REQ-DES-004 | Different implementation format may require token naming changes. |
+| ASSUMPT-88 | Motion uses a global reduced-motion policy. | PROPOSED | Accessibility Reviewer + Architecture Owner | REQ-DES-016 | Component-level-only control could be inconsistent. |
+| ASSUMPT-89 | Visual baselines are generated in a controlled CI environment after approval. | PROPOSED | QA Owner + Design Owner | REQ-DES-020 | Local baselines could be unstable or unreviewed. |

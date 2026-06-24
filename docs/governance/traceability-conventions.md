@@ -164,3 +164,33 @@ For each significant requirement, include:
 | UXP-REQ- | UI UX Pro Max governance requirement | P00-14 revision | Third-party advisory skill; project-local reviewed install only after approval. |
 | CNT-NFR- | Content alignment non-functional requirement | P00-14 revision / P00-14A | Page/section/content/CTA contracts; final registry format deferred. |
 | DCT-TST- | Design and content validation scenario | P00-14 revision | Future tests and browser review requirements only. |
+
+## P00-14A identifier families
+
+| Prefix | Meaning | Owning prompt | Notes |
+|---|---|---|---|
+| EXP-PRN- | Experience principle | P00-14A | Stable if labels change. |
+| VIS-DIR- | Visual-direction decision | P00-14A | Candidate and recommended visual directions. |
+| DSYS-REQ- | Design-system requirement | P00-14A | Future design-system implementation requirements. |
+| TOK-COL- | Color token | P00-14A | Proposed only until approved. |
+| TOK-TYP- | Typography token | P00-14A | Font licensing remains unresolved. |
+| TOK-SPC- | Spacing token | P00-14A | Semantic use required. |
+| TOK-SIZ- | Sizing token | P00-14A | Includes touch target planning. |
+| TOK-RAD- | Radius token | P00-14A | Proposed only. |
+| TOK-SHD- | Shadow/elevation token | P00-14A | Proposed only. |
+| TOK-Z- | Stacking token | P00-14A | Proposed only. |
+| TOK-BRK- | Breakpoint token | P00-14A | Proposed only. |
+| TOK-MOT- | Motion token | P00-14A | Motion version pinned only in Phase 1. |
+| IA-NODE- | Information-architecture node | P00-14A | Public and authenticated IA. |
+| NAV-MOD- | Navigation model | P00-14A | Role-specific navigation models. |
+| PAGE- | Stable page identifier | P00-14A | Stable if visible labels/routes change. |
+| SEC- | Stable section identifier | P00-14A | Stable if visible labels change. |
+| CMP- | Component or pattern identifier | P00-14A | Covers primitives, domain components, and content components. |
+| MOT-PAT- | Motion pattern | P00-14A | Governed motion behavior. |
+| CNT- | Content item or content type | P00-14A | Stable if visible copy changes. |
+| CTA- | Call-to-action contract | P00-14A | Label must match actual action. |
+| MSG- | System/state message | P00-14A | State-specific content. |
+| FORM- | Form contract | P00-14A | Future form validation/content alignment. |
+| STATE- | Page or component state | P00-14A | Future state coverage. |
+| REQ-DES- | Design governance decision | P00-14A | Recorded in decision register. |
+| REQ-CNT- | Content governance decision | P00-14A | Recorded in decision register. |

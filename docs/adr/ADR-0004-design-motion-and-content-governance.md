@@ -68,3 +68,9 @@ This ADR requires review when the Motion library changes, UI UX Pro Max is repla
 ## Approval Boundary
 
 This ADR does not approve final fonts, colors, shadows, radii, illustrations, icon system, imagery policy, motion token values, production copy, CMS, localization model, UI UX Pro Max installation, or Motion dependency installation.
+
+## P00-14A Completion Linkage
+
+P00-14A completed the proposed design and content direction required by this ADR. The selected proposed primary visual direction is `VIS-DIR-002 Warm Care Grid`. The completed artifact set includes experience principles, brand and visual direction, design-system specification, design tokens, information architecture, navigation/dashboard models, page/state inventory, responsive layout strategy, interaction patterns, motion system, design QA and visual review, UI UX Pro Max review brief, content strategy, voice and tone, content model, public website content blueprint, page-section content matrix, content-component contracts, content approval workflow, microcopy system, clinical content governance, state-message templates, and design/content validation.
+
+This linkage does not approve final assets, final fonts, final color system, final Motion version, UI UX Pro Max installation, production copy, content registry implementation, CMS, localization, or Phase 1 UI implementation.

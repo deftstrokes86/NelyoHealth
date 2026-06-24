@@ -484,3 +484,30 @@ For all future phase updates:
 - **Summary:** Added experience-quality, Motion for React, UI UX Pro Max governance, content-alignment, design/content validation, and ADR-0004 artifacts; registered P00-14A as the next required supplemental work package before P00-15.
 - **Constraints preserved:** No Motion dependency, UI UX Pro Max install, Playwright install, browser tooling, UI components, routes, design tokens, visual fixtures, production copy, or AGENTS.md workflow introduced.
 - **Approval status:** DRAFT-PENDING-SECURITY-ARCHITECTURE-QA-ACCESSIBILITY-PRIVACY-AND-OPERATIONS-APPROVAL.
+
+## Entry 016 - P00-14A experience design, visual system, motion system, and content architecture
+
+- **Prompt:** P00-14A
+- **Date:** 2026-06-25
+- **Change type:** Documentation implementation
+- **Files created:** 23 P00-14A artifacts.
+- **Files updated:** STATUS, execution plan, document register, decision register, open questions, assumptions, change log, traceability conventions, ADR-0004.
+- **Experience-principle count:** 20.
+- **Candidate visual directions:** 3.
+- **Recommended visual direction:** VIS-DIR-002 Warm Care Grid.
+- **Token count by category:** 26 color, 12 typography, 9 spacing, 8 sizing, 5 radius, 5 shadow/elevation, 7 z-index, 5 breakpoints, 16 motion.
+- **Page count:** 29 seed pages.
+- **Section count:** 37 canonical section contracts covering the P00-14A seed page inventory.
+- **Component count:** 32 primitives, 26 domain components, 22 content-component contracts, 33 interaction patterns.
+- **Motion-pattern count:** 22.
+- **Public website page count:** 18.
+- **Content-model count:** 25 conceptual content types.
+- **CTA count:** 14 CTA verb rules.
+- **Message count:** 27 state-message templates.
+- **Validation-requirement count:** 54 design/content validation anchors.
+- **Decisions added:** 40 (`REQ-DES-001` through `REQ-DES-020`, `REQ-CNT-001` through `REQ-CNT-020`).
+- **Open questions added:** 42 (`OQ-00-633` through `OQ-00-674`).
+- **Assumptions added:** 9 (`ASSUMPT-81` through `ASSUMPT-89`).
+- **UI UX Pro Max review brief:** Created; no skill installed or executed.
+- **Phase 1 Motion handoff:** Created in motion-system and validation documents; no package installed.
+- **Phase 1 content-registry handoff:** Repository-based structured content registry recommended; not implemented.
