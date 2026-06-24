@@ -115,8 +115,9 @@ Create a complete, reviewable, and externally approvable foundation for all Phas
 | P00-01 + P00-02 scope boundary | P00-01, P00-02 | COMPLETED, pending orchestration acceptance |
 | P00-03 actor-tenancy model | P00-03 | COMPLETED, pending orchestration acceptance |
 | P00-04 funding models | P00-04 | PASS |
-| P00-05 journeys and service blueprints | P00-05 | **COMPLETED, pending orchestration acceptance** |
-| Glossary / architecture / workflows | P00-06, P00-07 | not started |
+| P00-05 journeys and service blueprints | P00-05 | PASS |
+| P00-06 glossary, classification, and conceptual boundaries | P00-06 | **COMPLETED, pending orchestration acceptance**; covers Complete Breakdown P00-07 and P00-08 |
+| P00-07 workflow state machines | P00-07 | not started |
 | Privacy / legal / finance / operations | P00-11..P00-16 | not started |
 | Phase 0 gate and completion | P00-17 | not started |
 

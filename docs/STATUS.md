@@ -4,10 +4,10 @@
 
 - **Program:** NelyoHealth Platform Build
 - **Active phase:** Phase 0 (Product, clinical, regulatory, and delivery foundation)
-- **Current issue:** `P00-05` (COMPLETED, pending orchestration acceptance)
+- **Current issue:** `P00-06` (COMPLETED, pending orchestration acceptance)
 - **Date:** 2026-06-24
 - **Mode:** Planning / Documentation only
-- **Execution state:** `P00-05 COMPLETED, pending orchestration acceptance`
+- **Execution state:** `P00-06 COMPLETED, pending orchestration acceptance`
 - **Approved-lock decisions captured:** `13` (`REQ-LOCK-001` ... `REQ-LOCK-013`)
 
 ## Locked decisions currently captured
@@ -39,6 +39,14 @@
 - [docs/product/service-blueprints.md](./product/service-blueprints.md)
 - [docs/product/exception-journeys.md](./product/exception-journeys.md)
 - [docs/testing/journey-test-catalogue.md](./testing/journey-test-catalogue.md)
+- [docs/glossary.md](./glossary.md)
+- [docs/data/data-classification.md](./data/data-classification.md)
+- [docs/data/data-handling-matrix.md](./data/data-handling-matrix.md)
+- [docs/architecture/domain-boundaries.md](./architecture/domain-boundaries.md)
+- [docs/architecture/context-map.md](./architecture/context-map.md)
+- [docs/architecture/conceptual-domain-model.md](./architecture/conceptual-domain-model.md)
+- [docs/architecture/source-of-truth-matrix.md](./architecture/source-of-truth-matrix.md)
+- [docs/architecture/event-catalogue-draft.md](./architecture/event-catalogue-draft.md)
 
 ## Source precedence
 
@@ -62,17 +70,17 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - [x] Open-question schema normalized with owner, target prompt, target work-package, and approval path.
 - [x] Prompt-to-work-package crosswalk added to plan and traceability conventions.
 - [x] External approvals for legal, clinical, payment, and operational questions remain pending for pilot scope finalization.
-- [ ] Independent review and closure checklist for P00-05.
+- [ ] Independent review and closure checklist for P00-06.
 
 ## Completion summary for this phase
 
-- **Files changed this prompt:** 11
+- **Files changed this prompt:** 15
 - **Locked decisions preserved:** unchanged and carried forward from P00-00.
-- **New decisions:** P00-05 journey and blueprint decisions added (`REQ-JRN-001` to `REQ-JRN-012`).
-- **Open questions:** carried forward where unresolved and owned, with journey/operations uncertainties added (`OQ-00-70` through `OQ-00-89`).
-- **Assumptions:** added explicit P00-05 assumptions for journey ownership, conceptual state language, and partner handoff scope.
-- **Document register updates:** P00-05 artifacts marked DONE and linked.
-- **Next action:** Orchestration review and acceptance for `P00-05` before starting `P00-06`.
+- **New decisions:** P00-06 domain and architecture decisions added (`REQ-DOM-001` to `REQ-DOM-012`; `REQ-ARC-001` to `REQ-ARC-018`).
+- **Open questions:** carried forward where unresolved and owned, with domain/architecture uncertainties added (`OQ-00-90` through `OQ-00-110`).
+- **Assumptions:** added explicit P00-06 assumptions for modular-monolith modules, rebuildable read models, adapters, orchestration, and analytics consistency.
+- **Document register updates:** P00-06 artifacts marked DONE and linked.
+- **Next action:** Orchestration review and acceptance for `P00-06` before starting `P00-07`.
 
 ## Phase status
 
@@ -81,10 +89,11 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - **P00-02:** PASS
 - **P00-03:** PASS
 - **P00-04:** PASS
-- **P00-05:** COMPLETED, pending orchestration acceptance
-- **P00-06:** NOT STARTED
+- **P00-05:** PASS
+- **P00-06:** COMPLETED, pending orchestration acceptance
+- **P00-07:** NOT STARTED
 - **Current blocker:** pending legal, clinical, finance, and operations approvals tracked in open questions.
 
-## P00-05 execution status phrase
+## P00-06 execution status phrase
 
-- **P00-05 COMPLETED, pending orchestration acceptance**
+- **P00-06 COMPLETED, pending orchestration acceptance**

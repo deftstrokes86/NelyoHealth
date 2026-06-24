@@ -242,3 +242,52 @@ For all future phase updates:
 - External approvals obtained or blocked:
   - No new clinical, legal, finance, vendor, payment, or operational approvals were claimed.
   - Operational SLOs, clinical escalation intervals, payment refund/reversal behavior, privacy incident notification, and browser artifact retention remain open for later prompts and external owners.
+
+### Entry P00-06-001 - Glossary, data classification, and conceptual domain boundaries
+- Date: 2026-06-24
+- Prompt ID: P00-06
+- Files created or completed:
+  - `docs/glossary.md`
+  - `docs/data/data-classification.md`
+  - `docs/data/data-handling-matrix.md`
+  - `docs/architecture/domain-boundaries.md`
+  - `docs/architecture/context-map.md`
+  - `docs/architecture/conceptual-domain-model.md`
+  - `docs/architecture/source-of-truth-matrix.md`
+  - `docs/architecture/event-catalogue-draft.md`
+- Files updated:
+  - `docs/STATUS.md`
+  - `docs/exec-plans/P00-product-clinical-regulatory-foundation.md`
+  - `docs/governance/document-register.md`
+  - `docs/governance/decision-register.md`
+  - `docs/governance/open-questions.md`
+  - `docs/governance/assumptions-register.md`
+  - `docs/governance/change-log.md`
+- Coverage counts:
+  - Glossary terms: 152 canonical glossary rows.
+  - Data classifications: 12.
+  - Bounded contexts: 22.
+  - Source-of-truth entries: 31 major entity/concept rows plus 12 redacted projection rows.
+  - Draft events: 82.
+- Decisions added:
+  - Added `REQ-DOM-001` through `REQ-DOM-012`.
+  - Added `REQ-ARC-001` through `REQ-ARC-018`.
+- Open questions added:
+  - Added `OQ-00-90` through `OQ-00-110` for identity, source ownership, workflow/entity boundaries, provider disclosure persistence, audit retention, classification inheritance, de-identification, support projections, projection freshness, event ordering, integration retention, analytics review, and object metadata restrictions.
+- Assumptions added:
+  - Added `ASSUMPT-20` through `ASSUMPT-24` for modular-monolith module boundaries, rebuildable read models, vendor-neutral adapters, explicit orchestration, and analytics consistency.
+- Provider-disclosure projection controls:
+  - Defined `InternalProviderMatchingCandidate`, `PrePaymentProviderOfferView`, and `AuthorizedPostPaymentFulfilmentView` as separate conceptual views.
+  - Preserved server-side pre-payment sanitization and exact-order, selected-provider, actor, patient, and tenant scoped post-payment disclosure.
+  - Confirmed `providerDisplayName` as a field-level allowance only.
+- Transaction and eventual-consistency rules:
+  - Recorded atomic local invariants for ledger movements, finalized record versioning, prescriptions, diagnostic results, consent/audit, membership revocation, provider selection binding, stock reservation, account activation, and audit/outbox intent.
+  - Recorded acceptable eventual consistency for notifications, analytics, search, reporting, partner callbacks, support projections, and read-model refresh.
+- Remaining approvals:
+  - Final successful-payment event remains pending P00-13.
+  - Privacy/security approvals remain pending for final classification inheritance, support projection, artifact retention, audit retention, and de-identification policy.
+  - Clinical/operations approvals remain pending for final workflow states and clinical ownership refinements.
+- Validation status:
+  - P00-06 documentation-only scope preserved.
+  - No P00-07 workflow state machines were created.
+  - No application code, database schema, dependency, configuration, or browser-tooling changes were introduced.

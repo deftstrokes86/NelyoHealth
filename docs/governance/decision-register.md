@@ -154,3 +154,43 @@
 | REQ-JRN-010 | User-facing journey validation requires both interactive IDE browser inspection and deterministic Playwright E2E coverage when the implemented surface exists. | APPROVED | Source docs + Engineering lead + QA lead | P00-14 | Tooling remains deferred; this is a coverage requirement only. |
 | REQ-JRN-011 | Emergency safety actions precede payment, sponsor, HMO, registration, marketplace, and provider-detail-disclosure resolution in all affected journeys. | APPROVED | Source docs + Clinical lead + Operations lead | P00-09 | Reinforces REQ-LOCK-010 and REQ-COV-025. |
 | REQ-JRN-012 | P00-05 `JRN-*`, `BP-JRN-*`, `EXC-*`, and `T-JRN-*` identifiers are traceability handles only and must not be treated as implementation IDs or database keys. | PROPOSED | Architecture lead + QA lead | P00-06 / P00-17 | P00-06 and P00-17 must preserve traceability without creating implementation coupling. |
+
+## P00-06 domain terminology and data decisions
+
+| Decision ID | Decision text | Status | Owner | Review phase | Conditions |
+|---|---|---|---|---|---|
+| REQ-DOM-001 | Person, UserAccount, and Patient are distinct canonical terms; one cared-for Person has one longitudinal Patient identity and account activation/recovery must not silently create duplicates. | APPROVED | Source docs + product governance | P00-06 | Directly restates REQ-LOCK-001 and P00-06 locked rules. |
+| REQ-DOM-002 | `Member` is not a standalone canonical implementation term; every use must be qualified as OrganizationMember, FacilityMember, FamilyPlanMember, CoverageMember, HMOMember, or PlanMember. | APPROVED | Source docs + architecture | P00-06 | Business UI may use member only when surrounding context qualifies it. |
+| REQ-DOM-003 | Appointment, Encounter, and Consultation are distinct: appointment schedules time, encounter owns care lifecycle, and consultation is the clinical interaction modality or segment. | PROPOSED | Product + clinical + architecture | P00-07 | P00-07 must define final workflow states without collapsing these terms. |
+| REQ-DOM-004 | ClinicalRecord and ClinicalNote are distinct; finalized clinical notes are items within the longitudinal clinical record and must be amended/versioned, not silently overwritten. | APPROVED | Source docs + clinical governance | P00-06 | Directly restates REQ-LOCK-011 for terminology. |
+| REQ-DOM-005 | Quote, Reservation, ServiceOrder, and Fulfilment are distinct lifecycle concepts and must not be represented as one generic Order. | PROPOSED | Product + architecture + operations | P00-07 | P00-07 must define transitions without generic order conflation. |
+| REQ-DOM-006 | PaymentIntent, Payment, and LedgerEntry are distinct; a generic payment-success flag does not create provider-detail access. | APPROVED | Source docs + finance/security | P00-13 | Final successful-payment event remains REQUIRES_APPROVAL in P00-13. |
+| REQ-DOM-007 | Consent, Delegation, and Authorization are distinct; consent and delegation may inform access, but authorization decides a specific action in context. | PROPOSED | Privacy counsel + security lead | P00-11 | Requires privacy/security approval before implementation. |
+| REQ-DOM-008 | Data classification supports multiple simultaneous tags and strictest-rule precedence, with field-level restrictions overriding document-level defaults. | PROPOSED | Security lead + privacy counsel | P00-14 | Requires privacy/security review. |
+| REQ-DOM-009 | Provider identity and location data is a separate handling concern from general provider, facility, or payment data. | APPROVED | Source docs + security | P00-08 | Directly supports REQ-LOCK-003 through REQ-LOCK-005. |
+| REQ-DOM-010 | `providerDisplayName` is an explicit field-level pre-payment allowance; it does not permit address, branch, distance, coordinates, contact, map, or derivable metadata. | APPROVED | Source docs + security/privacy | P00-08 | Directly restates locked disclosure rule. |
+| REQ-DOM-011 | Lower environments, fixtures, browser traces, screenshots, and test data must be synthetic-only unless a later approved policy is more restrictive. | APPROVED | Source docs + QA/security | P00-14 | Directly restates locked browser-testing synthetic-data rule. |
+| REQ-DOM-012 | Analytics is derived, minimized, and non-authoritative; analytics must not become a transactional source of truth or grant operational access. | APPROVED | Source docs + privacy/security | P00-15 | Directly restates P00-06 locked analytics rule. |
+
+## P00-06 architecture decisions
+
+| Decision ID | Decision text | Status | Owner | Review phase | Conditions |
+|---|---|---|---|---|---|
+| REQ-ARC-001 | Initial architecture is a modular monolith, not a microservice topology. | APPROVED | Source docs + architecture | P00-06 | Directly restates P00-06 locked architectural rule. |
+| REQ-ARC-002 | Bounded contexts are logical ownership, terminology, dependency, and data-authority boundaries inside one deployable backend. | PROPOSED | Architecture lead | P00-17 | Implementation structure remains later-phase work. |
+| REQ-ARC-003 | Every major entity has one owning bounded context; other contexts use references, redacted projections, rebuildable read models, or derived aggregates. | APPROVED | Source docs + architecture | P00-06 | Directly restates one-source-of-truth rule. |
+| REQ-ARC-004 | Read models are derived and rebuildable unless a later approved design explicitly defines different retention and authority. | PROPOSED | Architecture + security | P00-14/P00-17 | Requires security/privacy review. |
+| REQ-ARC-005 | Cross-context access to sensitive data uses redacted projections and purpose-specific views instead of shared private-table access. | PROPOSED | Architecture + security + privacy | P00-14 | Requires implementation security design. |
+| REQ-ARC-006 | External vendors are accessed through ports and adapters. | APPROVED | Source docs + architecture | P00-06 | Directly restates vendor-independence rule. |
+| REQ-ARC-007 | Domain types must not contain vendor-specific names, SDK types, or provider enums. | APPROVED | Source docs + architecture | P00-06 | Directly restates vendor-independence rule. |
+| REQ-ARC-008 | A transactional outbox or equivalent atomic intent pattern is the conceptual default for sensitive changes that must emit audit or cross-context intent. | PROPOSED | Architecture + security | P00-14/P01 | Conceptual only; no implementation technology selected. |
+| REQ-ARC-009 | Notifications, analytics, search, reporting, partner callbacks, and support projections may be eventually consistent. | PROPOSED | Architecture + operations | P00-15/P00-17 | P00-07/P00-15 must define acceptable staleness where needed. |
+| REQ-ARC-010 | Ledger movements require atomic balanced entries for one financial movement. | PROPOSED | Finance + architecture | P00-13 | Finance approval required for final ledger policy. |
+| REQ-ARC-011 | Finalized clinical-record versioning requires atomic version creation plus immutable reference update. | APPROVED | Source docs + clinical governance | P00-06 | Directly supports REQ-LOCK-011. |
+| REQ-ARC-012 | Each context produces audit intent for sensitive actions while Consent and Audit owns the canonical append-only audit store. | PROPOSED | Security + architecture | P00-14 | Requires audit retention and implementation policy. |
+| REQ-ARC-013 | Pre-payment provider-view sanitization happens server-side before data crosses the server-to-client boundary. | APPROVED | Source docs + security | P00-08 | Directly restates REQ-LOCK-005. |
+| REQ-ARC-014 | InternalProviderMatchingCandidate, PrePaymentProviderOfferView, and AuthorizedPostPaymentFulfilmentView are separate conceptual projections. | APPROVED | Source docs + architecture | P00-06 | Names may be refined, boundaries remain locked. |
+| REQ-ARC-015 | Post-payment provider-detail authorization is exact-order, selected-provider, actor, patient, tenant, and server-authorization scoped. | APPROVED | Source docs + security | P00-08/P00-13 | Final payment event remains REQUIRES_APPROVAL. |
+| REQ-ARC-016 | Analytics is downstream-only and does not feed operational authority. | APPROVED | Source docs + privacy/security | P00-15 | Directly restates locked analytics rule. |
+| REQ-ARC-017 | Support and Operations cannot directly edit another context's storage for routine resolution. | APPROVED | Source docs + operations | P00-15 | Directly follows EXC-054/P00-05 rule. |
+| REQ-ARC-018 | Context interfaces and read models are required for cross-context access; private-table access is not an architectural assumption. | PROPOSED | Architecture + engineering | P01 | Implementation interface design deferred. |
