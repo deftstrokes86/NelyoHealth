@@ -194,3 +194,17 @@ For each significant requirement, include:
 | STATE- | Page or component state | P00-14A | Future state coverage. |
 | REQ-DES- | Design governance decision | P00-14A | Recorded in decision register. |
 | REQ-CNT- | Content governance decision | P00-14A | Recorded in decision register. |
+
+## P00-15 operational identifier families
+
+| Identifier family | Meaning | First use | Governance rule |
+|---|---|---|---|
+| OPS-REQ-001 onward | Cross-cutting operational requirements. | P00-15 | Must map to prompt, source requirement, owner, approval status, and validation. |
+| MET-001 onward | Metric catalogue entries. | P00-15 | Must include formula, source, owner, target status, classification, and future test. |
+| SLI-001 onward | Service-level indicators. | P00-15 | Must include good event, valid event, formula, source, owner, and related SLO. |
+| SLO-001 onward | Proposed service-level objectives. | P00-15 | No numeric target is approved by ID creation. |
+| DASH-001 onward | Proposed operational dashboard definitions. | P00-15 | Must include audience, data scope, prohibited data, accessibility, export, and approval status. |
+| QUE-001 onward | Exception queue definitions. | P00-15 | Must include owner, backup, escalation, age, closure, reopening, permitted commands, and prohibited actions. |
+| STOP-001 onward | Pilot stop, pause, rollback, freeze, containment, and resume conditions. | P00-15 | Must include trigger, source, verification, authority, containment, communication, investigation, resume criteria, and audit. |
+| ANL-POL-001 onward | Analytics data policy rules. | P00-15 | Must include owner, minimization purpose, approval status, and validation. |
+| OPS-TST-001 onward | Future operations tests. | P00-15 | Must use synthetic data outside production and remain future implementation work until Phase 1 or later. |

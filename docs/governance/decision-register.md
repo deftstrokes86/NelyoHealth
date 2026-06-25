@@ -603,3 +603,53 @@
 | REQ-CNT-018 | Browser design and content review. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
 | REQ-CNT-019 | UI UX Pro Max two-pass use. | REQUIRES_APPROVAL | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
 | REQ-CNT-020 | UI UX Pro Max remains advisory. | APPROVED | Content Owner + Domain Owners | P00-14A / Phase 1 | P00-14A content artifacts |
+
+## P00-15 operational metric, queue, analytics, and pilot-gate decisions
+
+| Decision ID | Decision | Status | Source | Owner | Approval impact |
+|---|---|---|---|---|---|
+| REQ-OPS-001 | Closed-loop metrics take precedence over vanity metrics | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-002 | Every metric has a versioned formula | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-003 | Every metric has an authoritative source | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-004 | Analytics events do not override authoritative workflow state | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-005 | Metrics do not authorize sensitive actions | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-006 | Safety metrics override growth metrics | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-007 | Clinical activity is not optimized for platform revenue | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-008 | Every critical queue has an owner | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-009 | Every queue item exposes age and next action | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-010 | No ownerless queue is allowed | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-011 | No routine database editing is permitted | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-012 | SLOs remain proposed until approved | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-013 | SLAs are separate contractual commitments | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-014 | Safety and privacy guardrails are not ordinary error budgets | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-015 | Pilot continuation and expansion are separate decisions | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-016 | Pilot stop conditions are explicit | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-017 | Pilot resumption requires evidence and approval | PROPOSED | P00-15 / P00-18 | Operations owner with domain approvers | Operational proposal or approval-controlled threshold/policy; external approval required before production reliance. |
+| REQ-OPS-018 | Analytics is downstream and non-authoritative | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-019 | Analytics uses minimum-necessary data | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-020 | Employer and HMO analytics are aggregate and minimized | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-021 | Small-cell and re-identification controls require approval | REQUIRES_APPROVAL | P00-15 / P00-18 | Operations owner with domain approvers | Operational proposal or approval-controlled threshold/policy; external approval required before production reliance. |
+| REQ-OPS-022 | Provider location is prohibited from pre-payment analytics | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-023 | Browser analytics cannot authorize payment or disclosure | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-024 | Product analytics cannot contain raw clinical records | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-025 | Clinical-quality analytics is separately restricted | PROPOSED | P00-15 / P00-18 | Operations owner with domain approvers | Operational proposal or approval-controlled threshold/policy; external approval required before production reliance. |
+| REQ-OPS-026 | Synthetic data is used outside production | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-027 | Analytics events require versioning and data lineage | PROPOSED | P00-15 / P00-18 | Operations owner with domain approvers | Operational proposal or approval-controlled threshold/policy; external approval required before production reliance. |
+| REQ-OPS-028 | Data-quality status accompanies important metrics | PROPOSED | P00-15 / P00-18 | Operations owner with domain approvers | Operational proposal or approval-controlled threshold/policy; external approval required before production reliance. |
+| REQ-OPS-029 | Operational dashboards are role-specific | PROPOSED | P00-15 / P00-18 | Operations owner with domain approvers | Operational proposal or approval-controlled threshold/policy; external approval required before production reliance. |
+| REQ-OPS-030 | Operational dashboards do not create clinical access | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-031 | Emergency and critical-result queues have priority | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-032 | Queue ageing is visible | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-033 | Queue response targets require approval | REQUIRES_APPROVAL | P00-15 / P00-18 | Operations owner with domain approvers | Operational proposal or approval-controlled threshold/policy; external approval required before production reliance. |
+| REQ-OPS-034 | On-call and escalation ownership is required | PROPOSED | P00-15 / P00-18 | Operations owner with domain approvers | Operational proposal or approval-controlled threshold/policy; external approval required before production reliance. |
+| REQ-OPS-035 | Design, content, and accessibility quality are pilot readiness criteria | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-036 | Browser release-gate results are operational readiness evidence | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-037 | Unapproved content blocks release where safety, privacy, finance, or law is affected | PROPOSED | P00-15 / P00-18 | Operations owner with domain approvers | Operational proposal or approval-controlled threshold/policy; external approval required before production reliance. |
+| REQ-OPS-038 | CTA action mismatches are operational defects | PROPOSED | P00-15 / P00-18 | Operations owner with domain approvers | Operational proposal or approval-controlled threshold/policy; external approval required before production reliance. |
+| REQ-OPS-039 | Provider-disclosure privacy failures can stop or pause the pilot | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-040 | No critical workflow may depend on engineering or database intervention | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-041 | Metrics require future automated validation | PROPOSED | P00-15 / P00-18 | Operations owner with domain approvers | Operational proposal or approval-controlled threshold/policy; external approval required before production reliance. |
+| REQ-OPS-042 | Metric dashboards require accessibility review | APPROVED | P00-15 / P00-18 | Operations owner with domain approvers | Direct restatement of accepted locked or operational rule. |
+| REQ-OPS-043 | Metric exports require privacy review | PROPOSED | P00-15 / P00-18 | Operations owner with domain approvers | Operational proposal or approval-controlled threshold/policy; external approval required before production reliance. |
+| REQ-OPS-044 | Pilot expansion requires evidence, not calendar progress | PROPOSED | P00-15 / P00-18 | Operations owner with domain approvers | Operational proposal or approval-controlled threshold/policy; external approval required before production reliance. |
+| REQ-OPS-045 | Stop-condition decisions require audit and communication | PROPOSED | P00-15 / P00-18 | Operations owner with domain approvers | Operational proposal or approval-controlled threshold/policy; external approval required before production reliance. |

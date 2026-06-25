@@ -114,3 +114,18 @@
 | ASSUMPT-87 | Design tokens later map to CSS custom properties and TypeScript objects. | PROPOSED | Architecture Owner + Design Owner | REQ-DES-004 | Different implementation format may require token naming changes. |
 | ASSUMPT-88 | Motion uses a global reduced-motion policy. | PROPOSED | Accessibility Reviewer + Architecture Owner | REQ-DES-016 | Component-level-only control could be inconsistent. |
 | ASSUMPT-89 | Visual baselines are generated in a controlled CI environment after approval. | PROPOSED | QA Owner + Design Owner | REQ-DES-020 | Local baselines could be unstable or unreviewed. |
+
+## P00-15 operational readiness assumptions
+
+| Assumption ID | Assumption | Owner | Impact | Status | Review trigger |
+|---|---|---|---|---|---|
+| ASSUMPT-90 | The pilot begins with manually reviewed operational dashboards before final automated instrumentation is implemented. | Operations owner with domain approvers | Phase 1 implementation, P00-16 risk consolidation, P00-17 gate, or external approval | PROPOSED | Revisit before production reliance. |
+| ASSUMPT-91 | Numeric SLO targets are approved only after baseline data and domain review exist. | Operations owner with domain approvers | Phase 1 implementation, P00-16 risk consolidation, P00-17 gate, or external approval | PROPOSED | Revisit before production reliance. |
+| ASSUMPT-92 | Important metrics are derived from authoritative domain events or records, not client analytics alone. | Operations owner with domain approvers | Phase 1 implementation, P00-16 risk consolidation, P00-17 gate, or external approval | PROPOSED | Revisit before production reliance. |
+| ASSUMPT-93 | Product analytics is separate from restricted clinical-quality analytics. | Operations owner with domain approvers | Phase 1 implementation, P00-16 risk consolidation, P00-17 gate, or external approval | PROPOSED | Revisit before production reliance. |
+| ASSUMPT-94 | Employer and HMO reports remain aggregate and minimized until contracts and privacy approvals define more detail. | Operations owner with domain approvers | Phase 1 implementation, P00-16 risk consolidation, P00-17 gate, or external approval | PROPOSED | Revisit before production reliance. |
+| ASSUMPT-95 | Queue ownership exists before the corresponding capability launches. | Operations owner with domain approvers | Phase 1 implementation, P00-16 risk consolidation, P00-17 gate, or external approval | PROPOSED | Revisit before production reliance. |
+| ASSUMPT-96 | Operational dashboards and queues are accessible and responsive before production use. | Operations owner with domain approvers | Phase 1 implementation, P00-16 risk consolidation, P00-17 gate, or external approval | PROPOSED | Revisit before production reliance. |
+| ASSUMPT-97 | Design and content approval status can later be instrumented from governance/content evidence records. | Operations owner with domain approvers | Phase 1 implementation, P00-16 risk consolidation, P00-17 gate, or external approval | PROPOSED | Revisit before production reliance. |
+| ASSUMPT-98 | P00-15 defines operational requirements but does not implement instrumentation. | Operations owner with domain approvers | Phase 1 implementation, P00-16 risk consolidation, P00-17 gate, or external approval | PROPOSED | Revisit before production reliance. |
+| ASSUMPT-99 | Critical safety and privacy events do not use normal error budgets. | Operations owner with domain approvers | Phase 1 implementation, P00-16 risk consolidation, P00-17 gate, or external approval | PROPOSED | Revisit before production reliance. |

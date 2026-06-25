@@ -511,3 +511,30 @@ For all future phase updates:
 - **UI UX Pro Max review brief:** Created; no skill installed or executed.
 - **Phase 1 Motion handoff:** Created in motion-system and validation documents; no package installed.
 - **Phase 1 content-registry handoff:** Repository-based structured content registry recommended; not implemented.
+
+## Entry 017 - P00-15 metrics, service levels, operational queues, and pilot readiness
+
+| Field | Value |
+|---|---|
+| Date | 2026-06-25 |
+| Prompt | P00-15 |
+| Complete Breakdown work package | P00-18 |
+| Issue ID | P00-OPS-001 |
+| Files created | docs/operations/metric-catalogue.md; docs/operations/sli-slo-draft.md; docs/operations/exception-queue-catalogue.md; docs/operations/pilot-stop-conditions.md; docs/data/analytics-data-policy.md |
+| Files updated | docs/STATUS.md; docs/exec-plans/P00-product-clinical-regulatory-foundation.md; docs/governance/document-register.md; docs/governance/decision-register.md; docs/governance/open-questions.md; docs/governance/assumptions-register.md; docs/governance/change-log.md; docs/governance/traceability-conventions.md; docs/architecture/event-catalogue-draft.md |
+| Metric count | 300 |
+| Metric-group count | 15 |
+| SLI count | 64 |
+| SLO count | 64 |
+| Dashboard count | 16 |
+| Queue count | 90 |
+| Stop-condition count | 55 |
+| Analytics-policy count | 15 |
+| Decision count | 45 |
+| Open-question count | 100 |
+| Assumption count | 10 |
+| Event or workflow alignment | Added P00-15 operational event candidates to docs/architecture/event-catalogue-draft.md; workflow redesign was not performed. |
+| Provider-disclosure analytics safeguards | Pre-payment provider address, branch, coordinates, distance, map, route, contact, matching features, patient-provider location pairs, and enumeration-enabling identifiers are prohibited from analytics. |
+| Accessibility, design, and content readiness metrics | Accessibility blockers, keyboard/focus/screen-reader/reflow/reduced-motion defects, browser release gates, design review, UI UX Pro Max review evidence, content approval, unsupported claims, CTA mismatch, visual regression, and protected visual artifact checks are included. |
+| Pilot decision model | CONTINUE, CONTINUE-WITH-CONDITIONS, FREEZE-EXPANSION, PAUSE-CAPABILITY, PAUSE-PILOT, STOP-PILOT, ROLLBACK-RELEASE, and EMERGENCY-CONTAINMENT are defined as proposed decision outcomes. |
+| Remaining approvals | Product, operations, clinical, privacy, security, finance, accessibility, design, content, engineering, and legal/regulatory approvals remain required before production reliance. |
