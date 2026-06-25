@@ -9,7 +9,9 @@
 - P01-FND-002: ACCEPTED.
 - P01-FND-003: ACCEPTED.
 - P01-FND-004: ACCEPTED.
-- P02-PLAN-001: COMPLETED, pending orchestration acceptance.
+- P02-PLAN-001: ACCEPTED.
+- P02-ISS-001: COMPLETED, pending orchestration acceptance.
+- P02-ISS-002: NOT STARTED.
 - AGENTS guidance: IMPLEMENTED.
 - Execution-plan convention: IMPLEMENTED.
 - Browser-validation skill: IMPLEMENTED.
@@ -20,15 +22,16 @@
 - Branch protection: MANUAL-ADMIN-PENDING.
 - Phase 1 gate: PHASE-1-CONDITIONAL-PASS.
 - Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS.
-- Phase 2 planning: P02-PLAN-001 COMPLETED, pending orchestration acceptance.
-- Phase 2 implementation: NOT STARTED.
+- Phase 2 planning: P02-PLAN-001 ACCEPTED.
+- Phase 2 implementation: P02-ISS-001 COMPLETED, pending orchestration acceptance; P02-ISS-002 NOT STARTED.
+- Phase 3: NOT STARTED.
 - Pilot launch: PILOT-NO-GO.
 - Production release: NOT APPROVED.
 - Production data: NOT APPROVED.
 - Interactive browser: VERIFIED THROUGH PLAYWRIGHT CLI FALLBACK.
 - Playwright MCP: VERIFIED THROUGH PROJECT-SCOPED LOCAL SMOKE ON 2026-06-25 WITH CODEX-CLI 0.141.0.
 - UI UX Pro Max licence: REVIEW-REQUIRED.
-- Next action: orchestration review of P02-PLAN-001, then explicit authorization of P02-ISS-001 before any Phase 2 implementation.
+- Next action: orchestration review of P02-ISS-001 before P02-ISS-002 may begin.
 
 ## Foundation commands
 
@@ -55,6 +58,18 @@ pnpm db:seed # expected nonzero Phase 2 gate
 - docs/engineering/phase-2-issue-backlog.md
 - docs/governance/phase-2-requirements-traceability.md
 
+## Phase 2 implementation artifacts
+
+- docs/exec-plans/P02-ISS-001-phase-2-adr-and-dependency-decision-pack.md
+- docs/engineering/phase-2-dependency-decision-pack.md
+- docs/governance/p02-iss-001-adr-review-checklist.md
+- docs/adr/ADR-P02-001-application-framework-and-dependency-pins.md
+- docs/adr/ADR-P02-002-database-access-and-migration-tool.md
+- docs/adr/ADR-P02-003-redis-compatible-cache-queue-and-worker-backplane.md
+- docs/adr/ADR-P02-004-object-storage-signed-url-adapter.md
+- docs/adr/ADR-P02-005-iac-cloud-provider-and-deployment-path.md
+- docs/adr/ADR-P02-006-observability-and-error-reporting-boundary.md
+
 ## Locked requirements retained
 
 - One person has one longitudinal patient identity.
@@ -76,3 +91,5 @@ pnpm db:seed # expected nonzero Phase 2 gate
 - Project-scoped Playwright MCP is currently verified for local synthetic smoke; Playwright CLI remains the verified fallback if MCP becomes unavailable.
 - UI UX Pro Max external license/commercial review remains pending before broader redistribution or commercial reliance.
 - Phase 0 domain approvals remain required before implementation or pilot decisions in clinical, legal, privacy, payment, pharmacy, laboratory, HMO, employer, sponsor, guardian, or emergency domains.
+- Cloud provider selection remains human-decision gated before P02-ISS-016.
+- Local object-storage emulator posture remains legal/commercial-review gated before signed URL implementation evidence.

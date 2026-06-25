@@ -2,7 +2,7 @@
 
 ## Status
 
-P02-PLAN-001 planning traceability. Implementation status is NOT STARTED.
+P02-PLAN-001 planning traceability is accepted. P02-ISS-001 is completed pending orchestration acceptance. P02-ISS-002 and later implementation issues remain NOT STARTED.
 
 ## Requirement map
 
@@ -30,7 +30,7 @@ P02-PLAN-001 planning traceability. Implementation status is NOT STARTED.
 | P02-REQ-020 | Environment strategy for local, PR, development, staging, production, partner sandbox | Phase 2 prompt | P02-ISS-015 | P02-ISS-016, P02-ISS-017 | PLANNED |
 | P02-REQ-021 | Production data never copied downward | Phase 2 prompt and locked data rules | P02-ISS-015 | P02-ISS-014, P02-ISS-018 | PLANNED |
 | P02-REQ-022 | IaC plan for network, hosting, managed data services, DNS/TLS/CDN/WAF, secrets, backups, monitoring | Phase 2 prompt | P02-ISS-016 | P02-ISS-017 | PLANNED-HUMAN-DECISION-REQUIRED |
-| P02-REQ-023 | Vendor-specific code stays in adapters | Phase 2 prompt and ADR-0005 | P02-ISS-001 | P02-ISS-005 through P02-ISS-011 | PLANNED |
+| P02-REQ-023 | Vendor-specific code stays in adapters | Phase 2 prompt and ADR-0005 | P02-ISS-001 | P02-ISS-005 through P02-ISS-011 | ADR-BOUNDARY-RECORDED-PENDING-IMPLEMENTATION-EVIDENCE |
 
 ## Exit-gate map
 
@@ -44,7 +44,20 @@ P02-PLAN-001 planning traceability. Implementation status is NOT STARTED.
 | P02-EG-006 | Document uploaded using signed URL | P02-ISS-009 | Synthetic document upload/download/expiry evidence | PLANNED |
 | P02-EG-007 | Browser tests start apps, seed, sign in, navigate, and retain traces | P02-ISS-014 | Playwright report and artifact retention evidence | PLANNED |
 | P02-EG-008 | Codex can inspect local routes and report console/network failures | P02-ISS-014 | MCP or CLI local inspection evidence | PLANNED |
-| P02-EG-009 | Vendor-specific code stays in adapters | P02-ISS-018 | Import boundary checks and review evidence | PLANNED |
+| P02-EG-009 | Vendor-specific code stays in adapters | P02-ISS-018 | Import boundary checks and review evidence; P02-ISS-001 ADR boundary decisions | PARTIAL-ADR-BOUNDARY-RECORDED |
+
+## P02-ISS-001 evidence
+
+| Evidence item | Result | Artifact |
+|---|---|---|
+| Application framework decision | Recorded | docs/adr/ADR-P02-001-application-framework-and-dependency-pins.md |
+| Database access/migration decision | Recorded | docs/adr/ADR-P02-002-database-access-and-migration-tool.md |
+| Redis-compatible queue/cache decision | Recorded | docs/adr/ADR-P02-003-redis-compatible-cache-queue-and-worker-backplane.md |
+| Object-storage signed URL adapter decision | Recorded with emulator review condition | docs/adr/ADR-P02-004-object-storage-signed-url-adapter.md |
+| IaC/cloud path decision | Recorded with cloud provider human-decision condition | docs/adr/ADR-P02-005-iac-cloud-provider-and-deployment-path.md |
+| Observability/error-reporting boundary | Recorded with vendor selection deferred | docs/adr/ADR-P02-006-observability-and-error-reporting-boundary.md |
+| Exact future dependency pins | Recorded without install | docs/engineering/phase-2-dependency-decision-pack.md |
+| ADR checklist | Completed pending orchestration acceptance | docs/governance/p02-iss-001-adr-review-checklist.md |
 
 ## Locked requirement preservation
 
@@ -71,4 +84,3 @@ P02-PLAN-001 planning traceability. Implementation status is NOT STARTED.
 | docs/engineering/phase-2-browser-harness-plan.md | Browser harness plan |
 | docs/engineering/phase-2-issue-backlog.md | Authoritative 18-issue backlog |
 | docs/governance/phase-2-requirements-traceability.md | Requirement and exit-gate traceability |
-

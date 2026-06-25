@@ -95,6 +95,6 @@ BLOCKS-PHASE-1-FOUNDATION, BLOCKS-SPECIFIC-CAPABILITY-IMPLEMENTATION, BLOCKS-REL
 | Blocker ID | Condition | Owner | Blocks Phase 2 | Blocks pilot | Status |
 |---|---|---|---|---|---|
 | BLK-P02-PLAN-001 | Cloud provider and IaC/deployment operating model are not selected. | Platform/release owner | Yes for P02-ISS-016 through P02-ISS-018 deployment evidence | Yes | OPEN |
-| BLK-P02-PLAN-002 | Redis-compatible service and object-storage emulator/provider license posture requires review. | Engineering/security owner | Yes for affected dependency implementation until ADR approval | Yes | OPEN |
-| BLK-P02-PLAN-003 | Database migration tool and operational owner are not approved. | Platform/data owner | Yes for P02-ISS-004 and database-dependent Phase 2 issues | Yes | OPEN |
+| BLK-P02-PLAN-002 | Redis-compatible local posture is resolved through Valkey-compatible/BullMQ ADR; object-storage emulator/provider license posture still requires review. | Engineering/security owner | Yes for signed URL/local object-storage implementation until emulator approval | Yes | PARTIAL-OBJECT-STORAGE-REMAINS |
+| BLK-P02-PLAN-003 | Database migration tool ADR is approved for Drizzle/pg; operational migration and seed implementation are not started. | Platform/data owner | No for P02-ISS-004 start; yes for claiming database exit-gate evidence until implemented | Yes | RESOLVED-FOR-ADR; IMPLEMENTATION-PENDING |
 | BLK-P02-PLAN-004 | Phase 2 browser harness synthetic auth, seed/reset, and artifact ownership are not implemented. | QA/security owner | Yes for P02-ISS-014 and P02-ISS-018 browser exit evidence | Yes | OPEN |

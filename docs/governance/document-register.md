@@ -301,11 +301,25 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 
 | Document | Purpose | Owner | Status |
 |---|---|---|---|
-| docs/exec-plans/P02-platform-and-infrastructure-foundation.md | Canonical Phase 2 execution plan, issue order, dependencies, exit-gate mapping, and blockers | Execution/platform owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| docs/engineering/phase-2-technology-evaluation.md | Current primary-source technology evaluation and ADR requirements | Engineering/architecture owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| docs/engineering/phase-2-application-topology.md | Future application and package topology | Engineering/architecture owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| docs/engineering/phase-2-environment-strategy.md | Local, PR, development, staging, production, and partner sandbox strategy | Platform/release owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| docs/engineering/phase-2-local-infrastructure-plan.md | Local dependency and infrastructure plan | Platform/data owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| docs/engineering/phase-2-browser-harness-plan.md | Phase 2 browser harness plan | QA/security owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| docs/engineering/phase-2-issue-backlog.md | Authoritative 18-issue Phase 2 backlog | Execution/platform owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| docs/governance/phase-2-requirements-traceability.md | Phase 2 requirement and exit-gate traceability | Governance/execution owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/exec-plans/P02-platform-and-infrastructure-foundation.md | Canonical Phase 2 execution plan, issue order, dependencies, exit-gate mapping, and blockers | Execution/platform owner | ACTIVE |
+| docs/engineering/phase-2-technology-evaluation.md | Current primary-source technology evaluation and ADR requirements | Engineering/architecture owner | ACTIVE |
+| docs/engineering/phase-2-application-topology.md | Future application and package topology | Engineering/architecture owner | ACTIVE |
+| docs/engineering/phase-2-environment-strategy.md | Local, PR, development, staging, production, and partner sandbox strategy | Platform/release owner | ACTIVE |
+| docs/engineering/phase-2-local-infrastructure-plan.md | Local dependency and infrastructure plan | Platform/data owner | ACTIVE |
+| docs/engineering/phase-2-browser-harness-plan.md | Phase 2 browser harness plan | QA/security owner | ACTIVE |
+| docs/engineering/phase-2-issue-backlog.md | Authoritative 18-issue Phase 2 backlog | Execution/platform owner | ACTIVE |
+| docs/governance/phase-2-requirements-traceability.md | Phase 2 requirement and exit-gate traceability | Governance/execution owner | ACTIVE |
+
+## P02-ISS-001 document register entries - 2026-06-25
+
+| Document | Purpose | Owner | Status |
+|---|---|---|---|
+| docs/exec-plans/P02-ISS-001-phase-2-adr-and-dependency-decision-pack.md | P02-ISS-001 execution plan, scope, validation, rollback, and completion evidence | Execution/platform owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/engineering/phase-2-dependency-decision-pack.md | Exact future package pins, package metadata evidence, official-source links, and dependency decision notes | Engineering/architecture owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/governance/p02-iss-001-adr-review-checklist.md | ADR review checklist and review-required limitations for P02-ISS-001 | Governance/execution owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/adr/ADR-P02-001-application-framework-and-dependency-pins.md | Phase 2 application framework and exact dependency-pin ADR | Engineering/architecture owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/adr/ADR-P02-002-database-access-and-migration-tool.md | Phase 2 database access and migration tool ADR | Platform/data owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/adr/ADR-P02-003-redis-compatible-cache-queue-and-worker-backplane.md | Phase 2 Redis-compatible queue/cache ADR | Engineering/security owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/adr/ADR-P02-004-object-storage-signed-url-adapter.md | Phase 2 object storage and signed URL adapter ADR | Platform/data owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/adr/ADR-P02-005-iac-cloud-provider-and-deployment-path.md | Phase 2 IaC/cloud provider path ADR | Platform/release owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/adr/ADR-P02-006-observability-and-error-reporting-boundary.md | Phase 2 observability and error-reporting boundary ADR | Engineering/security owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
