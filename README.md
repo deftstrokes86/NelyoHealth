@@ -1,174 +1,118 @@
 # NelyoHealth
 
-NelyoHealth is in Phase 1 foundation work. The repository currently contains a reproducible TypeScript monorepo baseline, a synthetic local browser smoke surface, deterministic Playwright smoke tests, and documentation for Codex browser use.
+NelyoHealth is in Phase 1 foundation work. The repository contains a reproducible TypeScript monorepo baseline, synthetic local browser smoke surfaces, deterministic Playwright browser checks, design-token/content/UI foundation packages, governed UI UX Pro Max advisory tooling, and repository governance checks.
 
-This repository does not yet contain a NelyoHealth product application. It implements no patient, provider, clinical, pharmacy, laboratory, payment, HMO, employer, family, guardian, sponsor, authentication, RBAC, database, API, or infrastructure feature.
+This repository does not yet contain a NelyoHealth product application. It implements no patient, provider, clinical, pharmacy, laboratory, payment, HMO, employer, family, guardian, sponsor, authentication, RBAC, ABAC, database, API, production infrastructure, production release, or pilot-launch feature.
 
 ## Status
 
-- Phase 0 gate: `PHASE-0-CONDITIONAL-PASS`
-- Phase 1 entry: `PHASE-1-GO-WITH-CONDITIONS`
-- Pilot launch: `PILOT-NO-GO`
-- Current bounded task: `P01-FND-001`
-- Phase 2: not started
+- Phase 0 gate: PHASE-0-CONDITIONAL-PASS
+- Phase 1 gate: PHASE-1-CONDITIONAL-PASS
+- Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS, only after external orchestration starts Phase 2
+- Pilot launch: PILOT-NO-GO
+- Production release: NOT APPROVED
+- Current bounded task completed: P01-FND-003
 
 ## Prerequisites
 
-Use the pinned runtime and package manager:
-
-- Node.js `24.18.0`
-- pnpm `11.9.0`
-
-The Node version is recorded in `.node-version`. The pnpm version is pinned in `package.json` through `packageManager` and `engines.pnpm`.
-
-If pnpm is not already available on the host, use a package-manager shim without installing globally:
+Use Node.js 24.18.0 and pnpm 11.9.0.
 
 ```bash
 npm exec --yes pnpm@11.9.0 -- install
-```
-
-## Install
-
-```bash
-pnpm install
-```
-
-Use frozen installation in CI and verification contexts:
-
-```bash
 pnpm install --frozen-lockfile
 ```
 
-## Development smoke server
-
-The only runnable workspace package in this issue is the synthetic browser smoke surface.
+## Core verification
 
 ```bash
-pnpm dev
+pnpm repository:verify
+pnpm verify
 ```
-
-By default it binds to `127.0.0.1:4173`. Override with local-only environment variables when needed:
-
-```bash
-SMOKE_HOST=127.0.0.1 SMOKE_PORT=4173 pnpm dev
-```
-
-The smoke page is tooling evidence only. It is not a NelyoHealth product page and contains no patient, provider, clinical, financial, organization, or production data.
 
 ## Quality commands
 
 ```bash
-pnpm lint
-pnpm format
 pnpm format:check
+pnpm lint
 pnpm typecheck
 pnpm test
 pnpm test:integration
 pnpm build
-pnpm verify
+pnpm secret:scan
 ```
 
-## Playwright commands
+## Browser and accessibility commands
 
 ```bash
-pnpm test:e2e
 pnpm test:browser
+pnpm test:a11y
 pnpm test:browser:headed
 pnpm test:browser:ui
-pnpm test:a11y
-```
-
-Install the required Chromium browser for the deterministic smoke tests:
-
-```bash
+pnpm ui:test:browser
+pnpm ui:test:a11y
 pnpm exec playwright install chromium
 ```
 
+## Design foundation commands
+
+```bash
+pnpm tokens:build
+pnpm tokens:check
+pnpm content:validate
+pnpm ui:build
+pnpm ui:test
+pnpm ui:preview
+pnpm uiux:check
+pnpm design:verify
+```
+
+## Repository governance commands
+
+```bash
+pnpm community:verify
+pnpm actions:verify
+pnpm deps:policy
+pnpm deps:audit
+pnpm deps:licenses
+pnpm deps:inventory
+pnpm deps:outdated
+pnpm deps:verify
+pnpm changeset:status
+pnpm release:check
+pnpm release:inventory
+```
+
+## Changesets
+
+Changesets is configured for private-package versioning evidence only. It must not publish, tag, deploy, or create production releases during foundation work.
+
+```bash
+pnpm changeset
+pnpm changeset:status
+pnpm release:version
+```
+
+Run `pnpm release:version` only in an explicitly approved release task.
+
 ## Interactive browser CLI fallback
-
-P01-FND-001R adds a temporary project-scoped interactive browser fallback using
-`@playwright/cli@0.1.14` while the Codex Playwright MCP path remains upstream blocked.
-
-Start the synthetic smoke server, then open the named local CLI session:
 
 ```bash
 pnpm dev
 pnpm browser:cli:open
-```
-
-Useful CLI scripts:
-
-```bash
-pnpm browser:cli:help
-pnpm browser:cli:install
 pnpm browser:cli:close
 pnpm browser:cli:cleanup
 ```
 
-The fallback is restricted to synthetic local browser validation. Do not use production origins,
-personal browser profiles, extension mode, CDP attach to a personal browser, real data, or
-undocumented sandbox changes.
+The fallback is restricted to synthetic local browser validation. Do not use production origins, personal browser profiles, extension mode, CDP attach to a personal browser, real data, or undocumented sandbox changes.
 
-## Browser artifacts
+## GitHub repository controls
 
-Browser artifacts are controlled under ignored paths:
-
-- `.playwright-cli/`
-- `.artifacts/playwright/`
-- `.artifacts/playwright-cli/`
-- `.artifacts/playwright-mcp/`
-- `.artifacts/screenshots/`
-- `.artifacts/traces/`
-- `.artifacts/videos/`
-- `.artifacts/network/`
-- `test-results/`
-- `playwright-report/`
-- `.auth/`
-
-Do not commit browser authentication state, traces, screenshots, videos, downloads, storage snapshots, or production-like browser artifacts.
-
-## Codex browser setup
-
-Project-scoped Codex configuration is in `.codex/config.toml`. Codex only loads project-scoped configuration after the project is trusted. The configured Playwright MCP server uses an exact pinned package version and an isolated Chromium context.
-
-The project configuration does not use production URLs, persistent personal profiles, secrets, extension mode, or authentication state.
-
-Current status: the Playwright MCP path remains open as an upstream nonblocking tracked blocker
-until project-scoped MCP smoke verification succeeds after a relevant Codex/browser update. The
-Playwright CLI fallback has verified interactive local smoke operation for P01-FND-001 closure.
+The repository contains CODEOWNERS, issue forms, a pull request template, Dependabot configuration, dependency-review configuration, release-note configuration, pinned CI workflows, and a read-only release-readiness workflow. Branch protection, rulesets, required status checks, code-owner enforcement, Dependency Review activation, and private vulnerability reporting require external repository-administrator verification.
 
 ## Synthetic-data rule
 
-All local tests and browser checks use synthetic data only. Do not enter real patient, provider, clinical, financial, organization, production, or credential data into the smoke page, browser tools, tests, logs, screenshots, traces, or reports.
+All local tests and browser checks use synthetic data only. Do not enter real patient, provider, clinical, financial, organization, production, or credential data into tests, tools, logs, screenshots, traces, reports, or issue content.
 
 ## No production use
 
-This foundation is not deployable product software. It exists to prove reproducible install, command execution, local browser interaction, deterministic browser testing, accessibility smoke checks, CI shape, and artifact hygiene.
-
-## Troubleshooting
-
-- If `pnpm` is missing, use `npm exec --yes pnpm@11.9.0 -- <command>`.
-- If Playwright reports that Chromium is missing, run `pnpm exec playwright install chromium`.
-- If the Codex project-scoped MCP server is not visible, trust or reload the project in Codex and re-open MCP settings.
-- If a smoke test fails due to an external request, inspect the failing URL and confirm the smoke surface has no external asset references.
-- If a browser artifact contains anything other than synthetic smoke data, delete the artifact and treat it as a privacy-boundary defect.
-
-## Next bounded task
-
-The next task may address design-foundation implementation only after orchestration acceptance. Motion, UI UX Pro Max, design-token implementation, content-registry implementation, app shells, and product features are not implemented in `P01-FND-001`.
-
-
-## P01-FND-002 design foundation
-Reusable foundation commands:
-- `pnpm tokens:build`
-- `pnpm tokens:check`
-- `pnpm content:validate`
-- `pnpm ui:build`
-- `pnpm ui:test`
-- `pnpm ui:preview`
-- `pnpm ui:test:browser`
-- `pnpm ui:test:a11y`
-- `pnpm uiux:check`
-- `pnpm uiux:review:foundation`
-- `pnpm design:verify`
-The design foundation preview is synthetic, non-production, and binds to trusted local origins only.
+This foundation is not deployable product software. It exists to prove repository governance, reproducible install, command execution, local browser interaction, deterministic browser testing, accessibility smoke checks, design foundations, dependency policy, release-readiness checks, and artifact hygiene.

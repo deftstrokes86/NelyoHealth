@@ -1,4 +1,4 @@
-﻿# NelyoHealth Phase 0 Change Log
+# NelyoHealth Phase 0 Change Log
 
 ## 2026-06-23
 
@@ -622,3 +622,11 @@ For all future phase updates:
 - Added design tokens, content registry, UI foundation primitives, synthetic design preview, browser/a11y tests, and governed UI UX Pro Max advisory wrapper.
 - No production application feature, clinical workflow, payment flow, database, or product app implementation was added.
 - UI UX Pro Max remains advisory only; external license review remains tracked.
+
+## 2026-06-25 - P01-FND-003
+
+- Added repository collaboration, release-readiness, dependency-governance, and Phase 1 closure artifacts.
+- Installed @changesets/cli 2.31.0 as an exact local development dependency.
+- Added local policy checks for package versions, GitHub Actions pinning, community health, dependency licenses, Changesets config, and release readiness.
+- Updated CI to include repository governance checks and added a read-only manual release-readiness workflow.
+- Recorded Phase 1 as PHASE-1-CONDITIONAL-PASS, Phase 2 entry as PHASE-2-GO-WITH-CONDITIONS, and pilot as PILOT-NO-GO.

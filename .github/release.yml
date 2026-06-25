@@ -1,0 +1,22 @@
+changelog:
+  exclude:
+    labels:
+      - skip-changelog
+    authors:
+      - dependabot
+  categories:
+    - title: Foundation governance
+      labels:
+        - governance
+        - documentation
+    - title: Tooling and dependencies
+      labels:
+        - tooling
+        - dependencies
+    - title: Tests and verification
+      labels:
+        - testing
+        - ci
+    - title: Other changes
+      labels:
+        - "*"

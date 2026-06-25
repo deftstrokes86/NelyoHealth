@@ -1,5 +1,9 @@
 # Third Party Notices
-P01-FND-002 adds or relies on these packages for the foundation layer:
+
+This file records foundation-stage third-party components and does not replace legal review.
+
+## Phase 1 foundation packages
+
 - React 19.2.7 - MIT
 - React DOM 19.2.7 - MIT
 - Motion 12.41.0 - MIT
@@ -8,10 +12,17 @@ P01-FND-002 adds or relies on these packages for the foundation layer:
 - Zod 4.4.3 - MIT
 - @testing-library/react 16.3.2 - MIT
 - jsdom 29.1.1 - MIT
-UI UX Pro Max vendored subset:
+- @changesets/cli 2.31.0 - MIT
+
+## UI UX Pro Max vendored subset
+
 - Repository: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git
 - Selected tag: v2.6.5
 - Selected commit: bdf1179bcf641cca49ee7a5f76df14c3015fd38c
 - Upstream root license and skill metadata identify MIT.
 - Upstream cli/README.md references CC-BY-NC-4.0 and was excluded from vendoring.
 - External license review is required before broader redistribution or commercial reliance.
+
+## Governance
+
+Dependency license checks are engineering evidence only. Unknown, ambiguous, non-commercial, copyleft, missing, or conflicting license metadata requires external legal/commercial review before production use or redistribution.

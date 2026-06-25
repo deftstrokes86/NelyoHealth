@@ -1,0 +1,58 @@
+name: Foundation change request
+description: Request a bounded documentation, tooling, or foundation change.
+title: "[Foundation]: "
+body:
+  - type: markdown
+    attributes:
+      value: "Feature requests must not bypass Phase 0 locked requirements or Phase 1 boundaries. Do not include real patient, clinical, provider, payment, credential, organization, or production data."
+  - type: input
+    id: scope
+    attributes:
+      label: Scope and bounded task
+    validations:
+      required: true
+  - type: textarea
+    id: request
+    attributes:
+      label: Requested change
+    validations:
+      required: true
+  - type: textarea
+    id: non-goals
+    attributes:
+      label: Non-goals and phase boundaries
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Affected environment or browser/viewport, if relevant
+    validations:
+      required: false
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: Impact areas
+      options:
+        - label: Privacy or data protection
+        - label: Security or tenant isolation
+        - label: Accessibility
+        - label: Provider disclosure
+        - label: Clinical safety
+        - label: Finance or payments
+        - label: Design or content
+        - label: Dependency or release governance
+  - type: textarea
+    id: approvals
+    attributes:
+      label: Required external approvals
+      description: State owner and status for clinical, legal, privacy, security, payment, pharmacy, lab, accessibility, product, or commercial approvals.
+    validations:
+      required: false
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Evidence confirmation
+      options:
+        - label: I have included synthetic or redacted evidence only.
+          required: true

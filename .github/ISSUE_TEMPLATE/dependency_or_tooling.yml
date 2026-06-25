@@ -1,0 +1,72 @@
+name: Dependency or tooling issue
+description: Report dependency, license, supply-chain, CI, browser-tooling, or release-readiness work.
+title: "[Tooling]: "
+body:
+  - type: input
+    id: package
+    attributes:
+      label: Package, workflow, or tool
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Current and proposed version
+    validations:
+      required: false
+  - type: textarea
+    id: source
+    attributes:
+      label: Primary-source evidence
+      description: Include official source links, version metadata, license source, and date checked.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Affected environment
+      description: Include Node, pnpm, OS, browser, CI, or viewport where relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Include sanitized command output and reproduction details.
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Dependency version
+        - License review
+        - GitHub Actions
+        - Branch protection or repository setting
+        - Changesets or release readiness
+        - Browser or accessibility tooling
+        - Other foundation tooling
+    validations:
+      required: true
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: Impact areas
+      options:
+        - label: Privacy or data protection
+        - label: Security or tenant isolation
+        - label: Accessibility
+        - label: Provider disclosure
+        - label: Clinical safety
+        - label: Finance or payments
+        - label: Dependency governance
+  - type: checkboxes
+    id: no-prod
+    attributes:
+      label: Boundary confirmation
+      options:
+        - label: This does not request production deployment, production data, automatic merge, package publication, or a product feature.
+          required: true
+        - label: Evidence is synthetic, redacted, or public-source only.
+          required: true

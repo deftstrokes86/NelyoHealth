@@ -1,0 +1,48 @@
+name: Documentation issue
+description: Report documentation inconsistency, missing traceability, or source-alignment problem.
+title: "[Docs]: "
+body:
+  - type: input
+    id: file
+    attributes:
+      label: Document path
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: Issue
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source requirement or conflict
+      description: Include source document, heading, official source, or governance register entry.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Affected phase, workflow, browser, or viewport, if relevant
+    validations:
+      required: false
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: Impact areas
+      options:
+        - label: Privacy or data protection
+        - label: Security or tenant isolation
+        - label: Accessibility
+        - label: Provider disclosure
+        - label: Clinical safety
+        - label: Finance or payments
+        - label: Phase gate or traceability
+  - type: checkboxes
+    id: sensitive-data
+    attributes:
+      label: Sensitive-data confirmation
+      options:
+        - label: This issue contains synthetic, redacted, or public documentation data only.
+          required: true

@@ -303,3 +303,13 @@ Founder/product owner, clinical lead/medical director, Nigerian legal/regulatory
 ## P01-FND-002 risks - 2026-06-25T03:29:17.292Z
 - Risk: UI UX Pro Max upstream contains advisory recommendations outside NelyoHealth scope or dependency constraints. Owner: Architecture. Mitigation: governed runner, integrity check, advisory-only skill wrapper, and documented accepted/rejected recommendations.
 - Risk: Third-party license ambiguity in excluded upstream CLI README. Owner: Legal/commercial. Mitigation: excluded conflicting file, retained notice, and external review before broader redistribution.
+
+## P01-FND-003 risks - 2026-06-25
+
+| Risk ID | Risk | Impact | Owner | Mitigation | Status |
+|---|---|---|---|---|---|
+| RSK-P01-FND-003-001 | GitHub branch protection and rulesets are documented but not verified active. | Unreviewed merges could bypass foundation checks. | Repository administrator | Enable protected branch/ruleset and required status checks. | MITIGATION-PLANNED |
+| RSK-P01-FND-003-002 | Dependency Review availability cannot be verified because gh is unavailable locally. | Supply-chain PR review may rely on local checks until enabled. | Security owner | Keep local dependency checks mandatory; enable Dependency Review when support is verified. | MITIGATION-PLANNED |
+| RSK-P01-FND-003-003 | UI UX Pro Max upstream license ambiguity remains unresolved. | Broader redistribution or commercial reliance may be unsafe. | Legal/commercial owner | Keep advisory-only scope and external review requirement. | MITIGATION-PLANNED |
+| RSK-P01-FND-003-004 | Host runtime differs from pinned Node version during local validation. | Local-only validation could differ from CI. | Engineering/architecture owner | Keep Node 24.18.0 pinned in repository and CI; record host warning. | MITIGATION-PLANNED |
+| RSK-P01-FND-003-005 | `@changesets/cli` currently brings transitive `js-yaml@3.14.2` with moderate advisory GHSA-h67p-54hq-rp68. | Dependency freshness and YAML parsing risk remains below the configured high audit failure gate but requires next dependency review. | Engineering/security owner | Keep `pnpm deps:audit` at high gate for P01; reassess when Changesets or dependency override options are reviewed. | TRACKED-NONBLOCKING |

@@ -1,0 +1,77 @@
+{
+  "generatedFor": "P01-FND-003",
+  "generatedAt": "2026-06-25",
+  "packageManager": "pnpm@11.9.0",
+  "nodeRuntime": "24.18.0",
+  "exactVersionPolicy": true,
+  "disallowedSpecifiers": [
+    "latest",
+    "*",
+    "^",
+    "~",
+    ">",
+    "<",
+    "git:",
+    "github:",
+    "http:",
+    "https:",
+    "file:",
+    "link:"
+  ],
+  "allowedInternalSpecifier": "workspace:*",
+  "allowedLicenses": [
+    "MIT",
+    "Apache-2.0",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "0BSD",
+    "BlueOak-1.0.0",
+    "MIT-0",
+    "CC0-1.0",
+    "Python-2.0"
+  ],
+  "reviewRequiredLicenses": [
+    "UNKNOWN",
+    "UNLICENSED",
+    "SEE LICENSE IN LICENSE",
+    "CC-BY-NC-4.0",
+    "GPL",
+    "AGPL",
+    "LGPL",
+    "MPL",
+    "MPL-2.0"
+  ],
+  "packageRules": {
+    "rootPrivate": true,
+    "workspacePackagesPrivate": true,
+    "noPublishConfig": true,
+    "noLifecycleInstallScripts": true,
+    "noProductionSecrets": true
+  },
+  "githubActions": {
+    "externalActionsRequireFullLengthSha": true,
+    "broadPermissionsForbidden": true,
+    "continueOnErrorForbiddenForRequiredGates": true,
+    "publishDeployReleaseForbiddenInFoundationWorkflows": true
+  },
+  "changesets": {
+    "cli": "@changesets/cli@2.31.0",
+    "baseBranch": "main",
+    "privatePackagesVersion": true,
+    "privatePackagesTag": false,
+    "publishCommand": "not configured"
+  },
+  "uiUxProMax": {
+    "status": "separately governed advisory-only vendored subset",
+    "licenseReview": "external commercial/license review pending before broader redistribution or reliance"
+  },
+  "knownLicenseMetadataOverrides": {
+    "spawndamnit": {
+      "license": "SEE LICENSE IN LICENSE",
+      "source": "npm view spawndamnit license repository --json",
+      "checkedAt": "2026-06-25",
+      "status": "REQUIRES-LEGAL-COMMERCIAL-REVIEW"
+    }
+  }
+}

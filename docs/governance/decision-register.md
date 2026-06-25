@@ -1,4 +1,4 @@
-﻿# Phase 0 Decision Register
+# Phase 0 Decision Register
 
 ## Decision status legend
 
@@ -742,3 +742,39 @@
 - Status: Accepted for P01-FND-002 implementation; production adoption remains subject to later architecture review.
 - Decision: Vendor UI UX Pro Max v2.6.5 as a governed advisory subset only.
 - Status: Accepted with license-review condition.
+
+## P01-FND-003 decisions - 2026-06-25
+
+| Decision ID | Decision | Status | Owner | Evidence |
+|---|---|---|---|---|
+| DEC-P01-FND-003-001 | Use @changesets/cli 2.31.0 as the exact local Changesets dependency. | APPROVED-FOR-FOUNDATION | Engineering/architecture owner | npm registry metadata checked 2026-06-25; package.json |
+| DEC-P01-FND-003-002 | Keep release readiness read-only with no publish, tag, deploy, or production release command. | APPROVED-FOR-FOUNDATION | Engineering/release owner | .github/workflows/release-readiness.yml; tools/checks/release-readiness.mjs |
+| DEC-P01-FND-003-003 | Use @deftstrokes86 as CODEOWNERS default because the personal GitHub remote owner is evidenced locally. | APPROVED-FOR-FOUNDATION | Repository owner | git remote origin URL |
+| DEC-P01-FND-003-004 | Do not add Dependency Review as a required workflow until GitHub support is verified. | PENDING-ADMIN-VERIFICATION | Repository administrator/security owner | gh unavailable locally; .github/dependency-review-config.yml prepared |
+| DEC-P01-FND-003-005 | Treat UI UX Pro Max as separately governed advisory-only material pending external license/commercial review. | REQUIRES-EXTERNAL-REVIEW | Legal/commercial owner | THIRD_PARTY_NOTICES.md; tools/vendor/ui-ux-pro-max/UPSTREAM.json |
+
+## P01-FND-003 expanded governance decisions - 2026-06-25
+
+| Decision ID | Decision | Status | Owner | Evidence |
+|---|---|---|---|---|
+| DEC-P01-FND-003-006 | Contribution standards are repository-controlled through CONTRIBUTING.md. | APPROVED-FOR-FOUNDATION | Repository owner | CONTRIBUTING.md |
+| DEC-P01-FND-003-007 | Pull requests require cross-domain impact review. | APPROVED-FOR-FOUNDATION | Repository owner | .github/pull_request_template.md |
+| DEC-P01-FND-003-008 | Issues and PR artifacts must not include real sensitive data. | APPROVED-FOR-FOUNDATION | Privacy/security owner | Issue forms and PR template |
+| DEC-P01-FND-003-009 | Security reports use private channels; public vulnerability issues are not supported. | APPROVED-FOR-FOUNDATION | Security owner | SECURITY.md |
+| DEC-P01-FND-003-010 | CODEOWNERS requires verified GitHub identities. | APPROVED-FOR-FOUNDATION | Repository administrator | .github/CODEOWNERS; git remote evidence |
+| DEC-P01-FND-003-011 | Repository settings are not inferred from files. | APPROVED-FOR-FOUNDATION | Repository administrator | github-repository-controls.md |
+| DEC-P01-FND-003-012 | External dependencies use exact versions. | APPROVED-FOR-FOUNDATION | Engineering/security owner | package-policy.mjs; dependency-policy.json |
+| DEC-P01-FND-003-013 | Unpinned Git dependencies are prohibited. | APPROVED-FOR-FOUNDATION | Engineering/security owner | package-policy.mjs |
+| DEC-P01-FND-003-014 | GitHub Actions require immutable SHA pinning. | APPROVED-FOR-FOUNDATION | Security/CI owner | github-actions-pinning.mjs |
+| DEC-P01-FND-003-015 | Dependabot does not auto-merge. | APPROVED-FOR-FOUNDATION | Repository administrator | .github/dependabot.yml |
+| DEC-P01-FND-003-016 | Dependency changes require human review. | APPROVED-FOR-FOUNDATION | Engineering/security owner | CONTRIBUTING.md; dependency-governance.md |
+| DEC-P01-FND-003-017 | Unknown or ambiguous licences require review. | APPROVED-FOR-FOUNDATION | Legal/commercial owner | dependency-policy.json; dependency-license-policy.mjs |
+| DEC-P01-FND-003-018 | Vendored code requires source, licence, commit, and integrity evidence. | APPROVED-FOR-FOUNDATION | Engineering/legal owner | tools/vendor/ui-ux-pro-max/UPSTREAM.json |
+| DEC-P01-FND-003-019 | UI UX Pro Max public redistribution is blocked pending licence review. | REQUIRES-EXTERNAL-REVIEW | Legal/commercial owner | THIRD_PARTY_NOTICES.md |
+| DEC-P01-FND-003-020 | Changesets governs private package versions and changelogs. | APPROVED-FOR-FOUNDATION | Release owner | .changeset/config.json |
+| DEC-P01-FND-003-021 | Private package tags are not automatic. | APPROVED-FOR-FOUNDATION | Release owner | .changeset/config.json |
+| DEC-P01-FND-003-022 | No package publishing is enabled. | APPROVED-FOR-FOUNDATION | Release owner | package.json; workflows |
+| DEC-P01-FND-003-023 | Release readiness is separate from release authorization. | APPROVED-FOR-FOUNDATION | Release owner | versioning-and-release.md |
+| DEC-P01-FND-003-024 | Releases require human approval. | APPROVED-FOR-FOUNDATION | Release owner | GOVERNANCE.md |
+| DEC-P01-FND-003-025 | Phase 1 and Phase 2 gates are separate. | APPROVED-FOR-FOUNDATION | Execution owner | phase-1-gate-review.md |
+| DEC-P01-FND-003-026 | Phase 2 and pilot readiness are separate. | APPROVED-FOR-FOUNDATION | Execution owner | phase-2-readiness-handoff.md |

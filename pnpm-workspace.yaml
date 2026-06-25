@@ -4,6 +4,7 @@
 
 minimumReleaseAge: 1440
 minimumReleaseAgeExclude:
+  - "@changesets/cli"
   - "@axe-core/playwright"
   - "@eslint/js"
   - "@playwright/cli"

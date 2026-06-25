@@ -1,4 +1,4 @@
-﻿# Phase 0 Document Register
+# Phase 0 Document Register
 
 ## Purpose
 
@@ -252,3 +252,23 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 - docs/engineering/ui-ux-pro-max-installation.md
 - docs/design/ui-ux-pro-max-phase-1-review.md
 - THIRD_PARTY_NOTICES.md
+
+## P01-FND-003 document register entries - 2026-06-25
+
+| Document | Purpose | Owner | Status |
+|---|---|---|---|
+| CONTRIBUTING.md | Contributor rules and checks | Repository owner | ACTIVE |
+| SECURITY.md | Security reporting and sensitive-data rules | Security owner | ACTIVE |
+| SUPPORT.md | Repository support boundary | Repository owner | ACTIVE |
+| GOVERNANCE.md | Domain authority and review routing | Product/execution owner | ACTIVE |
+| CHANGELOG.md | Foundation change history | Repository owner | ACTIVE |
+| docs/exec-plans/P01-repository-collaboration-release-dependency-governance.md | P01-FND-003 execution plan and outcome | Engineering/architecture owner | ACTIVE |
+| docs/engineering/repository-collaboration.md | Collaboration controls | Engineering/architecture owner | ACTIVE |
+| docs/engineering/github-repository-controls.md | GitHub controls and admin pending items | Repository administrator | ACTIVE |
+| docs/engineering/dependency-governance.md | Dependency policy | Engineering/security owner | ACTIVE |
+| docs/engineering/versioning-and-release.md | Changesets and read-only release readiness | Engineering/release owner | ACTIVE |
+| docs/engineering/supply-chain-inventory.md | Supply-chain inventory source basis | Engineering/security owner | ACTIVE |
+| docs/governance/phase-1-requirements-traceability.md | Phase 1 traceability | Execution owner | ACTIVE |
+| docs/governance/phase-1-gate-review.md | Phase 1 gate result | Execution owner | ACTIVE |
+| docs/governance/phase-1-completion-report.md | Phase 1 completion report | Execution owner | ACTIVE |
+| docs/governance/phase-2-readiness-handoff.md | Phase 2 conditional handoff | Execution owner | ACTIVE |

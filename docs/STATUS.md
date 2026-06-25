@@ -1,347 +1,51 @@
-﻿# NelyoHealth Phase 0 Status
+# NelyoHealth Status
 
-## Current phase
+## Current phase state
 
-- **Program:** NelyoHealth Platform Build
-- **Active phase:** Phase 0 (Product, clinical, regulatory, and delivery foundation)
-- **Current issue:** `P00-12` regulatory source and obligations register completed; orchestration acceptance pending.
-- **Date:** 2026-06-24
-- **Mode:** Planning / Documentation only
-- **Execution state:** `P00-12 COMPLETE, READY FOR ORCHESTRATION ACCEPTANCE`.
-- **Approved-lock decisions captured:** `13` (`REQ-LOCK-001` ... `REQ-LOCK-013`)
+- Program: NelyoHealth Platform Build.
+- Date: 2026-06-25.
+- Phase 0: PHASE-0-CONDITIONAL-PASS.
+- P01-FND-001: ACCEPTED.
+- P01-FND-002: ACCEPTED.
+- P01-FND-003: COMPLETED, pending orchestration acceptance.
+- Phase 1 gate: PHASE-1-CONDITIONAL-PASS.
+- Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS, only after external orchestration starts Phase 2.
+- Phase 2: NOT STARTED.
+- Pilot launch: PILOT-NO-GO.
+- Production release: NOT APPROVED.
+- Production data: NOT APPROVED.
+- Interactive browser: VERIFIED THROUGH PLAYWRIGHT CLI FALLBACK.
+- Playwright MCP: UPSTREAM BLOCKED, NONBLOCKING-TRACKED.
+- UI UX Pro Max licence: REVIEW-REQUIRED.
+- Next action: orchestration review of P01-FND-003.
 
-## Locked decisions currently captured
+## Foundation commands
 
-- `APPROVED`: explicit and approved for planning execution.
-- `PROPOSED`: planning defaults pending external approval.
-- `REQUIRES_APPROVAL`: explicit approvals still required before implementation.
-- `REQUIRES_LEGAL_REVIEW`: legal interpretation required before approval.
-- `REQUIRES_CLINICAL_REVIEW`: clinical review required before approval.
-- `SUPERSEDED`: replaced by a later decision.
+```bash
+pnpm repository:verify
+pnpm community:verify
+pnpm actions:verify
+pnpm deps:verify
+pnpm release:check
+pnpm design:verify
+```
 
-## Documents generated and edited in this phase
+## Locked requirements retained
 
-- [docs/STATUS.md](./STATUS.md)
-- [docs/exec-plans/P00-product-clinical-regulatory-foundation.md](./exec-plans/P00-product-clinical-regulatory-foundation.md)
-- [docs/governance/document-register.md](./governance/document-register.md)
-- [docs/governance/decision-register.md](./governance/decision-register.md)
-- [docs/governance/open-questions.md](./governance/open-questions.md)
-- [docs/governance/assumptions-register.md](./governance/assumptions-register.md)
-- [docs/governance/change-log.md](./governance/change-log.md)
-- [docs/governance/traceability-conventions.md](./governance/traceability-conventions.md)
-- [docs/product/funding-and-coverage-model.md](./product/funding-and-coverage-model.md)
-- [docs/product/family-plan-rules.md](./product/family-plan-rules.md)
-- [docs/product/diaspora-plan-rules.md](./product/diaspora-plan-rules.md)
-- [docs/product/employer-benefit-rules.md](./product/employer-benefit-rules.md)
-- [docs/product/hmo-coverage-rules.md](./product/hmo-coverage-rules.md)
-- [docs/security/payer-visibility-matrix.md](./security/payer-visibility-matrix.md)
-- [docs/product/user-journeys.md](./product/user-journeys.md)
-- [docs/product/service-blueprints.md](./product/service-blueprints.md)
-- [docs/product/exception-journeys.md](./product/exception-journeys.md)
-- [docs/testing/journey-test-catalogue.md](./testing/journey-test-catalogue.md)
-- [docs/glossary.md](./glossary.md)
-- [docs/data/data-classification.md](./data/data-classification.md)
-- [docs/data/data-handling-matrix.md](./data/data-handling-matrix.md)
-- [docs/architecture/domain-boundaries.md](./architecture/domain-boundaries.md)
-- [docs/architecture/context-map.md](./architecture/context-map.md)
-- [docs/architecture/conceptual-domain-model.md](./architecture/conceptual-domain-model.md)
-- [docs/architecture/source-of-truth-matrix.md](./architecture/source-of-truth-matrix.md)
-- [docs/architecture/event-catalogue-draft.md](./architecture/event-catalogue-draft.md)
-- [docs/workflows/state-machine-index.md](./workflows/state-machine-index.md)
-- [docs/workflows/cross-workflow-invariants.md](./workflows/cross-workflow-invariants.md)
-- [docs/workflows/identity-verification.md](./workflows/identity-verification.md)
-- [docs/workflows/guardian-verification.md](./workflows/guardian-verification.md)
-- [docs/workflows/practitioner-credential-review.md](./workflows/practitioner-credential-review.md)
-- [docs/workflows/facility-credential-review.md](./workflows/facility-credential-review.md)
-- [docs/workflows/appointment.md](./workflows/appointment.md)
-- [docs/workflows/encounter.md](./workflows/encounter.md)
-- [docs/workflows/prescription.md](./workflows/prescription.md)
-- [docs/workflows/pharmacy-quote.md](./workflows/pharmacy-quote.md)
-- [docs/workflows/stock-reservation.md](./workflows/stock-reservation.md)
-- [docs/workflows/pharmacy-order.md](./workflows/pharmacy-order.md)
-- [docs/workflows/delivery.md](./workflows/delivery.md)
-- [docs/workflows/diagnostic-order.md](./workflows/diagnostic-order.md)
-- [docs/workflows/laboratory-appointment.md](./workflows/laboratory-appointment.md)
-- [docs/workflows/specimen.md](./workflows/specimen.md)
-- [docs/workflows/diagnostic-result.md](./workflows/diagnostic-result.md)
-- [docs/workflows/referral.md](./workflows/referral.md)
-- [docs/workflows/home-care-visit.md](./workflows/home-care-visit.md)
-- [docs/workflows/payment-intent.md](./workflows/payment-intent.md)
-- [docs/workflows/refund.md](./workflows/refund.md)
-- [docs/workflows/payout.md](./workflows/payout.md)
-- [docs/workflows/prior-authorization.md](./workflows/prior-authorization.md)
-- [docs/workflows/claim.md](./workflows/claim.md)
-- [docs/workflows/consent.md](./workflows/consent.md)
-- [docs/workflows/complaint.md](./workflows/complaint.md)
-- [docs/workflows/clinical-incident.md](./workflows/clinical-incident.md)
-- [docs/product/provider-discovery-privacy.md](./product/provider-discovery-privacy.md)
-- [docs/contracts/provider-disclosure-contract.md](./contracts/provider-disclosure-contract.md)
-- [docs/security/provider-disclosure-threat-model.md](./security/provider-disclosure-threat-model.md)
-- [docs/testing/provider-disclosure-test-matrix.md](./testing/provider-disclosure-test-matrix.md)
-- [docs/adr/ADR-0001-provider-detail-release-after-payment.md](./adr/ADR-0001-provider-detail-release-after-payment.md)
+- One person has one longitudinal patient identity.
+- Paying for care does not grant clinical-record access.
+- Before successful payment, patient-facing pharmacy/laboratory responses may expose only approved providerDisplayName and approved non-identifying commercial information.
+- Protected provider details must not reach the client before successful payment.
+- Post-payment disclosure is scoped to the selected authorized paid order only.
+- Failed, canceled, incomplete, refunded, stale, or cross-order access must not unlock provider details except as governed by approved policy.
+- Emergency escalation must not be blocked by payment, marketplace comparison, plan authorization, ordinary registration, provider-detail obscuration, or booking workflows.
+- Signed clinical records are amended or versioned, never silently overwritten.
+- Sponsors, employers, family-plan administrators, HMOs, and guardians receive only explicitly granted permissions.
+- Browser testing includes interactive local browser access and deterministic Playwright tests using synthetic data only.
+- Phase 1 foundation work does not implement production application features.
 
-- [docs/clinical/clinical-scope.md](./clinical/clinical-scope.md)
-- [docs/clinical/clinical-safety-model.md](./clinical/clinical-safety-model.md)
-- [docs/clinical/telemedicine-suitability.md](./clinical/telemedicine-suitability.md)
-- [docs/clinical/consultation-standard.md](./clinical/consultation-standard.md)
-- [docs/clinical/safety-netting-standard.md](./clinical/safety-netting-standard.md)
-- [docs/clinical/clinical-incident-policy.md](./clinical/clinical-incident-policy.md)
-- [docs/clinical/emergency-protocol.md](./clinical/emergency-protocol.md)
-- [docs/clinical/urgent-care-protocol.md](./clinical/urgent-care-protocol.md)
-- [docs/clinical/referral-standard.md](./clinical/referral-standard.md)
-- [docs/clinical/critical-result-protocol.md](./clinical/critical-result-protocol.md)
-- [docs/runbooks/emergency-escalation-draft.md](./runbooks/emergency-escalation-draft.md)
-- [docs/runbooks/critical-result-draft.md](./runbooks/critical-result-draft.md)
-- [docs/clinical/prescription-policy.md](./clinical/prescription-policy.md)
-- [docs/operations/pharmacy-fulfilment-policy.md](./operations/pharmacy-fulfilment-policy.md)
-- [docs/operations/medicine-delivery-policy.md](./operations/medicine-delivery-policy.md)
-- [docs/clinical/laboratory-ordering-policy.md](./clinical/laboratory-ordering-policy.md)
-- [docs/clinical/result-release-policy.md](./clinical/result-release-policy.md)
-- [docs/compliance/official-source-register.md](./compliance/official-source-register.md)
-- [docs/compliance/obligations-register.md](./compliance/obligations-register.md)
-- [docs/compliance/legal-question-log.md](./compliance/legal-question-log.md)
-- [docs/compliance/licence-and-registration-matrix.md](./compliance/licence-and-registration-matrix.md)
-- [docs/compliance/contract-register-draft.md](./compliance/contract-register-draft.md)
-- [docs/compliance/regulatory-change-monitoring.md](./compliance/regulatory-change-monitoring.md)
+## Open conditions
 
-## Source precedence
-
-For this repository, conflict handling is fixed at:
-
-1. `NelyoHealth_Phase_0_Complete_Breakdown.md`
-2. `NelyoHealth_Phase_0_Codex_Prompt_Pack.md`
-3. `NelyoHealth_Build_Implementation_Map_for_Codex.md`
-4. Existing repository implementation, when compatible
-
-Any conflict with lower-priority sources is blocked until explicitly resolved with owners and approvals.
-
-## Readiness checks
-
-- [x] Required planning documents are readable and present.
-- [x] P00-00 source-preflight completed.
-- [x] Locked decisions are reconciled.
-- [x] Pre-payment provider disclosure limits are explicit in the decision register.
-- [x] Order- and actor-scoped disclosure enforcement is explicit in the decision register.
-- [x] Deny-by-default payment states and non-success unlock behavior are explicit.
-- [x] Open-question schema normalized with owner, target prompt, target work-package, and approval path.
-- [x] Prompt-to-work-package crosswalk added to plan and traceability conventions.
-- [x] External approvals for legal, clinical, payment, and operational questions remain pending for pilot scope finalization.
-- [ ] Independent review and closure checklist for P00-10.
-
-## Previous P00-08 completion summary
-
-- **Files changed this prompt:** 13
-- **Locked decisions preserved:** unchanged and carried forward from P00-00.
-- **New decisions:** P00-08 provider-disclosure decisions added (`REQ-PRV-001` to `REQ-PRV-028`).
-- **Open questions:** carried forward where unresolved and owned, with provider-disclosure uncertainties added (`OQ-00-137` through `OQ-00-160`) and linked to existing finance/support/privacy questions.
-- **Assumptions:** added P00-08 assumptions for conceptual contracts, on-demand retrieval, token implementation deferral, generic service-area visualization, and browser-artifact retention dependency.
-- **Document register updates:** five P00-08 provider-disclosure artifacts marked DONE and linked.
-- **Next action:** Orchestration review and acceptance for `P00-09` before starting `P00-10`.
-
-
-## P00-09 completion summary
-
-- **Files changed this prompt:** 27 documentation files.
-- **Clinical artifacts created:** 12 P00-09 artifacts with clinical status `DRAFT-PENDING-CLINICAL-APPROVAL` and effective date `NOT EFFECTIVE UNTIL APPROVED`.
-- **New decisions:** P00-09 clinical decisions added (`REQ-CLN-001` to `REQ-CLN-035`).
-- **Open questions:** clinical and operational questions added (`OQ-00-161` through `OQ-00-204`).
-- **Assumptions:** added P00-09 assumptions (`ASSUMPT-36` through `ASSUMPT-40`).
-- **Document register updates:** 12 P00-09 artifacts marked DONE and requiring approval.
-- **Workflow/event alignment:** narrow P00-09 alignment notes added to clinical workflows and minimum-necessary draft clinical events added where missing.
-- **Next action:** Orchestration review and acceptance for `P00-09` before starting `P00-10`.
-
-
-## P00-10 completion summary
-
-- **Files changed this prompt:** 25 documentation files.
-- **Policy artifacts created:** 5 P00-10 artifacts with status `DRAFT-PENDING-APPROVAL` and effective date `NOT EFFECTIVE UNTIL APPROVED`.
-- **Policy rule counts:** cross-cutting fulfilment requirements `FUL-REQ-001` through `FUL-REQ-021`; prescription rules `RX-POL-001` through `RX-POL-014`; pharmacy rules `PHA-POL-001` through `PHA-POL-020`; delivery rules `DLV-POL-001` through `DLV-POL-016`; laboratory-ordering rules `LAB-POL-001` through `LAB-POL-016`; result-release rules `RES-POL-001` through `RES-POL-016`.
-- **New decisions:** P00-10 fulfilment decisions added (`REQ-FUL-001` through `REQ-FUL-040`).
-- **Open questions:** fulfilment questions added (`OQ-00-205` through `OQ-00-264`).
-- **Assumptions:** added P00-10 assumptions (`ASSUMPT-41` through `ASSUMPT-48`).
-- **Document register updates:** 5 P00-10 artifacts marked DONE and requiring approval.
-- **Workflow/event alignment:** P00-10 guard sections added to fulfilment workflows and draft fulfilment/result events added where missing.
-- **Provider-disclosure safeguards:** preserved providerDisplayName-only pre-payment offers, backend projection controls, and exact-order post-payment disclosure.
-- **Reservation/payment safeguard:** recorded reservation-before-capture guard while leaving final payment, capture, and disclosure-unlock evidence for P00-13.
-- **Next action:** Orchestration review and acceptance for `P00-10` before starting `P00-11`.
-## Phase status
-
-- **P00-00:** PASS
-- **P00-01:** PASS
-- **P00-02:** PASS
-- **P00-03:** PASS
-- **P00-04:** PASS
-- **P00-05:** PASS
-- **P00-06:** PASS
-- **P00-07:** PASS
-- **P00-08:** PASS
-- **P00-09:** PASS
-- **P00-10:** PASS
-- **P00-11:** PASS
-- **P00-12:** PASS
-- **P00-13:** COMPLETED, pending orchestration acceptance
-- **Current blocker:** pending Nigerian legal/regulatory, finance/payments, accounting, tax, privacy/DPO, security, pharmacy, laboratory, operations, architecture, and external orchestration approvals tracked through P00-13 open questions.
-
-## P00-08 execution status phrase
-
-- **P00-08 PASS**
-## P00-09 execution status phrase
-
-- **P00-09 COMPLETED, pending orchestration acceptance**
-
-## P00-10 execution status phrase
-
-- **P00-10 COMPLETE, READY FOR ORCHESTRATION ACCEPTANCE**
-## P00-11 completion summary
-
-- **P00-11 COMPLETE, READY FOR ORCHESTRATION ACCEPTANCE**
-- **Privacy artifacts created:** data-flow map, processing activities draft, consent matrix, guardian and delegation policy, retention schedule draft, data-subject-rights workflows, cross-border data register, subprocessor register draft, break-glass policy, and notification data policy.
-- **Governance artifacts updated:** document register, decision register, open questions, assumptions register, change log, traceability conventions, status, execution plan, workflow alignment, and event catalogue.
-- **New decisions:** P00-11 added `REQ-DAT-001` through `REQ-DAT-040`; legal, privacy, clinical, security, transfer, and retention decisions remain draft or require approval unless they restate locked requirements.
-- **Open questions:** added `OQ-00-265` through `OQ-00-346` with owners, target phases, approval authorities, and resolution criteria.
-- **Assumptions:** added P00-11 assumptions `ASSUMPT-49` through `ASSUMPT-56`; all remain proposed implementation assumptions pending owner review.
-- **Provider-disclosure privacy:** P00-11 carries forward the rule that pre-payment clients receive only permitted non-identifying provider display/commercial information and that detailed provider information is released only through the selected authorized paid order.
-- **Phase boundary:** no production application code, database schema, API contract implementation, dependency installation, browser tooling installation, vendor selection, statutory period, breach deadline, transfer mechanism, lawful basis, or final age/guardianship rule was established.
-- **Current blocker:** privacy counsel, legal counsel, security lead, clinical lead, operations lead, finance/payments owner, DPO/privacy owner, and architecture owner approvals remain pending.
-- **Next action:** orchestration review of P00-11 only; do not execute P00-12 until accepted.
-
-## P00-12 completion summary
-
-- **P00-12 COMPLETE, READY FOR ORCHESTRATION ACCEPTANCE**
-- **Compliance artifacts created:** official source register, obligations register, legal question log, licence and registration matrix, contract register draft, and regulatory change monitoring.
-- **Source coverage:** 24 `REG-SRC-*` entries across NDPC, PCN, MDCN, MLSCN, NHIA, CBN, FMoH, NAFDAC, FCCPC, ARCON, NITDA/cybersecurity, official gazette/certified legal material sources, and state-dependent sources.
-- **Regulatory artifacts:** 46 obligations, 40 legal questions, 30 licence/registration rows, 33 contract categories, and 15 monitoring sources.
-- **New decisions:** `REQ-REG-001` through `REQ-REG-028`.
-- **Open questions:** `OQ-00-347` through `OQ-00-386`.
-- **Assumptions:** `ASSUMPT-57` through `ASSUMPT-63`.
-- **PCN display conflict:** recorded as unresolved and launch-gated; the locked providerDisplayName-only pre-payment transaction rule was not changed.
-- **Phase boundary:** no production application code, API implementation, database schema, dependency, configuration, browser tooling, vendor selection, final legal agreement, payment provider, pilot geography, final licence, or compliance claim was created.
-- **P00-12 acceptance note:** P00-13 was subsequently executed after external orchestration acceptance.
-
-
-## P00-13 completion summary
-
-- **P00-13 COMPLETE, READY FOR ORCHESTRATION ACCEPTANCE**
-- **Finance artifacts created:** funds flow, payment state model, ledger principles, refund and dispute policy, provider settlement policy, claims and remittance boundary, and ADR-0002 wallet-as-ledger-backed-balance.
-- **Completion state:** P00-00 through P00-14 are PASS; P00-14A is COMPLETED, pending orchestration acceptance; P00-15 is NOT STARTED.
-- **OrderFundingSecured:** proposed as the finance fact consumed by disclosure policy, but not approved for implementation until finance, legal/regulatory, accounting/tax, privacy, security, pharmacy, lab, product, and engineering review.
-- **Provider disclosure:** payment/funding facts do not directly expose provider details; ProviderDetailDisclosureDecision remains separately authoritative and exact-order scoped.
-- **Phase boundary:** no production application code, API implementation, database schema, migration, dependency, configuration, payment integration, payment provider, browser tooling, currency, FX provider, tax rate, percentage, payout interval, settlement interval, refund interval, or chargeback period was created or approved.
-- **Next action:** Orchestration review of P00-14A only; do not execute P00-15. P00-15 must not begin until P00-14A is accepted.
-
-## P00-14 completion summary
-
-- **Completion state:** P00-00 through P00-14 are PASS; P00-14A is COMPLETED, pending orchestration acceptance; P00-15 is NOT STARTED.
-- **Scope:** P00-14 produced non-functional requirements and browser-testing strategy documentation only. No production application features, dependency installs, browser binaries, Playwright configuration, `.codex/config.toml`, smoke route, fixtures, or automated test code were created.
-- **Browser validation:** Interactive Codex IDE browser inspection and deterministic Playwright Test remain separate mandatory Phase 1 implementation paths. Both use synthetic data only and trusted local/test/staging origins only.
-- **Provider disclosure:** Pre-payment provider-detail privacy remains a network-boundary and artifact-boundary requirement, not UI masking. Post-payment release remains exact-authorized-order scoped.
-- **Approvals:** P00-14 artifacts are DRAFT-PENDING-SECURITY-ARCHITECTURE-QA-ACCESSIBILITY-PRIVACY-AND-OPERATIONS-APPROVAL.
-- **Next action:** Orchestration review of P00-14A only; do not execute P00-15. P00-15 must not begin until P00-14A is accepted.
-
-## P00-14 revision completion summary
-
-- **Completion state:** P00-00 through P00-14 are PASS; P00-14A is COMPLETED, pending orchestration acceptance; P00-15 is NOT STARTED.
-- **Revision scope:** Experience quality, Motion for React requirements, UI UX Pro Max governance, page/section content alignment, design/content validation, and ADR-0004 were added to P00-14.
-- **P00-14A gate:** P00-14A is completed pending orchestration acceptance. P00-15 must not begin before P00-14A is accepted.
-- **Implementation exclusions:** No Motion dependency, UI UX Pro Max install, Playwright install, browser tooling, UI components, routes, design tokens, visual fixtures, final colors, final fonts, final motion values, production copy, or AGENTS.md workflow were introduced.
-- **Next action:** Orchestration review of P00-14A.
-
-## P00-14A completion summary
-
-- **Completion state:** P00-00 through P00-14 are PASS; P00-14A is COMPLETED, pending orchestration acceptance; P00-15 is NOT STARTED.
-- **Scope:** Experience design, visual system, motion system, and content architecture were specified in draft form for Phase 1 implementation.
-- **Implementation exclusions:** No application code, React components, CSS/Tailwind config, routes, pages, APIs, schemas, migrations, tests, package manifests, lockfiles, `.agents/skills`, `.codex/config.toml`, Playwright config, fonts, icons, assets, UI UX Pro Max scripts, or dependencies were created or installed.
-- **Next action:** Orchestration review of P00-14A.
-
-## P00-15 status update
-
-- P00-00 through P00-14: PASS
-- P00-14A: PASS
-- P00-15: COMPLETED, pending orchestration acceptance
-- P00-16: NOT STARTED
-- Next action: orchestration review of P00-15
-- Operational status: P00-15 artifacts are draft/proposed only, not approved SLAs, not contractual commitments, not clinical response-time commitments, not statutory deadline interpretations, and not staffing sufficiency statements.
-
-## P00-16 status update
-
-- P00-00 through P00-15: PASS
-- P00-14A: PASS
-- P00-16: COMPLETED, pending orchestration acceptance
-- P00-17: NOT STARTED
-- Phase 1: NOT STARTED
-- Next action: orchestration review of P00-16
-
-## P00-17 final Phase 0 gate status
-
-- P00-00 through P00-17: COMPLETED
-- P00-14A: COMPLETED
-- Phase 0 gate verdict: PHASE-0-CONDITIONAL-PASS
-- Phase 1 entry verdict: PHASE-1-GO-WITH-CONDITIONS
-- Pilot launch verdict: PILOT-NO-GO
-- Phase 1: NOT STARTED
-- Next action: external orchestration acceptance of P00-17
-- Note: This status does not claim external acceptance, pilot launch approval, legal approval, clinical approval, regulatory approval, financial approval, privacy/security approval, or implementation completion.
-
-
-## P01-FND-001 status update
-
-- **Phase 0:** PHASE-0-CONDITIONAL-PASS.
-- **Phase 1 entry:** PHASE-1-GO-WITH-CONDITIONS.
-- **P01-FND-001:** COMPLETED, pending orchestration acceptance.
-- **P01-FND-002:** NOT STARTED.
-- **Phase 2:** NOT STARTED.
-- **Pilot launch:** PILOT-NO-GO.
-- **Next action:** external orchestration review of P01-FND-001R; do not start P01-FND-002 until accepted.
-- **Deterministic foundation evidence:** dependency install, frozen-lockfile install, format check, lint, typecheck, unit tests, integration tests, Playwright Chromium browser smoke tests, accessibility smoke tests, build, verify, and basic secret-pattern scan completed locally with the expected host-runtime warning that the machine is running Node v25.8.1 while the repository pins Node 24.18.0.
-- **Interactive browser evidence:** Codex IDE terminal interactive browser operation is verified through the approved `@playwright/cli@0.1.14` fallback using the local synthetic `nelyohealth-smoke` session and `http://127.0.0.1:4173`.
-- **Playwright MCP blocker:** Codex in-app/browser MCP verification remains upstream blocked by `codex/sandbox-state-meta: missing field sandboxPolicy`, classified as `NONBLOCKING-TRACKED` for P01-FND-001R. No production origin was opened and no personal profile was used.
-
-## P01-FND-001R completion summary
-
-- **P01-FND-001R:** COMPLETED, pending orchestration acceptance.
-- **Scope:** official Playwright CLI fallback for interactive browser operation only; no P01-FND-002 work, no Phase 2 work, no production feature implementation, no application framework selection, no real data, no global package installation, no personal browser profile, no extension mode, no CDP attach, and no undocumented sandbox change.
-- **Tooling:** `@playwright/cli@0.1.14` added as an exact local dev dependency with scripts for help, browser install, open, close, and cleanup.
-- **Interactive evidence:** local headed smoke page open, accessibility snapshot, heading/navigation, button/live-region interaction, invalid and valid form states, dialog focus, same-origin request, no external requests, console checks, local/session storage checks, IndexedDB checks, service-worker checks, desktop/tablet/mobile snapshots, keyboard focus, reduced motion, screenshot capture, trace capture, browser close, smoke-server stop, and no remaining CLI browser session.
-- **MCP status:** Playwright MCP remains `UPSTREAM-BLOCKED-NONBLOCKING-TRACKED`; resolution requires a later successful project-scoped Playwright MCP smoke verification after a relevant Codex app, IDE, browser plugin, bundled CLI, or Playwright MCP update.
-- **Pilot:** `PILOT-NO-GO`.
-
-
-## 2026-06-25T03:29:17.292Z - P01-FND-002 design foundation
-- Added design tokens, content registry, UI foundation primitives, synthetic design preview, browser/a11y tests, and governed UI UX Pro Max advisory wrapper.
-- No production application feature, clinical workflow, payment flow, database, or product app implementation was added.
-- UI UX Pro Max remains advisory only; external license review remains tracked.
-
-## Validation evidence - 2026-06-25T04:48:42.1518253+01:00
-
-Passed locally under Node v25.8.1 with expected warning because the repository pins Node 24.18.0:
-
-- pnpm install
-- pnpm format:check
-- pnpm lint
-- pnpm typecheck
-- pnpm test
-- pnpm test:integration
-- pnpm build
-- pnpm secret:scan
-- pnpm test:browser
-- pnpm test:a11y
-- pnpm design:verify
-- pnpm uiux:check
-- pnpm uiux:review:foundation
-
-Interactive browser CLI fallback evidence:
-
-- .artifacts/browser/design-foundation-preview.png
-
-UI UX Pro Max advisory outputs:
-
-- .artifacts/ui-ux-pro-max/foundation-review-2026-06-25T03-37-42-994Z.md
-- .artifacts/ui-ux-pro-max/foundation-pass-b-2026-06-25T03-38-10-072Z.md
-"@ | Add-Content -LiteralPath docs/exec-plans/P01-design-motion-content-foundation.md
-@"
-
-## 2026-06-25T04:48:42.1518253+01:00 - P01-FND-002 validation complete
-
-- P01-FND-002 foundation implementation validated locally.
-- Browser testing completed with deterministic Playwright suites and Playwright CLI screenshot fallback.
-- Node warning remains environmental: repository pins Node 24.18.0 while local runtime is v25.8.1.
+- GitHub branch protection/rulesets, required checks, CODEOWNERS enforcement, Dependency Review, and private vulnerability reporting require repository administrator verification.
+- UI UX Pro Max external license/commercial review remains pending before broader redistribution or commercial reliance.
+- Phase 0 domain approvals remain required before implementation or pilot decisions in clinical, legal, privacy, payment, pharmacy, laboratory, HMO, employer, sponsor, guardian, or emergency domains.

@@ -1,0 +1,16 @@
+# CODEOWNERS for NelyoHealth foundation repository
+# Evidence: origin remote is https://github.com/deftstrokes86/NelyoHealth.git, a personal GitHub repository owned by deftstrokes86.
+# Enforcement still requires GitHub branch protection or ruleset configuration by a repository administrator.
+
+* @deftstrokes86
+/.github/ @deftstrokes86
+/docs/governance/ @deftstrokes86
+/docs/adr/ @deftstrokes86
+/docs/security/ @deftstrokes86
+/docs/privacy/ @deftstrokes86
+/docs/clinical/ @deftstrokes86
+/docs/finance/ @deftstrokes86
+/docs/design/ @deftstrokes86
+/tools/checks/ @deftstrokes86
+/tools/reports/ @deftstrokes86
+/packages/ @deftstrokes86

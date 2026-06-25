@@ -13,7 +13,7 @@ jobs:
   foundation:
     name: Repository foundation checks
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     env:
       CI: "true"
       PLAYWRIGHT_BROWSERS_PATH: .artifacts/playwright/browsers
@@ -63,5 +63,32 @@ jobs:
       - name: Build verification
         run: pnpm build
 
+      - name: Design verification
+        run: pnpm design:verify
+
       - name: Basic secret-pattern scan
         run: pnpm secret:scan
+
+      - name: Community health
+        run: pnpm community:verify
+
+      - name: GitHub Actions policy
+        run: pnpm actions:verify
+
+      - name: Dependency policy
+        run: pnpm deps:policy
+
+      - name: Dependency license policy
+        run: pnpm deps:licenses
+
+      - name: Dependency inventory
+        run: pnpm deps:inventory
+
+      - name: Changesets policy
+        run: node tools/checks/changeset-policy.mjs
+
+      - name: UI UX Pro Max integrity
+        run: pnpm uiux:check
+
+      - name: Release readiness
+        run: pnpm release:check

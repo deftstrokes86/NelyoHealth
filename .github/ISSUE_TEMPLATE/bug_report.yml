@@ -1,0 +1,65 @@
+name: Bug report
+description: Report a repository, documentation, tooling, or synthetic-test defect.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: "Do not include real patient, clinical, provider, payment, credential, organization, or production data. Use synthetic or redacted evidence only."
+  - type: input
+    id: scope
+    attributes:
+      label: Scope or bounded task
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Affected environment
+      description: Include OS, Node, pnpm, browser, viewport, and command context where relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps using synthetic data
+    validations:
+      required: true
+  - type: textarea
+    id: browser
+    attributes:
+      label: Browser and viewport evidence, if relevant
+    validations:
+      required: false
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: Impact areas
+      options:
+        - label: Privacy or data protection
+        - label: Security or tenant isolation
+        - label: Accessibility
+        - label: Provider disclosure
+        - label: Clinical safety
+        - label: Finance or payments
+        - label: Browser or viewport behavior
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Evidence confirmation
+      options:
+        - label: I have included synthetic or redacted evidence only.
+          required: true
+        - label: I have not included real patient, provider, clinical, payment, credential, organization, or production data.
+          required: true

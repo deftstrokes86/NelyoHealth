@@ -267,3 +267,14 @@ flowchart LR
 ## P01-FND-002 dependencies - 2026-06-25T03:29:17.292Z
 - React 19.2.7, React DOM 19.2.7, Motion 12.41.0, Vite 8.1.0, @vitejs/plugin-react 6.0.3, Zod 4.4.3, @testing-library/react 16.3.2, jsdom 29.1.1.
 - UI UX Pro Max v2.6.5 vendored advisory subset with integrity lock.
+
+## P01-FND-003 dependencies - 2026-06-25
+
+| Dependency ID | Dependency | Owner | Status | Required before |
+|---|---|---|---|---|
+| DEP-P01-FND-003-001 | GitHub branch protection or rulesets configured with required checks. | Repository administrator | PENDING-ADMIN-VERIFICATION | Pilot, production release |
+| DEP-P01-FND-003-002 | CODEOWNERS review enforcement enabled on protected branch. | Repository administrator | PENDING-ADMIN-VERIFICATION | Pilot, production release |
+| DEP-P01-FND-003-003 | Dependency Review support verified and workflow enabled if available. | Security owner/repository administrator | PENDING-ADMIN-VERIFICATION | Pilot, production release |
+| DEP-P01-FND-003-004 | Private vulnerability reporting support verified and enabled if available. | Security owner/repository administrator | PENDING-ADMIN-VERIFICATION | Pilot, production release |
+| DEP-P01-FND-003-005 | UI UX Pro Max license/commercial review completed. | Legal/commercial owner | PENDING-EXTERNAL-REVIEW | Broader redistribution or commercial reliance |
+| DEP-P01-FND-003-006 | `@changesets/cli` transitive `js-yaml@3.14.2` moderate advisory GHSA-h67p-54hq-rp68 reviewed against the high audit gate. | Engineering/security owner | TRACKED-NONBLOCKING-UNDER-HIGH-AUDIT-GATE | Next dependency review |
