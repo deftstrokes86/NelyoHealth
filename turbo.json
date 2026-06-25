@@ -3,12 +3,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$"],
-      "outputs": []
-    },
-    "dev": {
-      "cache": false,
-      "persistent": true
+      "outputs": ["lib/**", "dist/**", "generated/**"]
     },
     "lint": {
       "outputs": []
@@ -17,9 +12,61 @@
       "outputs": []
     },
     "test": {
-      "outputs": []
+      "outputs": ["coverage/**"]
     },
     "test:integration": {
+      "outputs": []
+    },
+    "test:browser": {
+      "outputs": ["test-results/**", "playwright-report/**"]
+    },
+    "test:a11y": {
+      "outputs": ["test-results/**", "playwright-report/**"]
+    },
+    "tokens:build": {
+      "outputs": ["packages/design-tokens/lib/**", "packages/design-tokens/generated/**"]
+    },
+    "tokens:check": {
+      "dependsOn": ["tokens:build"],
+      "outputs": []
+    },
+    "content:validate": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "ui:build": {
+      "dependsOn": ["tokens:build"],
+      "outputs": ["packages/ui-foundation/lib/**", "tools/design-foundation-preview/dist/**"]
+    },
+    "ui:test": {
+      "dependsOn": ["ui:build"],
+      "outputs": []
+    },
+    "ui:test:browser": {
+      "dependsOn": ["ui:build"],
+      "outputs": ["test-results/**", "playwright-report/**"]
+    },
+    "ui:test:a11y": {
+      "dependsOn": ["ui:build"],
+      "outputs": ["test-results/**", "playwright-report/**"]
+    },
+    "uiux:check": {
+      "outputs": []
+    },
+    "uiux:review:foundation": {
+      "dependsOn": ["uiux:check"],
+      "outputs": [".artifacts/ui-ux-pro-max/**"]
+    },
+    "design:verify": {
+      "dependsOn": [
+        "tokens:check",
+        "content:validate",
+        "ui:build",
+        "ui:test",
+        "uiux:check",
+        "ui:test:browser",
+        "ui:test:a11y"
+      ],
       "outputs": []
     }
   }

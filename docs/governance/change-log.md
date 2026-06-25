@@ -616,3 +616,9 @@ For all future phase updates:
 - **MCP status:** Playwright MCP remains upstream blocked with `codex/sandbox-state-meta: missing field sandboxPolicy`; blocker downgraded to `NONBLOCKING-TRACKED` for P01-FND-001 closure only.
 - **Phase boundary:** no P01-FND-002 work, Phase 2 work, production feature, application framework, product UI, real data, global package, personal browser profile, extension mode, CDP attach, unsafe sandbox flag, undocumented `sandboxPolicy`, `.agents/skills`, or `AGENTS.md` was introduced.
 - **Next action:** external orchestration review of P01-FND-001R. P01-FND-002 remains not started.
+
+
+## 2026-06-25T03:29:17.292Z - P01-FND-002 design foundation
+- Added design tokens, content registry, UI foundation primitives, synthetic design preview, browser/a11y tests, and governed UI UX Pro Max advisory wrapper.
+- No production application feature, clinical workflow, payment flow, database, or product app implementation was added.
+- UI UX Pro Max remains advisory only; external license review remains tracked.

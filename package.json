@@ -26,9 +26,20 @@
     "browser:cli:open": "playwright-cli -s=nelyohealth-smoke open http://127.0.0.1:4173",
     "browser:cli:close": "playwright-cli -s=nelyohealth-smoke close",
     "browser:cli:cleanup": "playwright-cli -s=nelyohealth-smoke close && playwright-cli -s=nelyohealth-smoke delete-data",
-    "build": "turbo run build",
+    "build": "pnpm tokens:build && pnpm --filter @nelyohealth/content-registry build && pnpm --filter @nelyohealth/ui-foundation build && pnpm --filter @nelyohealth/design-foundation-preview build",
     "secret:scan": "node tools/checks/basic-secret-scan.mjs",
-    "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:integration && pnpm test:browser && pnpm test:a11y && pnpm build && pnpm secret:scan"
+    "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:integration && pnpm test:browser && pnpm test:a11y && pnpm build && pnpm secret:scan",
+    "tokens:build": "pnpm --filter @nelyohealth/design-tokens build",
+    "tokens:check": "pnpm --filter @nelyohealth/design-tokens check",
+    "content:validate": "pnpm --filter @nelyohealth/content-registry validate",
+    "ui:build": "pnpm --filter @nelyohealth/ui-foundation build && pnpm --filter @nelyohealth/design-foundation-preview build",
+    "ui:test": "vitest run packages",
+    "ui:preview": "pnpm --filter @nelyohealth/design-foundation-preview dev",
+    "ui:test:browser": "playwright test tests/e2e/design-foundation-preview.spec.ts --project=chromium",
+    "ui:test:a11y": "playwright test tests/accessibility/design-foundation-preview.a11y.spec.ts --project=accessibility-chromium",
+    "uiux:check": "node tools/ui-ux-pro-max/check-integrity.mjs",
+    "uiux:review:foundation": "node tools/ui-ux-pro-max/run.mjs --label foundation-review --domain ux --stack react --query \"Warm Care Grid healthcare product foundation accessible motion content hierarchy privacy-preserving provider disclosure no dashboard imitation\"",
+    "design:verify": "pnpm tokens:build && pnpm tokens:check && pnpm content:validate && pnpm ui:build && pnpm ui:test && pnpm uiux:check && pnpm ui:test:browser && pnpm ui:test:a11y"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.12.1",
@@ -42,6 +53,16 @@
     "turbo": "2.10.0",
     "typescript": "6.0.3",
     "typescript-eslint": "8.62.0",
-    "vitest": "4.1.9"
+    "vitest": "4.1.9",
+    "@testing-library/react": "16.3.2",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.3",
+    "jsdom": "29.1.1",
+    "motion": "12.41.0",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "vite": "8.1.0",
+    "zod": "4.4.3"
   }
 }

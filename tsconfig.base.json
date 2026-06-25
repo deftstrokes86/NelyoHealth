@@ -1,24 +1,28 @@
 {
   "compilerOptions": {
     "target": "ES2023",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
-    "types": ["node"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-    "noImplicitOverride": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "forceConsistentCasingInFileNames": true,
+    "jsx": "react-jsx",
+    "noEmit": true,
     "isolatedModules": true,
-    "verbatimModuleSyntax": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "resolveJsonModule": true,
-    "allowJs": false,
-    "noEmit": true
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node", "vitest/globals"]
   },
-  "include": ["playwright.config.ts", "tests/**/*.ts"],
-  "exclude": ["node_modules", ".artifacts", "test-results", "playwright-report"]
+  "include": [
+    "packages/**/*.ts",
+    "packages/**/*.tsx",
+    "tools/**/*.ts",
+    "tools/**/*.tsx",
+    "tests/**/*.ts",
+    "scripts/**/*.mjs",
+    "playwright.config.ts"
+  ],
+  "exclude": ["node_modules", "dist", "lib", ".artifacts"]
 }

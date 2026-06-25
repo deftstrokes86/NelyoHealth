@@ -242,3 +242,13 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 | Engineering | [docs/engineering/browser-tooling.md](../engineering/browser-tooling.md) | P01-FND-001 | Engineering / QA / Security | CREATED | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | Browser tooling strategy and artifact controls; interactive IDE browser verification remains blocked in current session. |
 | Execution plan | [docs/exec-plans/P01-repository-and-browser-foundation.md](../exec-plans/P01-repository-and-browser-foundation.md) | P01-FND-001 | Engineering / Architecture | CREATED | PARTIAL-PENDING-BROWSER-INTEGRATION-VERIFICATION | Repository and browser foundation execution evidence. |
 | Repository | [README.md](../../README.md) | P01-FND-001 | Engineering / Architecture | CREATED | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | Root setup and command guide; no product application claim. |
+
+
+## P01-FND-002 documents - 2026-06-25T03:29:17.292Z
+- docs/exec-plans/P01-design-motion-content-foundation.md
+- docs/engineering/design-tokens.md
+- docs/engineering/content-registry.md
+- docs/engineering/motion-foundation.md
+- docs/engineering/ui-ux-pro-max-installation.md
+- docs/design/ui-ux-pro-max-phase-1-review.md
+- THIRD_PARTY_NOTICES.md

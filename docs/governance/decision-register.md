@@ -735,3 +735,10 @@
 | REQ-FND-014 | Keep Playwright MCP configured but not operationally approved until project-scoped MCP smoke verification succeeds. | NONBLOCKING-TRACKED | `.codex/config.toml` preserved; `BLK-P01-FND-001` remains open for MCP path. | Architecture / Security owner | Codex/browser bridge compatibility correction or Playwright MCP update. |
 | REQ-FND-015 | Restrict the CLI fallback to named synthetic local sessions and trusted local/test/staging origins only. | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | `browser:cli:*` scripts use `nelyohealth-smoke` and `http://127.0.0.1:4173`; validation used synthetic smoke page only. | Security / QA owner | Any origin, data, browser mode, or artifact-policy change. |
 | REQ-FND-016 | Browser CLI artifacts must remain ignored and must be inspected for secrets, production data, personal cookies, auth state, and real patient/provider/clinical/financial data before sharing. | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | `.gitignore`, docs/engineering/browser-cli-fallback.md, artifact scan. | Security / Privacy / QA owner | Artifact retention or evidence-sharing process change. |
+
+
+## P01-FND-002 foundation decisions - 2026-06-25T03:29:17.292Z
+- Decision: Use React 19.2.7, React DOM 19.2.7, Motion 12.41.0, Vite 8.1.0, @vitejs/plugin-react 6.0.3, Zod 4.4.3, @testing-library/react 16.3.2, and jsdom 29.1.1 for the foundation layer.
+- Status: Accepted for P01-FND-002 implementation; production adoption remains subject to later architecture review.
+- Decision: Vendor UI UX Pro Max v2.6.5 as a governed advisory subset only.
+- Status: Accepted with license-review condition.

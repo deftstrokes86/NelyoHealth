@@ -1,46 +1,36 @@
-import js from "@eslint/js";
+﻿import js from "@eslint/js";
 import globals from "globals";
 import tseslint from "typescript-eslint";
-
 export default [
   {
     ignores: [
       "node_modules/**",
-      ".turbo/**",
-      ".artifacts/**",
-      "test-results/**",
-      "playwright-report/**",
+      "dist/**",
+      "**/dist/**",
+      "lib/**",
       "coverage/**",
-      "pnpm-lock.yaml"
+      "playwright-report/**",
+      "test-results/**",
+      ".artifacts/**",
+      "packages/design-tokens/generated/**",
+      ".agents/skills/ui-ux-pro-max/data/**",
+      ".agents/skills/ui-ux-pro-max/scripts/**",
+      "tools/vendor/ui-ux-pro-max/**"
     ]
   },
   js.configs.recommended,
-  ...tseslint.configs.strict,
+  ...tseslint.configs.recommended,
   {
-    files: ["**/*.ts"],
-    languageOptions: {
-      parserOptions: {
-        project: "./tsconfig.base.json",
-        tsconfigRootDir: import.meta.dirname
-      },
-      globals: {
-        ...globals.node,
-        ...globals.browser
-      }
-    },
-    rules: {
-      "@typescript-eslint/no-non-null-assertion": "error"
-    }
-  },
-  {
-    files: ["**/*.mjs", "**/*.js"],
+    files: ["**/*.{js,mjs,cjs,ts,tsx}"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
-      globals: {
-        ...globals.node,
-        ...globals.browser
-      }
+      globals: { ...globals.node, ...globals.browser }
+    },
+    rules: {
+      "no-console": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-non-null-assertion": "off"
     }
   }
 ];

@@ -28,3 +28,10 @@ playwright-report/
 Thumbs.db
 .vscode/
 .idea/
+
+# P01-FND-002 design foundation artifacts
+.artifacts/ui-ux-pro-max/
+tools/design-foundation-preview/dist/
+packages/*/lib/
+playwright-report/
+test-results/

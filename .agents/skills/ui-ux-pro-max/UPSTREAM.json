@@ -1,0 +1,37 @@
+{
+  "upstreamRepository": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+  "observedLatestTag": "v2.6.5",
+  "expectedByPromptAtTaskStart": "v2.6.0",
+  "selectedTag": "v2.6.5",
+  "selectedCommit": "bdf1179bcf641cca49ee7a5f76df14c3015fd38c",
+  "sourcePaths": [
+    ".claude/skills/ui-ux-pro-max/SKILL.md",
+    "src/ui-ux-pro-max/scripts",
+    "src/ui-ux-pro-max/data"
+  ],
+  "includedFiles": [
+    ".agents/skills/ui-ux-pro-max/UPSTREAM_SKILL_REFERENCE.md",
+    "tools/vendor/ui-ux-pro-max/LICENSE",
+    ".agents/skills/ui-ux-pro-max/scripts/core.py",
+    ".agents/skills/ui-ux-pro-max/scripts/design_system.py",
+    ".agents/skills/ui-ux-pro-max/scripts/search.py",
+    ".agents/skills/ui-ux-pro-max/data/products.csv",
+    ".agents/skills/ui-ux-pro-max/data/styles.csv",
+    ".agents/skills/ui-ux-pro-max/data/colors.csv",
+    ".agents/skills/ui-ux-pro-max/data/typography.csv",
+    ".agents/skills/ui-ux-pro-max/data/ux-guidelines.csv",
+    ".agents/skills/ui-ux-pro-max/data/ui-reasoning.csv",
+    ".agents/skills/ui-ux-pro-max/data/react-performance.csv",
+    ".agents/skills/ui-ux-pro-max/data/app-interface.csv",
+    ".agents/skills/ui-ux-pro-max/data/landing.csv",
+    ".agents/skills/ui-ux-pro-max/data/charts.csv",
+    ".agents/skills/ui-ux-pro-max/data/stacks/react.csv"
+  ],
+  "excludedRationale": [
+    "Excluded global installers, plugin manifests, templates, and pointer files.",
+    "Excluded google-fonts.csv and icons.csv to avoid unapproved asset recommendations.",
+    "Excluded Next.js, shadcn, React Native, and non-React stack data outside the P01-FND-002 scope."
+  ],
+  "licenseFinding": "Root LICENSE and skill.json report MIT; cli/README.md references CC-BY-NC-4.0 and is not vendored. Treat upstream recommendations as advisory pending external license review.",
+  "vendoredAt": "2026-06-25T03:28:41.222Z"
+}

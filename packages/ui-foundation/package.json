@@ -1,0 +1,29 @@
+{
+  "name": "@nelyohealth/ui-foundation",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    },
+    "./styles.css": "./src/styles.css"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run src/**/*.test.tsx"
+  },
+  "dependencies": {
+    "@nelyohealth/design-tokens": "workspace:*",
+    "motion": "12.41.0",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  },
+  "peerDependencies": {
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  }
+}

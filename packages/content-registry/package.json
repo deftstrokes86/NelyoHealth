@@ -1,0 +1,22 @@
+{
+  "name": "@nelyohealth/content-registry",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "validate": "pnpm build && node scripts/validate.mjs",
+    "test": "vitest run src/**/*.test.ts"
+  },
+  "dependencies": {
+    "zod": "4.4.3"
+  }
+}

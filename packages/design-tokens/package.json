@@ -1,0 +1,26 @@
+{
+  "name": "@nelyohealth/design-tokens",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    },
+    "./tokens.css": "./generated/tokens.css",
+    "./tokens.json": "./generated/tokens.json"
+  },
+  "files": [
+    "lib",
+    "generated",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node scripts/build.mjs",
+    "check": "tsc -p tsconfig.json && node scripts/check.mjs",
+    "test": "vitest run src/**/*.test.ts"
+  }
+}

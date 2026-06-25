@@ -304,3 +304,44 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - **Interactive evidence:** local headed smoke page open, accessibility snapshot, heading/navigation, button/live-region interaction, invalid and valid form states, dialog focus, same-origin request, no external requests, console checks, local/session storage checks, IndexedDB checks, service-worker checks, desktop/tablet/mobile snapshots, keyboard focus, reduced motion, screenshot capture, trace capture, browser close, smoke-server stop, and no remaining CLI browser session.
 - **MCP status:** Playwright MCP remains `UPSTREAM-BLOCKED-NONBLOCKING-TRACKED`; resolution requires a later successful project-scoped Playwright MCP smoke verification after a relevant Codex app, IDE, browser plugin, bundled CLI, or Playwright MCP update.
 - **Pilot:** `PILOT-NO-GO`.
+
+
+## 2026-06-25T03:29:17.292Z - P01-FND-002 design foundation
+- Added design tokens, content registry, UI foundation primitives, synthetic design preview, browser/a11y tests, and governed UI UX Pro Max advisory wrapper.
+- No production application feature, clinical workflow, payment flow, database, or product app implementation was added.
+- UI UX Pro Max remains advisory only; external license review remains tracked.
+
+## Validation evidence - 2026-06-25T04:48:42.1518253+01:00
+
+Passed locally under Node v25.8.1 with expected warning because the repository pins Node 24.18.0:
+
+- pnpm install
+- pnpm format:check
+- pnpm lint
+- pnpm typecheck
+- pnpm test
+- pnpm test:integration
+- pnpm build
+- pnpm secret:scan
+- pnpm test:browser
+- pnpm test:a11y
+- pnpm design:verify
+- pnpm uiux:check
+- pnpm uiux:review:foundation
+
+Interactive browser CLI fallback evidence:
+
+- .artifacts/browser/design-foundation-preview.png
+
+UI UX Pro Max advisory outputs:
+
+- .artifacts/ui-ux-pro-max/foundation-review-2026-06-25T03-37-42-994Z.md
+- .artifacts/ui-ux-pro-max/foundation-pass-b-2026-06-25T03-38-10-072Z.md
+"@ | Add-Content -LiteralPath docs/exec-plans/P01-design-motion-content-foundation.md
+@"
+
+## 2026-06-25T04:48:42.1518253+01:00 - P01-FND-002 validation complete
+
+- P01-FND-002 foundation implementation validated locally.
+- Browser testing completed with deterministic Playwright suites and Playwright CLI screenshot fallback.
+- Node warning remains environmental: repository pins Node 24.18.0 while local runtime is v25.8.1.

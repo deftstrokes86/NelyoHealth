@@ -298,3 +298,8 @@ Every row in the register includes the fields requested by P00-16, including uni
 ## Risk Review and Acceptance
 
 Founder/product owner, clinical lead/medical director, Nigerian legal/regulatory counsel, DPO/privacy owner, security owner, finance/payments owner, operations lead, engineering/architecture owner, accessibility/design owner, and content owner acceptance authorities are domain-specific. A multi-domain risk requires all relevant approvals. No single technical administrator may accept clinical risk, privacy risk, regulatory risk, financial-custody risk, or patient-safety risk.
+
+
+## P01-FND-002 risks - 2026-06-25T03:29:17.292Z
+- Risk: UI UX Pro Max upstream contains advisory recommendations outside NelyoHealth scope or dependency constraints. Owner: Architecture. Mitigation: governed runner, integrity check, advisory-only skill wrapper, and documented accepted/rejected recommendations.
+- Risk: Third-party license ambiguity in excluded upstream CLI README. Owner: Legal/commercial. Mitigation: excluded conflicting file, retained notice, and external review before broader redistribution.

@@ -1,0 +1,141 @@
+@import "@nelyohealth/design-tokens/tokens.css";
+:root {
+  color: var(--nh-color-text);
+  background: var(--nh-color-background);
+  font-family: var(--nh-typography-family-body);
+}
+.nh-button {
+  min-height: var(--nh-sizing-size-touch);
+  border: 1px solid transparent;
+  border-radius: var(--nh-radius-pill);
+  padding: 0.75rem 1.1rem;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform var(--nh-motion-duration-fast) var(--nh-motion-ease-standard),
+    box-shadow var(--nh-motion-duration-fast) var(--nh-motion-ease-standard);
+}
+.nh-button:focus-visible,
+.nh-field__input:focus-visible {
+  outline: 3px solid var(--nh-color-amber-300);
+  outline-offset: 3px;
+}
+.nh-button--primary {
+  background: var(--nh-color-action);
+  color: var(--nh-color-paper-000);
+}
+.nh-button--secondary {
+  background: var(--nh-color-teal-100);
+  color: var(--nh-color-teal-900);
+  border-color: var(--nh-color-grid-200);
+}
+.nh-button--danger {
+  background: var(--nh-color-danger);
+  color: var(--nh-color-paper-000);
+}
+.nh-field {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--nh-color-text);
+}
+.nh-field__label {
+  font-weight: 700;
+}
+.nh-field__input {
+  min-height: var(--nh-sizing-size-touch);
+  border: 1px solid var(--nh-color-border);
+  border-radius: var(--nh-radius-md);
+  padding: 0.75rem;
+  background: var(--nh-color-paper-000);
+  color: var(--nh-color-text);
+}
+.nh-field__hint {
+  color: var(--nh-color-ink-500);
+  font-size: var(--nh-typography-size-sm);
+}
+.nh-alert {
+  border-radius: var(--nh-radius-lg);
+  border: 1px solid var(--nh-color-border);
+  padding: 1rem;
+  display: grid;
+  gap: 0.5rem;
+}
+.nh-alert--info {
+  background: var(--nh-color-sky-100);
+  color: var(--nh-color-sky-700);
+}
+.nh-alert--success {
+  background: var(--nh-color-success-100);
+  color: var(--nh-color-success-700);
+}
+.nh-alert--warning {
+  background: var(--nh-color-amber-300);
+  color: var(--nh-color-ink-900);
+}
+.nh-alert--danger {
+  background: var(--nh-color-coral-200);
+  color: var(--nh-color-coral-700);
+}
+.nh-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: var(--nh-z-index-dialog);
+  display: grid;
+  place-items: center;
+  background: rgba(16, 35, 33, 0.42);
+  padding: 1rem;
+}
+.nh-dialog__panel {
+  width: min(100%, var(--nh-sizing-size-panel-md));
+  border-radius: var(--nh-radius-lg);
+  background: var(--nh-color-paper-000);
+  color: var(--nh-color-text);
+  padding: 1.5rem;
+  box-shadow: var(--nh-elevation-lg);
+}
+.nh-surface {
+  border-radius: var(--nh-radius-lg);
+  border: 1px solid var(--nh-color-border);
+  padding: 1rem;
+}
+.nh-surface--plain {
+  background: var(--nh-color-paper-000);
+}
+.nh-surface--raised {
+  background: var(--nh-color-surface);
+  box-shadow: var(--nh-elevation-sm);
+}
+.nh-surface--emphasis {
+  background: var(--nh-color-teal-100);
+  color: var(--nh-color-teal-900);
+}
+.nh-stack {
+  display: flex;
+}
+.nh-stack--column {
+  flex-direction: column;
+}
+.nh-stack--row {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.nh-stack--sm {
+  gap: var(--nh-spacing-space-2);
+}
+.nh-stack--md {
+  gap: var(--nh-spacing-space-4);
+}
+.nh-stack--lg {
+  gap: var(--nh-spacing-space-6);
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

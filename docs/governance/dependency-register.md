@@ -262,3 +262,8 @@ flowchart LR
 | Playwright MCP project integration | BLOCKED-PENDING-IDE-RUNTIME-CORRECTION | `.codex/config.toml` preserved; original MCP failure remains `codex/sandbox-state-meta: missing field sandboxPolicy`. | PARTIALLY-SATISFIED-UPSTREAM-BLOCKED-NONBLOCKING-TRACKED | Architecture / Security owner | Do not mark MCP operational until project-scoped MCP smoke verification succeeds after relevant Codex or Playwright MCP update. |
 | Browser artifact handling | UNVALIDATED | `.playwright-cli/` and `.artifacts/playwright-cli/` are ignored; CLI screenshot and trace artifacts were produced under ignored CLI paths. | SATISFIED-FOR-P01-FND-001R | Security / Privacy / QA owner | Future sharing still requires inspection, artifact scan, and synthetic-data confirmation. |
 | Deterministic Playwright browser tests | IMPLEMENTED-PENDING-CI-RUN | Existing deterministic Playwright and accessibility suites remain part of `pnpm verify`; P01-FND-001R does not replace them. | SATISFIED-FOR-LOCAL-FOUNDATION | QA owner | CI acceptance remains external to this local remediation. |
+
+
+## P01-FND-002 dependencies - 2026-06-25T03:29:17.292Z
+- React 19.2.7, React DOM 19.2.7, Motion 12.41.0, Vite 8.1.0, @vitejs/plugin-react 6.0.3, Zod 4.4.3, @testing-library/react 16.3.2, jsdom 29.1.1.
+- UI UX Pro Max v2.6.5 vendored advisory subset with integrity lock.

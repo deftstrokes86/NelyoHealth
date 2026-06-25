@@ -156,3 +156,19 @@ This foundation is not deployable product software. It exists to prove reproduci
 ## Next bounded task
 
 The next task may address design-foundation implementation only after orchestration acceptance. Motion, UI UX Pro Max, design-token implementation, content-registry implementation, app shells, and product features are not implemented in `P01-FND-001`.
+
+
+## P01-FND-002 design foundation
+Reusable foundation commands:
+- `pnpm tokens:build`
+- `pnpm tokens:check`
+- `pnpm content:validate`
+- `pnpm ui:build`
+- `pnpm ui:test`
+- `pnpm ui:preview`
+- `pnpm ui:test:browser`
+- `pnpm ui:test:a11y`
+- `pnpm uiux:check`
+- `pnpm uiux:review:foundation`
+- `pnpm design:verify`
+The design foundation preview is synthetic, non-production, and binds to trusted local origins only.
