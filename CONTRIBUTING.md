@@ -11,7 +11,7 @@ Current status:
 - P01-FND-002: ACCEPTED.
 - P01-FND-003: ACCEPTED.
 - P01-FND-004: ACCEPTED.
-- Phase 2: P02-ISS-002 completed pending orchestration acceptance.
+- Phase 2: P02-ISS-003 partial; live Docker runtime evidence is blocked locally.
 - Pilot launch: PILOT-NO-GO.
 
 ## Phase boundaries
@@ -94,6 +94,18 @@ pnpm db:seed
 ```
 
 They intentionally exit nonzero in Phase 1 and must not be counted as operational database capability.
+
+Local infrastructure commands exist for P02-ISS-003:
+
+```bash
+pnpm infra:verify
+pnpm infra:start
+pnpm infra:health
+pnpm infra:stop
+pnpm infra:reset
+```
+
+`infra:start`, `infra:health`, `infra:stop`, and `infra:reset` require Docker Compose and must use synthetic local data only.
 
 ## Documentation expectations
 

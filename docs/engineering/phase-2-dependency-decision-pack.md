@@ -127,3 +127,16 @@ No package-policy file is changed by P02-ISS-001 because no dependency is instal
 ## Recheck rule
 
 Every package and infrastructure version in this document must be rechecked immediately before the later issue that installs or implements it.
+
+## P02-ISS-003 local infrastructure recheck
+
+Checked on 2026-06-25 before creating the local harness:
+
+| Component | P02-ISS-003 local pin | Evidence | Status |
+|---|---|---|---|
+| PostgreSQL/PostGIS image | `postgis/postgis:18-3.6-alpine@sha256:24047f97be7cf496a6e41a40a236f489fc4ac9caf26794f0882461f5bb6cd758` | PostgreSQL 18.4 official release/versioning docs; PostGIS 3.6.4 release notes; docker-postgis source and Docker Hub metadata | Configured for local harness; runtime version proof blocked by missing Docker CLI |
+| Valkey image | `valkey/valkey:8.1.8-alpine@sha256:77643d152547b446fc15cbafaff22004545663fcd40c6b28038ad283837baa75` | Valkey download page and Docker Hub metadata | Configured for local harness; runtime proof blocked by missing Docker CLI |
+| Object-storage emulator image | `motoserver/moto:5.2.2@sha256:d8ae5edc2bf080e7e4c13f9bd4b29b53ac3b4427e92956318db3dbe23ec43eb7` | Moto server-mode docs, Moto Apache-2.0 repository metadata, and Docker Hub metadata | Configured for local synthetic S3-compatible emulation; P02-ISS-009 still owns signed URL evidence |
+| OpenTelemetry Collector image | `otel/opentelemetry-collector-contrib:0.155.0@sha256:4935caa35e9a4cb387e35732e8fb22b2b5759af8d12e7043357f03837f6e8df5` | OpenTelemetry Collector docs/releases and Docker Hub metadata | Configured for local OTLP health/debug collector; P02-ISS-011 still owns app instrumentation |
+
+No npm dependency was installed by P02-ISS-003.

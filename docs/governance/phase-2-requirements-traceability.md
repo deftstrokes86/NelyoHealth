@@ -2,7 +2,7 @@
 
 ## Status
 
-P02-PLAN-001 planning traceability is accepted. P02-ISS-001 is accepted. P02-ISS-002 is completed pending orchestration acceptance. P02-ISS-003 and later implementation issues remain NOT STARTED.
+P02-PLAN-001 planning traceability is accepted. P02-ISS-001 is accepted. P02-ISS-002 is accepted. P02-ISS-003 is partial with local harness files and static checks implemented; live Docker start/stop/health evidence is blocked on the current validation host. P02-ISS-004 and later implementation issues remain NOT STARTED.
 
 ## Requirement map
 
@@ -13,13 +13,13 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 is accepted. P02-ISS
 | P02-REQ-003 | Background worker | Implementation map Phase 2 | P02-ISS-007 | P02-ISS-008, P02-ISS-011 | WORKSPACE-BOUNDARY-CREATED-PENDING-P02-ISS-007 |
 | P02-REQ-004 | Next.js patient, provider, organization, and admin apps | Implementation map Phase 2 | P02-ISS-012 | P02-ISS-006, P02-ISS-014 | WORKSPACE-BOUNDARY-CREATED-PENDING-P02-ISS-012 |
 | P02-REQ-005 | Empty Expo or React Native mobile shell | Implementation map Phase 2 | P02-ISS-013 | P02-ISS-014 | WORKSPACE-BOUNDARY-CREATED-PENDING-P02-ISS-013 |
-| P02-REQ-006 | PostgreSQL and PostGIS | Implementation map Phase 2 | P02-ISS-004 | P02-ISS-003 | PLANNED |
-| P02-REQ-007 | Redis-compatible cache/queue foundation | Implementation map Phase 2 | P02-ISS-003 | P02-ISS-007 | PLANNED-APPROVAL-REQUIRED |
-| P02-REQ-008 | Object storage with signed URL support | Implementation map Phase 2 | P02-ISS-009 | P02-ISS-014 | PLANNED-APPROVAL-REQUIRED |
+| P02-REQ-006 | PostgreSQL and PostGIS | Implementation map Phase 2 | P02-ISS-004 | P02-ISS-003 | LOCAL-HARNESS-CONFIGURED-PENDING-DOCKER-RUNTIME-EVIDENCE |
+| P02-REQ-007 | Redis-compatible cache/queue foundation | Implementation map Phase 2 | P02-ISS-003 | P02-ISS-007 | LOCAL-VALKEY-HARNESS-CONFIGURED-PENDING-DOCKER-RUNTIME-EVIDENCE |
+| P02-REQ-008 | Object storage with signed URL support | Implementation map Phase 2 | P02-ISS-009 | P02-ISS-014 | LOCAL-MOTO-EMULATOR-CONFIGURED-PENDING-DOCKER-RUNTIME-EVIDENCE-AND-P02-ISS-009-SIGNED-URL-IMPLEMENTATION |
 | P02-REQ-009 | Email, SMS, push adapters | Implementation map Phase 2 | P02-ISS-010 | None | PLANNED |
 | P02-REQ-010 | Feature flags | Implementation map Phase 2 | P02-ISS-010 | P02-ISS-015 | PLANNED |
 | P02-REQ-011 | Secrets manager boundary | Implementation map Phase 2 | P02-ISS-015 | P02-ISS-016 | PLANNED |
-| P02-REQ-012 | Managed logging, metrics/tracing, error reporting boundaries | Implementation map Phase 2 | P02-ISS-011 | P02-ISS-015 | PLANNED |
+| P02-REQ-012 | Managed logging, metrics/tracing, error reporting boundaries | Implementation map Phase 2 | P02-ISS-011 | P02-ISS-015 | LOCAL-OTEL-COLLECTOR-HARNESS-CONFIGURED-PENDING-DOCKER-RUNTIME-EVIDENCE |
 | P02-REQ-013 | Modular-monolith, REST, OpenAPI, typed client | Phase 2 prompt and ADR-0005 | P02-ISS-005 | P02-ISS-006 | PLANNED |
 | P02-REQ-014 | Request/correlation IDs and standard errors | Phase 2 prompt | P02-ISS-005 | P02-ISS-011 | PLANNED |
 | P02-REQ-015 | Idempotency-key middleware | Phase 2 prompt | P02-ISS-005 | P02-ISS-014 | PLANNED |
@@ -71,6 +71,17 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 is accepted. P02-ISS
 | Package policy coverage | Updated to scan apps | tools/checks/package-policy.mjs |
 | Topology contract test | Added | tests/unit/workspace-topology.spec.ts |
 | Runtime implementation | Not started | No routes, controllers, pages, mobile runtime, jobs, database, containers, IaC, or external providers |
+
+## P02-ISS-003 evidence
+
+| Evidence item | Result | Artifact |
+|---|---|---|
+| Local Compose harness | Created, static verification passed | infra/local/compose.yaml |
+| Local infrastructure control script | Created with verify, doctor, ports, start, health, stop, and reset commands | tools/local-infra/local-infra.mjs |
+| Local infrastructure runbook | Created | docs/engineering/phase-2-local-infrastructure-harness.md |
+| Unit test coverage | Added for static config, image pins, local binds, port validation, and port conflict detection | tests/unit/local-infrastructure-harness.spec.ts |
+| Docker runtime evidence | Blocked | Docker CLI unavailable on the validation host |
+| Database implementation | Not started | P02-ISS-004 remains NOT STARTED |
 
 ## Locked requirement preservation
 

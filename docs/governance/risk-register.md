@@ -338,3 +338,11 @@ Founder/product owner, clinical lead/medical director, Nigerian legal/regulatory
 |---|---|---|---|---|---|
 | RSK-P02-ISS-002-001 | Boundary-only app/package directories could be mistaken for runtime application implementation. | Later governance or testing evidence could overstate Phase 2 readiness. | Engineering/architecture owner | Each new workspace includes boundary-only README, `AGENTS.md` where applicable, boundary metadata exports, and topology tests. | MITIGATED-BY-P02-ISS-002-CONTROLS |
 | RSK-P02-ISS-002-002 | App package manifests could bypass dependency policy if policy scans only `packages/*`. | Later app dependencies could miss exact-version, lifecycle-script, private-package, and publish-prevention checks. | Engineering/security owner | `tools/checks/package-policy.mjs` now scans `apps/*`, and `tests/unit/workspace-topology.spec.ts` verifies app manifests are private and dependency-free. | MITIGATED-BY-P02-ISS-002-CONTROLS |
+
+## P02-ISS-003 risks - 2026-06-25
+
+| Risk ID | Risk | Impact | Owner | Mitigation | Status |
+|---|---|---|---|---|---|
+| RSK-P02-ISS-003-001 | Docker is unavailable on a validation host. | Local infrastructure start/stop/health evidence cannot be produced even when harness files are present. | Platform/engineering owner | `infra:doctor` fails explicitly, `infra:verify` remains static, and P02-ISS-003 is marked partial until Docker Compose runtime evidence exists. | OPEN-RUNTIME-EVIDENCE-BLOCKED |
+| RSK-P02-ISS-003-002 | Moto Server may diverge from real object-storage behavior. | Later signed URL work could pass a local emulator path but fail against a production provider. | Platform/data owner | Treat Moto as P02-ISS-003 local-only emulator; P02-ISS-009 still owns signed URL adapter tests and provider review. | MITIGATION-PLANNED |
+| RSK-P02-ISS-003-003 | Local telemetry debug output could capture sensitive payloads if later apps send non-synthetic data. | Logs or traces could violate privacy requirements. | Engineering/security owner | Synthetic-only rule remains locked; P02-ISS-011 owns redaction and telemetry payload tests before app instrumentation. | MITIGATION-PLANNED |

@@ -328,15 +328,28 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 
 | Document | Purpose | Owner | Status |
 |---|---|---|---|
-| docs/exec-plans/P02-ISS-002-workspace-topology-and-package-boundaries.md | P02-ISS-002 execution plan, scope, validation, rollback, and completion evidence | Execution/platform owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| docs/engineering/phase-2-application-topology.md | Phase 2 app/package topology and P02-ISS-002 boundary API table | Engineering/architecture owner | ACTIVE-PENDING-P02-ISS-002-ACCEPTANCE |
-| apps/AGENTS.md | App-area instructions for Phase 2 boundaries | Engineering/architecture owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| apps/*/AGENTS.md | App-specific boundary instructions | Engineering/architecture owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| apps/*/README.md | App boundary public API notes | Engineering/architecture owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| packages/api-client/README.md | API client package boundary public API notes | Engineering/architecture owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| packages/config/README.md | Config package boundary public API notes | Platform/security owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| packages/domain/README.md | Domain package boundary public API notes | Engineering/architecture owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| packages/observability/README.md | Observability package boundary public API notes | Engineering/security owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| packages/platform-adapters/README.md | Platform adapter package boundary public API notes | Engineering/security owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| packages/testing-factories/README.md | Synthetic testing factory package boundary public API notes | QA/security owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| tests/unit/workspace-topology.spec.ts | Deterministic topology contract test | QA/engineering owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/exec-plans/P02-ISS-002-workspace-topology-and-package-boundaries.md | P02-ISS-002 execution plan, scope, validation, rollback, and completion evidence | Execution/platform owner | ACTIVE |
+| docs/engineering/phase-2-application-topology.md | Phase 2 app/package topology and P02-ISS-002 boundary API table | Engineering/architecture owner | ACTIVE |
+| apps/AGENTS.md | App-area instructions for Phase 2 boundaries | Engineering/architecture owner | ACTIVE |
+| apps/*/AGENTS.md | App-specific boundary instructions | Engineering/architecture owner | ACTIVE |
+| apps/*/README.md | App boundary public API notes | Engineering/architecture owner | ACTIVE |
+| packages/api-client/README.md | API client package boundary public API notes | Engineering/architecture owner | ACTIVE |
+| packages/config/README.md | Config package boundary public API notes | Platform/security owner | ACTIVE |
+| packages/domain/README.md | Domain package boundary public API notes | Engineering/architecture owner | ACTIVE |
+| packages/observability/README.md | Observability package boundary public API notes | Engineering/security owner | ACTIVE |
+| packages/platform-adapters/README.md | Platform adapter package boundary public API notes | Engineering/security owner | ACTIVE |
+| packages/testing-factories/README.md | Synthetic testing factory package boundary public API notes | QA/security owner | ACTIVE |
+| tests/unit/workspace-topology.spec.ts | Deterministic topology contract test | QA/engineering owner | ACTIVE |
+
+## P02-ISS-003 document register entries - 2026-06-25
+
+| Document | Purpose | Owner | Status |
+|---|---|---|---|
+| docs/exec-plans/P02-ISS-003-local-infrastructure-harness.md | P02-ISS-003 execution plan, scope, validation, rollback, blocker, and partial completion evidence | Execution/platform owner | ACTIVE-PARTIAL-RUNTIME-EVIDENCE-BLOCKED |
+| docs/engineering/phase-2-local-infrastructure-harness.md | Local infrastructure harness runbook, image pins, source evidence, commands, and Docker blocker | Platform/engineering owner | ACTIVE-PARTIAL-RUNTIME-EVIDENCE-BLOCKED |
+| infra/local/AGENTS.md | Local infrastructure directory rules | Platform/security owner | ACTIVE |
+| infra/local/README.md | Local infrastructure command and cleanup guide | Platform/engineering owner | ACTIVE |
+| infra/local/compose.yaml | Local-only container workflow for PostgreSQL/PostGIS, Valkey, Moto Server, and OpenTelemetry Collector | Platform/engineering owner | ACTIVE-PARTIAL-RUNTIME-EVIDENCE-BLOCKED |
+| infra/local/otel-collector.yaml | Local OpenTelemetry Collector config with health extension and debug exporter | Engineering/security owner | ACTIVE-PARTIAL-RUNTIME-EVIDENCE-BLOCKED |
+| tools/local-infra/local-infra.mjs | Local infrastructure control script for static verification, Docker checks, port checks, start, health, stop, and reset | Engineering/QA owner | ACTIVE-PARTIAL-RUNTIME-EVIDENCE-BLOCKED |
+| tests/unit/local-infrastructure-harness.spec.ts | Unit tests for local harness configuration and port-conflict behavior | QA/engineering owner | ACTIVE |

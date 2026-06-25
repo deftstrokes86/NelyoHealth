@@ -11,8 +11,8 @@
 - P01-FND-004: ACCEPTED.
 - P02-PLAN-001: ACCEPTED.
 - P02-ISS-001: ACCEPTED.
-- P02-ISS-002: COMPLETED, pending orchestration acceptance.
-- P02-ISS-003: NOT STARTED.
+- P02-ISS-002: ACCEPTED.
+- P02-ISS-003: PARTIAL, required live Docker start/stop/health evidence blocked by missing local Docker CLI.
 - AGENTS guidance: IMPLEMENTED.
 - Execution-plan convention: IMPLEMENTED.
 - Browser-validation skill: IMPLEMENTED.
@@ -24,7 +24,7 @@
 - Phase 1 gate: PHASE-1-CONDITIONAL-PASS.
 - Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS.
 - Phase 2 planning: P02-PLAN-001 ACCEPTED.
-- Phase 2 implementation: P02-ISS-002 COMPLETED, pending orchestration acceptance; P02-ISS-003 NOT STARTED.
+- Phase 2 implementation: P02-ISS-003 PARTIAL; local harness files and static checks implemented; live Docker runtime evidence blocked; P02-ISS-004 NOT STARTED.
 - Phase 3: NOT STARTED.
 - Pilot launch: PILOT-NO-GO.
 - Production release: NOT APPROVED.
@@ -32,7 +32,7 @@
 - Interactive browser: VERIFIED THROUGH PLAYWRIGHT CLI FALLBACK.
 - Playwright MCP: VERIFIED THROUGH PROJECT-SCOPED LOCAL SMOKE ON 2026-06-25 WITH CODEX-CLI 0.141.0.
 - UI UX Pro Max licence: REVIEW-REQUIRED.
-- Next action: orchestration review of P02-ISS-002 before P02-ISS-003 may begin.
+- Next action: provide a Docker Compose-capable validation host or orchestration review of the P02-ISS-003 partial result before P02-ISS-004 may begin.
 
 ## Foundation commands
 
@@ -44,6 +44,11 @@ pnpm deps:verify
 pnpm release:check
 pnpm design:verify
 pnpm test:visual
+pnpm infra:verify
+pnpm infra:doctor # requires local Docker Compose
+pnpm infra:start # requires local Docker Compose
+pnpm infra:health # requires local Docker Compose
+pnpm infra:stop # requires local Docker Compose
 pnpm db:migrate # expected nonzero Phase 2 gate
 pnpm db:seed # expected nonzero Phase 2 gate
 ```
@@ -71,6 +76,8 @@ pnpm db:seed # expected nonzero Phase 2 gate
 - docs/adr/ADR-P02-005-iac-cloud-provider-and-deployment-path.md
 - docs/adr/ADR-P02-006-observability-and-error-reporting-boundary.md
 - docs/exec-plans/P02-ISS-002-workspace-topology-and-package-boundaries.md
+- docs/exec-plans/P02-ISS-003-local-infrastructure-harness.md
+- docs/engineering/phase-2-local-infrastructure-harness.md
 - apps/
 - packages/api-client/
 - packages/config/
@@ -79,6 +86,9 @@ pnpm db:seed # expected nonzero Phase 2 gate
 - packages/platform-adapters/
 - packages/testing-factories/
 - tests/unit/workspace-topology.spec.ts
+- infra/local/
+- tools/local-infra/local-infra.mjs
+- tests/unit/local-infrastructure-harness.spec.ts
 
 ## Locked requirements retained
 
@@ -102,4 +112,5 @@ pnpm db:seed # expected nonzero Phase 2 gate
 - UI UX Pro Max external license/commercial review remains pending before broader redistribution or commercial reliance.
 - Phase 0 domain approvals remain required before implementation or pilot decisions in clinical, legal, privacy, payment, pharmacy, laboratory, HMO, employer, sponsor, guardian, or emergency domains.
 - Cloud provider selection remains human-decision gated before P02-ISS-016.
-- Local object-storage emulator posture remains legal/commercial-review gated before signed URL implementation evidence.
+- P02-ISS-003 live start/stop/health evidence remains blocked until Docker Compose is available on a validation host.
+- Moto Server is configured as a local synthetic object-storage emulator for P02-ISS-003; production object-storage provider selection and signed URL implementation remain P02-ISS-009 work.

@@ -1,6 +1,6 @@
 # NelyoHealth
 
-NelyoHealth is in Phase 2 foundation work. The repository contains a reproducible TypeScript monorepo baseline, synthetic local browser smoke surfaces, deterministic Playwright browser checks, design-token/content/UI foundation packages, governed UI UX Pro Max advisory tooling, repository governance checks, and boundary-only Phase 2 app/package workspaces.
+NelyoHealth is in Phase 2 foundation work. The repository contains a reproducible TypeScript monorepo baseline, synthetic local browser smoke surfaces, deterministic Playwright browser checks, design-token/content/UI foundation packages, governed UI UX Pro Max advisory tooling, repository governance checks, boundary-only Phase 2 app/package workspaces, and a partial local infrastructure harness.
 
 The Phase 2 app and package directories are scaffolds only. They implement no patient, provider, clinical, pharmacy, laboratory, payment, HMO, employer, family, guardian, sponsor, authentication, RBAC, ABAC, database, API, production infrastructure, production release, or pilot-launch feature.
 
@@ -10,10 +10,11 @@ The Phase 2 app and package directories are scaffolds only. They implement no pa
 - Phase 1 gate: PHASE-1-CONDITIONAL-PASS
 - Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS
 - P02-ISS-001: ACCEPTED
-- P02-ISS-002: completed pending orchestration acceptance
+- P02-ISS-002: ACCEPTED
+- P02-ISS-003: PARTIAL, live Docker runtime evidence blocked locally
 - Pilot launch: PILOT-NO-GO
 - Production release: NOT APPROVED
-- Current bounded task completed: P02-ISS-002, pending orchestration acceptance
+- Current bounded task: P02-ISS-003 partial, pending Docker-capable runtime evidence and orchestration review
 
 ## Prerequisites
 
@@ -85,6 +86,20 @@ pnpm changeset:status
 pnpm release:check
 pnpm release:inventory
 ```
+
+## Local infrastructure commands
+
+```bash
+pnpm infra:verify
+pnpm infra:doctor
+pnpm infra:ports
+pnpm infra:start
+pnpm infra:health
+pnpm infra:stop
+pnpm infra:reset
+```
+
+`infra:verify` is a static check. The remaining local infrastructure commands require Docker Compose and use only synthetic local defaults.
 
 ## Changesets
 

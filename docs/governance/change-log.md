@@ -671,3 +671,13 @@ For all future phase updates:
 - Updated workspace manifests and lockfile importer evidence without adding external dependencies.
 - Updated status, application topology docs, decision register, dependency register, risk register, document register, traceability, README, and contributing guidance.
 - Preserved P02-ISS-003 as NOT STARTED, Phase 3 as NOT STARTED, pilot as PILOT-NO-GO, and Git/GitHub writes as HUMAN-ONLY.
+
+## 2026-06-25 - P02-ISS-003
+
+- Treated P02-ISS-002 as ACCEPTED per the P02-ISS-003 execution prompt.
+- Added a local-only infrastructure harness under `infra/local/` for PostgreSQL/PostGIS, Valkey, Moto Server, and OpenTelemetry Collector Contrib.
+- Added `tools/local-infra/local-infra.mjs` and package scripts for static verification, Docker checks, port preflight, start, health, stop, and reset.
+- Added local infrastructure unit tests for exact image pins, local-only binds, synthetic controls, port override validation, and port-conflict detection.
+- Updated status, local infrastructure docs, decision register, dependency register, blocker register, risk register, document register, traceability, README, and contributing guidance.
+- Marked P02-ISS-003 PARTIAL because Docker CLI and Docker Compose are unavailable on the validation host, blocking live start/health/stop evidence.
+- Preserved P02-ISS-004 as NOT STARTED, Phase 3 as NOT STARTED, pilot as PILOT-NO-GO, and Git/GitHub writes as HUMAN-ONLY.

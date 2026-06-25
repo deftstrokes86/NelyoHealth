@@ -25,6 +25,14 @@
     "test:a11y": "playwright test tests/accessibility",
     "db:migrate": "node tools/checks/phase-gated-database-command.mjs migrate",
     "db:seed": "node tools/checks/phase-gated-database-command.mjs seed",
+    "infra:config": "node tools/local-infra/local-infra.mjs config",
+    "infra:verify": "node tools/local-infra/local-infra.mjs verify",
+    "infra:doctor": "node tools/local-infra/local-infra.mjs doctor",
+    "infra:ports": "node tools/local-infra/local-infra.mjs ports",
+    "infra:start": "node tools/local-infra/local-infra.mjs start",
+    "infra:health": "node tools/local-infra/local-infra.mjs health",
+    "infra:stop": "node tools/local-infra/local-infra.mjs stop",
+    "infra:reset": "node tools/local-infra/local-infra.mjs reset",
     "browser:cli:help": "playwright-cli --help",
     "browser:cli:install": "playwright-cli install-browser chromium",
     "browser:cli:open": "playwright-cli -s=nelyohealth-smoke open http://127.0.0.1:4173",
@@ -59,7 +67,7 @@
     "release:version": "changeset version",
     "release:check": "node tools/checks/release-readiness.mjs",
     "release:inventory": "node tools/reports/dependency-inventory.mjs",
-    "repository:verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:integration && pnpm test:browser && pnpm test:a11y && pnpm test:visual && pnpm build && pnpm secret:scan && pnpm community:verify && pnpm actions:verify && pnpm deps:verify && pnpm changeset:status && pnpm release:check"
+    "repository:verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:integration && pnpm infra:verify && pnpm test:browser && pnpm test:a11y && pnpm test:visual && pnpm build && pnpm secret:scan && pnpm community:verify && pnpm actions:verify && pnpm deps:verify && pnpm changeset:status && pnpm release:check"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.12.1",

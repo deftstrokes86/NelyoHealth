@@ -1,0 +1,97 @@
+name: nelyohealth-local
+
+services:
+  postgres-postgis:
+    image: postgis/postgis:18-3.6-alpine@sha256:24047f97be7cf496a6e41a40a236f489fc4ac9caf26794f0882461f5bb6cd758
+    environment:
+      POSTGRES_DB: nelyohealth_local
+      POSTGRES_USER: nelyohealth
+      POSTGRES_PASSWORD: ${NELYO_LOCAL_POSTGRES_PASSWORD:-localdev}
+    ports:
+      - "127.0.0.1:${NELYO_LOCAL_POSTGRES_PORT:-55432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "test -f /usr/local/share/postgresql/extension/postgis.control && pg_isready -U nelyohealth -d nelyohealth_local -h 127.0.0.1"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    networks:
+      - local
+
+  valkey:
+    image: valkey/valkey:8.1.8-alpine@sha256:77643d152547b446fc15cbafaff22004545663fcd40c6b28038ad283837baa75
+    command:
+      [
+        "valkey-server",
+        "--save",
+        "",
+        "--appendonly",
+        "no",
+        "--protected-mode",
+        "yes",
+        "--maxmemory-policy",
+        "noeviction"
+      ]
+    ports:
+      - "127.0.0.1:${NELYO_LOCAL_VALKEY_PORT:-56379}:6379"
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 5s
+    networks:
+      - local
+
+  object-storage:
+    image: motoserver/moto:5.2.2@sha256:d8ae5edc2bf080e7e4c13f9bd4b29b53ac3b4427e92956318db3dbe23ec43eb7
+    command: ["moto_server", "-H", "0.0.0.0", "-p", "5000"]
+    environment:
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+      AWS_DEFAULT_REGION: us-east-1
+    ports:
+      - "127.0.0.1:${NELYO_LOCAL_OBJECT_STORAGE_PORT:-55000}:5000"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'python -c "import urllib.request; urllib.request.urlopen(''http://127.0.0.1:5000/moto-api/'').read()"'
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 5s
+    networks:
+      - local
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.155.0@sha256:4935caa35e9a4cb387e35732e8fb22b2b5759af8d12e7043357f03837f6e8df5
+    command: ["--config=/etc/otelcol/config.yaml"]
+    ports:
+      - "127.0.0.1:${NELYO_LOCAL_OTEL_GRPC_PORT:-54317}:4317"
+      - "127.0.0.1:${NELYO_LOCAL_OTEL_HTTP_PORT:-54318}:4318"
+      - "127.0.0.1:${NELYO_LOCAL_OTEL_HEALTH_PORT:-51333}:13133"
+    volumes:
+      - ./otel-collector.yaml:/etc/otelcol/config.yaml:ro
+    healthcheck:
+      test: ["CMD", "/otelcol-contrib", "--version"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 5s
+    networks:
+      - local
+
+volumes:
+  postgres-data:
+
+networks:
+  local:
+    name: nelyohealth-local
