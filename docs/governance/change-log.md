@@ -605,3 +605,14 @@ For all future phase updates:
 - **Interactive browser result:** PARTIAL; Codex browser runtime call failed with `codex/sandbox-state-meta: missing field sandboxPolicy` before page automation.
 - **Phase boundary:** no Phase 2 work, no application feature, no domain feature, no database, no auth, no payment, no provider integration, no Motion, no UI UX Pro Max, no AGENTS.md, no .agent/PLANS.md, and no .agents/skills were created.
 - **Next action:** external orchestration review, then browser-integration verification only after IDE/runtime reload or compatibility correction.
+
+## Entry 021 - P01-FND-001R interactive browser CLI fallback and foundation closure
+
+- **Date:** 2026-06-25.
+- **Prompt:** P01-FND-001R.
+- **Scope:** Official Playwright CLI fallback for interactive Codex IDE terminal browser operation while preserving the existing Playwright MCP configuration and blocker.
+- **Files changed:** package and lockfile for `@playwright/cli@0.1.14`, `.gitignore`, README, browser tooling docs, browser CLI fallback doc, P01 execution plan, status, decision register, dependency register, unresolved blocker register, and this change log.
+- **Validation evidence:** exact CLI package metadata and version verified; CLI Chromium browser installed; named `nelyohealth-smoke` session opened `http://127.0.0.1:4173`; interactive smoke sequence completed for accessibility snapshot, heading/navigation, button/live-region, invalid/valid form, dialog focus, same-origin request, console, storage, IndexedDB, service workers, desktop/tablet/mobile snapshots, keyboard focus, reduced motion, screenshot, trace, browser close, server stop, and no remaining CLI browser session.
+- **MCP status:** Playwright MCP remains upstream blocked with `codex/sandbox-state-meta: missing field sandboxPolicy`; blocker downgraded to `NONBLOCKING-TRACKED` for P01-FND-001 closure only.
+- **Phase boundary:** no P01-FND-002 work, Phase 2 work, production feature, application framework, product UI, real data, global package, personal browser profile, extension mode, CDP attach, unsafe sandbox flag, undocumented `sandboxPolicy`, `.agents/skills`, or `AGENTS.md` was introduced.
+- **Next action:** external orchestration review of P01-FND-001R. P01-FND-002 remains not started.

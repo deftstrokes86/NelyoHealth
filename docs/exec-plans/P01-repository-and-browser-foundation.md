@@ -85,6 +85,7 @@ Validation command outcomes are recorded in the final P01-FND-001 response and t
 - Firefox and WebKit execution are deferred.
 - Automated axe smoke checks do not establish WCAG conformance.
 - Playwright MCP localhost-only enforcement is documented and operationally restricted; the committed MCP args use only the verified minimal project-scoped package invocation.
+- P01-FND-001R adds an approved official Playwright CLI fallback for interactive Codex IDE terminal browser operation while the MCP path remains upstream blocked.
 
 ## Rollback
 
@@ -104,6 +105,7 @@ Remove the created root toolchain files, `.codex/config.toml`, `.github/workflow
 - Playwright Chromium installation for deterministic tests.
 - Future browser-matrix expansion for Firefox/WebKit.
 - Future design-foundation task for Motion, UI UX Pro Max, design tokens, and content registry implementation.
+- Re-verification of project-scoped Playwright MCP after a relevant Codex app, IDE, browser plugin, bundled CLI, or Playwright MCP update.
 
 ## Acceptance checklist
 
@@ -118,7 +120,8 @@ Remove the created root toolchain files, `.codex/config.toml`, `.github/workflow
 - [x] Accessibility smoke tests completed.
 - [x] Build completed.
 - [x] Verify completed.
-- [x] Interactive Codex IDE browser check attempted; blocker recorded.
+- [x] Interactive Codex IDE browser MCP check attempted; upstream blocker recorded.
+- [x] Interactive Codex IDE terminal browser check completed through the approved Playwright CLI fallback.
 - [x] No forbidden product/domain/framework files created.
 - [x] Status and governance updated.
 
@@ -127,4 +130,18 @@ Remove the created root toolchain files, `.codex/config.toml`, `.github/workflow
 P01-FND-002 is not started. The next bounded issue may address design-foundation implementation only after orchestration review accepts this foundation task.
 ## P01-FND-001 validation result
 
-Deterministic foundation checks passed locally with the expected host-runtime warning that this machine runs Node v25.8.1 while the repository pins Node 24.18.0. Interactive Codex IDE browser verification is blocked in the current session by a Node-backed browser-control MCP error: `codex/sandbox-state-meta: missing field sandboxPolicy`. The task result is therefore PARTIAL.
+Deterministic foundation checks passed locally with the expected host-runtime warning that this machine runs Node v25.8.1 while the repository pins Node 24.18.0. The original interactive Codex IDE browser MCP verification was blocked in the current session by a Node-backed browser-control MCP error: `codex/sandbox-state-meta: missing field sandboxPolicy`. Before P01-FND-001R, the task result was therefore PARTIAL.
+
+## P01-FND-001R closure update
+
+P01-FND-001R preserves the existing `.codex/config.toml` Playwright MCP configuration and records the MCP failure as an upstream nonblocking tracked blocker. The remediation adds `@playwright/cli@0.1.14` as a local dev dependency and exposes root scripts for a named synthetic browser session:
+
+- `browser:cli:help`
+- `browser:cli:install`
+- `browser:cli:open`
+- `browser:cli:close`
+- `browser:cli:cleanup`
+
+Interactive browser operation was verified from the Codex IDE terminal against `http://127.0.0.1:4173` using the named `nelyohealth-smoke` session. Evidence covered page open, accessibility snapshot, heading/navigation, live-region button interaction, invalid and valid form states, dialog focus, same-origin request/response, no external requests, console checks, local/session storage checks, IndexedDB checks, service-worker checks, desktop/tablet/mobile snapshots, keyboard focus, reduced motion, screenshot capture, trace capture, browser close, server stop, and no remaining CLI browser session.
+
+The P01-FND-001 result is updated from PARTIAL to COMPLETED pending orchestration acceptance. Playwright MCP remains `UPSTREAM-BLOCKED-NONBLOCKING-TRACKED`. P01-FND-002 is not started. Phase 2 is not started. Pilot remains `PILOT-NO-GO`.

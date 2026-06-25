@@ -84,11 +84,38 @@ Install the required Chromium browser for the deterministic smoke tests:
 pnpm exec playwright install chromium
 ```
 
+## Interactive browser CLI fallback
+
+P01-FND-001R adds a temporary project-scoped interactive browser fallback using
+`@playwright/cli@0.1.14` while the Codex Playwright MCP path remains upstream blocked.
+
+Start the synthetic smoke server, then open the named local CLI session:
+
+```bash
+pnpm dev
+pnpm browser:cli:open
+```
+
+Useful CLI scripts:
+
+```bash
+pnpm browser:cli:help
+pnpm browser:cli:install
+pnpm browser:cli:close
+pnpm browser:cli:cleanup
+```
+
+The fallback is restricted to synthetic local browser validation. Do not use production origins,
+personal browser profiles, extension mode, CDP attach to a personal browser, real data, or
+undocumented sandbox changes.
+
 ## Browser artifacts
 
 Browser artifacts are controlled under ignored paths:
 
+- `.playwright-cli/`
 - `.artifacts/playwright/`
+- `.artifacts/playwright-cli/`
 - `.artifacts/playwright-mcp/`
 - `.artifacts/screenshots/`
 - `.artifacts/traces/`
@@ -105,6 +132,10 @@ Do not commit browser authentication state, traces, screenshots, videos, downloa
 Project-scoped Codex configuration is in `.codex/config.toml`. Codex only loads project-scoped configuration after the project is trusted. The configured Playwright MCP server uses an exact pinned package version and an isolated Chromium context.
 
 The project configuration does not use production URLs, persistent personal profiles, secrets, extension mode, or authentication state.
+
+Current status: the Playwright MCP path remains open as an upstream nonblocking tracked blocker
+until project-scoped MCP smoke verification succeeds after a relevant Codex/browser update. The
+Playwright CLI fallback has verified interactive local smoke operation for P01-FND-001 closure.
 
 ## Synthetic-data rule
 

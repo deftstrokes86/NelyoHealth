@@ -252,3 +252,13 @@ flowchart LR
 | Deterministic Playwright browser tests | UNVALIDATED | Chromium browser installed; desktop/tablet/mobile Playwright smoke tests passed. | IMPLEMENTED-PENDING-CI-RUN | QA owner | Firefox/WebKit deferred. |
 | Accessibility smoke testing | UNVALIDATED | @axe-core/playwright accessibility smoke passed across desktop/tablet/mobile Chromium. | IMPLEMENTED-PENDING-CI-RUN | Accessibility / QA owner | Does not establish WCAG conformance. |
 | Project-scoped Codex IDE browser integration | UNVALIDATED | .codex/config.toml created with @playwright/mcp@0.0.76, but current Node-backed browser-control MCP call failed before automation. | BLOCKED-PENDING-IDE-RUNTIME-CORRECTION | Architecture / Security owner | Requires Codex IDE/project reload or MCP runtime compatibility correction before acceptance. |
+
+## P01-FND-001R dependency status updates
+
+| Dependency | Prior status | P01-FND-001R evidence | Updated status | Owner | Notes |
+|---|---|---|---|---|---|
+| Official Playwright CLI package | UNVALIDATED | `npm view @playwright/cli@0.1.14` verified package metadata and `playwright-cli --version` returned `0.1.14`. | SATISFIED-FOR-P01-FND-001R | Architecture / QA owner | Exact local dev dependency only; no global install and no `@latest`. |
+| Interactive Codex IDE terminal browser operation | BLOCKED-BY-MCP-RUNTIME | `@playwright/cli@0.1.14` opened the headed local smoke page through named session `nelyohealth-smoke` and completed the interaction sequence. | SATISFIED-THROUGH-PLAYWRIGHT-CLI-FALLBACK | Architecture / QA / Security owner | Satisfies P01-FND-001 closure only; not a substitute for future MCP re-verification. |
+| Playwright MCP project integration | BLOCKED-PENDING-IDE-RUNTIME-CORRECTION | `.codex/config.toml` preserved; original MCP failure remains `codex/sandbox-state-meta: missing field sandboxPolicy`. | PARTIALLY-SATISFIED-UPSTREAM-BLOCKED-NONBLOCKING-TRACKED | Architecture / Security owner | Do not mark MCP operational until project-scoped MCP smoke verification succeeds after relevant Codex or Playwright MCP update. |
+| Browser artifact handling | UNVALIDATED | `.playwright-cli/` and `.artifacts/playwright-cli/` are ignored; CLI screenshot and trace artifacts were produced under ignored CLI paths. | SATISFIED-FOR-P01-FND-001R | Security / Privacy / QA owner | Future sharing still requires inspection, artifact scan, and synthetic-data confirmation. |
+| Deterministic Playwright browser tests | IMPLEMENTED-PENDING-CI-RUN | Existing deterministic Playwright and accessibility suites remain part of `pnpm verify`; P01-FND-001R does not replace them. | SATISFIED-FOR-LOCAL-FOUNDATION | QA owner | CI acceptance remains external to this local remediation. |

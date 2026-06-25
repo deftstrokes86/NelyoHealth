@@ -21,6 +21,11 @@
     "test:browser:headed": "playwright test tests/e2e --headed",
     "test:browser:ui": "playwright test tests/e2e --ui",
     "test:a11y": "playwright test tests/accessibility",
+    "browser:cli:help": "playwright-cli --help",
+    "browser:cli:install": "playwright-cli install-browser chromium",
+    "browser:cli:open": "playwright-cli -s=nelyohealth-smoke open http://127.0.0.1:4173",
+    "browser:cli:close": "playwright-cli -s=nelyohealth-smoke close",
+    "browser:cli:cleanup": "playwright-cli -s=nelyohealth-smoke close && playwright-cli -s=nelyohealth-smoke delete-data",
     "build": "turbo run build",
     "secret:scan": "node tools/checks/basic-secret-scan.mjs",
     "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:integration && pnpm test:browser && pnpm test:a11y && pnpm build && pnpm secret:scan"
@@ -28,6 +33,7 @@
   "devDependencies": {
     "@axe-core/playwright": "4.12.1",
     "@eslint/js": "10.0.1",
+    "@playwright/cli": "0.1.14",
     "@playwright/test": "1.61.1",
     "@types/node": "24.13.2",
     "eslint": "10.5.0",

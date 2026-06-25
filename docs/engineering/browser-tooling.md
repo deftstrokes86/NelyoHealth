@@ -90,7 +90,9 @@ The automated `@axe-core/playwright` scan is a smoke check only. It does not est
 
 Ignored artifact paths:
 
+- `.playwright-cli/`
 - `.artifacts/playwright/`
+- `.artifacts/playwright-cli/`
 - `.artifacts/playwright-mcp/`
 - `.artifacts/screenshots/`
 - `.artifacts/traces/`
@@ -101,3 +103,28 @@ Ignored artifact paths:
 - `.auth/`
 
 Artifacts must use synthetic data only and must not be committed unless a later reviewed process explicitly attaches sanitized evidence.
+
+## P01-FND-001R Playwright CLI fallback
+
+P01-FND-001R adds `@playwright/cli@0.1.14` as the approved temporary interactive browser fallback for Codex IDE terminal operation while the Playwright MCP path remains upstream blocked by `codex/sandbox-state-meta: missing field sandboxPolicy`.
+
+The fallback is documented in `docs/engineering/browser-cli-fallback.md` and exposed through these root scripts:
+
+- `pnpm browser:cli:help`
+- `pnpm browser:cli:install`
+- `pnpm browser:cli:open`
+- `pnpm browser:cli:close`
+- `pnpm browser:cli:cleanup`
+
+The fallback uses the named synthetic session `nelyohealth-smoke` and the existing local smoke URL `http://127.0.0.1:4173`. It does not use personal browser profiles, extension mode, CDP attach to a personal browser, production origins, real data, global packages, or undocumented sandbox changes.
+
+P01-FND-001R verified:
+
+- Exact CLI version `0.1.14`.
+- CLI Chromium browser installation.
+- Headed local smoke page open through the named session.
+- Accessibility snapshot, heading, navigation, live-region interaction, form validation, dialog focus, same-origin request, console, storage, IndexedDB, service-worker, viewport, keyboard, reduced-motion, screenshot, and trace checks.
+- Only `127.0.0.1:4173` network requests.
+- Browser session cleanup with `playwright-cli list` returning no browsers.
+
+This fallback satisfies the interactive browser layer for P01-FND-001 closure. It does not mark Playwright MCP operational. `BLK-P01-FND-001` remains open as `NONBLOCKING-TRACKED` pending a successful project-scoped Playwright MCP smoke verification after a relevant Codex or Playwright MCP update.
