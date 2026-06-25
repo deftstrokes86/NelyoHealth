@@ -216,3 +216,15 @@ For each significant requirement, include:
 | RSK-001 onward | Material risk entries. | P00-16 | Must include owner, score, residual score, early warning, mitigation, contingency, blocker, review trigger, and acceptance authority. |
 | DEP-001 onward | Internal, approval, regulatory, provider, vendor, tooling, contract, geography, staffing, training, test, and future dependencies. | P00-16 | Must include owner, evidence, status, milestone, fallback, related risk, and verification method. |
 | REQ-RSK-001 onward | Risk-governance and ADR-consolidation decisions. | P00-16 | Must preserve locked decisions and separate proposals from approvals. |
+
+## P00-17 final gate identifier families
+
+| Identifier family | Meaning | First use | Governance rule |
+|---|---|---|---|
+| TRC-001 onward | Detailed traceability entries. | P00-17 | Must map requirement, source, owner, risk, dependency, approval, test, implementation phase, and gap. |
+| AUD-001 onward | Consistency-audit findings. | P00-17 | Must include severity, domain, correction status, blocker effect, owner, and resolution criterion. |
+| APR-001 onward | Approval-register items. | P00-17 | APPROVED requires evidence of approver, capacity, scope, date, conditions, and location. |
+| BLK-001 onward | Unresolved blocker entries. | P00-17 | Must classify phase, capability, release, pilot, expansion, tracked, or future-scope effect. |
+| GATE-001 onward | Phase gate criteria. | P00-17 | Must state evidence, result, gaps, owner, required action, and whether Phase 0, Phase 1, or pilot is blocked. |
+| HND-001 onward | Phase 1 handoff requirements. | P00-17 | Must preserve source set, restrictions, dependencies, browser/test obligations, and checkpoint discipline. |
+| REQ-GATE-001 onward | Final gate-governance decisions. | P00-17 | Must not create new locked product requirements or external approvals. |

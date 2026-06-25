@@ -693,3 +693,23 @@
 | REQ-RSK-033 | Regulatory conflicts create launch gates | REQUIRES_APPROVAL | P00-16 / P00-19 | Governance owner with domain approvers | Direct locked-rule restatement if APPROVED; otherwise requires external approval before production reliance. |
 | REQ-RSK-034 | Risk links to metrics, queues, stop conditions, and tests | PROPOSED | P00-16 / P00-19 | Governance owner with domain approvers | Direct locked-rule restatement if APPROVED; otherwise requires external approval before production reliance. |
 | REQ-RSK-035 | P00-17 must review all critical and high residual risks | PROPOSED | P00-16 / P00-19 | Governance owner with domain approvers | Direct locked-rule restatement if APPROVED; otherwise requires external approval before production reliance. |
+
+## P00-17 gate-governance decisions
+
+| Decision ID | Decision | Status | Source | Owner | Approval impact |
+|---|---|---|---|---|---|
+| REQ-GATE-001 | Phase 0 uses separate documentation, Phase 1, and pilot gates | APPROVED | P00-17 / P00-20 | Phase 0 governance owner | Explicit P00-17 governance rule; external orchestration acceptance still required for gate adoption. |
+| REQ-GATE-002 | Missing pilot approvals do not automatically block repository foundation work | APPROVED | P00-17 / P00-20 | Phase 0 governance owner | Explicit P00-17 governance rule; external orchestration acceptance still required for gate adoption. |
+| REQ-GATE-003 | Phase 1 work is restricted by capability blockers | APPROVED | P00-17 / P00-20 | Phase 0 governance owner | Explicit P00-17 governance rule; external orchestration acceptance still required for gate adoption. |
+| REQ-GATE-004 | Pilot launch requires explicit external approvals | APPROVED | P00-17 / P00-20 | Phase 0 governance owner | Explicit P00-17 governance rule; external orchestration acceptance still required for gate adoption. |
+| REQ-GATE-005 | Every locked requirement requires detailed traceability | APPROVED | P00-17 / P00-20 | Phase 0 governance owner | Explicit P00-17 governance rule; external orchestration acceptance still required for gate adoption. |
+| REQ-GATE-006 | Every requirement family requires coverage evidence | APPROVED | P00-17 / P00-20 | Phase 0 governance owner | Explicit P00-17 governance rule; external orchestration acceptance still required for gate adoption. |
+| REQ-GATE-007 | No external approval may be inferred from Codex completion | APPROVED | P00-17 / P00-20 | Phase 0 governance owner | Explicit P00-17 governance rule; external orchestration acceptance still required for gate adoption. |
+| REQ-GATE-008 | Deterministic governance defects may be corrected during P00-17 | APPROVED | P00-17 / P00-20 | Phase 0 governance owner | Explicit P00-17 governance rule; external orchestration acceptance still required for gate adoption. |
+| REQ-GATE-009 | Substantive policy conflicts remain externally decided | APPROVED | P00-17 / P00-20 | Phase 0 governance owner | Explicit P00-17 governance rule; external orchestration acceptance still required for gate adoption. |
+| REQ-GATE-010 | Phase 1 may not use real patient or provider data | APPROVED | P00-17 / P00-20 | Phase 0 governance owner | Explicit P00-17 governance rule; external orchestration acceptance still required for gate adoption. |
+| REQ-GATE-011 | Phase 1 browser tooling uses synthetic data | APPROVED | P00-17 / P00-20 | Phase 0 governance owner | Explicit P00-17 governance rule; external orchestration acceptance still required for gate adoption. |
+| REQ-GATE-012 | Blocked capabilities may receive abstractions but not live operation | APPROVED | P00-17 / P00-20 | Phase 0 governance owner | Explicit P00-17 governance rule; external orchestration acceptance still required for gate adoption. |
+| REQ-GATE-013 | Phase 1 and pilot readiness remain separate | APPROVED | P00-17 / P00-20 | Phase 0 governance owner | Explicit P00-17 governance rule; external orchestration acceptance still required for gate adoption. |
+| REQ-GATE-014 | Gate verdicts require evidence and conditions | APPROVED | P00-17 / P00-20 | Phase 0 governance owner | Explicit P00-17 governance rule; external orchestration acceptance still required for gate adoption. |
+| REQ-GATE-015 | Phase 0 completion report is the canonical handoff summary | APPROVED | P00-17 / P00-20 | Phase 0 governance owner | Explicit P00-17 governance rule; external orchestration acceptance still required for gate adoption. |

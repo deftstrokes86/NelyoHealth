@@ -92,7 +92,7 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 | Testing | [docs/testing/browser-validation-strategy.md](../testing/browser-validation-strategy.md) | P00-14 | QA + engineering | NOT_STARTED | PROPOSED | To be authored in P00-14 |
 | Governance | [docs/governance/risk-register.md](../governance/risk-register.md) | P00-16 | Security + clinical + operations | NOT_STARTED | PROPOSED | To be authored in P00-16 |
 | Governance | [docs/governance/dependency-register.md](../governance/dependency-register.md) | P00-16 | Execution lead | NOT_STARTED | PROPOSED | To be authored in P00-16 |
-| Governance | [docs/governance/requirements-traceability-matrix.md](../governance/requirements-traceability-matrix.md) | P00-17 | Product + architecture + QA | NOT_STARTED | PROPOSED | To be authored in P00-17 |
+| Governance | [docs/governance/phase-0-requirements-traceability.md](../governance/phase-0-requirements-traceability.md) | P00-17 | Product + architecture + QA | COMPLETED | FINAL-PHASE-0-REVIEW-DRAFT | Created in P00-17 |
 
 ## Update rule
 
@@ -221,3 +221,14 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 | [docs/adr/ADR-0009-video-platform-decision-deferred.md](../adr/ADR-0009-video-platform-decision-deferred.md) | ADR-0009: Video platform decision deferred | Architecture owner | P00-16 | P00-19 | Phase 0 draft | Pending orchestration acceptance | Founder/product, clinical, legal/regulatory, privacy, security, finance, operations, engineering, accessibility/design/content approval as applicable |
 | [docs/adr/ADR-0010-no-production-phi-in-product-analytics-or-session-replay.md](../adr/ADR-0010-no-production-phi-in-product-analytics-or-session-replay.md) | ADR-0010: No production PHI in product analytics or session replay | Architecture owner | P00-16 | P00-19 | Phase 0 draft | Pending orchestration acceptance | Founder/product, clinical, legal/regulatory, privacy, security, finance, operations, engineering, accessibility/design/content approval as applicable |
 | [docs/adr/ADR-0011-order-funding-secured-and-disclosure-separation.md](../adr/ADR-0011-order-funding-secured-and-disclosure-separation.md) | ADR-0011: OrderFundingSecured and disclosure separation | Architecture owner | P00-16 | P00-19 | Phase 0 draft | Pending orchestration acceptance | Founder/product, clinical, legal/regulatory, privacy, security, finance, operations, engineering, accessibility/design/content approval as applicable |
+
+## P00-17 document registrations
+
+| Path | Purpose | Owner | Prompt | Complete Breakdown work package | Lifecycle status | Review state | Required approvals |
+|---|---|---|---|---|---|---|---|
+| [docs/governance/phase-0-consistency-audit.md](../governance/phase-0-consistency-audit.md) | Phase 0 consistency audit and deterministic corrections | Phase 0 governance owner | P00-17 | P00-20 | Phase 0 final review draft | Pending external orchestration acceptance | External orchestration and domain approvers |
+| [docs/governance/approval-register.md](../governance/approval-register.md) | External approval evidence register | Phase 0 governance owner | P00-17 | P00-20 | Phase 0 final review draft | Pending external orchestration acceptance | External orchestration and domain approvers |
+| [docs/governance/unresolved-blocker-register.md](../governance/unresolved-blocker-register.md) | Unresolved blocker classification and allowed/prohibited work | Phase 0 governance owner | P00-17 | P00-20 | Phase 0 final review draft | Pending external orchestration acceptance | External orchestration and domain approvers |
+| [docs/governance/phase-0-gate-review.md](../governance/phase-0-gate-review.md) | Final Phase 0, Phase 1, and pilot gate review | Phase 0 governance owner | P00-17 | P00-20 | Phase 0 final review draft | Pending external orchestration acceptance | External orchestration and domain approvers |
+| [docs/governance/phase-1-readiness-handoff.md](../governance/phase-1-readiness-handoff.md) | Phase 1 source set and bounded task handoff | Phase 0 governance owner | P00-17 | P00-20 | Phase 0 final review draft | Pending external orchestration acceptance | External orchestration and domain approvers |
+| [docs/governance/phase-0-completion-report.md](../governance/phase-0-completion-report.md) | Phase 0 completion report and recommendations | Phase 0 governance owner | P00-17 | P00-20 | Phase 0 final review draft | Pending external orchestration acceptance | External orchestration and domain approvers |
