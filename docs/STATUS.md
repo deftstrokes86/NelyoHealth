@@ -261,3 +261,12 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - P00-16: NOT STARTED
 - Next action: orchestration review of P00-15
 - Operational status: P00-15 artifacts are draft/proposed only, not approved SLAs, not contractual commitments, not clinical response-time commitments, not statutory deadline interpretations, and not staffing sufficiency statements.
+
+## P00-16 status update
+
+- P00-00 through P00-15: PASS
+- P00-14A: PASS
+- P00-16: COMPLETED, pending orchestration acceptance
+- P00-17: NOT STARTED
+- Phase 1: NOT STARTED
+- Next action: orchestration review of P00-16

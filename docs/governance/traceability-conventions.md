@@ -208,3 +208,11 @@ For each significant requirement, include:
 | STOP-001 onward | Pilot stop, pause, rollback, freeze, containment, and resume conditions. | P00-15 | Must include trigger, source, verification, authority, containment, communication, investigation, resume criteria, and audit. |
 | ANL-POL-001 onward | Analytics data policy rules. | P00-15 | Must include owner, minimization purpose, approval status, and validation. |
 | OPS-TST-001 onward | Future operations tests. | P00-15 | Must use synthetic data outside production and remain future implementation work until Phase 1 or later. |
+
+## P00-16 risk and dependency identifier families
+
+| Identifier family | Meaning | First use | Governance rule |
+|---|---|---|---|
+| RSK-001 onward | Material risk entries. | P00-16 | Must include owner, score, residual score, early warning, mitigation, contingency, blocker, review trigger, and acceptance authority. |
+| DEP-001 onward | Internal, approval, regulatory, provider, vendor, tooling, contract, geography, staffing, training, test, and future dependencies. | P00-16 | Must include owner, evidence, status, milestone, fallback, related risk, and verification method. |
+| REQ-RSK-001 onward | Risk-governance and ADR-consolidation decisions. | P00-16 | Must preserve locked decisions and separate proposals from approvals. |

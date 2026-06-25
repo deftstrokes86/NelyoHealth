@@ -200,3 +200,14 @@ P00-14A is completed pending orchestration acceptance. P00-15 must not begin unt
 - Created: docs/operations/metric-catalogue.md, docs/operations/sli-slo-draft.md, docs/operations/exception-queue-catalogue.md, docs/operations/pilot-stop-conditions.md, docs/data/analytics-data-policy.md
 - Governance updated: document register, decision register, open questions, assumptions, traceability conventions, change log, status, and operational event catalogue.
 - Approval boundary: numeric targets, SLO thresholds, queue age limits, staffing, on-call rotations, legal/regulatory interpretations, contractual SLAs, and production instrumentation remain outside P00-15 and require external approval.
+
+## P00-16 execution completion
+
+- Prompt: P00-16
+- Complete Breakdown work package covered: P00-19
+- Issue ID: P00-RSK-001
+- Status: COMPLETED, pending orchestration acceptance
+- P00-17 status: NOT STARTED
+- Phase 1 status: NOT STARTED
+- Created: risk register, dependency register, ADR index, and ADR-0005 through ADR-0011.
+- Approval boundary: risk acceptance, dependency satisfaction, assumption validation, ADR supersession, vendor selection, legal/regulatory conclusions, clinical conclusions, financial approvals, privacy/security approvals, and launch waivers remain outside Codex authority.

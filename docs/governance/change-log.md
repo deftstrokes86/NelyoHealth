@@ -538,3 +538,35 @@ For all future phase updates:
 | Accessibility, design, and content readiness metrics | Accessibility blockers, keyboard/focus/screen-reader/reflow/reduced-motion defects, browser release gates, design review, UI UX Pro Max review evidence, content approval, unsupported claims, CTA mismatch, visual regression, and protected visual artifact checks are included. |
 | Pilot decision model | CONTINUE, CONTINUE-WITH-CONDITIONS, FREEZE-EXPANSION, PAUSE-CAPABILITY, PAUSE-PILOT, STOP-PILOT, ROLLBACK-RELEASE, and EMERGENCY-CONTAINMENT are defined as proposed decision outcomes. |
 | Remaining approvals | Product, operations, clinical, privacy, security, finance, accessibility, design, content, engineering, and legal/regulatory approvals remain required before production reliance. |
+
+## Entry 018 - P00-16 risks, assumptions, dependencies, and ADR consolidation
+
+| Field | Value |
+|---|---|
+| Date | 2026-06-25 |
+| Prompt | P00-16 |
+| Complete Breakdown work package | P00-19 |
+| Issue ID | P00-RSK-001 |
+| Files created | docs/governance/risk-register.md; docs/governance/dependency-register.md; docs/adr/ADR-index.md; ADR-0005 through ADR-0011 |
+| Files updated | docs/governance/assumptions-register.md; docs/STATUS.md; docs/exec-plans/P00-product-clinical-regulatory-foundation.md; docs/governance/document-register.md; docs/governance/decision-register.md; docs/governance/open-questions.md; docs/governance/change-log.md; docs/governance/traceability-conventions.md |
+| Risk count | 147 |
+| Risk-category count | 15 |
+| Top-ten risks | RSK-091, RSK-100, RSK-109, RSK-112, RSK-114, RSK-115, RSK-116, RSK-031, RSK-032, RSK-033 |
+| Pilot blockers | 51 |
+| Phase 1 blockers | 41 |
+| Dependency count | 168 |
+| Dependency categories | 26 |
+| Assumptions reviewed | 42 named planning assumptions plus architecture-changing assumption summary |
+| Assumptions validated | 0 newly validated by Codex |
+| Assumptions challenged | Approval-required and unvalidated assumptions recorded |
+| Assumptions superseded | Locked requirements confirmed as decisions, not assumptions |
+| Architecture-changing assumptions | 19 |
+| ADR count | 11 indexed |
+| New ADRs | ADR-0005 through ADR-0011 |
+| Superseded ADRs | None |
+| Decisions added | 35 |
+| Open questions added | 57 |
+| Provider-disclosure risks | Covered, including PCN conflict, API/DOM/accessibility-tree/map/analytics/log/browser/support leakage, wrong order/patient/tenant, refund/chargeback recomputation, replacement, and external lookup. |
+| Regulatory risks | Covered, including legal posture, PCN, NEPP, pharmacist/pharmacy/lab, NDPC/DPIA/DPO, CBN/payment, HMO/employer, advertising, and geography. |
+| Tooling and supply-chain risks | Covered, including Playwright, MCP, browser artifacts, prompt injection, UI UX Pro Max, Motion, Node/package, CI, secrets, and environment parity. |
+| Remaining approvals | Product, clinical, legal/regulatory, privacy, security, finance, operations, accessibility, design, content, engineering, and founder approvals remain required. |
