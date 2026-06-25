@@ -26,6 +26,34 @@ packages/
 
 The package list is a planning target. P02-PLAN-001 does not create these paths.
 
+## P02-ISS-002 implementation state
+
+P02-ISS-002 creates the approved workspace paths as private, boundary-only
+packages. It does not create runtime apps, framework configuration, routes,
+database access, queue workers, object storage, observability wiring, auth,
+clinical, payment, provider matching, production infrastructure, or pilot
+behavior.
+
+| Workspace | Package name | Boundary API | Runtime owner |
+|---|---|---|---|
+| `apps/api` | `@nelyohealth/api` | `apiApplicationBoundary` | P02-ISS-005 |
+| `apps/worker` | `@nelyohealth/worker` | `workerApplicationBoundary` | P02-ISS-007 |
+| `apps/patient-web` | `@nelyohealth/patient-web` | `patientWebApplicationBoundary` | P02-ISS-012 |
+| `apps/provider-web` | `@nelyohealth/provider-web` | `providerWebApplicationBoundary` | P02-ISS-012 |
+| `apps/organization-web` | `@nelyohealth/organization-web` | `organizationWebApplicationBoundary` | P02-ISS-012 |
+| `apps/admin-web` | `@nelyohealth/admin-web` | `adminWebApplicationBoundary` | P02-ISS-012 |
+| `apps/mobile` | `@nelyohealth/mobile` | `mobileApplicationBoundary` | P02-ISS-013 |
+| `packages/api-client` | `@nelyohealth/api-client` | `apiClientPackageBoundary` | P02-ISS-006 |
+| `packages/config` | `@nelyohealth/config` | `configPackageBoundary` | P02-ISS-015 |
+| `packages/domain` | `@nelyohealth/domain` | `domainPackageBoundary` | P02-ISS-005 and later bounded-context issues |
+| `packages/observability` | `@nelyohealth/observability` | `observabilityPackageBoundary` | P02-ISS-011 |
+| `packages/platform-adapters` | `@nelyohealth/platform-adapters` | `platformAdaptersPackageBoundary` | P02-ISS-009 through P02-ISS-011 |
+| `packages/testing-factories` | `@nelyohealth/testing-factories` | `testingFactoriesPackageBoundary` | P02-ISS-014 |
+
+All P02-ISS-002 package manifests remain dependency-free except for existing
+workspace tooling inherited from the root install. Later issues must install
+framework or runtime dependencies only in their authorized scope.
+
 ## Application responsibilities
 
 | App | Framework target | Responsibility | Explicit exclusions |
@@ -95,4 +123,3 @@ The P02 prompt referenced `docs/engineering/design-token-foundation.md` and `doc
 - `docs/engineering/content-registry.md`
 
 Phase 2 planning uses the accepted repository paths and records this as documentation path normalization, not a source change.
-

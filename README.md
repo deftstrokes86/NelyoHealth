@@ -1,17 +1,19 @@
 # NelyoHealth
 
-NelyoHealth is in Phase 1 foundation work. The repository contains a reproducible TypeScript monorepo baseline, synthetic local browser smoke surfaces, deterministic Playwright browser checks, design-token/content/UI foundation packages, governed UI UX Pro Max advisory tooling, and repository governance checks.
+NelyoHealth is in Phase 2 foundation work. The repository contains a reproducible TypeScript monorepo baseline, synthetic local browser smoke surfaces, deterministic Playwright browser checks, design-token/content/UI foundation packages, governed UI UX Pro Max advisory tooling, repository governance checks, and boundary-only Phase 2 app/package workspaces.
 
-This repository does not yet contain a NelyoHealth product application. It implements no patient, provider, clinical, pharmacy, laboratory, payment, HMO, employer, family, guardian, sponsor, authentication, RBAC, ABAC, database, API, production infrastructure, production release, or pilot-launch feature.
+The Phase 2 app and package directories are scaffolds only. They implement no patient, provider, clinical, pharmacy, laboratory, payment, HMO, employer, family, guardian, sponsor, authentication, RBAC, ABAC, database, API, production infrastructure, production release, or pilot-launch feature.
 
 ## Status
 
 - Phase 0 gate: PHASE-0-CONDITIONAL-PASS
 - Phase 1 gate: PHASE-1-CONDITIONAL-PASS
-- Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS, only after external orchestration starts Phase 2
+- Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS
+- P02-ISS-001: ACCEPTED
+- P02-ISS-002: completed pending orchestration acceptance
 - Pilot launch: PILOT-NO-GO
 - Production release: NOT APPROVED
-- Current bounded task completed: P01-FND-004, pending orchestration acceptance
+- Current bounded task completed: P02-ISS-002, pending orchestration acceptance
 
 ## Prerequisites
 
@@ -132,4 +134,4 @@ All local tests and browser checks use synthetic data only. Do not enter real pa
 
 ## No production use
 
-This foundation is not deployable product software. It exists to prove repository governance, reproducible install, command execution, local browser interaction, deterministic browser testing, accessibility smoke checks, design foundations, dependency policy, release-readiness checks, and artifact hygiene.
+This foundation is not deployable product software. It exists to prove repository governance, reproducible install, command execution, workspace boundaries, local browser interaction, deterministic browser testing, accessibility smoke checks, design foundations, dependency policy, release-readiness checks, and artifact hygiene.

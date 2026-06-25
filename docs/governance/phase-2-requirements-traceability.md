@@ -2,17 +2,17 @@
 
 ## Status
 
-P02-PLAN-001 planning traceability is accepted. P02-ISS-001 is completed pending orchestration acceptance. P02-ISS-002 and later implementation issues remain NOT STARTED.
+P02-PLAN-001 planning traceability is accepted. P02-ISS-001 is accepted. P02-ISS-002 is completed pending orchestration acceptance. P02-ISS-003 and later implementation issues remain NOT STARTED.
 
 ## Requirement map
 
 | Requirement ID | Requirement | Source | Primary issue | Supporting issue(s) | Status |
 |---|---|---|---|---|---|
-| P02-REQ-001 | Deployable application skeleton with local, development, and staging environments | Implementation map Phase 2 | P02-ISS-017 | P02-ISS-002 through P02-ISS-018 | PLANNED |
-| P02-REQ-002 | NestJS API | Implementation map Phase 2 | P02-ISS-005 | P02-ISS-006, P02-ISS-011 | PLANNED |
-| P02-REQ-003 | Background worker | Implementation map Phase 2 | P02-ISS-007 | P02-ISS-008, P02-ISS-011 | PLANNED |
-| P02-REQ-004 | Next.js patient, provider, organization, and admin apps | Implementation map Phase 2 | P02-ISS-012 | P02-ISS-006, P02-ISS-014 | PLANNED |
-| P02-REQ-005 | Empty Expo or React Native mobile shell | Implementation map Phase 2 | P02-ISS-013 | P02-ISS-014 | PLANNED |
+| P02-REQ-001 | Deployable application skeleton with local, development, and staging environments | Implementation map Phase 2 | P02-ISS-017 | P02-ISS-002 through P02-ISS-018 | TOPOLOGY-SCAFFOLDED-PENDING-RUNTIME-IMPLEMENTATION |
+| P02-REQ-002 | NestJS API | Implementation map Phase 2 | P02-ISS-005 | P02-ISS-006, P02-ISS-011 | WORKSPACE-BOUNDARY-CREATED-PENDING-P02-ISS-005 |
+| P02-REQ-003 | Background worker | Implementation map Phase 2 | P02-ISS-007 | P02-ISS-008, P02-ISS-011 | WORKSPACE-BOUNDARY-CREATED-PENDING-P02-ISS-007 |
+| P02-REQ-004 | Next.js patient, provider, organization, and admin apps | Implementation map Phase 2 | P02-ISS-012 | P02-ISS-006, P02-ISS-014 | WORKSPACE-BOUNDARY-CREATED-PENDING-P02-ISS-012 |
+| P02-REQ-005 | Empty Expo or React Native mobile shell | Implementation map Phase 2 | P02-ISS-013 | P02-ISS-014 | WORKSPACE-BOUNDARY-CREATED-PENDING-P02-ISS-013 |
 | P02-REQ-006 | PostgreSQL and PostGIS | Implementation map Phase 2 | P02-ISS-004 | P02-ISS-003 | PLANNED |
 | P02-REQ-007 | Redis-compatible cache/queue foundation | Implementation map Phase 2 | P02-ISS-003 | P02-ISS-007 | PLANNED-APPROVAL-REQUIRED |
 | P02-REQ-008 | Object storage with signed URL support | Implementation map Phase 2 | P02-ISS-009 | P02-ISS-014 | PLANNED-APPROVAL-REQUIRED |
@@ -44,7 +44,7 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 is completed pending
 | P02-EG-006 | Document uploaded using signed URL | P02-ISS-009 | Synthetic document upload/download/expiry evidence | PLANNED |
 | P02-EG-007 | Browser tests start apps, seed, sign in, navigate, and retain traces | P02-ISS-014 | Playwright report and artifact retention evidence | PLANNED |
 | P02-EG-008 | Codex can inspect local routes and report console/network failures | P02-ISS-014 | MCP or CLI local inspection evidence | PLANNED |
-| P02-EG-009 | Vendor-specific code stays in adapters | P02-ISS-018 | Import boundary checks and review evidence; P02-ISS-001 ADR boundary decisions | PARTIAL-ADR-BOUNDARY-RECORDED |
+| P02-EG-009 | Vendor-specific code stays in adapters | P02-ISS-018 | Import boundary checks and review evidence; P02-ISS-001 ADR boundary decisions; P02-ISS-002 dependency-free boundary packages | PARTIAL-ADR-AND-WORKSPACE-BOUNDARY-RECORDED |
 
 ## P02-ISS-001 evidence
 
@@ -57,7 +57,20 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 is completed pending
 | IaC/cloud path decision | Recorded with cloud provider human-decision condition | docs/adr/ADR-P02-005-iac-cloud-provider-and-deployment-path.md |
 | Observability/error-reporting boundary | Recorded with vendor selection deferred | docs/adr/ADR-P02-006-observability-and-error-reporting-boundary.md |
 | Exact future dependency pins | Recorded without install | docs/engineering/phase-2-dependency-decision-pack.md |
-| ADR checklist | Completed pending orchestration acceptance | docs/governance/p02-iss-001-adr-review-checklist.md |
+| ADR checklist | Accepted by P02-ISS-002 execution prompt | docs/governance/p02-iss-001-adr-review-checklist.md |
+
+## P02-ISS-002 evidence
+
+| Evidence item | Result | Artifact |
+|---|---|---|
+| Approved app topology | Boundary-only workspaces created | apps/ |
+| Approved shared package topology | Boundary-only workspaces created | packages/api-client, packages/config, packages/domain, packages/observability, packages/platform-adapters, packages/testing-factories |
+| Nested app instructions | Created | apps/AGENTS.md and app-specific AGENTS.md files |
+| Workspace manifest coverage | Updated | pnpm-workspace.yaml and pnpm-lock.yaml |
+| Build/typecheck wiring | Updated | package.json, tsconfig.base.json, app/package tsconfig files |
+| Package policy coverage | Updated to scan apps | tools/checks/package-policy.mjs |
+| Topology contract test | Added | tests/unit/workspace-topology.spec.ts |
+| Runtime implementation | Not started | No routes, controllers, pages, mobile runtime, jobs, database, containers, IaC, or external providers |
 
 ## Locked requirement preservation
 

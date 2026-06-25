@@ -817,7 +817,7 @@
 
 | Decision ID | Decision | Status | Owner | Evidence |
 |---|---|---|---|---|
-| DEC-P02-ISS-001-001 | P02-ISS-001 is completed as a docs/ADR/dependency-decision issue only; no package installation or runtime implementation is authorized by this issue. | COMPLETED-PENDING-ORCHESTRATION-ACCEPTANCE | Execution/platform owner | docs/exec-plans/P02-ISS-001-phase-2-adr-and-dependency-decision-pack.md |
+| DEC-P02-ISS-001-001 | P02-ISS-001 is accepted as a docs/ADR/dependency-decision issue only; no package installation or runtime implementation is authorized by this issue. | ACCEPTED | Execution/platform owner | P02-ISS-002 execution prompt; docs/exec-plans/P02-ISS-001-phase-2-adr-and-dependency-decision-pack.md |
 | DEC-P02-ISS-001-002 | Use NestJS 11, Next.js 16, Expo SDK 56/React Native 0.85.3, Nest OpenAPI, and openapi-typescript/openapi-fetch as the Phase 2 application framework and contract stack. | ACCEPTED-FOR-PHASE-2-FOUNDATION | Engineering/architecture owner | ADR-P02-001; docs/engineering/phase-2-dependency-decision-pack.md |
 | DEC-P02-ISS-001-003 | Use PostgreSQL 18.4, PostGIS 3.6.4, Drizzle ORM, Drizzle Kit, and node-postgres for the Phase 2 database foundation. | ACCEPTED-FOR-PHASE-2-DATABASE-FOUNDATION | Platform/data owner | ADR-P02-002; docs/engineering/phase-2-dependency-decision-pack.md |
 | DEC-P02-ISS-001-004 | Use a Valkey-compatible Redis protocol local service with BullMQ and ioredis behind adapters for Phase 2 queue/cache work; Redis OSS 8 production reliance remains legal/commercial-review required. | ACCEPTED-FOR-PHASE-2-LOCAL; PRODUCTION-REVIEW-REQUIRED | Engineering/security owner | ADR-P02-003; Redis and Valkey official source review |
@@ -826,3 +826,13 @@
 | DEC-P02-ISS-001-007 | Use OpenTelemetry explicit instrumentation and Pino for Phase 2 observability boundaries; no hosted error-reporting vendor is selected. | ACCEPTED-FOR-PHASE-2-OBSERVABILITY-FOUNDATION | Engineering/security owner | ADR-P02-006; OpenTelemetry and npm metadata review |
 | DEC-P02-ISS-001-008 | Use OpenFeature core/server/NestJS packages for future provider-neutral feature flag adapter shells. | ACCEPTED-FOR-PHASE-2-ADAPTER-SHELLS | Engineering/security owner | docs/engineering/phase-2-dependency-decision-pack.md; OpenFeature official docs |
 | DEC-P02-ISS-001-009 | Use Testcontainers Node packages conditionally for isolated local dependency tests, subject to Docker runtime availability and emulator licensing for LocalStack. | ACCEPTED-CONDITIONAL-FOR-TESTING | QA/platform owner | docs/engineering/phase-2-dependency-decision-pack.md; Testcontainers official docs |
+
+## P02-ISS-002 decisions - 2026-06-25
+
+| Decision ID | Decision | Status | Owner | Evidence |
+|---|---|---|---|---|
+| DEC-P02-ISS-002-001 | P02-ISS-002 creates the approved `apps/*` and shared package workspace topology as boundary-only private packages. | COMPLETED-PENDING-ORCHESTRATION-ACCEPTANCE | Execution/platform owner | docs/exec-plans/P02-ISS-002-workspace-topology-and-package-boundaries.md; docs/engineering/phase-2-application-topology.md |
+| DEC-P02-ISS-002-002 | P02-ISS-002 does not install framework/runtime dependencies; NestJS, Next.js, Expo, database, queue, storage, observability, and adapter dependencies remain assigned to later issues. | ACCEPTED-FOR-P02-ISS-002-SCOPE | Engineering/architecture owner | package.json; pnpm-lock.yaml; docs/engineering/phase-2-dependency-decision-pack.md |
+| DEC-P02-ISS-002-003 | `apps/*` package manifests are now included in workspace and package-policy validation. | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | Engineering/security owner | pnpm-workspace.yaml; tools/checks/package-policy.mjs; tests/unit/workspace-topology.spec.ts |
+| DEC-P02-ISS-002-004 | New app/package boundary modules expose only topology metadata and must not be treated as runtime implementation evidence. | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | Engineering/architecture owner | apps/*/src/index.ts; packages/api-client/src/index.ts; packages/config/src/index.ts; packages/domain/src/index.ts; packages/observability/src/index.ts; packages/platform-adapters/src/index.ts; packages/testing-factories/src/index.ts |
+| DEC-P02-ISS-002-005 | P02-ISS-003 and later implementation issues remain not started after P02-ISS-002. | LOCKED-FOR-P02-ISS-002 | Execution/platform owner | docs/STATUS.md; docs/governance/phase-2-requirements-traceability.md |

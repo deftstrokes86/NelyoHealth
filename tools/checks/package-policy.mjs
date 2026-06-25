@@ -38,7 +38,7 @@ function readJson(filePath) {
 
 function packageFiles() {
   const candidates = ["package.json"];
-  for (const base of ["packages", "tools"]) {
+  for (const base of ["apps", "packages", "tools"]) {
     const dir = path.join(root, base);
     if (!fs.existsSync(dir)) continue;
     for (const child of fs.readdirSync(dir, { withFileTypes: true })) {

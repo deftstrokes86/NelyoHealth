@@ -10,13 +10,13 @@ Current status:
 - P01-FND-001: ACCEPTED.
 - P01-FND-002: ACCEPTED.
 - P01-FND-003: ACCEPTED.
-- P01-FND-004: completed pending orchestration acceptance.
-- Phase 2: NOT STARTED.
+- P01-FND-004: ACCEPTED.
+- Phase 2: P02-ISS-002 completed pending orchestration acceptance.
 - Pilot launch: PILOT-NO-GO.
 
 ## Phase boundaries
 
-Do not implement patient, provider, clinical, pharmacy, laboratory, HMO, employer, sponsor, guardian, payment, auth, RBAC, ABAC, database, API, video, marketplace, production-infrastructure, production-release, or pilot-launch behavior unless a later approved prompt explicitly authorizes it.
+Do not implement patient, provider, clinical, pharmacy, laboratory, HMO, employer, sponsor, guardian, payment, auth, RBAC, ABAC, database, API runtime behavior, video, marketplace, production-infrastructure, production-release, or pilot-launch behavior unless a later approved prompt explicitly authorizes it.
 
 ## Prerequisites and installation
 
@@ -121,4 +121,4 @@ Preserve one longitudinal patient identity, payer/clinical-access separation, pr
 
 ## Definition of done
 
-A change is done only when required files exist, validation evidence is recorded, external approvals are not fabricated, relevant registers are updated, no sensitive data is introduced, no release/publish/deploy path is added, Phase 2 remains not started unless explicitly authorized by a later prompt, and pilot remains PILOT-NO-GO.
+A change is done only when required files exist, validation evidence is recorded, external approvals are not fabricated, relevant registers are updated, no sensitive data is introduced, no release/publish/deploy path is added, later Phase 2 issues remain unstarted unless explicitly authorized by a later prompt, and pilot remains PILOT-NO-GO.

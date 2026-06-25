@@ -314,12 +314,29 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 
 | Document | Purpose | Owner | Status |
 |---|---|---|---|
-| docs/exec-plans/P02-ISS-001-phase-2-adr-and-dependency-decision-pack.md | P02-ISS-001 execution plan, scope, validation, rollback, and completion evidence | Execution/platform owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| docs/engineering/phase-2-dependency-decision-pack.md | Exact future package pins, package metadata evidence, official-source links, and dependency decision notes | Engineering/architecture owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| docs/governance/p02-iss-001-adr-review-checklist.md | ADR review checklist and review-required limitations for P02-ISS-001 | Governance/execution owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| docs/adr/ADR-P02-001-application-framework-and-dependency-pins.md | Phase 2 application framework and exact dependency-pin ADR | Engineering/architecture owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| docs/adr/ADR-P02-002-database-access-and-migration-tool.md | Phase 2 database access and migration tool ADR | Platform/data owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| docs/adr/ADR-P02-003-redis-compatible-cache-queue-and-worker-backplane.md | Phase 2 Redis-compatible queue/cache ADR | Engineering/security owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| docs/adr/ADR-P02-004-object-storage-signed-url-adapter.md | Phase 2 object storage and signed URL adapter ADR | Platform/data owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| docs/adr/ADR-P02-005-iac-cloud-provider-and-deployment-path.md | Phase 2 IaC/cloud provider path ADR | Platform/release owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
-| docs/adr/ADR-P02-006-observability-and-error-reporting-boundary.md | Phase 2 observability and error-reporting boundary ADR | Engineering/security owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/exec-plans/P02-ISS-001-phase-2-adr-and-dependency-decision-pack.md | P02-ISS-001 execution plan, scope, validation, rollback, and completion evidence | Execution/platform owner | ACTIVE |
+| docs/engineering/phase-2-dependency-decision-pack.md | Exact future package pins, package metadata evidence, official-source links, and dependency decision notes | Engineering/architecture owner | ACTIVE |
+| docs/governance/p02-iss-001-adr-review-checklist.md | ADR review checklist and review-required limitations for P02-ISS-001 | Governance/execution owner | ACTIVE |
+| docs/adr/ADR-P02-001-application-framework-and-dependency-pins.md | Phase 2 application framework and exact dependency-pin ADR | Engineering/architecture owner | ACTIVE |
+| docs/adr/ADR-P02-002-database-access-and-migration-tool.md | Phase 2 database access and migration tool ADR | Platform/data owner | ACTIVE |
+| docs/adr/ADR-P02-003-redis-compatible-cache-queue-and-worker-backplane.md | Phase 2 Redis-compatible queue/cache ADR | Engineering/security owner | ACTIVE |
+| docs/adr/ADR-P02-004-object-storage-signed-url-adapter.md | Phase 2 object storage and signed URL adapter ADR | Platform/data owner | ACTIVE |
+| docs/adr/ADR-P02-005-iac-cloud-provider-and-deployment-path.md | Phase 2 IaC/cloud provider path ADR | Platform/release owner | ACTIVE |
+| docs/adr/ADR-P02-006-observability-and-error-reporting-boundary.md | Phase 2 observability and error-reporting boundary ADR | Engineering/security owner | ACTIVE |
+
+## P02-ISS-002 document register entries - 2026-06-25
+
+| Document | Purpose | Owner | Status |
+|---|---|---|---|
+| docs/exec-plans/P02-ISS-002-workspace-topology-and-package-boundaries.md | P02-ISS-002 execution plan, scope, validation, rollback, and completion evidence | Execution/platform owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/engineering/phase-2-application-topology.md | Phase 2 app/package topology and P02-ISS-002 boundary API table | Engineering/architecture owner | ACTIVE-PENDING-P02-ISS-002-ACCEPTANCE |
+| apps/AGENTS.md | App-area instructions for Phase 2 boundaries | Engineering/architecture owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| apps/*/AGENTS.md | App-specific boundary instructions | Engineering/architecture owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| apps/*/README.md | App boundary public API notes | Engineering/architecture owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| packages/api-client/README.md | API client package boundary public API notes | Engineering/architecture owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| packages/config/README.md | Config package boundary public API notes | Platform/security owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| packages/domain/README.md | Domain package boundary public API notes | Engineering/architecture owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| packages/observability/README.md | Observability package boundary public API notes | Engineering/security owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| packages/platform-adapters/README.md | Platform adapter package boundary public API notes | Engineering/security owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| packages/testing-factories/README.md | Synthetic testing factory package boundary public API notes | QA/security owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| tests/unit/workspace-topology.spec.ts | Deterministic topology contract test | QA/engineering owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |

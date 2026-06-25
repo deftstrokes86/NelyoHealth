@@ -297,7 +297,7 @@ flowchart LR
 | Dependency ID | Dependency | Owner | Status | Required before |
 |---|---|---|---|---|
 | DEP-P02-PLAN-001 | Human-reviewed cloud provider and hosting model decision. | Platform/release owner | OPEN | P02-ISS-016, P02-ISS-017 |
-| DEP-P02-PLAN-002 | Phase 2 app/framework/dependency ADR and exact pin approval. | Engineering/architecture owner | SATISFIED-FOR-P02-ISS-001; INSTALLATION-PENDING-LATER-ISSUES | P02-ISS-002 and later dependency installation |
+| DEP-P02-PLAN-002 | Phase 2 app/framework/dependency ADR and exact pin approval. | Engineering/architecture owner | SATISFIED-FOR-P02-ISS-002-WORKSPACE-BOUNDARY; FRAMEWORK-INSTALLATION-PENDING-LATER-ISSUES | P02-ISS-005, P02-ISS-012, P02-ISS-013 and later dependency installation |
 | DEP-P02-PLAN-003 | Database access and migration tool owner/ADR. | Platform/data owner | SATISFIED-FOR-P02-ISS-004-START; IMPLEMENTATION-PENDING | P02-ISS-004 |
 | DEP-P02-PLAN-004 | Redis-compatible service and queue/cache license posture. | Engineering/security owner | RESOLVED-FOR-PHASE-2-LOCAL-VALKEY-BULLMQ; PRODUCTION-REVIEW-REQUIRED | P02-ISS-003, P02-ISS-007 |
 | DEP-P02-PLAN-005 | Object storage local emulator and production adapter strategy. | Platform/data owner | PARTIAL-SDK-AND-PORT-SELECTED; LOCAL-EMULATOR-REVIEW-REQUIRED | P02-ISS-003, P02-ISS-009 |

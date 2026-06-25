@@ -16,6 +16,8 @@
     "types": ["node", "vitest/globals"]
   },
   "include": [
+    "apps/**/*.ts",
+    "apps/**/*.tsx",
     "packages/**/*.ts",
     "packages/**/*.tsx",
     "tools/**/*.ts",

@@ -34,5 +34,6 @@ Thumbs.db
 .artifacts/ui-ux-pro-max/
 tools/design-foundation-preview/dist/
 packages/*/lib/
+apps/*/lib/
 playwright-report/
 test-results/

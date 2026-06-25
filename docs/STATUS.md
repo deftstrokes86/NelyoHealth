@@ -10,8 +10,9 @@
 - P01-FND-003: ACCEPTED.
 - P01-FND-004: ACCEPTED.
 - P02-PLAN-001: ACCEPTED.
-- P02-ISS-001: COMPLETED, pending orchestration acceptance.
-- P02-ISS-002: NOT STARTED.
+- P02-ISS-001: ACCEPTED.
+- P02-ISS-002: COMPLETED, pending orchestration acceptance.
+- P02-ISS-003: NOT STARTED.
 - AGENTS guidance: IMPLEMENTED.
 - Execution-plan convention: IMPLEMENTED.
 - Browser-validation skill: IMPLEMENTED.
@@ -23,7 +24,7 @@
 - Phase 1 gate: PHASE-1-CONDITIONAL-PASS.
 - Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS.
 - Phase 2 planning: P02-PLAN-001 ACCEPTED.
-- Phase 2 implementation: P02-ISS-001 COMPLETED, pending orchestration acceptance; P02-ISS-002 NOT STARTED.
+- Phase 2 implementation: P02-ISS-002 COMPLETED, pending orchestration acceptance; P02-ISS-003 NOT STARTED.
 - Phase 3: NOT STARTED.
 - Pilot launch: PILOT-NO-GO.
 - Production release: NOT APPROVED.
@@ -31,7 +32,7 @@
 - Interactive browser: VERIFIED THROUGH PLAYWRIGHT CLI FALLBACK.
 - Playwright MCP: VERIFIED THROUGH PROJECT-SCOPED LOCAL SMOKE ON 2026-06-25 WITH CODEX-CLI 0.141.0.
 - UI UX Pro Max licence: REVIEW-REQUIRED.
-- Next action: orchestration review of P02-ISS-001 before P02-ISS-002 may begin.
+- Next action: orchestration review of P02-ISS-002 before P02-ISS-003 may begin.
 
 ## Foundation commands
 
@@ -69,6 +70,15 @@ pnpm db:seed # expected nonzero Phase 2 gate
 - docs/adr/ADR-P02-004-object-storage-signed-url-adapter.md
 - docs/adr/ADR-P02-005-iac-cloud-provider-and-deployment-path.md
 - docs/adr/ADR-P02-006-observability-and-error-reporting-boundary.md
+- docs/exec-plans/P02-ISS-002-workspace-topology-and-package-boundaries.md
+- apps/
+- packages/api-client/
+- packages/config/
+- packages/domain/
+- packages/observability/
+- packages/platform-adapters/
+- packages/testing-factories/
+- tests/unit/workspace-topology.spec.ts
 
 ## Locked requirements retained
 

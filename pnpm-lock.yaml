@@ -78,6 +78,24 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
 
+  apps/admin-web: {}
+
+  apps/api: {}
+
+  apps/mobile: {}
+
+  apps/organization-web: {}
+
+  apps/patient-web: {}
+
+  apps/provider-web: {}
+
+  apps/worker: {}
+
+  packages/api-client: {}
+
+  packages/config: {}
+
   packages/content-registry:
     dependencies:
       zod:
@@ -85,6 +103,14 @@ importers:
         version: 4.4.3
 
   packages/design-tokens: {}
+
+  packages/domain: {}
+
+  packages/observability: {}
+
+  packages/platform-adapters: {}
+
+  packages/testing-factories: {}
 
   packages/ui-foundation:
     dependencies:
