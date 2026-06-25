@@ -1,0 +1,38 @@
+# Project-scoped Codex configuration for NelyoHealth.
+# Codex loads this file only after the repository is trusted.
+# No secrets, production URLs, personal browser profiles, or auth state are configured here.
+
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+
+[mcp_servers.playwright]
+command = "npx"
+args = [
+  "-y",
+  "@playwright/mcp@0.0.76",
+  "--browser",
+  "chrome",
+  "--isolated",
+  "--allowed-hosts",
+  "localhost,127.0.0.1",
+  "--allowed-origins",
+  "http://127.0.0.1:4173;http://localhost:4173",
+  "--block-service-workers",
+  "--output-dir",
+  ".artifacts/playwright-mcp",
+  "--output-mode",
+  "file",
+  "--image-responses",
+  "omit",
+  "--console-level",
+  "warning",
+  "--timeout-action",
+  "10000",
+  "--timeout-navigation",
+  "15000"
+]
+enabled = true
+required = true
+startup_timeout_sec = 30
+tool_timeout_sec = 120
+default_tools_approval_mode = "prompt"

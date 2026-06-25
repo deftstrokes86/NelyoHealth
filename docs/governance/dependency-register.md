@@ -241,3 +241,14 @@ flowchart LR
 |---|---|
 | Phase 1 critical path | DEP-001 through DEP-019 and relevant tooling dependencies |
 | Pilot-launch critical path | Legal, clinical, provider, privacy, payment, operations, quality, and stop-authority dependencies in this register |
+
+
+## P01-FND-001 dependency status updates
+
+| Dependency | Prior status | P01-FND-001 evidence | Updated status | Owner | Notes |
+|---|---|---|---|---|---|
+| Node runtime pin | UNVALIDATED | Node 24.18.0 selected from official Node release index and pinned in .node-version/package.json/CI. | IMPLEMENTED-PENDING-CI-RUN | Architecture owner | Local host used Node v25.8.1 and emitted expected engine warning. |
+| pnpm workspace install | UNVALIDATED | pnpm 11.9.0 install and frozen-lockfile install completed; lockfile committed. | IMPLEMENTED-PENDING-CI-RUN | Architecture owner | Host lacks pnpm/corepack, so local validation used npm exec with exact pnpm version. |
+| Deterministic Playwright browser tests | UNVALIDATED | Chromium browser installed; desktop/tablet/mobile Playwright smoke tests passed. | IMPLEMENTED-PENDING-CI-RUN | QA owner | Firefox/WebKit deferred. |
+| Accessibility smoke testing | UNVALIDATED | @axe-core/playwright accessibility smoke passed across desktop/tablet/mobile Chromium. | IMPLEMENTED-PENDING-CI-RUN | Accessibility / QA owner | Does not establish WCAG conformance. |
+| Project-scoped Codex IDE browser integration | UNVALIDATED | .codex/config.toml created with @playwright/mcp@0.0.76, but current Node-backed browser-control MCP call failed before automation. | BLOCKED-PENDING-IDE-RUNTIME-CORRECTION | Architecture / Security owner | Requires Codex IDE/project reload or MCP runtime compatibility correction before acceptance. |

@@ -713,3 +713,21 @@
 | REQ-GATE-013 | Phase 1 and pilot readiness remain separate | APPROVED | P00-17 / P00-20 | Phase 0 governance owner | Explicit P00-17 governance rule; external orchestration acceptance still required for gate adoption. |
 | REQ-GATE-014 | Gate verdicts require evidence and conditions | APPROVED | P00-17 / P00-20 | Phase 0 governance owner | Explicit P00-17 governance rule; external orchestration acceptance still required for gate adoption. |
 | REQ-GATE-015 | Phase 0 completion report is the canonical handoff summary | APPROVED | P00-17 / P00-20 | Phase 0 governance owner | Explicit P00-17 governance rule; external orchestration acceptance still required for gate adoption. |
+
+
+## P01-FND-001 implementation decisions
+
+| Decision ID | Decision | Status | Evidence | Owner | Review trigger |
+|---|---|---|---|---|
+| REQ-FND-001 | Use Node.js 24.18.0 as the repository runtime pin. | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | .node-version, package.json, CI. | Architecture owner | Node LTS change or tool incompatibility. |
+| REQ-FND-002 | Use pnpm 11.9.0 with pnpm workspaces. | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | packageManager, engines, pnpm-lock.yaml, pnpm-workspace.yaml. | Architecture owner | Package-manager upgrade. |
+| REQ-FND-003 | Use Turborepo 2.10.0 for task orchestration only. | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | turbo.json and build validation. | Architecture owner | New workspace package or task class. |
+| REQ-FND-004 | Use strict TypeScript with no product domain implementation. | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | tsconfig.base.json and typecheck. | Engineering owner | App framework or domain package creation. |
+| REQ-FND-005 | Use ESLint flat config and Prettier for foundation quality checks. | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | eslint.config.mjs and format/lint validation. | Engineering owner | Rule or formatter upgrade. |
+| REQ-FND-006 | Use Vitest for foundation unit/integration tests. | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | Unit and integration test validation. | QA owner | Test runner replacement. |
+| REQ-FND-007 | Use Playwright Test 1.61.1 with Chromium desktop/tablet/mobile projects for deterministic browser smoke. | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | test:e2e and test:browser pass. | QA / Architecture owner | Browser matrix expansion. |
+| REQ-FND-008 | Use @axe-core/playwright 4.12.1 for accessibility smoke checks. | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | test:a11y pass. | Accessibility / QA owner | Accessibility tooling upgrade. |
+| REQ-FND-009 | Configure @playwright/mcp 0.0.76 project-scoped for Codex IDE browser integration. | PARTIAL-BLOCKED-PENDING-RUNTIME-VERIFICATION | .codex/config.toml exists; current session node_repl browser-control call failed with sandboxPolicy metadata error. | Architecture / Security owner | Codex IDE reload, MCP compatibility correction, or Playwright MCP upgrade. |
+| REQ-FND-010 | Keep Motion and UI UX Pro Max deferred. | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | No Motion or UI UX Pro Max dependencies installed. | Design / Architecture owner | P01-FND-002 or later design-foundation task. |
+| REQ-FND-011 | Do not create AGENTS.md, .agent/PLANS.md, or .agents/skills in this task. | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | Forbidden-path validation. | External orchestration | Future explicit orchestration change. |
+| REQ-FND-012 | Do not select an application framework in P01-FND-001. | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | No Next.js, NestJS, React, app shell, API, database, auth, payment, or provider dependency installed. | Architecture owner | Application-shell task. |

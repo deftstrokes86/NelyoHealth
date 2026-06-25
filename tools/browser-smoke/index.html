@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>NelyoHealth Synthetic Browser Smoke</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to smoke content</a>
+    <header class="site-header">
+      <p class="eyebrow">Synthetic local tooling surface</p>
+      <h1>NelyoHealth Browser Smoke Check</h1>
+      <p class="lede">
+        This local page proves browser tooling only. It is not a product screen and uses no real
+        patient, provider, clinical, financial, organization, or production data.
+      </p>
+      <nav aria-label="Smoke sections">
+        <a href="#interaction">Interaction</a>
+        <a href="#form-check">Form</a>
+        <a href="#async-check">Async request</a>
+      </nav>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <section id="interaction" class="card accent">
+        <h2>Interactive control</h2>
+        <p id="button-help">Activate the button to update the live status region.</p>
+        <button id="status-button" type="button" aria-describedby="button-help">
+          Update synthetic status
+        </button>
+        <p id="live-status" class="status" role="status" aria-live="polite">
+          Waiting for synthetic interaction.
+        </p>
+      </section>
+
+      <section id="form-check" class="card">
+        <h2>Accessible validation</h2>
+        <form id="smoke-form" novalidate>
+          <label for="synthetic-name">Synthetic label</label>
+          <input
+            id="synthetic-name"
+            name="synthetic-name"
+            autocomplete="off"
+            aria-describedby="synthetic-name-help"
+          />
+          <p id="synthetic-name-help" class="hint">Use the value "ready" for the passing state.</p>
+          <p id="synthetic-name-error" class="error" hidden></p>
+          <button type="submit">Submit synthetic form</button>
+        </form>
+      </section>
+
+      <section id="dialog-check" class="card">
+        <h2>Dialog focus</h2>
+        <button id="open-dialog" type="button">Open synthetic dialog</button>
+        <dialog id="smoke-dialog" aria-labelledby="dialog-title">
+          <h3 id="dialog-title">Synthetic confirmation dialog</h3>
+          <p>This dialog exists only to test focus behavior in a local browser.</p>
+          <button id="close-dialog" type="button">Close dialog</button>
+        </dialog>
+      </section>
+
+      <section id="async-check" class="card">
+        <h2>Same-origin request</h2>
+        <p id="async-description">The request is local, synthetic, and same-origin.</p>
+        <div class="button-row">
+          <button id="run-request" type="button" aria-describedby="async-description">
+            Run same-origin check
+          </button>
+          <button id="show-error" type="button">Show synthetic error state</button>
+        </div>
+        <p id="async-state" class="status" role="status" aria-live="polite">
+          Async check has not started.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>

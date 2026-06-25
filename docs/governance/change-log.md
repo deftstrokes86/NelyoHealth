@@ -592,3 +592,16 @@ For all future phase updates:
 | Pilot verdict | PILOT-NO-GO |
 | Conditions | Phase 1 restricted to foundation work, synthetic data, no live operation, and blocker governance; pilot launch remains blocked. |
 | Next action | External orchestration acceptance of P00-17. |
+
+
+## Entry 020 - P01-FND-001 repository, toolchain, CI, and browser foundation
+
+- **Date:** 2026-06-25.
+- **Prompt:** P01-FND-001.
+- **Scope:** TypeScript monorepo foundation, pnpm workspace, Turborepo, ESLint, Prettier, TypeScript, Vitest, Playwright Test, accessibility smoke, synthetic smoke server, CI, Codex project MCP config, basic secret scan, and engineering documentation.
+- **Files created:** root toolchain/config files, .github workflow, .codex config, tests, smoke server, engineering docs, execution plan, README, lockfile.
+- **Validation passed:** install, frozen-lockfile install, format:check, lint, typecheck, unit test, integration test, test:e2e, test:browser, test:a11y, build, verify, basic secret scan.
+- **Validation warning:** local host Node is v25.8.1 while repository runtime is pinned to Node 24.18.0.
+- **Interactive browser result:** PARTIAL; Codex browser runtime call failed with `codex/sandbox-state-meta: missing field sandboxPolicy` before page automation.
+- **Phase boundary:** no Phase 2 work, no application feature, no domain feature, no database, no auth, no payment, no provider integration, no Motion, no UI UX Pro Max, no AGENTS.md, no .agent/PLANS.md, and no .agents/skills were created.
+- **Next action:** external orchestration review, then browser-integration verification only after IDE/runtime reload or compatibility correction.

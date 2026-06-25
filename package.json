@@ -1,0 +1,41 @@
+{
+  "name": "nelyohealth",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.9.0",
+  "engines": {
+    "node": "24.18.0",
+    "pnpm": "11.9.0"
+  },
+  "scripts": {
+    "dev": "turbo run dev --filter=@nelyohealth/browser-smoke",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc -p tsconfig.base.json --noEmit",
+    "test": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test:e2e": "playwright test tests/e2e",
+    "test:browser": "playwright test tests/e2e",
+    "test:browser:headed": "playwright test tests/e2e --headed",
+    "test:browser:ui": "playwright test tests/e2e --ui",
+    "test:a11y": "playwright test tests/accessibility",
+    "build": "turbo run build",
+    "secret:scan": "node tools/checks/basic-secret-scan.mjs",
+    "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:integration && pnpm test:browser && pnpm test:a11y && pnpm build && pnpm secret:scan"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.12.1",
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.61.1",
+    "@types/node": "24.13.2",
+    "eslint": "10.5.0",
+    "globals": "17.7.0",
+    "prettier": "3.8.4",
+    "turbo": "2.10.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.62.0",
+    "vitest": "4.1.9"
+  }
+}

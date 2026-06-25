@@ -1,0 +1,11 @@
+node_modules/
+.turbo/
+.artifacts/
+test-results/
+playwright-report/
+coverage/
+.auth/
+pnpm-lock.yaml
+docs/**
+NelyoHealth_*.md
+*.docx

@@ -232,3 +232,13 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 | [docs/governance/phase-0-gate-review.md](../governance/phase-0-gate-review.md) | Final Phase 0, Phase 1, and pilot gate review | Phase 0 governance owner | P00-17 | P00-20 | Phase 0 final review draft | Pending external orchestration acceptance | External orchestration and domain approvers |
 | [docs/governance/phase-1-readiness-handoff.md](../governance/phase-1-readiness-handoff.md) | Phase 1 source set and bounded task handoff | Phase 0 governance owner | P00-17 | P00-20 | Phase 0 final review draft | Pending external orchestration acceptance | External orchestration and domain approvers |
 | [docs/governance/phase-0-completion-report.md](../governance/phase-0-completion-report.md) | Phase 0 completion report and recommendations | Phase 0 governance owner | P00-17 | P00-20 | Phase 0 final review draft | Pending external orchestration acceptance | External orchestration and domain approvers |
+
+
+## P01-FND-001 document registration
+
+| Category | Document | Prompt | Owner | Status | Approval state | Notes |
+|---|---|---|---|---|---|---|
+| Engineering | [docs/engineering/toolchain.md](../engineering/toolchain.md) | P01-FND-001 | Engineering / Architecture | CREATED | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | Exact toolchain pins and official-source verification. |
+| Engineering | [docs/engineering/browser-tooling.md](../engineering/browser-tooling.md) | P01-FND-001 | Engineering / QA / Security | CREATED | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | Browser tooling strategy and artifact controls; interactive IDE browser verification remains blocked in current session. |
+| Execution plan | [docs/exec-plans/P01-repository-and-browser-foundation.md](../exec-plans/P01-repository-and-browser-foundation.md) | P01-FND-001 | Engineering / Architecture | CREATED | PARTIAL-PENDING-BROWSER-INTEGRATION-VERIFICATION | Repository and browser foundation execution evidence. |
+| Repository | [README.md](../../README.md) | P01-FND-001 | Engineering / Architecture | CREATED | IMPLEMENTED-PENDING-ORCHESTRATION-ACCEPTANCE | Root setup and command guide; no product application claim. |

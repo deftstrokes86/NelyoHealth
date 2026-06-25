@@ -281,3 +281,16 @@ Any conflict with lower-priority sources is blocked until explicitly resolved wi
 - Phase 1: NOT STARTED
 - Next action: external orchestration acceptance of P00-17
 - Note: This status does not claim external acceptance, pilot launch approval, legal approval, clinical approval, regulatory approval, financial approval, privacy/security approval, or implementation completion.
+
+
+## P01-FND-001 status update
+
+- **Phase 0:** PHASE-0-CONDITIONAL-PASS.
+- **Phase 1 entry:** PHASE-1-GO-WITH-CONDITIONS.
+- **P01-FND-001:** PARTIAL.
+- **P01-FND-002:** NOT STARTED.
+- **Phase 2:** NOT STARTED.
+- **Pilot launch:** PILOT-NO-GO.
+- **Next action:** browser-integration verification only after Codex IDE browser runtime reload or compatibility correction.
+- **Deterministic foundation evidence:** dependency install, frozen-lockfile install, format check, lint, typecheck, unit tests, integration tests, Playwright Chromium browser smoke tests, accessibility smoke tests, build, verify, and basic secret-pattern scan completed locally with the expected host-runtime warning that the machine is running Node v25.8.1 while the repository pins Node 24.18.0.
+- **Interactive browser blocker:** Codex in-app browser verification could not be completed because the Node-backed browser-control MCP call failed before browser automation with `codex/sandbox-state-meta: missing field sandboxPolicy`. No production origin was opened and no personal profile was used.
