@@ -195,6 +195,21 @@ For each significant requirement, include:
 | REQ-DES- | Design governance decision | P00-14A | Recorded in decision register. |
 | REQ-CNT- | Content governance decision | P00-14A | Recorded in decision register. |
 
+## P02 identifier families
+
+| Prefix | Meaning | Owning prompt | Notes |
+|---|---|---|---|
+| P02-REQ | Phase 2 platform/infrastructure requirement | P02-PLAN-001 | Requirement rows in phase-2-requirements-traceability.md |
+| P02-EG | Phase 2 exit-gate condition | P02-PLAN-001 | Exit gates from the canonical Phase 2 map |
+| P02-ISS | Phase 2 implementation issue | P02-PLAN-001 | Future implementation backlog; not started by planning docs |
+| DEC-P02-PLAN | Phase 2 planning decision | P02-PLAN-001 | Planning-only decisions and future ADR requirements |
+| DEP-P02-PLAN | Phase 2 planning dependency | P02-PLAN-001 | Dependencies that gate future implementation |
+| BLK-P02-PLAN | Phase 2 planning blocker | P02-PLAN-001 | Blockers/conditions for future Phase 2 issues |
+| RSK-P02-PLAN | Phase 2 planning risk | P02-PLAN-001 | Cross-references into risk register |
+| OQ-P02 | Phase 2 open question | P02-PLAN-001 | Questions requiring owner resolution before affected issues |
+
+P02 identifiers are documentation traceability identifiers only. They are not app route names, database identifiers, environment names, queue names, object-storage keys, provider identifiers, or deployment identifiers.
+
 ## P00-15 operational identifier families
 
 | Identifier family | Meaning | First use | Governance rule |

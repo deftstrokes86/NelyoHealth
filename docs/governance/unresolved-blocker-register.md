@@ -89,3 +89,12 @@ BLOCKS-PHASE-1-FOUNDATION, BLOCKS-SPECIFIC-CAPABILITY-IMPLEMENTATION, BLOCKS-REL
 | BLK-P01-FND-004-003 | Project-scoped Playwright MCP local smoke was reverified during P01-FND-004. | Architecture/security owner | No | No | RESOLVED |
 | BLK-P01-FND-004-004 | CODEOWNERS enforcement remains deferred until an independent qualified reviewer exists. | Repository administrator | No | Yes for production-grade review governance | OPEN |
 | BLK-P01-FND-004-005 | Operational database migrations and seed behavior are Phase 2 work and are not started. | Platform/data owner | Yes for database-dependent Phase 2 tasks until authorized | Yes | OPEN |
+
+## P02-PLAN-001 unresolved conditions - 2026-06-25
+
+| Blocker ID | Condition | Owner | Blocks Phase 2 | Blocks pilot | Status |
+|---|---|---|---|---|---|
+| BLK-P02-PLAN-001 | Cloud provider and IaC/deployment operating model are not selected. | Platform/release owner | Yes for P02-ISS-016 through P02-ISS-018 deployment evidence | Yes | OPEN |
+| BLK-P02-PLAN-002 | Redis-compatible service and object-storage emulator/provider license posture requires review. | Engineering/security owner | Yes for affected dependency implementation until ADR approval | Yes | OPEN |
+| BLK-P02-PLAN-003 | Database migration tool and operational owner are not approved. | Platform/data owner | Yes for P02-ISS-004 and database-dependent Phase 2 issues | Yes | OPEN |
+| BLK-P02-PLAN-004 | Phase 2 browser harness synthetic auth, seed/reset, and artifact ownership are not implemented. | QA/security owner | Yes for P02-ISS-014 and P02-ISS-018 browser exit evidence | Yes | OPEN |

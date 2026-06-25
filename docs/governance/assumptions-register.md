@@ -206,3 +206,10 @@ P00-16 reviewed all existing assumptions without deleting or renumbering them. N
 ## P00-16 locked requirements are not assumptions
 
 One longitudinal patient identity, payment not granting clinical access, pre-payment provider-detail protection, authorized-order-scoped disclosure, emergency independence from payment, amendment/versioning for finalized records, interactive and automated browser testing, synthetic browser data, and no routine production database editing remain decisions, not active ordinary assumptions.
+
+## P02-PLAN-001 assumptions - 2026-06-25
+
+| Assumption | Current status | Architecture impact if false | Earliest validation phase | Owner | Related ADR | Related dependency | Contingency |
+|---|---|---|---|---|---|---|---|
+| Current package and infrastructure versions checked on 2026-06-25 will be rechecked before P02 dependency installation. | ACTIVE | Dependency pins, engines, and ADR recommendations may need revision. | P02-ISS-001 | Engineering/architecture owner | ADR-P02-001 | DEP-P02-PLAN-002 | Re-run primary-source and package metadata checks before install. |
+| Development and staging deployment cannot be implemented until a human-reviewed cloud/provider and IaC decision exists. | ACTIVE | P02-ISS-016 and P02-ISS-017 may be blocked or narrowed to docs/plan-only. | P02-ISS-016 | Platform/release owner | ADR-P02-005 | DEP-P02-PLAN-001 | Keep local skeleton work moving; defer live dev/staging deployment evidence. |

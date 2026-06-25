@@ -313,3 +313,12 @@ Founder/product owner, clinical lead/medical director, Nigerian legal/regulatory
 | RSK-P01-FND-003-003 | UI UX Pro Max upstream license ambiguity remains unresolved. | Broader redistribution or commercial reliance may be unsafe. | Legal/commercial owner | Keep advisory-only scope and external review requirement. | MITIGATION-PLANNED |
 | RSK-P01-FND-003-004 | Host runtime differs from pinned Node version during local validation. | Local-only validation could differ from CI. | Engineering/architecture owner | Keep Node 24.18.0 pinned in repository and CI; record host warning. | MITIGATION-PLANNED |
 | RSK-P01-FND-003-005 | `@changesets/cli` currently brings transitive `js-yaml@3.14.2` with moderate advisory GHSA-h67p-54hq-rp68. | Dependency freshness and YAML parsing risk remains below the configured high audit failure gate but requires next dependency review. | Engineering/security owner | Keep `pnpm deps:audit` at high gate for P01; reassess when Changesets or dependency override options are reviewed. | TRACKED-NONBLOCKING |
+
+## P02-PLAN-001 risks - 2026-06-25
+
+| Risk ID | Risk | Impact | Owner | Mitigation | Status |
+|---|---|---|---|---|---|
+| RSK-P02-PLAN-001 | Cloud provider and IaC model are not selected before deployment implementation begins. | Development and staging exit gates could be delayed or implemented inconsistently. | Platform/release owner | Block P02-ISS-016 until human-reviewed provider/IaC ADR exists. | MITIGATION-PLANNED |
+| RSK-P02-PLAN-002 | Redis and object-storage local/prod choices have license or account constraints. | Queue/cache/signed URL implementation could require replacement or rework. | Engineering/security owner | Keep adapters vendor-neutral and require P02-ISS-001 license review. | MITIGATION-PLANNED |
+| RSK-P02-PLAN-003 | Database migration tooling is selected without rollback and owner clarity. | Unsafe migration behavior could block Phase 2 exit gate and later clinical/payment work. | Platform/data owner | Require migration ADR, runbook, and rollback/compensating evidence in P02-ISS-004. | MITIGATION-PLANNED |
+| RSK-P02-PLAN-004 | Browser harness artifacts capture sensitive or non-synthetic data after app shells are introduced. | Privacy boundary and artifact safety requirements could be violated. | QA/security owner | Keep synthetic-only seed/auth states, route-level privacy assertions, artifact scanning, and ignored artifact paths. | MITIGATION-PLANNED |

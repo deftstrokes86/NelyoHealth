@@ -800,3 +800,15 @@
 | DEC-P01-FND-004-015 | Visual testing is implemented for the synthetic foundation as a deterministic visual-contract suite, not final product design approval. | APPROVED-FOR-FOUNDATION | QA/design owner | tests/visual/design-foundation.visual.spec.ts; package.json |
 | DEC-P01-FND-004-016 | Database command interfaces are present but phase-gated until Phase 2; they intentionally fail and create nothing in Phase 1. | APPROVED-FOR-FOUNDATION | Engineering owner | tools/checks/phase-gated-database-command.mjs; package.json |
 | DEC-P01-FND-004-017 | Phase 1 map deviations are explicit amendments, not accidental omissions. | APPROVED-FOR-FOUNDATION | Execution owner | phase-1-map-amendments.md |
+
+## P02-PLAN-001 planning decisions - 2026-06-25
+
+| Decision ID | Decision | Status | Owner | Evidence |
+|---|---|---|---|---|
+| DEC-P02-PLAN-001 | Phase 2 implementation is decomposed into exactly 18 ordered implementation issues P02-ISS-001 through P02-ISS-018. | PROPOSED-PENDING-ORCHESTRATION-ACCEPTANCE | Execution/platform owner | docs/engineering/phase-2-issue-backlog.md |
+| DEC-P02-PLAN-002 | Future application topology is `apps/api`, `apps/worker`, `apps/patient-web`, `apps/provider-web`, `apps/organization-web`, `apps/admin-web`, and `apps/mobile`. | PROPOSED-PENDING-ORCHESTRATION-ACCEPTANCE | Engineering/architecture owner | docs/engineering/phase-2-application-topology.md |
+| DEC-P02-PLAN-003 | Phase 2 keeps modular-monolith-first backend boundaries, REST, generated OpenAPI, and generated typed client as required conventions. | PROPOSED-PENDING-ORCHESTRATION-ACCEPTANCE | Engineering/architecture owner | ADR-0005; docs/governance/phase-2-requirements-traceability.md |
+| DEC-P02-PLAN-004 | Cloud provider and IaC tool are not selected in P02-PLAN-001; P02-ISS-016 must record human-reviewed provider/IaC approval before deployment implementation. | LOCKED-FOR-P02-PLAN-001 | Platform/release owner | docs/engineering/phase-2-technology-evaluation.md |
+| DEC-P02-PLAN-005 | Redis, queue, object storage, observability, communications, feature flags, secrets, and error reporting must stay behind adapter boundaries. | PROPOSED-PENDING-ORCHESTRATION-ACCEPTANCE | Engineering/security owner | docs/engineering/phase-2-technology-evaluation.md; docs/engineering/phase-2-application-topology.md |
+| DEC-P02-PLAN-006 | Local, development, staging, production, and partner sandbox boundaries must prohibit production data copied downward. | LOCKED | Privacy/security/platform owners | docs/engineering/phase-2-environment-strategy.md |
+| DEC-P02-PLAN-007 | Browser harness work must include per-app Chromium projects, synthetic auth states, reset/seed support, privacy assertions, console/network failure checks, and retained failure artifacts. | PROPOSED-PENDING-ORCHESTRATION-ACCEPTANCE | QA/security owner | docs/engineering/phase-2-browser-harness-plan.md |

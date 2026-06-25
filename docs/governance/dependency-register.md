@@ -291,3 +291,16 @@ flowchart LR
 | DEP-P01-FND-004-006 | Controlled screenshot baseline environment for cross-platform visual snapshots. | QA/design owner | DEFERRED-BY-EXPLICIT-AMENDMENT | Screenshot-baseline gate or baseline updates |
 | DEP-P01-FND-004-007 | Phase 2 database package and migration ownership. | Platform/data owner | NOT-STARTED-PHASE-2 | Operational `db:migrate` or `db:seed` behavior |
 | DEP-P01-FND-004-008 | GitHub organization decision trigger: team growth, ownership transfer, production-governance needs, or managed permissions. | Repository owner | DEFERRED-BY-EXPLICIT-AMENDMENT | Organization creation |
+
+## P02-PLAN-001 dependencies - 2026-06-25
+
+| Dependency ID | Dependency | Owner | Status | Required before |
+|---|---|---|---|---|
+| DEP-P02-PLAN-001 | Human-reviewed cloud provider and hosting model decision. | Platform/release owner | OPEN | P02-ISS-016, P02-ISS-017 |
+| DEP-P02-PLAN-002 | Phase 2 app/framework/dependency ADR and exact pin approval. | Engineering/architecture owner | OPEN | P02-ISS-002 and later dependency installation |
+| DEP-P02-PLAN-003 | Database access and migration tool owner/ADR. | Platform/data owner | OPEN | P02-ISS-004 |
+| DEP-P02-PLAN-004 | Redis-compatible service and queue/cache license posture. | Engineering/security owner | OPEN | P02-ISS-003, P02-ISS-007 |
+| DEP-P02-PLAN-005 | Object storage local emulator and production adapter strategy. | Platform/data owner | OPEN | P02-ISS-003, P02-ISS-009 |
+| DEP-P02-PLAN-006 | Observability backend/exporter and error-reporting boundary. | Engineering/security owner | OPEN | P02-ISS-011, P02-ISS-015 |
+| DEP-P02-PLAN-007 | Development/staging secret provisioning performed by authorized humans or approved secret-manager IaC. | Security/platform owner | OPEN | P02-ISS-015, P02-ISS-017 |
+| DEP-P02-PLAN-008 | Synthetic auth, seed/reset, and browser artifact ownership. | QA/security owner | OPEN | P02-ISS-014 |

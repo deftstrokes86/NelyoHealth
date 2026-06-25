@@ -296,3 +296,16 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 | tests/visual/design-foundation.visual.spec.ts | Synthetic foundation visual-contract test | QA/design owner | ACTIVE |
 | tools/checks/phase-gated-database-command.mjs | Phase-gated database command interface | Engineering owner | ACTIVE |
 | tools/checks/visual-baseline-update-gate.mjs | Manual-review gate for visual baseline updates | QA/design owner | ACTIVE |
+
+## P02-PLAN-001 document register entries - 2026-06-25
+
+| Document | Purpose | Owner | Status |
+|---|---|---|---|
+| docs/exec-plans/P02-platform-and-infrastructure-foundation.md | Canonical Phase 2 execution plan, issue order, dependencies, exit-gate mapping, and blockers | Execution/platform owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/engineering/phase-2-technology-evaluation.md | Current primary-source technology evaluation and ADR requirements | Engineering/architecture owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/engineering/phase-2-application-topology.md | Future application and package topology | Engineering/architecture owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/engineering/phase-2-environment-strategy.md | Local, PR, development, staging, production, and partner sandbox strategy | Platform/release owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/engineering/phase-2-local-infrastructure-plan.md | Local dependency and infrastructure plan | Platform/data owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/engineering/phase-2-browser-harness-plan.md | Phase 2 browser harness plan | QA/security owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/engineering/phase-2-issue-backlog.md | Authoritative 18-issue Phase 2 backlog | Execution/platform owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |
+| docs/governance/phase-2-requirements-traceability.md | Phase 2 requirement and exit-gate traceability | Governance/execution owner | ACTIVE-PENDING-ORCHESTRATION-ACCEPTANCE |

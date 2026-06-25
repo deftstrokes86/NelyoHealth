@@ -8,7 +8,8 @@
 - P01-FND-001: ACCEPTED.
 - P01-FND-002: ACCEPTED.
 - P01-FND-003: ACCEPTED.
-- P01-FND-004: COMPLETED, pending orchestration acceptance.
+- P01-FND-004: ACCEPTED.
+- P02-PLAN-001: COMPLETED, pending orchestration acceptance.
 - AGENTS guidance: IMPLEMENTED.
 - Execution-plan convention: IMPLEMENTED.
 - Browser-validation skill: IMPLEMENTED.
@@ -18,15 +19,16 @@
 - Database command interfaces: PRESENT, PHASE-2-GATED, NOT-OPERATIONAL.
 - Branch protection: MANUAL-ADMIN-PENDING.
 - Phase 1 gate: PHASE-1-CONDITIONAL-PASS.
-- Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS, only after external orchestration starts Phase 2.
-- Phase 2: NOT STARTED.
+- Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS.
+- Phase 2 planning: P02-PLAN-001 COMPLETED, pending orchestration acceptance.
+- Phase 2 implementation: NOT STARTED.
 - Pilot launch: PILOT-NO-GO.
 - Production release: NOT APPROVED.
 - Production data: NOT APPROVED.
 - Interactive browser: VERIFIED THROUGH PLAYWRIGHT CLI FALLBACK.
 - Playwright MCP: VERIFIED THROUGH PROJECT-SCOPED LOCAL SMOKE ON 2026-06-25 WITH CODEX-CLI 0.141.0.
 - UI UX Pro Max licence: REVIEW-REQUIRED.
-- Next action: orchestration review of P01-FND-004.
+- Next action: orchestration review of P02-PLAN-001, then explicit authorization of P02-ISS-001 before any Phase 2 implementation.
 
 ## Foundation commands
 
@@ -41,6 +43,17 @@ pnpm test:visual
 pnpm db:migrate # expected nonzero Phase 2 gate
 pnpm db:seed # expected nonzero Phase 2 gate
 ```
+
+## Phase 2 planning artifacts
+
+- docs/exec-plans/P02-platform-and-infrastructure-foundation.md
+- docs/engineering/phase-2-technology-evaluation.md
+- docs/engineering/phase-2-application-topology.md
+- docs/engineering/phase-2-environment-strategy.md
+- docs/engineering/phase-2-local-infrastructure-plan.md
+- docs/engineering/phase-2-browser-harness-plan.md
+- docs/engineering/phase-2-issue-backlog.md
+- docs/governance/phase-2-requirements-traceability.md
 
 ## Locked requirements retained
 
