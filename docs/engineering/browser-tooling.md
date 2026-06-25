@@ -128,3 +128,13 @@ P01-FND-001R verified:
 - Browser session cleanup with `playwright-cli list` returning no browsers.
 
 This fallback satisfies the interactive browser layer for P01-FND-001 closure. It does not mark Playwright MCP operational. `BLK-P01-FND-001` remains open as `NONBLOCKING-TRACKED` pending a successful project-scoped Playwright MCP smoke verification after a relevant Codex or Playwright MCP update.
+
+## P01-FND-004 browser-validation updates
+
+P01-FND-004 adds the repository skill `.agents/skills/nelyo-browser-validation/SKILL.md`. It is a Codex Skill, not an autonomous agent. It requires synthetic local/test origins, the applicable `AGENTS.md` instructions, Playwright CLI fallback while MCP is blocked, interactive happy-path and failure-path inspection, desktop/tablet/mobile review, console/network/storage/cache review, accessibility structure, focus and keyboard checks, reduced-motion checks, artifact storage under ignored paths, and deterministic Playwright tests after interactive inspection.
+
+The project-scoped Playwright MCP configuration remains preserved in `.codex/config.toml`. P01-FND-004 reverified the MCP path on 2026-06-25 with Codex CLI 0.141.0: `codex mcp list` showed the project `playwright` server enabled, `mcp__playwright.browser_tabs` listed tabs successfully, the MCP opened `http://127.0.0.1:4173/`, wrote a snapshot under `.artifacts/playwright-mcp`, resized to mobile viewport, and closed the page. The previous `codex/sandbox-state-meta: missing field sandboxPolicy` error was not reproduced.
+
+Do not weaken sandboxing to keep MCP working. If the previous bridge error recurs, reopen the blocker and continue using the Playwright CLI fallback until a supported MCP smoke succeeds again.
+
+P01-FND-004 also adds `pnpm test:visual` for the synthetic design-foundation preview. The current implementation is a visual-contract suite rather than a screenshot-baseline gate because a controlled cross-platform baseline environment is not yet approved. `pnpm test:visual:update` is intentionally blocked by a manual-review gate and must not run in CI.

@@ -6,6 +6,14 @@ const root = process.cwd();
 const failures = [];
 const warnings = [];
 const requiredFiles = [
+  "AGENTS.md",
+  "docs/AGENTS.md",
+  "packages/AGENTS.md",
+  "tests/AGENTS.md",
+  "tools/AGENTS.md",
+  ".github/AGENTS.md",
+  "infra/AGENTS.md",
+  ".agent/PLANS.md",
   "CONTRIBUTING.md",
   "SECURITY.md",
   "SUPPORT.md",
@@ -17,7 +25,15 @@ const requiredFiles = [
   ".github/release.yml",
   ".github/workflows/ci.yml",
   ".github/workflows/release-readiness.yml",
-  "config/dependency-policy.json"
+  "config/dependency-policy.json",
+  ".agents/skills/nelyo-browser-validation/SKILL.md",
+  ".agents/skills/nelyo-browser-validation/references/browser-checklist.md",
+  ".agents/skills/nelyo-browser-validation/references/provider-disclosure-checklist.md",
+  ".agents/skills/nelyo-browser-validation/references/artifact-safety.md",
+  "docs/engineering/manual-git-and-github-workflow.md",
+  "docs/engineering/github-manual-ruleset-checklist.md",
+  "docs/governance/phase-1-map-amendments.md",
+  "tools/checks/phase-gated-database-command.mjs"
 ];
 const issueForms = [
   ".github/ISSUE_TEMPLATE/bug_report.yml",
@@ -64,6 +80,34 @@ for (const file of scanFiles) {
     failures.push(`${file}: unresolved TODO/TBD marker is not allowed in P01-FND-003 artifacts`);
   if (/BEGIN PRIVATE KEY|AKIA[0-9A-Z]{16}|password\s*=|secret\s*=/i.test(content))
     failures.push(`${file}: possible secret pattern found`);
+}
+
+const rootAgents = fs.existsSync(path.join(root, "AGENTS.md"))
+  ? fs.readFileSync(path.join(root, "AGENTS.md"), "utf8")
+  : "";
+if (rootAgents && !/not create autonomous agents/i.test(rootAgents))
+  failures.push("AGENTS.md must state that it does not create autonomous agents");
+if (
+  rootAgents &&
+  !/Codex must never commit, push, merge, tag, release, or deploy/i.test(rootAgents)
+)
+  failures.push("AGENTS.md must preserve the manual Git write prohibition");
+
+const browserSkill = fs.existsSync(
+  path.join(root, ".agents", "skills", "nelyo-browser-validation", "SKILL.md")
+)
+  ? fs.readFileSync(
+      path.join(root, ".agents", "skills", "nelyo-browser-validation", "SKILL.md"),
+      "utf8"
+    )
+  : "";
+if (browserSkill) {
+  if (!/^---\s*\nname:\s*nelyo-browser-validation/m.test(browserSkill))
+    failures.push("nelyo-browser-validation skill metadata is missing the required name");
+  if (!/description:/m.test(browserSkill))
+    failures.push("nelyo-browser-validation skill metadata is missing a description");
+  if (/autonomous agent/i.test(browserSkill) && !/not an autonomous agent/i.test(browserSkill))
+    failures.push("nelyo-browser-validation skill must not imply autonomous-agent behavior");
 }
 
 if (warnings.length) console.warn(warnings.map((warning) => `WARNING: ${warning}`).join("\n"));

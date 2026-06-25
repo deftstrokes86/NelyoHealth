@@ -9,7 +9,7 @@
     "pnpm": "11.9.0"
   },
   "scripts": {
-    "dev": "turbo run dev --filter=@nelyohealth/browser-smoke",
+    "dev": "node scripts/browser-smoke-server.mjs --host 127.0.0.1 --port 4173",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -18,9 +18,13 @@
     "test:integration": "vitest run tests/integration",
     "test:e2e": "playwright test tests/e2e",
     "test:browser": "playwright test tests/e2e",
+    "test:visual": "playwright test tests/visual --project=visual-chromium",
+    "test:visual:update": "node tools/checks/visual-baseline-update-gate.mjs",
     "test:browser:headed": "playwright test tests/e2e --headed",
     "test:browser:ui": "playwright test tests/e2e --ui",
     "test:a11y": "playwright test tests/accessibility",
+    "db:migrate": "node tools/checks/phase-gated-database-command.mjs migrate",
+    "db:seed": "node tools/checks/phase-gated-database-command.mjs seed",
     "browser:cli:help": "playwright-cli --help",
     "browser:cli:install": "playwright-cli install-browser chromium",
     "browser:cli:open": "playwright-cli -s=nelyohealth-smoke open http://127.0.0.1:4173",
@@ -53,7 +57,7 @@
     "release:version": "changeset version",
     "release:check": "node tools/checks/release-readiness.mjs",
     "release:inventory": "node tools/reports/dependency-inventory.mjs",
-    "repository:verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:integration && pnpm test:browser && pnpm test:a11y && pnpm build && pnpm secret:scan && pnpm community:verify && pnpm actions:verify && pnpm deps:verify && pnpm changeset:status && pnpm release:check"
+    "repository:verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:integration && pnpm test:browser && pnpm test:a11y && pnpm test:visual && pnpm build && pnpm secret:scan && pnpm community:verify && pnpm actions:verify && pnpm deps:verify && pnpm changeset:status && pnpm release:check"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.12.1",

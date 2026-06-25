@@ -13,6 +13,7 @@ The implementation map identifies Phase 2 as Platform and infrastructure foundat
 ## Files Phase 2 must read first
 
 - README.md
+- AGENTS.md
 - CONTRIBUTING.md
 - SECURITY.md
 - SUPPORT.md
@@ -22,6 +23,8 @@ The implementation map identifies Phase 2 as Platform and infrastructure foundat
 - pnpm-lock.yaml
 - .github/workflows/ci.yml
 - .github/workflows/release-readiness.yml
+- .agent/PLANS.md
+- .agents/skills/nelyo-browser-validation/SKILL.md
 - docs/STATUS.md
 - docs/governance/phase-0-completion-report.md
 - docs/governance/phase-0-gate-review.md
@@ -29,6 +32,7 @@ The implementation map identifies Phase 2 as Platform and infrastructure foundat
 - docs/governance/phase-1-requirements-traceability.md
 - docs/governance/phase-1-gate-review.md
 - docs/governance/phase-1-completion-report.md
+- docs/governance/phase-1-map-amendments.md
 - docs/governance/decision-register.md
 - docs/governance/risk-register.md
 - docs/governance/dependency-register.md
@@ -43,6 +47,8 @@ The implementation map identifies Phase 2 as Platform and infrastructure foundat
 - docs/engineering/browser-cli-fallback.md
 - docs/engineering/repository-collaboration.md
 - docs/engineering/github-repository-controls.md
+- docs/engineering/github-manual-ruleset-checklist.md
+- docs/engineering/manual-git-and-github-workflow.md
 - docs/engineering/dependency-governance.md
 - docs/engineering/versioning-and-release.md
 - docs/engineering/supply-chain-inventory.md
@@ -60,10 +66,13 @@ The implementation map identifies Phase 2 as Platform and infrastructure foundat
 - Signed clinical records are amended or versioned, never silently overwritten.
 - Sponsors, employers, family-plan administrators, HMOs, and guardians receive only explicitly granted permissions.
 - Browser testing uses interactive browser access and deterministic Playwright tests with synthetic data only.
+- Git and GitHub writes remain human-only.
 
 ## Current blockers and conditions
 
 - GitHub branch protection/rulesets, required checks, CODEOWNERS enforcement, Dependency Review, and private vulnerability reporting require repository administrator verification.
+- Project-scoped Playwright MCP is verified for local synthetic smoke as of P01-FND-004; Playwright CLI remains the verified fallback if MCP becomes unavailable.
+- Database commands exist but intentionally fail in Phase 1; Phase 2 owns operational migration and seed behavior.
 - UI UX Pro Max external license/commercial review remains pending before broader redistribution or commercial reliance.
 - Clinical, legal, privacy, payment, pharmacy, laboratory, HMO, employer, sponsor, guardian, emergency, and pilot domain approvals from Phase 0 remain unresolved unless separately approved.
 
@@ -73,10 +82,12 @@ The implementation map identifies Phase 2 as Platform and infrastructure foundat
 - Local, test, or staging-origin planning and tooling that preserves synthetic-data restrictions.
 - Repository-governed infrastructure documentation, configuration, and validation when explicitly authorized.
 - Browser, accessibility, dependency, and release-readiness checks required by the Phase 2 prompt.
+- Operational database command implementation only when explicitly authorized by the Phase 2 prompt.
 
 ## Prohibited Phase 2 work until explicitly approved
 
 - Production deployment, production secrets, production databases, production origins, public releases, npm publication, container publication, clinical workflows, patient portals, pharmacy/lab matching, payment integration, auth/RBAC/ABAC, or use of real patient/provider/clinical/payment/organization data.
+- Codex Git or GitHub writes, automated PR creation, auto-merge, auto-release, deployment, or package publication.
 
 ## First bounded Phase 2 milestone
 
@@ -85,6 +96,7 @@ The first Phase 2 milestone must be supplied by external orchestration. It shoul
 ## Required evidence in Phase 2
 
 - `pnpm repository:verify`
+- `pnpm test:visual`
 - Relevant deterministic Playwright tests
 - Interactive browser evidence when UI or browser tooling is affected
 - Accessibility evidence where UI is affected

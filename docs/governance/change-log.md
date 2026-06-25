@@ -630,3 +630,15 @@ For all future phase updates:
 - Added local policy checks for package versions, GitHub Actions pinning, community health, dependency licenses, Changesets config, and release readiness.
 - Updated CI to include repository governance checks and added a read-only manual release-readiness workflow.
 - Recorded Phase 1 as PHASE-1-CONDITIONAL-PASS, Phase 2 entry as PHASE-2-GO-WITH-CONDITIONS, and pilot as PILOT-NO-GO.
+
+## 2026-06-25 - P01-FND-004
+
+- Added root and nested `AGENTS.md` repository instruction files.
+- Added `.agent/PLANS.md` as an execution-plan convention, not autonomous-agent configuration.
+- Added the `nelyo-browser-validation` Codex Skill and references for browser, provider-disclosure, and artifact-safety review.
+- Added human-only Git and GitHub governance, the manual GitHub ruleset checklist, and explicit Phase 1 map amendments.
+- Added `pnpm test:visual` as a deterministic synthetic visual-contract suite and kept screenshot baselines deferred pending a controlled environment.
+- Added `pnpm db:migrate` and `pnpm db:seed` command interfaces that intentionally fail in Phase 1 and create no database artifacts.
+- Updated CI, repository verification, governance registers, status, gate review, completion report, and Phase 2 handoff for P01-FND-004.
+- Preserved Playwright CLI as the verified interactive fallback and reverified project-scoped Playwright MCP for local synthetic smoke with Codex CLI 0.141.0.
+- Preserved Phase 1 as PHASE-1-CONDITIONAL-PASS, Phase 2 as NOT STARTED, and pilot as PILOT-NO-GO.

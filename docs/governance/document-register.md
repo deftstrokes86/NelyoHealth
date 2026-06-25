@@ -272,3 +272,27 @@ Track every planned and produced Phase 0 document, with status, owner, and revie
 | docs/governance/phase-1-gate-review.md | Phase 1 gate result | Execution owner | ACTIVE |
 | docs/governance/phase-1-completion-report.md | Phase 1 completion report | Execution owner | ACTIVE |
 | docs/governance/phase-2-readiness-handoff.md | Phase 2 conditional handoff | Execution owner | ACTIVE |
+
+## P01-FND-004 document register entries - 2026-06-25
+
+| Document | Purpose | Owner | Status |
+|---|---|---|---|
+| AGENTS.md | Root repository instructions for Codex work | Repository owner | ACTIVE |
+| docs/AGENTS.md | Documentation-area instructions | Repository owner | ACTIVE |
+| packages/AGENTS.md | Package-boundary instructions | Engineering owner | ACTIVE |
+| tests/AGENTS.md | Test and browser-validation instructions | QA/security owner | ACTIVE |
+| tools/AGENTS.md | Tooling-script instructions | Engineering/security owner | ACTIVE |
+| .github/AGENTS.md | GitHub workflow and repository-setting instructions | Repository administrator | ACTIVE |
+| infra/AGENTS.md | Future infrastructure instructions and Phase 2 boundary | Architecture/security owner | ACTIVE |
+| .agent/PLANS.md | Execution-plan convention, not agent orchestration | Execution owner | ACTIVE |
+| .agents/skills/nelyo-browser-validation/SKILL.md | Repository browser-validation Codex Skill | QA/security owner | ACTIVE |
+| .agents/skills/nelyo-browser-validation/references/browser-checklist.md | Browser-validation checklist | QA/security owner | ACTIVE |
+| .agents/skills/nelyo-browser-validation/references/provider-disclosure-checklist.md | Provider-disclosure browser privacy checklist | Privacy/security owner | ACTIVE |
+| .agents/skills/nelyo-browser-validation/references/artifact-safety.md | Browser artifact safety checklist | Privacy/security owner | ACTIVE |
+| docs/engineering/manual-git-and-github-workflow.md | Human-only Git and GitHub operating model | Repository owner | ACTIVE |
+| docs/engineering/github-manual-ruleset-checklist.md | Manual branch-protection and ruleset checklist | Repository administrator | ACTIVE-PENDING-MANUAL-EVIDENCE |
+| docs/governance/phase-1-map-amendments.md | Explicit Phase 1 map amendments | Execution owner | ACTIVE |
+| docs/exec-plans/P01-phase-1-map-gap-closure.md | P01-FND-004 execution plan and validation scope | Execution owner | ACTIVE |
+| tests/visual/design-foundation.visual.spec.ts | Synthetic foundation visual-contract test | QA/design owner | ACTIVE |
+| tools/checks/phase-gated-database-command.mjs | Phase-gated database command interface | Engineering owner | ACTIVE |
+| tools/checks/visual-baseline-update-gate.mjs | Manual-review gate for visual baseline updates | QA/design owner | ACTIVE |

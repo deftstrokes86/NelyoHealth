@@ -3,12 +3,12 @@
 ## Source precedence
 
 1. Locked NelyoHealth requirements.
-2. Phase 0 gate and Phase 1 handoff.
-3. Accepted ADRs.
-4. Decision register.
-5. Accepted P01-FND-001 and P01-FND-002 implementations.
-6. Current official GitHub, pnpm, and Changesets documentation.
-7. New P01-FND-003 governance proposals.
+2. Current explicit owner decisions, including human-only Git and GitHub writes.
+3. Phase 0 and Phase 1 gate documents.
+4. Accepted ADRs.
+5. Decision register.
+6. Build implementation map.
+7. Current repository implementation.
 
 ## Decision register
 
@@ -42,6 +42,12 @@ New dependencies require documented purpose, exact version, primary-source verif
 
 Release readiness is not release authorization. No script may tag, publish, push, deploy, create a GitHub release, publish npm packages, or alter GitHub settings automatically during Phase 1.
 
-## Autonomous-agent governance
+## Repository instruction governance
 
-No AGENTS.md, nested AGENTS.md, `.agent/PLANS.md`, autonomous-agent orchestration, or unsupported agent-governance file is created by P01-FND-003.
+`AGENTS.md` files are repository instructions only. They do not create autonomous agents, subagents, agent teams, routing systems, or background execution. `.agent/PLANS.md` is an execution-plan convention, not an autonomous-agent configuration.
+
+## Manual Git and GitHub authority
+
+The human owner retains exclusive authority for staging, committing, pushing, branch creation, pull-request creation, merging, tagging, releases, deployments, package publication, and GitHub settings. Codex may inspect Git state and produce a suggested commit message only.
+
+The current founder-owned personal repository is explicitly accepted for this founder-led stage. GitHub organization creation is deferred until team growth, ownership transfer, production-governance needs, or managed permissions justify it.

@@ -63,6 +63,13 @@ const server = http.createServer((request, response) => {
     response.end(request.url === "/healthz" ? "ok" : html);
     return;
   }
+  if (request.url === "/favicon.ico") {
+    response.writeHead(204, {
+      "cache-control": "no-store"
+    });
+    response.end();
+    return;
+  }
   response.writeHead(404, {
     "content-type": "text/plain; charset=utf-8",
     "cache-control": "no-store"

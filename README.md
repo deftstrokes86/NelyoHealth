@@ -11,7 +11,7 @@ This repository does not yet contain a NelyoHealth product application. It imple
 - Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS, only after external orchestration starts Phase 2
 - Pilot launch: PILOT-NO-GO
 - Production release: NOT APPROVED
-- Current bounded task completed: P01-FND-003
+- Current bounded task completed: P01-FND-004, pending orchestration acceptance
 
 ## Prerequisites
 
@@ -46,6 +46,8 @@ pnpm secret:scan
 ```bash
 pnpm test:browser
 pnpm test:a11y
+pnpm test:visual
+pnpm test:visual:update
 pnpm test:browser:headed
 pnpm test:browser:ui
 pnpm ui:test:browser
@@ -104,6 +106,21 @@ pnpm browser:cli:cleanup
 ```
 
 The fallback is restricted to synthetic local browser validation. Do not use production origins, personal browser profiles, extension mode, CDP attach to a personal browser, real data, or undocumented sandbox changes.
+
+## Database command interfaces
+
+```bash
+pnpm db:migrate
+pnpm db:seed
+```
+
+These commands are present but phase-gated. They intentionally exit nonzero in Phase 1, create no files or databases, and defer operational migration and seed behavior to Phase 2.
+
+## Repository instructions and manual Git
+
+Root and nested `AGENTS.md` files contain repository instructions only. They do not create autonomous agents, subagents, agent teams, or background orchestration. `.agent/PLANS.md` is an execution-plan convention for complex work.
+
+Git and GitHub writes are human-only. Codex may inspect Git state, edit files, run validation, and suggest a commit message, but must not commit, push, merge, tag, release, deploy, publish packages, create pull requests, or change GitHub settings.
 
 ## GitHub repository controls
 

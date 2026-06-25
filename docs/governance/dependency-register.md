@@ -278,3 +278,16 @@ flowchart LR
 | DEP-P01-FND-003-004 | Private vulnerability reporting support verified and enabled if available. | Security owner/repository administrator | PENDING-ADMIN-VERIFICATION | Pilot, production release |
 | DEP-P01-FND-003-005 | UI UX Pro Max license/commercial review completed. | Legal/commercial owner | PENDING-EXTERNAL-REVIEW | Broader redistribution or commercial reliance |
 | DEP-P01-FND-003-006 | `@changesets/cli` transitive `js-yaml@3.14.2` moderate advisory GHSA-h67p-54hq-rp68 reviewed against the high audit gate. | Engineering/security owner | TRACKED-NONBLOCKING-UNDER-HIGH-AUDIT-GATE | Next dependency review |
+
+## P01-FND-004 dependencies - 2026-06-25
+
+| Dependency ID | Dependency | Owner | Status | Required before |
+|---|---|---|---|---|
+| DEP-P01-FND-004-001 | Manual Git and GitHub writes performed by the human repository owner. | Repository owner | LOCKED | Every repository-changing action |
+| DEP-P01-FND-004-002 | Project-local Codex manual Git rule support remains compatible with official Codex rule syntax. | Engineering owner | IMPLEMENTED-PENDING-RULE-CHECK | Treating `.codex/rules/manual-git.rules` as enforceable runtime policy |
+| DEP-P01-FND-004-003 | Branch protection or GitHub ruleset configured manually with required checks and failed-check blocking. | Repository administrator | PENDING-MANUAL-EVIDENCE | Full Phase 1 pass, pilot, production release |
+| DEP-P01-FND-004-004 | CODEOWNERS enforcement activated only after an independent qualified reviewer exists. | Repository administrator | DEFERRED-BY-EXPLICIT-AMENDMENT | Multi-maintainer review governance |
+| DEP-P01-FND-004-005 | Project-scoped Playwright MCP local synthetic smoke compatibility. | Architecture/security owner | SATISFIED-FOR-FOUNDATION | Recheck after Codex or Playwright MCP updates |
+| DEP-P01-FND-004-006 | Controlled screenshot baseline environment for cross-platform visual snapshots. | QA/design owner | DEFERRED-BY-EXPLICIT-AMENDMENT | Screenshot-baseline gate or baseline updates |
+| DEP-P01-FND-004-007 | Phase 2 database package and migration ownership. | Platform/data owner | NOT-STARTED-PHASE-2 | Operational `db:migrate` or `db:seed` behavior |
+| DEP-P01-FND-004-008 | GitHub organization decision trigger: team growth, ownership transfer, production-governance needs, or managed permissions. | Repository owner | DEFERRED-BY-EXPLICIT-AMENDMENT | Organization creation |

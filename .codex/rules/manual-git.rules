@@ -1,0 +1,142 @@
+# P01-FND-004 manual Git and GitHub governance.
+# The human owner performs all Git and GitHub writes.
+
+prefix_rule(
+    pattern = ["git", "add"],
+    decision = "forbidden",
+    justification = "Manual Git policy: the human owner stages changes.",
+    match = ["git add AGENTS.md"],
+)
+
+prefix_rule(
+    pattern = ["git", "commit"],
+    decision = "forbidden",
+    justification = "Manual Git policy: the human owner commits changes.",
+    match = ["git commit -m docs"],
+)
+
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "forbidden",
+    justification = "Manual Git policy: the human owner pushes branches.",
+    match = ["git push origin main"],
+)
+
+prefix_rule(
+    pattern = ["git", "merge"],
+    decision = "forbidden",
+    justification = "Manual Git policy: the human owner performs merges.",
+    match = ["git merge feature/example"],
+)
+
+prefix_rule(
+    pattern = ["git", "rebase"],
+    decision = "forbidden",
+    justification = "Manual Git policy: the human owner performs rebases.",
+    match = ["git rebase main"],
+)
+
+prefix_rule(
+    pattern = ["git", "tag"],
+    decision = "forbidden",
+    justification = "Manual Git policy: the human owner creates tags.",
+    match = ["git tag v0.0.1"],
+)
+
+prefix_rule(
+    pattern = ["git", "reset", "--hard"],
+    decision = "forbidden",
+    justification = "Manual Git policy: destructive history or worktree changes require the human owner.",
+    match = ["git reset --hard HEAD"],
+)
+
+prefix_rule(
+    pattern = ["git", "clean"],
+    decision = "forbidden",
+    justification = "Manual Git policy: destructive worktree cleanup requires the human owner.",
+    match = ["git clean -fd"],
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", "create"],
+    decision = "forbidden",
+    justification = "Manual GitHub policy: the human owner creates pull requests.",
+    match = ["gh pr create --fill"],
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", "merge"],
+    decision = "forbidden",
+    justification = "Manual GitHub policy: the human owner merges pull requests.",
+    match = ["gh pr merge 1"],
+)
+
+prefix_rule(
+    pattern = ["gh", "release", "create"],
+    decision = "forbidden",
+    justification = "Manual GitHub policy: releases are not created by Codex.",
+    match = ["gh release create v0.0.1"],
+)
+
+prefix_rule(
+    pattern = ["gh", "repo", "edit"],
+    decision = "forbidden",
+    justification = "Manual GitHub policy: repository settings are human-controlled.",
+    match = ["gh repo edit --enable-auto-merge"],
+)
+
+prefix_rule(
+    pattern = ["gh", "api", "--method", "POST"],
+    decision = "forbidden",
+    justification = "Manual GitHub policy: GitHub API write calls are human-controlled.",
+    match = ["gh api --method POST repos/owner/repo/issues"],
+)
+
+prefix_rule(
+    pattern = ["gh", "api", "--method", "PATCH"],
+    decision = "forbidden",
+    justification = "Manual GitHub policy: GitHub API write calls are human-controlled.",
+    match = ["gh api --method PATCH repos/owner/repo"],
+)
+
+prefix_rule(
+    pattern = ["gh", "api", "--method", "PUT"],
+    decision = "forbidden",
+    justification = "Manual GitHub policy: GitHub API write calls are human-controlled.",
+    match = ["gh api --method PUT repos/owner/repo/branches/main/protection"],
+)
+
+prefix_rule(
+    pattern = ["gh", "api", "--method", "DELETE"],
+    decision = "forbidden",
+    justification = "Manual GitHub policy: GitHub API write calls are human-controlled.",
+    match = ["gh api --method DELETE repos/owner/repo/git/refs/tags/v0.0.1"],
+)
+
+prefix_rule(
+    pattern = ["gh", "api", "-X", "POST"],
+    decision = "forbidden",
+    justification = "Manual GitHub policy: GitHub API write calls are human-controlled.",
+    match = ["gh api -X POST repos/owner/repo/issues"],
+)
+
+prefix_rule(
+    pattern = ["gh", "api", "-X", "PATCH"],
+    decision = "forbidden",
+    justification = "Manual GitHub policy: GitHub API write calls are human-controlled.",
+    match = ["gh api -X PATCH repos/owner/repo"],
+)
+
+prefix_rule(
+    pattern = ["gh", "api", "-X", "PUT"],
+    decision = "forbidden",
+    justification = "Manual GitHub policy: GitHub API write calls are human-controlled.",
+    match = ["gh api -X PUT repos/owner/repo/branches/main/protection"],
+)
+
+prefix_rule(
+    pattern = ["gh", "api", "-X", "DELETE"],
+    decision = "forbidden",
+    justification = "Manual GitHub policy: GitHub API write calls are human-controlled.",
+    match = ["gh api -X DELETE repos/owner/repo/git/refs/tags/v0.0.1"],
+)

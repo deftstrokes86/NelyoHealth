@@ -60,6 +60,9 @@ jobs:
       - name: Accessibility smoke tests
         run: pnpm test:a11y
 
+      - name: Visual contract tests
+        run: pnpm test:visual
+
       - name: Build verification
         run: pnpm build
 

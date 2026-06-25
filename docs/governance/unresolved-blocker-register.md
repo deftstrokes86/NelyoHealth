@@ -70,7 +70,7 @@ BLOCKS-PHASE-1-FOUNDATION, BLOCKS-SPECIFIC-CAPABILITY-IMPLEMENTATION, BLOCKS-REL
 
 | Blocker ID | Area | Owner | Problem | Evidence | Class | Severity | Required correction | Blocks P01-FND-001 completion | Blocks P01-FND-002 | Status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| BLK-P01-FND-001 | Playwright MCP interactive Codex IDE browser verification | Architecture / Security owner | Codex in-app/browser MCP automation remains upstream blocked because the Node-backed browser-control MCP call failed with `codex/sandbox-state-meta: missing field sandboxPolicy`. P01-FND-001R verified interactive Codex IDE terminal browser operation through official `@playwright/cli@0.1.14`, so this blocker applies only to the MCP path. | Minimal node_repl browser-control call failed before MCP browser automation; deterministic Playwright tests passed; Playwright CLI fallback opened and operated the synthetic local smoke page with the named `nelyohealth-smoke` session. | NONBLOCKING-TRACKED | MEDIUM | After a relevant Codex app, IDE, browser plugin, bundled CLI, or Playwright MCP update, rerun project-scoped Playwright MCP smoke verification using `.codex/config.toml` without unsafe flags, personal profile, extension mode, CDP attach, production origin, or real data. | No | No | OPEN |
+| BLK-P01-FND-001 | Playwright MCP interactive Codex IDE browser verification | Architecture / Security owner | The earlier Codex browser-bridge error `codex/sandbox-state-meta: missing field sandboxPolicy` was retested during P01-FND-004 and was not reproduced. | Codex CLI 0.141.0; `codex mcp list`; project-scoped MCP tab list; MCP opened `http://127.0.0.1:4173/`, resized to mobile, wrote snapshot under `.artifacts/playwright-mcp`, and closed. | RESOLVED-FOR-FOUNDATION | MEDIUM | Reopen only if the MCP bridge error recurs after a relevant Codex, IDE, browser plugin, or Playwright MCP update. | No | No | RESOLVED |
 
 ## P01-FND-003 unresolved conditions - 2026-06-25
 
@@ -79,3 +79,13 @@ BLOCKS-PHASE-1-FOUNDATION, BLOCKS-SPECIFIC-CAPABILITY-IMPLEMENTATION, BLOCKS-REL
 | BLK-P01-FND-003-001 | GitHub branch protection/rulesets, required checks, and CODEOWNERS enforcement not externally verified. | Repository administrator | No, if accepted as tracked condition | Yes | OPEN |
 | BLK-P01-FND-003-002 | Dependency Review and private vulnerability reporting support not externally verified. | Security owner/repository administrator | No, if accepted as tracked condition | Yes | OPEN |
 | BLK-P01-FND-003-003 | UI UX Pro Max license/commercial review remains unresolved. | Legal/commercial owner | No, while advisory-only | Yes for broader redistribution or commercial reliance | OPEN |
+
+## P01-FND-004 unresolved conditions - 2026-06-25
+
+| Blocker ID | Condition | Owner | Blocks Phase 2 | Blocks pilot | Status |
+|---|---|---|---|---|---|
+| BLK-P01-FND-004-001 | GitHub branch protection or ruleset evidence is not present; manual repository-administration checklist remains pending. | Repository administrator | No, if accepted as tracked condition | Yes | OPEN |
+| BLK-P01-FND-004-002 | Required failed-check merge blocking is not externally evidenced. | Repository administrator | No, if accepted as tracked condition | Yes | OPEN |
+| BLK-P01-FND-004-003 | Project-scoped Playwright MCP local smoke was reverified during P01-FND-004. | Architecture/security owner | No | No | RESOLVED |
+| BLK-P01-FND-004-004 | CODEOWNERS enforcement remains deferred until an independent qualified reviewer exists. | Repository administrator | No | Yes for production-grade review governance | OPEN |
+| BLK-P01-FND-004-005 | Operational database migrations and seed behavior are Phase 2 work and are not started. | Platform/data owner | Yes for database-dependent Phase 2 tasks until authorized | Yes | OPEN |

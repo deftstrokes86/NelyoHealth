@@ -23,6 +23,9 @@
     "test:a11y": {
       "outputs": ["test-results/**", "playwright-report/**"]
     },
+    "test:visual": {
+      "outputs": ["test-results/**", "playwright-report/**"]
+    },
     "tokens:build": {
       "outputs": ["packages/design-tokens/lib/**", "packages/design-tokens/generated/**"]
     },

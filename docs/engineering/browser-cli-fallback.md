@@ -108,9 +108,9 @@ P01-FND-001R uses synthetic smoke data only. Any future artifact containing non-
 
 ## Relationship to Playwright MCP
 
-The Playwright CLI fallback satisfies interactive browser operation for P01-FND-001 closure only. It does not resolve the upstream Codex browser-bridge blocker.
+The Playwright CLI fallback satisfied interactive browser operation for P01-FND-001 closure. P01-FND-004 later reverified the project-scoped Playwright MCP path successfully against the local synthetic smoke page on 2026-06-25 with Codex CLI 0.141.0.
 
-`BLK-P01-FND-001` remains open as `NONBLOCKING-TRACKED`. The next review trigger is a relevant Codex app, IDE, browser plugin, bundled CLI, or Playwright MCP update. The resolution criterion is a successful project-scoped Playwright MCP smoke verification using the existing `.codex/config.toml` path without unsafe flags or personal browser state.
+The CLI remains a verified fallback if MCP becomes unavailable again. Any future MCP regression must be tracked without `--disable-sandbox`, undocumented `sandboxPolicy`, personal browser state, extension mode, or CDP attach.
 
 ## Next-state rule
 

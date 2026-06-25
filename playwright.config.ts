@@ -52,6 +52,11 @@ export default defineConfig({
       name: "accessibility-chromium",
       testMatch: ["tests/accessibility/**/*.spec.ts"],
       use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 1000 } }
+    },
+    {
+      name: "visual-chromium",
+      testMatch: ["tests/visual/**/*.spec.ts"],
+      use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 1000 } }
     }
   ]
 });

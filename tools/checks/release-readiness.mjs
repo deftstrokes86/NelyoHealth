@@ -26,11 +26,19 @@ const requiredDocs = [
   "docs/governance/phase-1-gate-review.md",
   "docs/governance/phase-1-completion-report.md",
   "docs/governance/phase-2-readiness-handoff.md",
+  "AGENTS.md",
+  ".agent/PLANS.md",
+  ".agents/skills/nelyo-browser-validation/SKILL.md",
   "docs/engineering/repository-collaboration.md",
   "docs/engineering/github-repository-controls.md",
+  "docs/engineering/github-manual-ruleset-checklist.md",
+  "docs/engineering/manual-git-and-github-workflow.md",
   "docs/engineering/dependency-governance.md",
   "docs/engineering/versioning-and-release.md",
-  "docs/engineering/supply-chain-inventory.md"
+  "docs/engineering/supply-chain-inventory.md",
+  "docs/governance/phase-1-map-amendments.md",
+  "docs/exec-plans/P01-phase-1-map-gap-closure.md",
+  "tools/checks/phase-gated-database-command.mjs"
 ];
 for (const file of requiredDocs) {
   if (!fs.existsSync(path.join(root, file))) failures.push(`Missing ${file}`);

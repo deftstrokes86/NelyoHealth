@@ -7,6 +7,7 @@ build/
 
 # Browser and test artifacts
 .artifacts/
+.artifacts/visual/
 .artifacts/playwright-cli/
 .playwright-cli/
 test-results/

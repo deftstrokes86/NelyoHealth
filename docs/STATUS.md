@@ -7,7 +7,16 @@
 - Phase 0: PHASE-0-CONDITIONAL-PASS.
 - P01-FND-001: ACCEPTED.
 - P01-FND-002: ACCEPTED.
-- P01-FND-003: COMPLETED, pending orchestration acceptance.
+- P01-FND-003: ACCEPTED.
+- P01-FND-004: COMPLETED, pending orchestration acceptance.
+- AGENTS guidance: IMPLEMENTED.
+- Execution-plan convention: IMPLEMENTED.
+- Browser-validation skill: IMPLEMENTED.
+- Manual Git authority: LOCKED.
+- Automated GitHub writes: PROHIBITED.
+- Visual test command: IMPLEMENTED as `pnpm test:visual`.
+- Database command interfaces: PRESENT, PHASE-2-GATED, NOT-OPERATIONAL.
+- Branch protection: MANUAL-ADMIN-PENDING.
 - Phase 1 gate: PHASE-1-CONDITIONAL-PASS.
 - Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS, only after external orchestration starts Phase 2.
 - Phase 2: NOT STARTED.
@@ -15,9 +24,9 @@
 - Production release: NOT APPROVED.
 - Production data: NOT APPROVED.
 - Interactive browser: VERIFIED THROUGH PLAYWRIGHT CLI FALLBACK.
-- Playwright MCP: UPSTREAM BLOCKED, NONBLOCKING-TRACKED.
+- Playwright MCP: VERIFIED THROUGH PROJECT-SCOPED LOCAL SMOKE ON 2026-06-25 WITH CODEX-CLI 0.141.0.
 - UI UX Pro Max licence: REVIEW-REQUIRED.
-- Next action: orchestration review of P01-FND-003.
+- Next action: orchestration review of P01-FND-004.
 
 ## Foundation commands
 
@@ -28,6 +37,9 @@ pnpm actions:verify
 pnpm deps:verify
 pnpm release:check
 pnpm design:verify
+pnpm test:visual
+pnpm db:migrate # expected nonzero Phase 2 gate
+pnpm db:seed # expected nonzero Phase 2 gate
 ```
 
 ## Locked requirements retained
@@ -43,9 +55,11 @@ pnpm design:verify
 - Sponsors, employers, family-plan administrators, HMOs, and guardians receive only explicitly granted permissions.
 - Browser testing includes interactive local browser access and deterministic Playwright tests using synthetic data only.
 - Phase 1 foundation work does not implement production application features.
+- Codex must never commit, push, merge, tag, release, deploy, publish, create pull requests, or mutate GitHub settings.
 
 ## Open conditions
 
 - GitHub branch protection/rulesets, required checks, CODEOWNERS enforcement, Dependency Review, and private vulnerability reporting require repository administrator verification.
+- Project-scoped Playwright MCP is currently verified for local synthetic smoke; Playwright CLI remains the verified fallback if MCP becomes unavailable.
 - UI UX Pro Max external license/commercial review remains pending before broader redistribution or commercial reliance.
 - Phase 0 domain approvals remain required before implementation or pilot decisions in clinical, legal, privacy, payment, pharmacy, laboratory, HMO, employer, sponsor, guardian, or emergency domains.

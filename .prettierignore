@@ -5,6 +5,7 @@ coverage
 playwright-report
 test-results
 .artifacts
+.codex/rules
 *.md
 docs
 .agents

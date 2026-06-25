@@ -9,7 +9,8 @@ Current status:
 - Phase 0: PHASE-0-CONDITIONAL-PASS.
 - P01-FND-001: ACCEPTED.
 - P01-FND-002: ACCEPTED.
-- P01-FND-003: completed pending orchestration acceptance.
+- P01-FND-003: ACCEPTED.
+- P01-FND-004: completed pending orchestration acceptance.
 - Phase 2: NOT STARTED.
 - Pilot launch: PILOT-NO-GO.
 
@@ -73,6 +74,27 @@ pnpm deps:outdated
 
 UI-affecting work must include deterministic Playwright evidence, interactive browser evidence where requested by the prompt, desktop/tablet/mobile evidence, accessibility evidence, and reduced-motion evidence when Motion is affected.
 
+Visual foundation work must run:
+
+```bash
+pnpm test:visual
+```
+
+Do not run `pnpm test:visual:update` in CI. Snapshot or baseline updates require manual review and must not be treated as product design approval.
+
+## Manual Git and GitHub policy
+
+The repository owner performs every Git and GitHub write. Codex may inspect state with read-only Git commands, edit files, run validation, and suggest a commit message. Codex must not stage, commit, push, create branches, open or merge pull requests, tag, release, deploy, publish packages, enable auto-merge, or change GitHub settings.
+
+Operational database commands are Phase 2-gated:
+
+```bash
+pnpm db:migrate
+pnpm db:seed
+```
+
+They intentionally exit nonzero in Phase 1 and must not be counted as operational database capability.
+
 ## Documentation expectations
 
 Architecture, dependency, security, privacy, provider-disclosure, release, or workflow changes must update the relevant docs, registers, ADRs, or traceability artifacts. Do not silently revise a locked requirement.
@@ -99,4 +121,4 @@ Preserve one longitudinal patient identity, payer/clinical-access separation, pr
 
 ## Definition of done
 
-A change is done only when required files exist, validation evidence is recorded, external approvals are not fabricated, relevant registers are updated, no sensitive data is introduced, no release/publish/deploy path is added, Phase 2 remains not started during P01-FND-003, and pilot remains PILOT-NO-GO.
+A change is done only when required files exist, validation evidence is recorded, external approvals are not fabricated, relevant registers are updated, no sensitive data is introduced, no release/publish/deploy path is added, Phase 2 remains not started unless explicitly authorized by a later prompt, and pilot remains PILOT-NO-GO.

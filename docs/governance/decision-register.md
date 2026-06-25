@@ -778,3 +778,25 @@
 | DEC-P01-FND-003-024 | Releases require human approval. | APPROVED-FOR-FOUNDATION | Release owner | GOVERNANCE.md |
 | DEC-P01-FND-003-025 | Phase 1 and Phase 2 gates are separate. | APPROVED-FOR-FOUNDATION | Execution owner | phase-1-gate-review.md |
 | DEC-P01-FND-003-026 | Phase 2 and pilot readiness are separate. | APPROVED-FOR-FOUNDATION | Execution owner | phase-2-readiness-handoff.md |
+
+## P01-FND-004 decisions - 2026-06-25
+
+| Decision ID | Decision | Status | Owner | Evidence |
+|---|---|---|---|---|
+| DEC-P01-FND-004-001 | `AGENTS.md` files are repository guidance, not autonomous-agent orchestration. | APPROVED-FOR-FOUNDATION | Repository owner | AGENTS.md; phase-1-map-amendments.md |
+| DEC-P01-FND-004-002 | Nested `AGENTS.md` files provide directory-specific rules without creating subagents, teams, routing, or background execution. | APPROVED-FOR-FOUNDATION | Repository owner | docs/AGENTS.md; packages/AGENTS.md; tests/AGENTS.md; tools/AGENTS.md; .github/AGENTS.md; infra/AGENTS.md |
+| DEC-P01-FND-004-003 | `.agent/PLANS.md` is an execution-plan convention, not an autonomous-agent configuration. | APPROVED-FOR-FOUNDATION | Execution owner | .agent/PLANS.md |
+| DEC-P01-FND-004-004 | Repository browser validation is represented as a Codex Skill, not an autonomous agent. | APPROVED-FOR-FOUNDATION | QA/security owner | .agents/skills/nelyo-browser-validation/SKILL.md |
+| DEC-P01-FND-004-005 | Git and GitHub writes remain human-only. | LOCKED | Repository owner | AGENTS.md; manual-git-and-github-workflow.md; manual-git.rules |
+| DEC-P01-FND-004-006 | Codex may inspect Git state but must not mutate Git history, repository settings, releases, tags, pull requests, deployments, or package publication. | LOCKED | Repository owner | AGENTS.md; CONTRIBUTING.md; GOVERNANCE.md |
+| DEC-P01-FND-004-007 | No automated PR, merge, tag, release, package publication, or deployment path is introduced in Phase 1. | APPROVED-FOR-FOUNDATION | Release owner | package.json; workflows; manual-git-and-github-workflow.md |
+| DEC-P01-FND-004-008 | The founder-owned personal GitHub repository is accepted for the current founder-led stage. | APPROVED-FOR-FOUNDATION | Repository owner | phase-1-map-amendments.md; github-repository-controls.md |
+| DEC-P01-FND-004-009 | GitHub organization creation is deferred until team growth, ownership transfer, production-governance needs, or managed permissions justify it. | APPROVED-FOR-FOUNDATION | Repository owner | phase-1-map-amendments.md |
+| DEC-P01-FND-004-010 | Branch protection or rulesets are manually configured by the repository owner and must not be claimed active without evidence. | EXTERNAL-MANUAL-ACTION-PENDING | Repository administrator | github-manual-ruleset-checklist.md |
+| DEC-P01-FND-004-011 | Required status checks block invalid merges but do not automate merging. | APPROVED-FOR-FOUNDATION | Repository administrator | github-manual-ruleset-checklist.md |
+| DEC-P01-FND-004-012 | CODEOWNERS remains informative until an independent qualified reviewer exists; code-owner enforcement can be added then. | APPROVED-FOR-FOUNDATION | Repository administrator | github-repository-controls.md |
+| DEC-P01-FND-004-013 | Project-scoped Playwright MCP is verified for local synthetic smoke with the existing `.codex/config.toml` configuration and no sandbox weakening. | APPROVED-FOR-FOUNDATION | Architecture/security owner | browser-tooling.md; P01-FND-004 MCP smoke |
+| DEC-P01-FND-004-014 | Playwright CLI remains the verified interactive browser fallback while MCP is blocked. | APPROVED-FOR-FOUNDATION | QA/security owner | browser-cli-fallback.md; nelyo-browser-validation skill |
+| DEC-P01-FND-004-015 | Visual testing is implemented for the synthetic foundation as a deterministic visual-contract suite, not final product design approval. | APPROVED-FOR-FOUNDATION | QA/design owner | tests/visual/design-foundation.visual.spec.ts; package.json |
+| DEC-P01-FND-004-016 | Database command interfaces are present but phase-gated until Phase 2; they intentionally fail and create nothing in Phase 1. | APPROVED-FOR-FOUNDATION | Engineering owner | tools/checks/phase-gated-database-command.mjs; package.json |
+| DEC-P01-FND-004-017 | Phase 1 map deviations are explicit amendments, not accidental omissions. | APPROVED-FOR-FOUNDATION | Execution owner | phase-1-map-amendments.md |
