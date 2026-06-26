@@ -1,3 +1,6 @@
+export { createApiHealthResponse, createReadinessResponse } from "./health.js";
+export type { ApiHealthResponse, ReadinessResponse } from "./health.js";
+
 export const apiApplicationBoundary = {
   id: "api",
   packageName: "@nelyohealth/api",

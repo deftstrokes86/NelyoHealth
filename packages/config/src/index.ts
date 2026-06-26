@@ -1,3 +1,6 @@
+export { createRuntimeConfig, defaultRuntimeConfig, resolveRuntimeConfig } from "./env.js";
+export type { NodeEnvironment, RuntimeConfig, RuntimeConfigOverrides } from "./env.js";
+
 export const configPackageBoundary = {
   id: "config",
   packageName: "@nelyohealth/config",
