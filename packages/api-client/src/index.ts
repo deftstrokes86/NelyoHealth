@@ -4,6 +4,10 @@ export { createBookingDraftDto } from "./bookings.js";
 export type { BookingDraftDto, BookingDraftRequestDto } from "./bookings.js";
 export { createIntakeDraftDto } from "./intake.js";
 export type { IntakeDraftDto, IntakeDraftRequestDto } from "./intake.js";
+export { createReferralDraftDto } from "./referrals.js";
+export type { ReferralDraftDto, ReferralDraftRequestDto } from "./referrals.js";
+export { createPrescriptionDraftDto } from "./prescriptions.js";
+export type { PrescriptionDraftDto, PrescriptionDraftRequestDto } from "./prescriptions.js";
 
 export const apiClientPackageBoundary = {
   id: "api-client",

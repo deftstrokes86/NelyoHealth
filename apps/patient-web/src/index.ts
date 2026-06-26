@@ -9,6 +9,19 @@ export { createInitialBookingState, createBookingStateWithSelection } from "./bo
 export type { BookingState } from "./booking-state.js";
 export { createInitialIntakeState, createIntakeStateWithSelection } from "./intake-state.js";
 export type { IntakeState } from "./intake-state.js";
+export { createIntakeViewModel } from "./intake.js";
+export type { IntakeDraftDtoLike, IntakeViewModel } from "./intake.js";
+export { createInitialReferralState, createReferralStateWithSelection } from "./referral-state.js";
+export type { ReferralState } from "./referral-state.js";
+export { createReferralViewModel } from "./referral.js";
+export type { ReferralDraftDtoLike, ReferralViewModel } from "./referral.js";
+export {
+  createInitialPrescriptionState,
+  createPrescriptionStateWithSelection
+} from "./prescription-state.js";
+export type { PrescriptionState } from "./prescription-state.js";
+export { createPrescriptionViewModel } from "./prescription.js";
+export type { PrescriptionDraftDtoLike, PrescriptionViewModel } from "./prescription.js";
 
 export const patientWebApplicationBoundary = {
   id: "patient-web",

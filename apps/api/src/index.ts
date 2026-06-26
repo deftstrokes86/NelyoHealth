@@ -15,6 +15,10 @@ export { createBookingDraft } from "./bookings.js";
 export type { BookingDraft, BookingDraftInput } from "./bookings.js";
 export { createIntakeDraft } from "./intake.js";
 export type { IntakeDraft, IntakeDraftInput } from "./intake.js";
+export { createReferralDraft } from "./referrals.js";
+export type { ReferralDraft, ReferralDraftInput } from "./referrals.js";
+export { createPrescriptionDraft } from "./prescriptions.js";
+export type { PrescriptionDraft, PrescriptionDraftInput } from "./prescriptions.js";
 
 export const apiApplicationBoundary = {
   id: "api",
