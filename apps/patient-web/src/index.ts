@@ -7,6 +7,8 @@ export {
 export type { ProviderDiscoveryState } from "./provider-discovery-state.js";
 export { createInitialBookingState, createBookingStateWithSelection } from "./booking-state.js";
 export type { BookingState } from "./booking-state.js";
+export { createInitialIntakeState, createIntakeStateWithSelection } from "./intake-state.js";
+export type { IntakeState } from "./intake-state.js";
 
 export const patientWebApplicationBoundary = {
   id: "patient-web",

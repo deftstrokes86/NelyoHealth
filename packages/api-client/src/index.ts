@@ -2,6 +2,8 @@ export { createProviderSearchResponseDto } from "./providers.js";
 export type { ProviderSearchRequestDto, ProviderSearchResponseDto } from "./providers.js";
 export { createBookingDraftDto } from "./bookings.js";
 export type { BookingDraftDto, BookingDraftRequestDto } from "./bookings.js";
+export { createIntakeDraftDto } from "./intake.js";
+export type { IntakeDraftDto, IntakeDraftRequestDto } from "./intake.js";
 
 export const apiClientPackageBoundary = {
   id: "api-client",

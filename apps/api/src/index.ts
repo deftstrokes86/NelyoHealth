@@ -13,6 +13,8 @@ export type {
 } from "./providers.js";
 export { createBookingDraft } from "./bookings.js";
 export type { BookingDraft, BookingDraftInput } from "./bookings.js";
+export { createIntakeDraft } from "./intake.js";
+export type { IntakeDraft, IntakeDraftInput } from "./intake.js";
 
 export const apiApplicationBoundary = {
   id: "api",
