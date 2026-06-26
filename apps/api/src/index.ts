@@ -19,6 +19,8 @@ export { createReferralDraft } from "./referrals.js";
 export type { ReferralDraft, ReferralDraftInput } from "./referrals.js";
 export { createPrescriptionDraft } from "./prescriptions.js";
 export type { PrescriptionDraft, PrescriptionDraftInput } from "./prescriptions.js";
+export { createDiagnosticResultDraft } from "./diagnostic-results.js";
+export type { DiagnosticResultDraft, DiagnosticResultDraftInput } from "./diagnostic-results.js";
 
 export const apiApplicationBoundary = {
   id: "api",

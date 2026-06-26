@@ -8,6 +8,11 @@ export { createReferralDraftDto } from "./referrals.js";
 export type { ReferralDraftDto, ReferralDraftRequestDto } from "./referrals.js";
 export { createPrescriptionDraftDto } from "./prescriptions.js";
 export type { PrescriptionDraftDto, PrescriptionDraftRequestDto } from "./prescriptions.js";
+export { createDiagnosticResultDraftDto } from "./diagnostic-results.js";
+export type {
+  DiagnosticResultDraftDto,
+  DiagnosticResultDraftRequestDto
+} from "./diagnostic-results.js";
 
 export const apiClientPackageBoundary = {
   id: "api-client",

@@ -22,6 +22,16 @@ export {
 export type { PrescriptionState } from "./prescription-state.js";
 export { createPrescriptionViewModel } from "./prescription.js";
 export type { PrescriptionDraftDtoLike, PrescriptionViewModel } from "./prescription.js";
+export {
+  createInitialDiagnosticResultState,
+  createDiagnosticResultStateWithSelection
+} from "./diagnostic-result-state.js";
+export type { DiagnosticResultState } from "./diagnostic-result-state.js";
+export { createDiagnosticResultViewModel } from "./diagnostic-result.js";
+export type {
+  DiagnosticResultDraftDtoLike,
+  DiagnosticResultViewModel
+} from "./diagnostic-result.js";
 
 export const patientWebApplicationBoundary = {
   id: "patient-web",
