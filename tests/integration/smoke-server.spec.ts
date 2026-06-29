@@ -47,6 +47,52 @@ describe("synthetic browser smoke server", () => {
         status: "synthetic-ok"
       });
 
+      const paymentRouteResponse = await fetch(`${baseURL}/api/payment-transition`);
+      expect(paymentRouteResponse.headers.get("cache-control")).toContain("no-store");
+      await expect(paymentRouteResponse.json()).resolves.toMatchObject({
+        data: {
+          paymentId: "payment-route-1",
+          status: "initiated"
+        },
+        meta: {
+          operationTag: "payment.transition",
+          decisionReasonTag: "to:initiated"
+        },
+        errors: []
+      });
+
+      const refundRouteResponse = await fetch(`${baseURL}/api/refund-transition`);
+      expect(refundRouteResponse.headers.get("cache-control")).toContain("no-store");
+      await expect(refundRouteResponse.json()).resolves.toMatchObject({
+        data: {
+          refundId: "refund-route-1",
+          status: "eligibility-review"
+        },
+        meta: {
+          operationTag: "refund.transition",
+          decisionReasonTag: "to:eligibility-review"
+        },
+        errors: []
+      });
+
+      const disclosureRouteResponse = await fetch(
+        `${baseURL}/api/disclosure-eligibility?orderId=order-route-1&providerDisplayName=Route%20Provider&paymentStatus=settled&hasAuthorization=true&sameTenant=true`
+      );
+      expect(disclosureRouteResponse.headers.get("cache-control")).toContain("no-store");
+      await expect(disclosureRouteResponse.json()).resolves.toMatchObject({
+        data: {
+          orderId: "order-route-1",
+          status: "eligible",
+          reasonCode: "eligible",
+          providerDisplayName: "Route Provider"
+        },
+        meta: {
+          operationTag: "provider-disclosure.eligibility.evaluate",
+          decisionReasonTag: "eligible"
+        },
+        errors: []
+      });
+
       const missingResponse = await fetch(`${baseURL}/../package.json`);
       expect(missingResponse.status).toBe(404);
     } finally {

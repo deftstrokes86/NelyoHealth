@@ -4,6 +4,11 @@ import { createRefundDraft } from "../../apps/api/src/refunds.js";
 import { transitionPaymentStatus } from "../../apps/api/src/payment-handlers.js";
 import { transitionRefundStatus } from "../../apps/api/src/refund-handlers.js";
 import { evaluateProviderDisclosureEligibility } from "../../apps/api/src/provider-disclosure-handlers.js";
+import {
+  handlePaymentTransitionRoute,
+  handleProviderDisclosureEligibilityRoute,
+  handleRefundTransitionRoute
+} from "../../apps/api/src/runtime-routes.js";
 
 describe("payment and refund runtime transitions", () => {
   it("transitions a payment from quoted to settled with contract-safe fields", () => {
@@ -168,6 +173,72 @@ describe("payment and refund runtime transitions", () => {
       reasonCode: "tenant-mismatch",
       providerDisplayName: "Provider Wrong Tenant",
       authorizedAt: null
+    });
+  });
+
+  it("attaches operation and decision reason tags to runtime route envelopes", () => {
+    const paymentResponse = handlePaymentTransitionRoute({
+      requestId: "req-obs-1",
+      correlationId: "corr-obs-1",
+      input: {
+        payment: createPaymentDraft({
+          paymentId: "payment-obs-1",
+          orderId: "order-obs-1",
+          status: "quoted",
+          amount: "10000",
+          currency: "NGN",
+          authorizedAt: null,
+          settledAt: null
+        }),
+        toStatus: "initiated",
+        transitionedAt: "2026-07-11T09:00:00.000Z"
+      }
+    });
+
+    expect(paymentResponse.meta).toMatchObject({
+      operationTag: "payment.transition",
+      decisionReasonTag: "to:initiated"
+    });
+
+    const refundResponse = handleRefundTransitionRoute({
+      requestId: "req-obs-2",
+      correlationId: "corr-obs-2",
+      input: {
+        refund: createRefundDraft({
+          refundId: "refund-obs-1",
+          paymentId: "payment-obs-1",
+          orderId: "order-obs-1",
+          status: "requested",
+          amount: "10000",
+          currency: "NGN",
+          completedAt: null
+        }),
+        toStatus: "eligibility-review",
+        transitionedAt: "2026-07-11T09:05:00.000Z"
+      }
+    });
+
+    expect(refundResponse.meta).toMatchObject({
+      operationTag: "refund.transition",
+      decisionReasonTag: "to:eligibility-review"
+    });
+
+    const disclosureResponse = handleProviderDisclosureEligibilityRoute({
+      requestId: "req-obs-3",
+      correlationId: "corr-obs-3",
+      input: {
+        orderId: "order-obs-2",
+        providerDisplayName: "Provider Observability",
+        paymentStatus: "settled",
+        hasAuthorization: true,
+        sameTenant: true,
+        evaluatedAt: "2026-07-11T09:10:00.000Z"
+      }
+    });
+
+    expect(disclosureResponse.meta).toMatchObject({
+      operationTag: "provider-disclosure.eligibility.evaluate",
+      decisionReasonTag: "eligible"
     });
   });
 });

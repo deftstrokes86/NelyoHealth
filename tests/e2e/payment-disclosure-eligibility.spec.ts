@@ -19,15 +19,17 @@ test.describe("synthetic payment to disclosure eligibility boundary", () => {
     expect(pendingResponse.ok()).toBe(true);
     const pendingDecision = await pendingResponse.json();
     expect(pendingDecision).toMatchObject({
-      orderId: "order-e2e-1",
-      status: "not-eligible",
-      reasonCode: "payment-not-settled",
-      providerDisplayName: "CarePoint Pharmacy",
-      authorizedAt: null
+      data: {
+        orderId: "order-e2e-1",
+        status: "not-eligible",
+        reasonCode: "payment-not-settled",
+        providerDisplayName: "CarePoint Pharmacy",
+        authorizedAt: null
+      }
     });
-    expect(pendingDecision).not.toHaveProperty("providerId");
-    expect(pendingDecision).not.toHaveProperty("providerAddress");
-    expect(pendingDecision).not.toHaveProperty("providerPhone");
+    expect(pendingDecision.data).not.toHaveProperty("providerId");
+    expect(pendingDecision.data).not.toHaveProperty("providerAddress");
+    expect(pendingDecision.data).not.toHaveProperty("providerPhone");
 
     const settledResponse = await page.request.get(
       "/api/disclosure-eligibility?orderId=order-e2e-1&providerDisplayName=CarePoint%20Pharmacy&paymentStatus=settled&hasAuthorization=true&sameTenant=true"
@@ -35,12 +37,14 @@ test.describe("synthetic payment to disclosure eligibility boundary", () => {
     expect(settledResponse.ok()).toBe(true);
     const settledDecision = await settledResponse.json();
     expect(settledDecision).toMatchObject({
-      orderId: "order-e2e-1",
-      status: "eligible",
-      reasonCode: "eligible",
-      providerDisplayName: "CarePoint Pharmacy"
+      data: {
+        orderId: "order-e2e-1",
+        status: "eligible",
+        reasonCode: "eligible",
+        providerDisplayName: "CarePoint Pharmacy"
+      }
     });
-    expect(typeof settledDecision.authorizedAt).toBe("string");
+    expect(typeof settledDecision.data.authorizedAt).toBe("string");
 
     const refundedResponse = await page.request.get(
       "/api/disclosure-eligibility?orderId=order-e2e-1&providerDisplayName=CarePoint%20Pharmacy&paymentStatus=settled&refundStatus=completed&hasAuthorization=true&sameTenant=true"
@@ -48,11 +52,13 @@ test.describe("synthetic payment to disclosure eligibility boundary", () => {
     expect(refundedResponse.ok()).toBe(true);
     const refundedDecision = await refundedResponse.json();
     expect(refundedDecision).toMatchObject({
-      orderId: "order-e2e-1",
-      status: "not-eligible",
-      reasonCode: "policy-gated",
-      providerDisplayName: "CarePoint Pharmacy",
-      authorizedAt: null
+      data: {
+        orderId: "order-e2e-1",
+        status: "not-eligible",
+        reasonCode: "policy-gated",
+        providerDisplayName: "CarePoint Pharmacy",
+        authorizedAt: null
+      }
     });
 
     const unauthorizedResponse = await page.request.get(
@@ -61,11 +67,13 @@ test.describe("synthetic payment to disclosure eligibility boundary", () => {
     expect(unauthorizedResponse.ok()).toBe(true);
     const unauthorizedDecision = await unauthorizedResponse.json();
     expect(unauthorizedDecision).toMatchObject({
-      orderId: "order-e2e-1",
-      status: "denied",
-      reasonCode: "authorization-missing",
-      providerDisplayName: "CarePoint Pharmacy",
-      authorizedAt: null
+      data: {
+        orderId: "order-e2e-1",
+        status: "denied",
+        reasonCode: "authorization-missing",
+        providerDisplayName: "CarePoint Pharmacy",
+        authorizedAt: null
+      }
     });
 
     const wrongTenantResponse = await page.request.get(
@@ -74,14 +82,56 @@ test.describe("synthetic payment to disclosure eligibility boundary", () => {
     expect(wrongTenantResponse.ok()).toBe(true);
     const wrongTenantDecision = await wrongTenantResponse.json();
     expect(wrongTenantDecision).toMatchObject({
-      orderId: "order-e2e-1",
-      status: "denied",
-      reasonCode: "tenant-mismatch",
-      providerDisplayName: "CarePoint Pharmacy",
-      authorizedAt: null
+      data: {
+        orderId: "order-e2e-1",
+        status: "denied",
+        reasonCode: "tenant-mismatch",
+        providerDisplayName: "CarePoint Pharmacy",
+        authorizedAt: null
+      }
     });
 
     await expectNoProtectedSentinels(page);
     await expectNoBrowserGuardFailures(guards);
+  });
+
+  test("does not cache disclosure eligibility across sequential requests", async ({ page }) => {
+    await page.goto("/");
+
+    const firstResponse = await page.request.get(
+      "/api/disclosure-eligibility?orderId=order-e2e-cache&providerDisplayName=CacheSafe%20Provider&paymentStatus=settled&hasAuthorization=true&sameTenant=true"
+    );
+    expect(firstResponse.ok()).toBe(true);
+    expect(firstResponse.headers()["cache-control"] ?? "").toContain("no-store");
+
+    const firstDecision = await firstResponse.json();
+    expect(firstDecision).toMatchObject({
+      data: {
+        orderId: "order-e2e-cache",
+        status: "eligible",
+        reasonCode: "eligible",
+        providerDisplayName: "CacheSafe Provider"
+      }
+    });
+
+    const secondResponse = await page.request.get(
+      "/api/disclosure-eligibility?orderId=order-e2e-cache&providerDisplayName=CacheSafe%20Provider&paymentStatus=settled&refundStatus=completed&hasAuthorization=true&sameTenant=true"
+    );
+    expect(secondResponse.ok()).toBe(true);
+    expect(secondResponse.headers()["cache-control"] ?? "").toContain("no-store");
+
+    const secondDecision = await secondResponse.json();
+    expect(secondDecision).toMatchObject({
+      data: {
+        orderId: "order-e2e-cache",
+        status: "not-eligible",
+        reasonCode: "policy-gated",
+        providerDisplayName: "CacheSafe Provider",
+        authorizedAt: null
+      }
+    });
+
+    expect(secondDecision.data.status).not.toBe(firstDecision.data.status);
+    expect(secondDecision.data.reasonCode).not.toBe(firstDecision.data.reasonCode);
   });
 });

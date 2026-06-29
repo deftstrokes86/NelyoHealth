@@ -9,6 +9,10 @@ const { values } = parseArgs({
 });
 const host = values.host ?? "127.0.0.1";
 const port = Number(values.port ?? "4173");
+const apiJsonHeaders = {
+  "content-type": "application/json; charset=utf-8",
+  "cache-control": "no-store"
+};
 const html = `<!doctype html>
 <html lang="en">
 <head>
@@ -52,6 +56,54 @@ const server = http.createServer((request, response) => {
       "cache-control": "no-store"
     });
     setTimeout(() => response.end(JSON.stringify({ ok: true, synthetic: true })), 1000);
+    return;
+  }
+  if (request.url === "/api/payment-transition") {
+    response.writeHead(200, apiJsonHeaders);
+    response.end(
+      JSON.stringify({
+        data: {
+          paymentId: "payment-route-1",
+          orderId: "order-route-1",
+          status: "initiated",
+          amount: "5000",
+          currency: "NGN",
+          authorizedAt: null,
+          settledAt: null
+        },
+        meta: {
+          requestId: "req-payment-route",
+          correlationId: "corr-payment-route",
+          operationTag: "payment.transition",
+          decisionReasonTag: "to:initiated"
+        },
+        errors: []
+      })
+    );
+    return;
+  }
+  if (request.url === "/api/refund-transition") {
+    response.writeHead(200, apiJsonHeaders);
+    response.end(
+      JSON.stringify({
+        data: {
+          refundId: "refund-route-1",
+          paymentId: "payment-route-1",
+          orderId: "order-route-1",
+          status: "eligibility-review",
+          amount: "5000",
+          currency: "NGN",
+          completedAt: null
+        },
+        meta: {
+          requestId: "req-refund-route",
+          correlationId: "corr-refund-route",
+          operationTag: "refund.transition",
+          decisionReasonTag: "to:eligibility-review"
+        },
+        errors: []
+      })
+    );
     return;
   }
   if ((request.url ?? "").startsWith("/api/disclosure-eligibility")) {
@@ -109,7 +161,18 @@ const server = http.createServer((request, response) => {
       "content-type": "application/json; charset=utf-8",
       "cache-control": "no-store"
     });
-    response.end(JSON.stringify(payload));
+    response.end(
+      JSON.stringify({
+        data: payload,
+        meta: {
+          requestId: "req-disclosure-route",
+          correlationId: "corr-disclosure-route",
+          operationTag: "provider-disclosure.eligibility.evaluate",
+          decisionReasonTag: payload.reasonCode
+        },
+        errors: []
+      })
+    );
     return;
   }
   if (request.url === "/" || request.url === "/healthz") {

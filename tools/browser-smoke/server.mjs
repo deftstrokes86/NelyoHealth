@@ -14,6 +14,10 @@ const contentTypes = new Map([
   [".css", "text/css; charset=utf-8"],
   [".json", "application/json; charset=utf-8"]
 ]);
+const apiJsonHeaders = {
+  "Content-Type": "application/json; charset=utf-8",
+  "Cache-Control": "no-store"
+};
 
 const publicFiles = new Set(["/index.html", "/app.js", "/styles.css"]);
 
@@ -67,6 +71,56 @@ export function createSmokeServer() {
         return;
       }
 
+      if (requestUrl.pathname === "/api/payment-transition") {
+        response.writeHead(200, apiJsonHeaders);
+        response.end(
+          JSON.stringify({
+            data: {
+              paymentId: "payment-route-1",
+              orderId: "order-route-1",
+              status: "initiated",
+              amount: "5000",
+              currency: "NGN",
+              authorizedAt: null,
+              settledAt: null
+            },
+            meta: {
+              requestId: "req-payment-route",
+              correlationId: "corr-payment-route",
+              operationTag: "payment.transition",
+              decisionReasonTag: "to:initiated"
+            },
+            errors: []
+          })
+        );
+        return;
+      }
+
+      if (requestUrl.pathname === "/api/refund-transition") {
+        response.writeHead(200, apiJsonHeaders);
+        response.end(
+          JSON.stringify({
+            data: {
+              refundId: "refund-route-1",
+              paymentId: "payment-route-1",
+              orderId: "order-route-1",
+              status: "eligibility-review",
+              amount: "5000",
+              currency: "NGN",
+              completedAt: null
+            },
+            meta: {
+              requestId: "req-refund-route",
+              correlationId: "corr-refund-route",
+              operationTag: "refund.transition",
+              decisionReasonTag: "to:eligibility-review"
+            },
+            errors: []
+          })
+        );
+        return;
+      }
+
       if (requestUrl.pathname === "/api/disclosure-eligibility") {
         const paymentStatus = requestUrl.searchParams.get("paymentStatus") ?? "quoted";
         const refundStatus = requestUrl.searchParams.get("refundStatus");
@@ -115,7 +169,18 @@ export function createSmokeServer() {
         }
 
         response.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
-        response.end(JSON.stringify(payload));
+        response.end(
+          JSON.stringify({
+            data: payload,
+            meta: {
+              requestId: "req-disclosure-route",
+              correlationId: "corr-disclosure-route",
+              operationTag: "provider-disclosure.eligibility.evaluate",
+              decisionReasonTag: payload.reasonCode
+            },
+            errors: []
+          })
+        );
         return;
       }
 

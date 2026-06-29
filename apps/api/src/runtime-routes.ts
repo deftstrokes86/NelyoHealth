@@ -34,14 +34,18 @@ export function handlePaymentTransitionRoute(
     return createApiEnvelope({
       data: payment,
       requestId: request.requestId,
-      correlationId: request.correlationId
+      correlationId: request.correlationId,
+      operationTag: "payment.transition",
+      decisionReasonTag: `to:${payment.status}`
     });
   } catch (error) {
     return createErrorEnvelope({
       requestId: request.requestId,
       correlationId: request.correlationId,
       message: error instanceof Error ? error.message : "Payment transition failed",
-      code: "PAYMENT_TRANSITION_FAILED"
+      code: "PAYMENT_TRANSITION_FAILED",
+      operationTag: "payment.transition",
+      decisionReasonTag: "transition-denied"
     });
   }
 }
@@ -54,14 +58,18 @@ export function handleRefundTransitionRoute(
     return createApiEnvelope({
       data: refund,
       requestId: request.requestId,
-      correlationId: request.correlationId
+      correlationId: request.correlationId,
+      operationTag: "refund.transition",
+      decisionReasonTag: `to:${refund.status}`
     });
   } catch (error) {
     return createErrorEnvelope({
       requestId: request.requestId,
       correlationId: request.correlationId,
       message: error instanceof Error ? error.message : "Refund transition failed",
-      code: "REFUND_TRANSITION_FAILED"
+      code: "REFUND_TRANSITION_FAILED",
+      operationTag: "refund.transition",
+      decisionReasonTag: "transition-denied"
     });
   }
 }
@@ -73,6 +81,8 @@ export function handleProviderDisclosureEligibilityRoute(
   return createApiEnvelope({
     data: decision,
     requestId: request.requestId,
-    correlationId: request.correlationId
+    correlationId: request.correlationId,
+    operationTag: "provider-disclosure.eligibility.evaluate",
+    decisionReasonTag: decision.reasonCode
   });
 }
