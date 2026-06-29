@@ -30,7 +30,11 @@ const apiOnlyModules = new Set([
   "response",
   "payment-handlers",
   "refund-handlers",
-  "provider-disclosure-handlers"
+  "provider-disclosure-handlers",
+  "appointment-handlers",
+  "booking-handlers",
+  "appointment-booking-routes",
+  "server"
 ]);
 const apiModules = getContractModules(apiDir).filter((moduleName) => !apiOnlyModules.has(moduleName));
 const apiClientModules = getContractModules(apiClientDir);

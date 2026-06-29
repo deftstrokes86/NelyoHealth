@@ -5,6 +5,8 @@ export interface ApiEnvelope<T> {
     correlationId: string;
     operationTag?: string;
     decisionReasonTag?: string;
+    traceId?: string;
+    spanId?: string;
   };
   errors: Array<{
     message: string;
@@ -18,6 +20,8 @@ export interface ApiEnvelopeInput<T> {
   correlationId: string;
   operationTag?: string;
   decisionReasonTag?: string;
+  traceId?: string;
+  spanId?: string;
 }
 
 export interface ErrorEnvelopeInput {
@@ -27,6 +31,8 @@ export interface ErrorEnvelopeInput {
   code?: string;
   operationTag?: string;
   decisionReasonTag?: string;
+  traceId?: string;
+  spanId?: string;
 }
 
 export function createApiEnvelope<T>(input: ApiEnvelopeInput<T>): ApiEnvelope<T> {
@@ -36,7 +42,9 @@ export function createApiEnvelope<T>(input: ApiEnvelopeInput<T>): ApiEnvelope<T>
       requestId: input.requestId,
       correlationId: input.correlationId,
       operationTag: input.operationTag,
-      decisionReasonTag: input.decisionReasonTag
+      decisionReasonTag: input.decisionReasonTag,
+      traceId: input.traceId,
+      spanId: input.spanId
     },
     errors: []
   };
@@ -49,7 +57,9 @@ export function createErrorEnvelope(input: ErrorEnvelopeInput): ApiEnvelope<null
       requestId: input.requestId,
       correlationId: input.correlationId,
       operationTag: input.operationTag,
-      decisionReasonTag: input.decisionReasonTag
+      decisionReasonTag: input.decisionReasonTag,
+      traceId: input.traceId,
+      spanId: input.spanId
     },
     errors: [
       {

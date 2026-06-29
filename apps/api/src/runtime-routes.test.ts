@@ -59,6 +59,41 @@ describe("runtime route handlers", () => {
         code: "PAYMENT_TRANSITION_FAILED"
       }
     ]);
+    expect(response.meta).toMatchObject({
+      operationTag: "payment.transition",
+      decisionReasonTag: "transition-denied"
+    });
+  });
+
+  it("returns an error envelope for invalid refund transitions", () => {
+    const response = handleRefundTransitionRoute({
+      requestId: "req-2b",
+      correlationId: "corr-2b",
+      input: {
+        refund: createRefundDraft({
+          refundId: "refund-route-2",
+          paymentId: "payment-route-2",
+          orderId: "order-route-2",
+          status: "requested",
+          amount: "5000",
+          currency: "NGN",
+          completedAt: null
+        }),
+        toStatus: "completed",
+        transitionedAt: "2026-07-10T09:05:00.000Z"
+      }
+    });
+
+    expect(response.data).toBeNull();
+    expect(response.errors).toMatchObject([
+      {
+        code: "REFUND_TRANSITION_FAILED"
+      }
+    ]);
+    expect(response.meta).toMatchObject({
+      operationTag: "refund.transition",
+      decisionReasonTag: "transition-denied"
+    });
   });
 
   it("returns an envelope for valid refund transitions", () => {

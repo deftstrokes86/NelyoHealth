@@ -16,6 +16,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@nelyohealth/config": "0.0.0"
+    "@nelyohealth/config": "0.0.0",
+    "hono": "4.8.0"
   }
 }

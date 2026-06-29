@@ -35,6 +35,8 @@ export type {
 } from "./provider-disclosure.js";
 export { createRefundDraftDto } from "./refunds.js";
 export type { RefundDraftDto, RefundDraftRequestDto } from "./refunds.js";
+export { createAppointmentScheduleDto, createBookingDto } from "./appointment-booking.js";
+export type { AppointmentScheduleDto, BookingDto } from "./appointment-booking.js";
 export {
   createPaymentTransitionRouteRequestDto,
   createRefundTransitionRouteRequestDto,

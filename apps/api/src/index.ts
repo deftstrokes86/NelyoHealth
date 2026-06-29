@@ -50,6 +50,22 @@ export type { RefundTransitionInput } from "./refund-handlers.js";
 export { evaluateProviderDisclosureEligibility } from "./provider-disclosure-handlers.js";
 export type { ProviderDisclosureEligibilityInput } from "./provider-disclosure-handlers.js";
 export {
+  scheduleAppointmentStatus,
+  createBookingWithAppointment,
+  transitionBookingStatus,
+  handleAppointmentScheduleRoute,
+  handleBookingCreateRoute,
+  handleBookingTransitionRoute
+} from "./appointment-booking.js";
+export type {
+  AppointmentScheduleInput,
+  BookingCreateInput,
+  BookingCompleteInput,
+  AppointmentScheduleRouteRequest,
+  BookingCreateRouteRequest,
+  BookingTransitionRouteRequest
+} from "./appointment-booking.js";
+export {
   handlePaymentTransitionRoute,
   handleRefundTransitionRoute,
   handleProviderDisclosureEligibilityRoute
