@@ -41,6 +41,14 @@ export type {
   ProviderDisclosureDecisionDraft,
   ProviderDisclosureDecisionDraftInput
 } from "./provider-disclosure.js";
+export { createRefundDraft } from "./refunds.js";
+export type { RefundDraft, RefundDraftInput } from "./refunds.js";
+export { transitionPaymentStatus } from "./payment-handlers.js";
+export type { PaymentTransitionInput } from "./payment-handlers.js";
+export { transitionRefundStatus } from "./refund-handlers.js";
+export type { RefundTransitionInput } from "./refund-handlers.js";
+export { evaluateProviderDisclosureEligibility } from "./provider-disclosure-handlers.js";
+export type { ProviderDisclosureEligibilityInput } from "./provider-disclosure-handlers.js";
 
 export const apiApplicationBoundary = {
   id: "api",

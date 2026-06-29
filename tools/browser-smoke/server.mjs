@@ -67,6 +67,58 @@ export function createSmokeServer() {
         return;
       }
 
+      if (requestUrl.pathname === "/api/disclosure-eligibility") {
+        const paymentStatus = requestUrl.searchParams.get("paymentStatus") ?? "quoted";
+        const refundStatus = requestUrl.searchParams.get("refundStatus");
+        const sameTenant = requestUrl.searchParams.get("sameTenant") !== "false";
+        const hasAuthorization = requestUrl.searchParams.get("hasAuthorization") !== "false";
+        const orderId = requestUrl.searchParams.get("orderId") ?? "order-synthetic";
+        const providerDisplayName =
+          requestUrl.searchParams.get("providerDisplayName") ?? "Synthetic Provider";
+
+        let payload = {
+          orderId,
+          status: "eligible",
+          reasonCode: "eligible",
+          providerDisplayName,
+          authorizedAt: new Date(0).toISOString()
+        };
+
+        if (!sameTenant) {
+          payload = {
+            ...payload,
+            status: "denied",
+            reasonCode: "tenant-mismatch",
+            authorizedAt: null
+          };
+        } else if (!hasAuthorization) {
+          payload = {
+            ...payload,
+            status: "denied",
+            reasonCode: "authorization-missing",
+            authorizedAt: null
+          };
+        } else if (paymentStatus !== "settled") {
+          payload = {
+            ...payload,
+            status: "not-eligible",
+            reasonCode: "payment-not-settled",
+            authorizedAt: null
+          };
+        } else if (refundStatus === "completed") {
+          payload = {
+            ...payload,
+            status: "not-eligible",
+            reasonCode: "policy-gated",
+            authorizedAt: null
+          };
+        }
+
+        response.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+        response.end(JSON.stringify(payload));
+        return;
+      }
+
       const filePath = safePath(requestUrl.pathname);
       if (!filePath) {
         response.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });

@@ -33,6 +33,8 @@ export type {
   ProviderDisclosureDecisionDraftDto,
   ProviderDisclosureDecisionDraftRequestDto
 } from "./provider-disclosure.js";
+export { createRefundDraftDto } from "./refunds.js";
+export type { RefundDraftDto, RefundDraftRequestDto } from "./refunds.js";
 
 export const apiClientPackageBoundary = {
   id: "api-client",

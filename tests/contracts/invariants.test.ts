@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createProviderSearchResponseWithProtectedFields } from "../../apps/api/src/providers.js";
 import { createPaymentDraft } from "../../apps/api/src/payments.js";
 import { createProviderDisclosureDecisionDraft } from "../../apps/api/src/provider-disclosure.js";
+import { createRefundDraft } from "../../apps/api/src/refunds.js";
 
 describe("contract invariants", () => {
   it("does not expose protected provider fields in pre-payment search responses", () => {
@@ -77,5 +78,30 @@ describe("contract invariants", () => {
     expect(decision).not.toHaveProperty("providerId");
     expect(decision).not.toHaveProperty("providerAddress");
     expect(decision).not.toHaveProperty("providerPhone");
+  });
+
+  it("keeps refund boundary free from provider-detail fields", () => {
+    const refund = createRefundDraft({
+      refundId: "refund-locked-1",
+      paymentId: "payment-locked-2",
+      orderId: "order-locked-3",
+      status: "eligibility-review",
+      amount: "8000",
+      currency: "NGN",
+      completedAt: null
+    });
+
+    expect(refund).toMatchObject({
+      refundId: "refund-locked-1",
+      paymentId: "payment-locked-2",
+      orderId: "order-locked-3",
+      status: "eligibility-review",
+      amount: "8000",
+      currency: "NGN",
+      completedAt: null
+    });
+    expect(refund).not.toHaveProperty("providerId");
+    expect(refund).not.toHaveProperty("providerDisplayName");
+    expect(refund).not.toHaveProperty("address");
   });
 });

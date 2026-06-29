@@ -54,6 +54,64 @@ const server = http.createServer((request, response) => {
     setTimeout(() => response.end(JSON.stringify({ ok: true, synthetic: true })), 1000);
     return;
   }
+  if ((request.url ?? "").startsWith("/api/disclosure-eligibility")) {
+    const requestUrl = new URL(
+      request.url ?? "/api/disclosure-eligibility",
+      `http://${host}:${port}`
+    );
+    const paymentStatus = requestUrl.searchParams.get("paymentStatus") ?? "quoted";
+    const refundStatus = requestUrl.searchParams.get("refundStatus");
+    const sameTenant = requestUrl.searchParams.get("sameTenant") !== "false";
+    const hasAuthorization = requestUrl.searchParams.get("hasAuthorization") !== "false";
+    const orderId = requestUrl.searchParams.get("orderId") ?? "order-synthetic";
+    const providerDisplayName =
+      requestUrl.searchParams.get("providerDisplayName") ?? "Synthetic Provider";
+
+    let payload = {
+      orderId,
+      status: "eligible",
+      reasonCode: "eligible",
+      providerDisplayName,
+      authorizedAt: new Date(0).toISOString()
+    };
+
+    if (!sameTenant) {
+      payload = {
+        ...payload,
+        status: "denied",
+        reasonCode: "tenant-mismatch",
+        authorizedAt: null
+      };
+    } else if (!hasAuthorization) {
+      payload = {
+        ...payload,
+        status: "denied",
+        reasonCode: "authorization-missing",
+        authorizedAt: null
+      };
+    } else if (paymentStatus !== "settled") {
+      payload = {
+        ...payload,
+        status: "not-eligible",
+        reasonCode: "payment-not-settled",
+        authorizedAt: null
+      };
+    } else if (refundStatus === "completed") {
+      payload = {
+        ...payload,
+        status: "not-eligible",
+        reasonCode: "policy-gated",
+        authorizedAt: null
+      };
+    }
+
+    response.writeHead(200, {
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "no-store"
+    });
+    response.end(JSON.stringify(payload));
+    return;
+  }
   if (request.url === "/" || request.url === "/healthz") {
     response.writeHead(200, {
       "content-type":

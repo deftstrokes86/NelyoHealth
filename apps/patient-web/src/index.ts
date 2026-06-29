@@ -75,6 +75,10 @@ export type {
   ProviderDisclosureDecisionDraftDtoLike,
   ProviderDisclosureDecisionViewModel
 } from "./provider-disclosure.js";
+export { createInitialRefundState, createRefundStateWithSelection } from "./refund-state.js";
+export type { RefundState } from "./refund-state.js";
+export { createRefundViewModel } from "./refund.js";
+export type { RefundDraftDtoLike, RefundViewModel } from "./refund.js";
 
 export const patientWebApplicationBoundary = {
   id: "patient-web",
