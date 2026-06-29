@@ -1,5 +1,9 @@
 export { createProviderDiscoveryViewModel } from "./provider-discovery.js";
 export type { ProviderDiscoveryViewModel } from "./provider-discovery.js";
+export { createInitialAccountState, createAccountStateWithSelection } from "./account-state.js";
+export type { AccountState } from "./account-state.js";
+export { createAccountViewModel } from "./account.js";
+export type { AccountDraftDtoLike, AccountViewModel } from "./account.js";
 export {
   createInitialProviderDiscoveryState,
   createProviderDiscoveryStateWithSelection

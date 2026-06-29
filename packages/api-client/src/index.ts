@@ -1,5 +1,7 @@
 export { createProviderSearchResponseDto } from "./providers.js";
 export type { ProviderSearchRequestDto, ProviderSearchResponseDto } from "./providers.js";
+export { createAccountDraftDto } from "./accounts.js";
+export type { AccountDraftDto, AccountDraftRequestDto } from "./accounts.js";
 export { createBookingDraftDto } from "./bookings.js";
 export type { BookingDraftDto, BookingDraftRequestDto } from "./bookings.js";
 export { createIntakeDraftDto } from "./intake.js";
