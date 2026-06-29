@@ -13,6 +13,17 @@ export type {
   DiagnosticResultDraftDto,
   DiagnosticResultDraftRequestDto
 } from "./diagnostic-results.js";
+export { createFollowUpDraftDto } from "./follow-ups.js";
+export type { FollowUpDraftDto, FollowUpDraftRequestDto } from "./follow-ups.js";
+export { createAppointmentDraftDto } from "./appointments.js";
+export type { AppointmentDraftDto, AppointmentDraftRequestDto } from "./appointments.js";
+export { createConsentDraftDto } from "./consents.js";
+export type { ConsentDraftDto, ConsentDraftRequestDto } from "./consents.js";
+export { createAuthorizationPermissionDraftDto } from "./authorization.js";
+export type {
+  AuthorizationPermissionDraftDto,
+  AuthorizationPermissionDraftRequestDto
+} from "./authorization.js";
 
 export const apiClientPackageBoundary = {
   id: "api-client",
