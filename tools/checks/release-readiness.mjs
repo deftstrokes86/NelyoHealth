@@ -10,6 +10,7 @@ const checks = [
   ["GitHub Actions policy", ["node", ["tools/checks/github-actions-pinning.mjs"]]],
   ["Dependency license policy", ["node", ["tools/checks/dependency-license-policy.mjs"]]],
   ["Changesets policy", ["node", ["tools/checks/changeset-policy.mjs"]]],
+  ["Contract drift and invariant gate", ["node", ["tools/checks/contract-invariant-gate.mjs"]]],
   ["UI UX Pro Max integrity", ["node", ["tools/ui-ux-pro-max/check-integrity.mjs"]]],
   ["Basic secret scan", ["node", ["tools/checks/basic-secret-scan.mjs"]]]
 ];

@@ -28,6 +28,11 @@ export type {
 } from "./authorization.js";
 export { createPaymentDraftDto } from "./payments.js";
 export type { PaymentDraftDto, PaymentDraftRequestDto } from "./payments.js";
+export { createProviderDisclosureDecisionDraftDto } from "./provider-disclosure.js";
+export type {
+  ProviderDisclosureDecisionDraftDto,
+  ProviderDisclosureDecisionDraftRequestDto
+} from "./provider-disclosure.js";
 
 export const apiClientPackageBoundary = {
   id: "api-client",

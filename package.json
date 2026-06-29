@@ -15,6 +15,7 @@
     "format:check": "prettier --check .",
     "typecheck": "tsc -p tsconfig.base.json --noEmit && pnpm topology:typecheck",
     "test": "vitest run tests/unit",
+    "test:contract": "vitest run tests/contracts && node tools/checks/contract-invariant-gate.mjs",
     "test:integration": "vitest run tests/integration",
     "test:e2e": "playwright test tests/e2e",
     "test:browser": "playwright test tests/e2e",
@@ -67,7 +68,7 @@
     "release:version": "changeset version",
     "release:check": "node tools/checks/release-readiness.mjs",
     "release:inventory": "node tools/reports/dependency-inventory.mjs",
-    "repository:verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:integration && pnpm infra:verify && pnpm test:browser && pnpm test:a11y && pnpm test:visual && pnpm build && pnpm secret:scan && pnpm community:verify && pnpm actions:verify && pnpm deps:verify && pnpm changeset:status && pnpm release:check"
+    "repository:verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:contract && pnpm test:integration && pnpm infra:verify && pnpm test:browser && pnpm test:a11y && pnpm test:visual && pnpm build && pnpm secret:scan && pnpm community:verify && pnpm actions:verify && pnpm deps:verify && pnpm changeset:status && pnpm release:check"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.12.1",

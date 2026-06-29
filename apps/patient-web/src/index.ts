@@ -65,6 +65,16 @@ export { createInitialPaymentState, createPaymentStateWithSelection } from "./pa
 export type { PaymentState } from "./payment-state.js";
 export { createPaymentViewModel } from "./payment.js";
 export type { PaymentDraftDtoLike, PaymentViewModel } from "./payment.js";
+export {
+  createInitialProviderDisclosureState,
+  createProviderDisclosureStateWithSelection
+} from "./provider-disclosure-state.js";
+export type { ProviderDisclosureState } from "./provider-disclosure-state.js";
+export { createProviderDisclosureDecisionViewModel } from "./provider-disclosure.js";
+export type {
+  ProviderDisclosureDecisionDraftDtoLike,
+  ProviderDisclosureDecisionViewModel
+} from "./provider-disclosure.js";
 
 export const patientWebApplicationBoundary = {
   id: "patient-web",

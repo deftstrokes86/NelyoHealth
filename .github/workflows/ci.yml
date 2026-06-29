@@ -51,6 +51,9 @@ jobs:
       - name: Unit tests
         run: pnpm test
 
+      - name: Contract drift and invariant tests
+        run: pnpm test:contract
+
       - name: Integration tests
         run: pnpm test:integration
 

@@ -36,6 +36,11 @@ export type {
 } from "./authorization.js";
 export { createPaymentDraft } from "./payments.js";
 export type { PaymentDraft, PaymentDraftInput } from "./payments.js";
+export { createProviderDisclosureDecisionDraft } from "./provider-disclosure.js";
+export type {
+  ProviderDisclosureDecisionDraft,
+  ProviderDisclosureDecisionDraftInput
+} from "./provider-disclosure.js";
 
 export const apiApplicationBoundary = {
   id: "api",
