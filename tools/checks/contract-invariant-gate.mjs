@@ -25,7 +25,13 @@ function getExportedModuleNames(indexContent) {
 }
 
 const failures = [];
-const apiOnlyModules = new Set(["health", "response"]);
+const apiOnlyModules = new Set([
+  "health",
+  "response",
+  "payment-handlers",
+  "refund-handlers",
+  "provider-disclosure-handlers"
+]);
 const apiModules = getContractModules(apiDir).filter((moduleName) => !apiOnlyModules.has(moduleName));
 const apiClientModules = getContractModules(apiClientDir);
 const missingInApiClient = apiModules.filter((moduleName) => !apiClientModules.includes(moduleName));

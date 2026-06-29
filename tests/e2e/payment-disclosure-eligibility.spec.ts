@@ -55,6 +55,32 @@ test.describe("synthetic payment to disclosure eligibility boundary", () => {
       authorizedAt: null
     });
 
+    const unauthorizedResponse = await page.request.get(
+      "/api/disclosure-eligibility?orderId=order-e2e-1&providerDisplayName=CarePoint%20Pharmacy&paymentStatus=settled&hasAuthorization=false&sameTenant=true"
+    );
+    expect(unauthorizedResponse.ok()).toBe(true);
+    const unauthorizedDecision = await unauthorizedResponse.json();
+    expect(unauthorizedDecision).toMatchObject({
+      orderId: "order-e2e-1",
+      status: "denied",
+      reasonCode: "authorization-missing",
+      providerDisplayName: "CarePoint Pharmacy",
+      authorizedAt: null
+    });
+
+    const wrongTenantResponse = await page.request.get(
+      "/api/disclosure-eligibility?orderId=order-e2e-1&providerDisplayName=CarePoint%20Pharmacy&paymentStatus=settled&hasAuthorization=true&sameTenant=false"
+    );
+    expect(wrongTenantResponse.ok()).toBe(true);
+    const wrongTenantDecision = await wrongTenantResponse.json();
+    expect(wrongTenantDecision).toMatchObject({
+      orderId: "order-e2e-1",
+      status: "denied",
+      reasonCode: "tenant-mismatch",
+      providerDisplayName: "CarePoint Pharmacy",
+      authorizedAt: null
+    });
+
     await expectNoProtectedSentinels(page);
     await expectNoBrowserGuardFailures(guards);
   });

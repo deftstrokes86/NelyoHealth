@@ -49,6 +49,17 @@ export { transitionRefundStatus } from "./refund-handlers.js";
 export type { RefundTransitionInput } from "./refund-handlers.js";
 export { evaluateProviderDisclosureEligibility } from "./provider-disclosure-handlers.js";
 export type { ProviderDisclosureEligibilityInput } from "./provider-disclosure-handlers.js";
+export {
+  handlePaymentTransitionRoute,
+  handleRefundTransitionRoute,
+  handleProviderDisclosureEligibilityRoute
+} from "./runtime-routes.js";
+export type {
+  RuntimeRouteMeta,
+  PaymentTransitionRouteRequest,
+  RefundTransitionRouteRequest,
+  ProviderDisclosureEligibilityRouteRequest
+} from "./runtime-routes.js";
 
 export const apiApplicationBoundary = {
   id: "api",

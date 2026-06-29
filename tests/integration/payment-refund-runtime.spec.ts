@@ -132,4 +132,42 @@ describe("payment and refund runtime transitions", () => {
     });
     expect(settledDecision).not.toHaveProperty("providerAddress");
   });
+
+  it("denies disclosure when authorization is missing", () => {
+    const deniedDecision = evaluateProviderDisclosureEligibility({
+      orderId: "order-runtime-5",
+      providerDisplayName: "Provider Unauthorized",
+      paymentStatus: "settled",
+      hasAuthorization: false,
+      sameTenant: true,
+      evaluatedAt: "2026-07-09T11:10:00.000Z"
+    });
+
+    expect(deniedDecision).toMatchObject({
+      orderId: "order-runtime-5",
+      status: "denied",
+      reasonCode: "authorization-missing",
+      providerDisplayName: "Provider Unauthorized",
+      authorizedAt: null
+    });
+  });
+
+  it("denies disclosure when tenant context mismatches", () => {
+    const deniedDecision = evaluateProviderDisclosureEligibility({
+      orderId: "order-runtime-6",
+      providerDisplayName: "Provider Wrong Tenant",
+      paymentStatus: "settled",
+      hasAuthorization: true,
+      sameTenant: false,
+      evaluatedAt: "2026-07-09T11:20:00.000Z"
+    });
+
+    expect(deniedDecision).toMatchObject({
+      orderId: "order-runtime-6",
+      status: "denied",
+      reasonCode: "tenant-mismatch",
+      providerDisplayName: "Provider Wrong Tenant",
+      authorizedAt: null
+    });
+  });
 });

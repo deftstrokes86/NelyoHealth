@@ -1,0 +1,78 @@
+import { createApiEnvelope, createErrorEnvelope, type ApiEnvelope } from "./response.js";
+import { transitionPaymentStatus, type PaymentTransitionInput } from "./payment-handlers.js";
+import { transitionRefundStatus, type RefundTransitionInput } from "./refund-handlers.js";
+import {
+  evaluateProviderDisclosureEligibility,
+  type ProviderDisclosureEligibilityInput
+} from "./provider-disclosure-handlers.js";
+import type { PaymentDraft } from "./payments.js";
+import type { RefundDraft } from "./refunds.js";
+import type { ProviderDisclosureDecisionDraft } from "./provider-disclosure.js";
+
+export interface RuntimeRouteMeta {
+  requestId: string;
+  correlationId: string;
+}
+
+export interface PaymentTransitionRouteRequest extends RuntimeRouteMeta {
+  input: PaymentTransitionInput;
+}
+
+export interface RefundTransitionRouteRequest extends RuntimeRouteMeta {
+  input: RefundTransitionInput;
+}
+
+export interface ProviderDisclosureEligibilityRouteRequest extends RuntimeRouteMeta {
+  input: ProviderDisclosureEligibilityInput;
+}
+
+export function handlePaymentTransitionRoute(
+  request: PaymentTransitionRouteRequest
+): ApiEnvelope<PaymentDraft> {
+  try {
+    const payment = transitionPaymentStatus(request.input);
+    return createApiEnvelope({
+      data: payment,
+      requestId: request.requestId,
+      correlationId: request.correlationId
+    });
+  } catch (error) {
+    return createErrorEnvelope({
+      requestId: request.requestId,
+      correlationId: request.correlationId,
+      message: error instanceof Error ? error.message : "Payment transition failed",
+      code: "PAYMENT_TRANSITION_FAILED"
+    });
+  }
+}
+
+export function handleRefundTransitionRoute(
+  request: RefundTransitionRouteRequest
+): ApiEnvelope<RefundDraft> {
+  try {
+    const refund = transitionRefundStatus(request.input);
+    return createApiEnvelope({
+      data: refund,
+      requestId: request.requestId,
+      correlationId: request.correlationId
+    });
+  } catch (error) {
+    return createErrorEnvelope({
+      requestId: request.requestId,
+      correlationId: request.correlationId,
+      message: error instanceof Error ? error.message : "Refund transition failed",
+      code: "REFUND_TRANSITION_FAILED"
+    });
+  }
+}
+
+export function handleProviderDisclosureEligibilityRoute(
+  request: ProviderDisclosureEligibilityRouteRequest
+): ApiEnvelope<ProviderDisclosureDecisionDraft> {
+  const decision = evaluateProviderDisclosureEligibility(request.input);
+  return createApiEnvelope({
+    data: decision,
+    requestId: request.requestId,
+    correlationId: request.correlationId
+  });
+}

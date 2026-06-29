@@ -35,6 +35,17 @@ export type {
 } from "./provider-disclosure.js";
 export { createRefundDraftDto } from "./refunds.js";
 export type { RefundDraftDto, RefundDraftRequestDto } from "./refunds.js";
+export {
+  createPaymentTransitionRouteRequestDto,
+  createRefundTransitionRouteRequestDto,
+  createProviderDisclosureEligibilityRouteRequestDto
+} from "./runtime-routes.js";
+export type {
+  RuntimeRouteMetaDto,
+  PaymentTransitionRouteRequestDto,
+  RefundTransitionRouteRequestDto,
+  ProviderDisclosureEligibilityRouteRequestDto
+} from "./runtime-routes.js";
 
 export const apiClientPackageBoundary = {
   id: "api-client",
