@@ -34,6 +34,8 @@ export type {
   AuthorizationPermissionDraft,
   AuthorizationPermissionDraftInput
 } from "./authorization.js";
+export { createPaymentDraft } from "./payments.js";
+export type { PaymentDraft, PaymentDraftInput } from "./payments.js";
 
 export const apiApplicationBoundary = {
   id: "api",
