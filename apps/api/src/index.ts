@@ -76,6 +76,34 @@ export type {
   RefundTransitionRouteRequest,
   ProviderDisclosureEligibilityRouteRequest
 } from "./runtime-routes.js";
+export {
+  createReferralDraftAdvanced,
+  createPrescriptionDraftAdvanced,
+  transitionReferralStatus,
+  transitionPrescriptionStatus
+} from "./referral-prescription.js";
+export type {
+  ReferralDraftAdvanced,
+  ReferralDraftAdvancedInput,
+  PrescriptionDraftAdvanced,
+  PrescriptionDraftAdvancedInput,
+  ReferralStatusUpdateInput,
+  PrescriptionStatusUpdateInput
+} from "./referral-prescription.js";
+export {
+  handleReferralStatusRoute,
+  handlePrescriptionStatusRoute
+} from "./referral-prescription-routes.js";
+export type {
+  ReferralStatusRouteRequest,
+  PrescriptionStatusRouteRequest
+} from "./referral-prescription-routes.js";
+export {
+  createTracingContext,
+  extractTracingContext,
+  tracingContextToHeaders
+} from "./tracing-context.js";
+export type { TracingContext } from "./tracing-context.js";
 
 export const apiApplicationBoundary = {
   id: "api",

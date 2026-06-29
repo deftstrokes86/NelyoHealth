@@ -38,6 +38,14 @@ export type { RefundDraftDto, RefundDraftRequestDto } from "./refunds.js";
 export { createAppointmentScheduleDto, createBookingDto } from "./appointment-booking.js";
 export type { AppointmentScheduleDto, BookingDto } from "./appointment-booking.js";
 export {
+  createReferralDraftAdvancedDto,
+  createPrescriptionDraftAdvancedDto
+} from "./referral-prescription-advanced.js";
+export type {
+  ReferralDraftAdvancedDto,
+  PrescriptionDraftAdvancedDto
+} from "./referral-prescription-advanced.js";
+export {
   createPaymentTransitionRouteRequestDto,
   createRefundTransitionRouteRequestDto,
   createProviderDisclosureEligibilityRouteRequestDto
