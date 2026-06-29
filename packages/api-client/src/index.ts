@@ -40,11 +40,11 @@ export type { AppointmentScheduleDto, BookingDto } from "./appointment-booking.j
 export {
   createReferralDraftAdvancedDto,
   createPrescriptionDraftAdvancedDto
-} from "./referral-prescription-advanced.js";
+} from "./referral-prescription.js";
 export type {
   ReferralDraftAdvancedDto,
   PrescriptionDraftAdvancedDto
-} from "./referral-prescription-advanced.js";
+} from "./referral-prescription.js";
 export {
   createPaymentTransitionRouteRequestDto,
   createRefundTransitionRouteRequestDto,

@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import { app } from "./server.js";
 import { createPaymentDraft } from "./payments.js";
 import { createRefundDraft } from "./refunds.js";
+import { createReferralDraftAdvanced } from "./referral-advanced.js";
+import { createPrescriptionDraftAdvanced } from "./prescription-advanced.js";
 
 describe("api http server", () => {
   it("responds to health check", async () => {
@@ -248,6 +250,113 @@ describe("api http server", () => {
       correlationId: "corr-payment-err",
       traceId: "trace-payment-err",
       operationTag: "payment.transition"
+    });
+  });
+
+  it("handles referral status transition endpoint with tracing headers", async () => {
+    const referral = createReferralDraftAdvanced({
+      referralId: "ref-http-1",
+      patientId: "patient-http-1",
+      referringProviderId: "provider-a",
+      receivingProviderId: null,
+      status: "pending",
+      specialty: "cardiology",
+      reason: "Specialist consult",
+      createdAt: "2026-07-21T12:00:00.000Z",
+      sentAt: null,
+      respondedAt: null,
+      completedAt: null,
+      cancelledAt: null
+    });
+
+    const req = new Request("http://localhost/api/referral-status", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-request-id": "req-referral-1",
+        "x-correlation-id": "corr-referral-1",
+        "x-trace-id": "trace-referral-1",
+        "x-span-id": "span-referral-1"
+      },
+      body: JSON.stringify({
+        referral,
+        toStatus: "sent",
+        transitionedAt: "2026-07-21T12:05:00.000Z"
+      })
+    });
+
+    const res = await app.fetch(req);
+    expect(res.status).toBe(200);
+
+    const envelope = await res.json();
+    expect(envelope).toMatchObject({
+      data: {
+        referralId: "ref-http-1",
+        status: "sent"
+      },
+      meta: {
+        requestId: "req-referral-1",
+        correlationId: "corr-referral-1",
+        traceId: "trace-referral-1",
+        spanId: "span-referral-1",
+        operationTag: "referral.status.transition",
+        decisionReasonTag: "to:sent"
+      },
+      errors: []
+    });
+  });
+
+  it("handles prescription status transition endpoint with tracing headers", async () => {
+    const prescription = createPrescriptionDraftAdvanced({
+      prescriptionId: "rx-http-1",
+      patientId: "patient-http-1",
+      providerId: "provider-a",
+      medicationCode: "MED-123",
+      medicationName: "Amoxicillin",
+      dosage: "500mg",
+      frequency: "bid",
+      status: "prescribed",
+      prescribedAt: "2026-07-21T12:00:00.000Z",
+      verifiedAt: null,
+      dispensedAt: null,
+      completedAt: null,
+      cancelledAt: null
+    });
+
+    const req = new Request("http://localhost/api/prescription-status", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-request-id": "req-rx-1",
+        "x-correlation-id": "corr-rx-1",
+        "x-trace-id": "trace-rx-1",
+        "x-span-id": "span-rx-1"
+      },
+      body: JSON.stringify({
+        prescription,
+        toStatus: "verified",
+        transitionedAt: "2026-07-21T12:08:00.000Z"
+      })
+    });
+
+    const res = await app.fetch(req);
+    expect(res.status).toBe(200);
+
+    const envelope = await res.json();
+    expect(envelope).toMatchObject({
+      data: {
+        prescriptionId: "rx-http-1",
+        status: "verified"
+      },
+      meta: {
+        requestId: "req-rx-1",
+        correlationId: "corr-rx-1",
+        traceId: "trace-rx-1",
+        spanId: "span-rx-1",
+        operationTag: "prescription.status.transition",
+        decisionReasonTag: "to:verified"
+      },
+      errors: []
     });
   });
 });

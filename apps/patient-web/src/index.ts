@@ -19,6 +19,16 @@ export { createInitialReferralState, createReferralStateWithSelection } from "./
 export type { ReferralState } from "./referral-state.js";
 export { createReferralViewModel } from "./referral.js";
 export type { ReferralDraftDtoLike, ReferralViewModel } from "./referral.js";
+export { createReferralAdvancedViewModel } from "./referral-advanced.js";
+export type {
+  ReferralDraftAdvancedDtoLike,
+  ReferralAdvancedViewModel
+} from "./referral-advanced.js";
+export {
+  createInitialReferralAdvancedState,
+  createReferralAdvancedStateWithSelection
+} from "./referral-advanced-state.js";
+export type { ReferralAdvancedState } from "./referral-advanced-state.js";
 export {
   createInitialPrescriptionState,
   createPrescriptionStateWithSelection
@@ -26,6 +36,16 @@ export {
 export type { PrescriptionState } from "./prescription-state.js";
 export { createPrescriptionViewModel } from "./prescription.js";
 export type { PrescriptionDraftDtoLike, PrescriptionViewModel } from "./prescription.js";
+export { createPrescriptionAdvancedViewModel } from "./prescription-advanced.js";
+export type {
+  PrescriptionDraftAdvancedDtoLike,
+  PrescriptionAdvancedViewModel
+} from "./prescription-advanced.js";
+export {
+  createInitialPrescriptionAdvancedState,
+  createPrescriptionAdvancedStateWithSelection
+} from "./prescription-advanced-state.js";
+export type { PrescriptionAdvancedState } from "./prescription-advanced-state.js";
 export {
   createInitialDiagnosticResultState,
   createDiagnosticResultStateWithSelection

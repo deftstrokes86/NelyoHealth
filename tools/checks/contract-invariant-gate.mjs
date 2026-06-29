@@ -34,25 +34,6 @@ const apiOnlyModules = new Set([
   "appointment-handlers",
   "booking-handlers",
   "appointment-booking-routes",
-  "server"
-]);
-  "referral-advanced",
-  "prescription-advanced",
-  "referral-prescription-handlers",
-  "referral-prescription-routes",
-  "tracing-context"
-]);
-const apiModules = getContractModules(apiDir).filter((moduleName) => !apiOnlyModules.has(moduleName));
-
-const apiOnlyModules = new Set([
-  "health",
-  "response",
-  "payment-handlers",
-  "refund-handlers",
-  "provider-disclosure-handlers",
-  "appointment-handlers",
-  "booking-handlers",
-  "appointment-booking-routes",
   "server",
   "referral-advanced",
   "prescription-advanced",
@@ -60,6 +41,9 @@ const apiOnlyModules = new Set([
   "referral-prescription-routes",
   "tracing-context"
 ]);
+const apiModules = getContractModules(apiDir).filter(
+  (moduleName) => !apiOnlyModules.has(moduleName)
+);
 const apiClientModules = getContractModules(apiClientDir);
 const missingInApiClient = apiModules.filter((moduleName) => !apiClientModules.includes(moduleName));
 const missingInApi = apiClientModules.filter((moduleName) => !apiModules.includes(moduleName));

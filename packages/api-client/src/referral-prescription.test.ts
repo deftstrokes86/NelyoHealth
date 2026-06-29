@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   createReferralDraftAdvancedDto,
   createPrescriptionDraftAdvancedDto
-} from "./referral-prescription-advanced.js";
+} from "./referral-prescription.js";
 
 describe("referral and prescription advanced DTOs", () => {
   it("creates referral DTO with defaults", () => {

@@ -4,6 +4,12 @@ import { handleProviderDisclosureEligibilityRoute } from "./runtime-routes.js";
 import { handlePaymentTransitionRoute, handleRefundTransitionRoute } from "./runtime-routes.js";
 import type { ProviderDisclosureEligibilityRouteRequest } from "./runtime-routes.js";
 import type { PaymentTransitionRouteRequest, RefundTransitionRouteRequest } from "./runtime-routes.js";
+import {
+  handlePrescriptionStatusRoute,
+  handleReferralStatusRoute,
+  type PrescriptionStatusRouteRequest,
+  type ReferralStatusRouteRequest
+} from "./referral-prescription-routes.js";
 
 export const app = new Hono();
 
@@ -166,6 +172,112 @@ app.post("/api/refund-transition", async (c: Context) => {
           traceId: c.req.header("x-trace-id"),
           spanId: c.req.header("x-span-id"),
           operationTag: "refund.transition",
+          decisionReasonTag: "error"
+        },
+        errors: [
+          {
+            message: error instanceof Error ? error.message : "Internal server error"
+          }
+        ]
+      },
+      500
+    );
+  }
+});
+
+/**
+ * POST /api/referral-status
+ *
+ * Transition referral status through its lifecycle.
+ */
+app.post("/api/referral-status", async (c: Context) => {
+  try {
+    const requestId = c.req.header("x-request-id") ?? crypto.randomUUID();
+    const correlationId = c.req.header("x-correlation-id") ?? crypto.randomUUID();
+    const traceId = c.req.header("x-trace-id");
+    const spanId = c.req.header("x-span-id");
+
+    const body = await c.req.json();
+
+    const routeRequest: ReferralStatusRouteRequest = {
+      requestId,
+      correlationId,
+      input: {
+        referral: body.referral,
+        toStatus: body.toStatus,
+        transitionedAt: body.transitionedAt ?? new Date().toISOString()
+      }
+    };
+
+    const response = handleReferralStatusRoute(routeRequest);
+
+    if (traceId) response.meta.traceId = traceId;
+    if (spanId) response.meta.spanId = spanId;
+
+    return c.json(response, 200);
+  } catch (error) {
+    return c.json(
+      {
+        data: null,
+        meta: {
+          requestId: c.req.header("x-request-id") ?? crypto.randomUUID(),
+          correlationId: c.req.header("x-correlation-id") ?? crypto.randomUUID(),
+          traceId: c.req.header("x-trace-id"),
+          spanId: c.req.header("x-span-id"),
+          operationTag: "referral.status.transition",
+          decisionReasonTag: "error"
+        },
+        errors: [
+          {
+            message: error instanceof Error ? error.message : "Internal server error"
+          }
+        ]
+      },
+      500
+    );
+  }
+});
+
+/**
+ * POST /api/prescription-status
+ *
+ * Transition prescription status through its lifecycle.
+ */
+app.post("/api/prescription-status", async (c: Context) => {
+  try {
+    const requestId = c.req.header("x-request-id") ?? crypto.randomUUID();
+    const correlationId = c.req.header("x-correlation-id") ?? crypto.randomUUID();
+    const traceId = c.req.header("x-trace-id");
+    const spanId = c.req.header("x-span-id");
+
+    const body = await c.req.json();
+
+    const routeRequest: PrescriptionStatusRouteRequest = {
+      requestId,
+      correlationId,
+      input: {
+        prescription: body.prescription,
+        toStatus: body.toStatus,
+        transitionedAt: body.transitionedAt ?? new Date().toISOString()
+      }
+    };
+
+    const response = handlePrescriptionStatusRoute(routeRequest);
+
+    if (traceId) response.meta.traceId = traceId;
+    if (spanId) response.meta.spanId = spanId;
+
+    return c.json(response, 200);
+  } catch (error) {
+    return c.json(
+      {
+        data: null,
+        meta: {
+          requestId: c.req.header("x-request-id") ?? crypto.randomUUID(),
+          correlationId: c.req.header("x-correlation-id") ?? crypto.randomUUID(),
+          traceId: c.req.header("x-trace-id"),
+          spanId: c.req.header("x-span-id"),
+          operationTag: "prescription.status.transition",
           decisionReasonTag: "error"
         },
         errors: [
