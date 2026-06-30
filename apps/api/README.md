@@ -1,10 +1,16 @@
 # @nelyohealth/api
 
-Boundary-only workspace for the future NestJS API skeleton.
+Phase 2 NestJS API skeleton workspace.
 
-## Public API
+## Current scope (P02-ISS-005)
 
-- Exports `apiApplicationBoundary` for P02-ISS-002 topology validation.
-- Contains no controllers, routes, DTOs, OpenAPI output, database access, auth, clinical, payment, provider matching, pharmacy, laboratory, or production behavior.
+- Provides health and readiness routes.
+- Adds request and correlation ID middleware.
+- Adds idempotency middleware for unsafe request fingerprints.
+- Adds standardized API error envelopes through a global exception filter.
 
-Runtime implementation belongs to P02-ISS-005.
+## Out of scope
+
+- No auth, clinical, payment, provider matching, pharmacy, laboratory, or production behavior.
+- No direct controller database access.
+- No external provider calls from controllers.

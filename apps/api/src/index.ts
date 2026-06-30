@@ -104,6 +104,7 @@ export {
   tracingContextToHeaders
 } from "./tracing-context.js";
 export type { TracingContext } from "./tracing-context.js";
+export { createNestApiApp } from "./nest/bootstrap.js";
 
 export const apiApplicationBoundary = {
   id: "api",

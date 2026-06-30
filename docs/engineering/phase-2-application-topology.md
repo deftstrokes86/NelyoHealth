@@ -29,15 +29,13 @@ The package list is a planning target. P02-PLAN-001 does not create these paths.
 
 ## P02-ISS-002 implementation state
 
-P02-ISS-002 creates the approved workspace paths as private, boundary-only
-packages. It does not create runtime apps, framework configuration, routes,
-database access, queue workers, object storage, observability wiring, auth,
-clinical, payment, provider matching, production infrastructure, or pilot
-behavior.
+P02-ISS-002 created the approved workspace paths as private, boundary-oriented
+packages. P02-ISS-005 now implements the API NestJS skeleton and request
+conventions while the remaining app workspaces stay boundary-first.
 
 | Workspace | Package name | Boundary API | Runtime owner |
 |---|---|---|---|
-| `apps/api` | `@nelyohealth/api` | `apiApplicationBoundary` | P02-ISS-005 |
+| `apps/api` | `@nelyohealth/api` | `apiApplicationBoundary` | P02-ISS-005 (implemented) |
 | `apps/worker` | `@nelyohealth/worker` | `workerApplicationBoundary` | P02-ISS-007 |
 | `apps/patient-web` | `@nelyohealth/patient-web` | `patientWebApplicationBoundary` | P02-ISS-012 |
 | `apps/provider-web` | `@nelyohealth/provider-web` | `providerWebApplicationBoundary` | P02-ISS-012 |
