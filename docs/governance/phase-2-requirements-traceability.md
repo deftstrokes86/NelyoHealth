@@ -2,7 +2,7 @@
 
 ## Status
 
-P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-009 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-010 and later implementation issues remain not started.
+P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-010 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-011 and later implementation issues remain not started.
 
 ## Requirement map
 
@@ -16,8 +16,8 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are 
 | P02-REQ-006 | PostgreSQL and PostGIS | Implementation map Phase 2 | P02-ISS-004 | P02-ISS-003 | LOCAL-HARNESS-CONFIGURED-PENDING-DOCKER-RUNTIME-EVIDENCE |
 | P02-REQ-007 | Redis-compatible cache/queue foundation | Implementation map Phase 2 | P02-ISS-003 | P02-ISS-007 | LOCAL-VALKEY-HARNESS-CONFIGURED-PENDING-DOCKER-RUNTIME-EVIDENCE |
 | P02-REQ-008 | Object storage with signed URL support | Implementation map Phase 2 | P02-ISS-009 | P02-ISS-014 | SIGNED-UPLOAD-DOWNLOAD-URL-AND-SYNTHETIC-CLEANUP-HARNESS-IMPLEMENTED |
-| P02-REQ-009 | Email, SMS, push adapters | Implementation map Phase 2 | P02-ISS-010 | None | PLANNED |
-| P02-REQ-010 | Feature flags | Implementation map Phase 2 | P02-ISS-010 | P02-ISS-015 | PLANNED |
+| P02-REQ-009 | Email, SMS, push adapters | Implementation map Phase 2 | P02-ISS-010 | None | PROVIDER-NEUTRAL-PORTS-AND-FAKE-LOCAL-ADAPTERS-IMPLEMENTED |
+| P02-REQ-010 | Feature flags | Implementation map Phase 2 | P02-ISS-010 | P02-ISS-015 | LOCAL-FEATURE-FLAG-ADAPTER-SHELL-IMPLEMENTED-VENDOR-INTEGRATION-DEFERRED |
 | P02-REQ-011 | Secrets manager boundary | Implementation map Phase 2 | P02-ISS-015 | P02-ISS-016 | PLANNED |
 | P02-REQ-012 | Managed logging, metrics/tracing, error reporting boundaries | Implementation map Phase 2 | P02-ISS-011 | P02-ISS-015 | LOCAL-OTEL-COLLECTOR-HARNESS-CONFIGURED-PENDING-DOCKER-RUNTIME-EVIDENCE |
 | P02-REQ-013 | Modular-monolith, REST, OpenAPI, typed client | Phase 2 prompt and ADR-0005 | P02-ISS-005 | P02-ISS-006 | PLANNED |

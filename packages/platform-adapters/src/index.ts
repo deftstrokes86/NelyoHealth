@@ -2,7 +2,7 @@ export const platformAdaptersPackageBoundary = {
   id: "platform-adapters",
   packageName: "@nelyohealth/platform-adapters",
   kind: "shared-package",
-  status: "queue-and-storage-foundation-implemented",
+  status: "queue-storage-communications-feature-flags-foundation-implemented",
   owningIssue: "P02-ISS-007/P02-ISS-009/P02-ISS-010/P02-ISS-011",
   publicApi: "Provider-neutral platform ports and adapter boundary",
   runtimeImplementation: true,
@@ -39,3 +39,27 @@ export {
   S3SignedUrlObjectStorageAdapter,
   type S3SignedUrlAdapterConfig
 } from "./storage/s3-signed-url.adapter.js";
+
+export {
+  assertSafeCommunicationMessage,
+  type CommunicationChannel,
+  type CommunicationDispatchReceipt,
+  type CommunicationMessage,
+  type CommunicationSafeContext,
+  type CommunicationsPort
+} from "./communications/communications-port.js";
+
+export { FakeCommunicationsAdapter } from "./communications/fake-communications.adapter.js";
+
+export {
+  assertSafeFeatureFlagKey,
+  type FeatureFlagContext,
+  type FeatureFlagEvaluation,
+  type FeatureFlagPort,
+  type FeatureFlagValue
+} from "./feature-flags/feature-flag-port.js";
+
+export {
+  LocalFeatureFlagAdapter,
+  type LocalFeatureFlagAdapterConfig
+} from "./feature-flags/local-feature-flag.adapter.js";
