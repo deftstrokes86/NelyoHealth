@@ -20,6 +20,7 @@
     "@nestjs/common": "11.1.27",
     "@nestjs/core": "11.1.27",
     "@nestjs/platform-express": "11.1.27",
+    "@nestjs/swagger": "11.4.4",
     "@nelyohealth/config": "0.0.0",
     "hono": "4.8.0",
     "reflect-metadata": "0.2.2",

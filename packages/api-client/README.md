@@ -1,10 +1,15 @@
 # @nelyohealth/api-client
 
-Boundary-only package for the future generated typed OpenAPI client.
+Generated typed OpenAPI client package for Phase 2 contract work.
 
 ## Public API
 
-- Exports `apiClientPackageBoundary` for P02-ISS-002 topology validation.
-- Contains no generated client, hand-authored domain logic, auth behavior, protected provider fields, or runtime fetch wrapper.
+- Exports generated OpenAPI types from `src/generated/openapi-types.ts`.
+- Exports `createApiClient` from `src/generated/client.ts`.
+- Preserves DTO parity modules used by existing contract tests.
 
-Generated OpenAPI client implementation belongs to P02-ISS-006.
+## Safety
+
+- Generated contract currently exposes only the approved API skeleton routes.
+- Contract must not expose protected provider details, secrets, PHI, real provider data, or payment credentials.
+- No hand-authored domain logic belongs in generated client files.

@@ -56,15 +56,18 @@ export type {
   RefundTransitionRouteRequestDto,
   ProviderDisclosureEligibilityRouteRequestDto
 } from "./runtime-routes.js";
+export type { paths, components, operations } from "./generated/openapi-types.js";
+export { createApiClient } from "./generated/client.js";
+export type { ApiClient } from "./generated/client.js";
 
 export const apiClientPackageBoundary = {
   id: "api-client",
   packageName: "@nelyohealth/api-client",
   kind: "shared-package",
-  status: "boundary-only",
+  status: "phase-2-foundation",
   owningIssue: "P02-ISS-006",
-  publicApi: "Generated OpenAPI typed client boundary",
-  runtimeImplementation: false,
+  publicApi: "Generated OpenAPI typed client",
+  runtimeImplementation: true,
   featureImplementation: false
 } as const;
 

@@ -1,0 +1,61 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/health": {
+      "get": {
+        "operationId": "SystemController_getHealth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Health envelope"
+          }
+        },
+        "summary": "API liveness health endpoint",
+        "tags": [
+          "system"
+        ]
+      }
+    },
+    "/api/ready": {
+      "get": {
+        "operationId": "SystemController_getReady",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Readiness envelope"
+          }
+        },
+        "summary": "API dependency readiness endpoint",
+        "tags": [
+          "system"
+        ]
+      }
+    },
+    "/api/idempotency/probe": {
+      "post": {
+        "operationId": "SystemController_probeIdempotency",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Probe acceptance envelope"
+          }
+        },
+        "summary": "Unsafe-method idempotency probe endpoint",
+        "tags": [
+          "system"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "NelyoHealth API Skeleton",
+    "description": "Phase 2 API skeleton OpenAPI contract",
+    "version": "0.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {}
+  }
+}

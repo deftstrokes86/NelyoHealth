@@ -29,6 +29,8 @@
     "db:status": "pnpm --filter @nelyohealth/database exec node scripts/db-cli.mjs status",
     "db:reset": "pnpm --filter @nelyohealth/database exec node scripts/db-cli.mjs reset",
     "db:rollback": "pnpm --filter @nelyohealth/database exec node scripts/db-cli.mjs rollback",
+    "openapi:generate": "pnpm --filter @nelyohealth/api exec vitest run src/nest/openapi-generate.spec.ts",
+    "api-client:generate": "pnpm openapi:generate && pnpm --filter @nelyohealth/api-client exec node scripts/generate-client.mjs",
     "infra:config": "node tools/local-infra/local-infra.mjs config",
     "infra:verify": "node tools/local-infra/local-infra.mjs verify",
     "infra:doctor": "node tools/local-infra/local-infra.mjs doctor",

@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Req } from "@nestjs/common";
 import type { Request } from "express";
+import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import type { ApiEnvelope } from "../api-envelope.js";
 import { createMeta } from "../api-envelope.js";
 import { ReadinessService } from "./readiness.service.js";
@@ -15,11 +16,16 @@ interface IdempotencyProbeData {
 }
 
 @Controller("api")
+@ApiTags("system")
 export class SystemController {
   constructor(private readonly readinessService: ReadinessService) {}
 
   @Get("health")
-  getHealth(@Req() req: Request & { requestId?: string; correlationId?: string }): ApiEnvelope<HealthData> {
+  @ApiOperation({ summary: "API liveness health endpoint" })
+  @ApiOkResponse({ description: "Health envelope" })
+  getHealth(
+    @Req() req: Request & { requestId?: string; correlationId?: string }
+  ): ApiEnvelope<HealthData> {
     return {
       data: {
         status: "ok",
@@ -37,6 +43,8 @@ export class SystemController {
   }
 
   @Get("ready")
+  @ApiOperation({ summary: "API dependency readiness endpoint" })
+  @ApiOkResponse({ description: "Readiness envelope" })
   async getReady(
     @Req() req: Request & { requestId?: string; correlationId?: string }
   ): Promise<ApiEnvelope<Awaited<ReturnType<ReadinessService["getReadiness"]>>>> {
@@ -54,6 +62,8 @@ export class SystemController {
   }
 
   @Post("idempotency/probe")
+  @ApiOperation({ summary: "Unsafe-method idempotency probe endpoint" })
+  @ApiOkResponse({ description: "Probe acceptance envelope" })
   probeIdempotency(
     @Req() req: Request & { requestId?: string; correlationId?: string }
   ): ApiEnvelope<IdempotencyProbeData> {
