@@ -2,7 +2,7 @@
 
 ## Status
 
-P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-007 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-008 and later implementation issues remain not started.
+P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-008 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-009 and later implementation issues remain not started.
 
 ## Requirement map
 
@@ -23,8 +23,8 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are 
 | P02-REQ-013 | Modular-monolith, REST, OpenAPI, typed client | Phase 2 prompt and ADR-0005 | P02-ISS-005 | P02-ISS-006 | PLANNED |
 | P02-REQ-014 | Request/correlation IDs and standard errors | Phase 2 prompt | P02-ISS-005 | P02-ISS-011 | PLANNED |
 | P02-REQ-015 | Idempotency-key middleware | Phase 2 prompt | P02-ISS-005 | P02-ISS-014 | PLANNED |
-| P02-REQ-016 | DB transaction helpers and transactional outbox | Phase 2 prompt and ADR-0005 | P02-ISS-008 | P02-ISS-004, P02-ISS-007 | PLANNED |
-| P02-REQ-017 | Domain event dispatch, retry, DLQ | Phase 2 prompt | P02-ISS-007 | P02-ISS-008, P02-ISS-011 | RETRY-AND-DLQ-FOUNDATION-IMPLEMENTED-DOMAIN-EVENT-DISPATCH-PENDING-P02-ISS-008 |
+| P02-REQ-016 | DB transaction helpers and transactional outbox | Phase 2 prompt and ADR-0005 | P02-ISS-008 | P02-ISS-004, P02-ISS-007 | IMPLEMENTED-WITH-TRANSACTION-COMMIT-ROLLBACK-AND-OUTBOX-DISPATCH-EVIDENCE |
+| P02-REQ-017 | Domain event dispatch, retry, DLQ | Phase 2 prompt | P02-ISS-007 | P02-ISS-008, P02-ISS-011 | QUEUE-RETRY-DLQ-AND-OUTBOX-DISPATCH-SKELETON-IMPLEMENTED-END-TO-END-OBSERVABILITY-PENDING-P02-ISS-011 |
 | P02-REQ-018 | Health/readiness endpoints | Phase 2 prompt | P02-ISS-005 | P02-ISS-003, P02-ISS-015 | PLANNED |
 | P02-REQ-019 | Browser harness projects, auth states, seed/reset, API helpers, page objects, assertions, artifacts, a11y, privacy, sharding/retry | Phase 2 prompt and ADR-0003 | P02-ISS-014 | P02-ISS-004, P02-ISS-012, P02-ISS-013 | PLANNED |
 | P02-REQ-020 | Environment strategy for local, PR, development, staging, production, partner sandbox | Phase 2 prompt | P02-ISS-015 | P02-ISS-016, P02-ISS-017 | PLANNED |

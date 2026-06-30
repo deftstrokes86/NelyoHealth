@@ -1,0 +1,2 @@
+DROP INDEX IF EXISTS nelyo_foundation.idx_transactional_outbox_pending_created;
+DROP TABLE IF EXISTS nelyo_foundation.transactional_outbox;

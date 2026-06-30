@@ -17,6 +17,7 @@
 - P02-ISS-005: COMPLETED, NestJS API skeleton and request conventions validated through integration tests.
 - P02-ISS-006: COMPLETED, OpenAPI document and typed client contract generated with drift evidence.
 - P02-ISS-007: COMPLETED, worker queue foundation with deterministic retry, DLQ, idempotency, correlation propagation, and health evidence.
+- P02-ISS-008: COMPLETED, transaction helper and transactional outbox foundation with deterministic dispatch and rollback evidence.
 - AGENTS guidance: IMPLEMENTED.
 - Execution-plan convention: IMPLEMENTED.
 - Browser-validation skill: IMPLEMENTED.
@@ -28,7 +29,7 @@
 - Phase 1 gate: PHASE-1-CONDITIONAL-PASS.
 - Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS.
 - Phase 2 planning: P02-PLAN-001 ACCEPTED.
-- Phase 2 implementation: P02-ISS-003 COMPLETED; local harness files, static checks, and live Docker runtime evidence validated. P02-ISS-004 COMPLETED with migration, status, seed/reset, and rollback evidence. P02-ISS-005 COMPLETED with health/readiness routes, middleware conventions, and integration evidence. P02-ISS-006 COMPLETED with generated OpenAPI and typed client contract artifacts. P02-ISS-007 COMPLETED with worker queue foundation and deterministic retry/DLQ/idempotency test evidence.
+- Phase 2 implementation: P02-ISS-003 COMPLETED; local harness files, static checks, and live Docker runtime evidence validated. P02-ISS-004 COMPLETED with migration, status, seed/reset, and rollback evidence. P02-ISS-005 COMPLETED with health/readiness routes, middleware conventions, and integration evidence. P02-ISS-006 COMPLETED with generated OpenAPI and typed client contract artifacts. P02-ISS-007 COMPLETED with worker queue foundation and deterministic retry/DLQ/idempotency test evidence. P02-ISS-008 COMPLETED with transaction helper and transactional outbox dispatch/rollback evidence.
 - Phase 3: NOT STARTED.
 - Pilot launch: PILOT-NO-GO.
 - Production release: NOT APPROVED.
@@ -36,7 +37,7 @@
 - Interactive browser: VERIFIED THROUGH PLAYWRIGHT CLI FALLBACK.
 - Playwright MCP: VERIFIED THROUGH PROJECT-SCOPED LOCAL SMOKE ON 2026-06-25 WITH CODEX-CLI 0.141.0.
 - UI UX Pro Max licence: REVIEW-REQUIRED.
-- Next action: begin P02-ISS-008, transaction helpers, transactional outbox, and domain event dispatch.
+- Next action: begin P02-ISS-009, object storage signed URL adapter.
 
 ## Foundation commands
 
@@ -88,6 +89,7 @@ pnpm db:rollback
 - docs/exec-plans/P02-ISS-005-nestjs-api-skeleton-and-request-conventions.md
 - docs/exec-plans/P02-ISS-006-openapi-generation-and-typed-client-contract.md
 - docs/exec-plans/P02-ISS-007-worker-queue-foundation-retries-and-dlq.md
+- docs/exec-plans/P02-ISS-008-transaction-helpers-outbox-and-domain-event-dispatch.md
 - docs/engineering/phase-2-local-infrastructure-harness.md
 - docs/engineering/phase-2-database-migration-runbook.md
 - apps/
@@ -107,6 +109,8 @@ pnpm db:rollback
 - tests/integration/database-cli.spec.ts
 - tests/integration/api-nest-runtime.spec.ts
 - tests/integration/worker-queue-runtime.spec.ts
+- tests/unit/database-transaction-outbox.spec.ts
+- tests/integration/database-outbox-dispatch.spec.ts
 - tests/unit/worker-queue-foundation.spec.ts
 - infra/local/
 - tools/local-infra/local-infra.mjs

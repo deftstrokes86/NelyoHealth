@@ -2,7 +2,7 @@
 
 ## Scope
 
-This runbook covers local synthetic database operations implemented in P02-ISS-004.
+This runbook covers local synthetic database operations implemented in P02-ISS-004 and P02-ISS-008.
 
 - `pnpm db:migrate`
 - `pnpm db:status`
@@ -63,6 +63,17 @@ Current migration behavior in P02-ISS-004:
 Compensating action expectation:
 
 - If rollback cannot safely reverse shared extension state, use a documented compensating action and re-apply migration with `pnpm db:migrate`.
+
+Current migration behavior in P02-ISS-008:
+
+- `0002_transactional_outbox.up.sql` creates `nelyo_foundation.transactional_outbox` with pending/dispatched/dead-lettered status lifecycle and an index for pending dispatch polling.
+- `0002_transactional_outbox.down.sql` removes the outbox index and table.
+
+Transactional outbox safety expectation:
+
+- Domain events are inserted into outbox inside the database transaction.
+- External event publishing must execute only after the transaction commits.
+- Outbox dispatch retries and dead-letter movement are explicit and deterministic for synthetic tests.
 
 ## Evidence expectations
 

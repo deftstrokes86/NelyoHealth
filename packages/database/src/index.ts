@@ -18,8 +18,8 @@ export const databasePackageBoundary = {
   packageName: "@nelyohealth/database",
   kind: "shared-package",
   status: "phase-2-foundation",
-  owningIssue: "P02-ISS-004",
-  publicApi: "Database migration and synthetic seed conventions",
+  owningIssue: "P02-ISS-004/P02-ISS-008",
+  publicApi: "Database migration, synthetic seed conventions, and transactional outbox foundation",
   runtimeImplementation: true,
   featureImplementation: false
 } as const;
@@ -56,7 +56,9 @@ export function assertSafeDatabaseCommandEnvironment(
   const declaredEnv = (env.NELYO_DEPLOYMENT_ENV ?? "local").toLowerCase();
 
   if (nodeEnv === "production" || declaredEnv === "production") {
-    throw new Error(`Refusing to run db:${command} when NODE_ENV or NELYO_DEPLOYMENT_ENV is production.`);
+    throw new Error(
+      `Refusing to run db:${command} when NODE_ENV or NELYO_DEPLOYMENT_ENV is production.`
+    );
   }
 
   if (env.NELYO_ALLOW_PRODUCTION_DB_COMMANDS === "true") {
@@ -85,3 +87,20 @@ export function deterministicSyntheticSeedRows(seedVersion = "p02-iss-004-v1"): 
     }
   ];
 }
+
+export {
+  createDomainEventEnvelope,
+  dispatchPendingOutboxEvents,
+  ExternalCallPolicy,
+  runTransactionalWorkWithOutbox,
+  SyntheticInMemoryOutboxStore,
+  SyntheticTransactionAdapter,
+  type DispatchStatus,
+  type DomainEventEnvelope,
+  type DomainEventPublisher,
+  type DomainEventSafeContext,
+  type OutboxEventRecord,
+  type TransactionAdapter,
+  type TransactionalOutboxPort,
+  type TransactionWorkContext
+} from "./transaction-outbox.js";
