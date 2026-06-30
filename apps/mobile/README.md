@@ -1,10 +1,11 @@
 # @nelyohealth/mobile
 
-Boundary-only workspace for the future Expo mobile shell.
+Empty Expo mobile shell workspace for P02-ISS-013 foundation runtime.
 
 ## Public API
 
-- Exports `mobileApplicationBoundary` for P02-ISS-002 topology validation.
-- Contains no Expo runtime configuration, native modules, device permissions, push integration, auth, clinical, payment, provider matching, or production behavior.
+- Exports `mobileApplicationBoundary` and shell descriptors for P02-ISS-013 topology/runtime validation.
+- Provides minimal Expo shell runtime entry and synthetic-only shell surface.
+- Contains no native feature parity claim, push integration, auth, clinical, payment, provider matching, or production behavior.
 
-Runtime implementation belongs to P02-ISS-013.
+Native modules and device permissions remain out of scope in this package.

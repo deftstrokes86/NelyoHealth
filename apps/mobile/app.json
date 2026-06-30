@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "NelyoHealth Mobile Shell",
+    "slug": "nelyohealth-mobile-shell",
+    "version": "0.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": ["**/*"],
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#f5fbf8"
+      }
+    },
+    "extra": {
+      "syntheticOnly": true,
+      "issue": "P02-ISS-013"
+    }
+  }
+}

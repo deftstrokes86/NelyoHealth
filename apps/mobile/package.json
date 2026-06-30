@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "./lib/index.js",
+  "main": "./expo.entry.ts",
   "types": "./lib/index.d.ts",
   "exports": {
     ".": {
@@ -12,7 +12,14 @@
     }
   },
   "scripts": {
+    "start": "expo start --offline",
     "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "validate:expo": "expo config --type public"
+  },
+  "dependencies": {
+    "expo": "56.0.12",
+    "react": "19.2.7",
+    "react-native": "0.85.3"
   }
 }
