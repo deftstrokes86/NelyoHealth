@@ -1,5 +1,3 @@
-import { createApiClient } from "@nelyohealth/api-client";
-
 export const patientShellDescriptor = {
   appId: "patient-web",
   issue: "P02-ISS-012",
@@ -9,6 +7,9 @@ export const patientShellDescriptor = {
 
 export type PatientShellDescriptor = typeof patientShellDescriptor;
 
-export function createPatientShellApiClient(baseUrl: string) {
-  return createApiClient(baseUrl);
+export function createPatientShellApiClient<TClient>(
+  baseUrl: string,
+  factory: (resolvedBaseUrl: string) => TClient
+): TClient {
+  return factory(baseUrl);
 }

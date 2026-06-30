@@ -5,11 +5,12 @@ import { describe, expect, it } from "vitest";
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
-const boundaryApplications = [
+const runtimeApplications = [
   ["api", "@nelyohealth/api"],
-  ["worker", "@nelyohealth/worker"],
-  ["mobile", "@nelyohealth/mobile"]
+  ["worker", "@nelyohealth/worker"]
 ] as const;
+
+const boundaryApplications = [["mobile", "@nelyohealth/mobile"]] as const;
 
 const webShellApplications = [
   ["patient-web", "@nelyohealth/patient-web"],
@@ -18,13 +19,17 @@ const webShellApplications = [
   ["admin-web", "@nelyohealth/admin-web"]
 ] as const;
 
-const sharedPackages = [
-  ["api-client", "@nelyohealth/api-client"],
+const boundarySharedPackages = [
   ["config", "@nelyohealth/config"],
   ["domain", "@nelyohealth/domain"],
+  ["testing-factories", "@nelyohealth/testing-factories"]
+] as const;
+
+const runtimeSharedPackages = [
+  ["api-client", "@nelyohealth/api-client"],
   ["observability", "@nelyohealth/observability"],
   ["platform-adapters", "@nelyohealth/platform-adapters"],
-  ["testing-factories", "@nelyohealth/testing-factories"]
+  ["database", "@nelyohealth/database"]
 ] as const;
 
 const dependencyFields = [
@@ -131,6 +136,26 @@ function expectWebShellWorkspace(
   expect(source).toContain("featureImplementation: false");
 }
 
+function expectRuntimeWorkspace(
+  relativeDir: string,
+  packageName: string,
+  markerName: string
+): void {
+  const manifest = readManifest(`${relativeDir}/package.json`);
+  expect(manifest).toMatchObject({
+    name: packageName,
+    version: "0.0.0",
+    private: true,
+    type: "module"
+  });
+  expect(manifest.publishConfig).toBeUndefined();
+  expect(manifest.scripts?.build).toBeTypeOf("string");
+  expect(manifest.scripts?.typecheck).toBeTypeOf("string");
+
+  const source = readText(`${relativeDir}/src/index.ts`);
+  expect(source).toContain(markerName);
+}
+
 describe("Phase 2 workspace topology", () => {
   it("registers the approved apps in the pnpm workspace", () => {
     const workspace = readText("pnpm-workspace.yaml");
@@ -138,8 +163,22 @@ describe("Phase 2 workspace topology", () => {
     expect(workspace).toContain('- "packages/*"');
     expect(workspace).toContain('- "tools/*"');
 
-    for (const [appName] of [...boundaryApplications, ...webShellApplications]) {
+    for (const [appName] of [
+      ...runtimeApplications,
+      ...boundaryApplications,
+      ...webShellApplications
+    ]) {
       expect(fs.existsSync(path.join(rootDir, "apps", appName))).toBe(true);
+    }
+  });
+
+  it("keeps existing runtime applications private and typed", () => {
+    for (const [appName, packageName] of runtimeApplications) {
+      const marker = `${appName.replace(/-([a-z])/g, (_, letter: string) =>
+        letter.toUpperCase()
+      )}ApplicationBoundary`;
+      expectRuntimeWorkspace(`apps/${appName}`, packageName, marker);
+      expect(fs.existsSync(path.join(rootDir, "apps", appName, "AGENTS.md"))).toBe(true);
     }
   });
 
@@ -163,12 +202,21 @@ describe("Phase 2 workspace topology", () => {
     }
   });
 
-  it("keeps approved shared packages private, dependency-free, and boundary-only", () => {
-    for (const [packageDir, packageName] of sharedPackages) {
+  it("keeps boundary shared packages private, dependency-free, and boundary-only", () => {
+    for (const [packageDir, packageName] of boundarySharedPackages) {
       const marker = `${packageDir.replace(/-([a-z])/g, (_, letter: string) =>
         letter.toUpperCase()
       )}PackageBoundary`;
       expectBoundaryWorkspace(`packages/${packageDir}`, packageName, marker);
+    }
+  });
+
+  it("keeps runtime shared packages private and typed", () => {
+    for (const [packageDir, packageName] of runtimeSharedPackages) {
+      const marker = `${packageDir.replace(/-([a-z])/g, (_, letter: string) =>
+        letter.toUpperCase()
+      )}PackageBoundary`;
+      expectRuntimeWorkspace(`packages/${packageDir}`, packageName, marker);
     }
   });
 });

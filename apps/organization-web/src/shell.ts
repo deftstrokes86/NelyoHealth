@@ -1,5 +1,3 @@
-import { createApiClient } from "@nelyohealth/api-client";
-
 export const organizationShellDescriptor = {
   appId: "organization-web",
   issue: "P02-ISS-012",
@@ -9,6 +7,9 @@ export const organizationShellDescriptor = {
 
 export type OrganizationShellDescriptor = typeof organizationShellDescriptor;
 
-export function createOrganizationShellApiClient(baseUrl: string) {
-  return createApiClient(baseUrl);
+export function createOrganizationShellApiClient<TClient>(
+  baseUrl: string,
+  factory: (resolvedBaseUrl: string) => TClient
+): TClient {
+  return factory(baseUrl);
 }

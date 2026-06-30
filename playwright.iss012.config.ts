@@ -23,25 +23,25 @@ export default defineConfig({
   },
   webServer: [
     {
-      command: `pnpm --filter @nelyohealth/patient-web dev -- --hostname 127.0.0.1 --port ${patientPort}`,
+      command: `pnpm --filter @nelyohealth/patient-web exec next dev --hostname 127.0.0.1 --port ${patientPort}`,
       url: `http://127.0.0.1:${patientPort}`,
       reuseExistingServer: !process.env.CI,
       timeout: 120_000
     },
     {
-      command: `pnpm --filter @nelyohealth/provider-web dev -- --hostname 127.0.0.1 --port ${providerPort}`,
+      command: `pnpm --filter @nelyohealth/provider-web exec next dev --hostname 127.0.0.1 --port ${providerPort}`,
       url: `http://127.0.0.1:${providerPort}`,
       reuseExistingServer: !process.env.CI,
       timeout: 120_000
     },
     {
-      command: `pnpm --filter @nelyohealth/organization-web dev -- --hostname 127.0.0.1 --port ${organizationPort}`,
+      command: `pnpm --filter @nelyohealth/organization-web exec next dev --hostname 127.0.0.1 --port ${organizationPort}`,
       url: `http://127.0.0.1:${organizationPort}`,
       reuseExistingServer: !process.env.CI,
       timeout: 120_000
     },
     {
-      command: `pnpm --filter @nelyohealth/admin-web dev -- --hostname 127.0.0.1 --port ${adminPort}`,
+      command: `pnpm --filter @nelyohealth/admin-web exec next dev --hostname 127.0.0.1 --port ${adminPort}`,
       url: `http://127.0.0.1:${adminPort}`,
       reuseExistingServer: !process.env.CI,
       timeout: 120_000

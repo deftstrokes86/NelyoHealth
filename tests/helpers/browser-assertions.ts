@@ -1,6 +1,7 @@
 import { expect, type Page, type Request, type TestInfo } from "@playwright/test";
 import {
   approvedSyntheticStorageKeys,
+  approvedSyntheticStorageKeyPrefixes,
   forbiddenProtectedSentinels,
   localOriginAllowList
 } from "./synthetic-smoke-data.js";
@@ -83,24 +84,33 @@ export async function expectNoProtectedSentinels(page: Page): Promise<void> {
 }
 
 export async function expectNoUnexpectedStorage(page: Page): Promise<void> {
-  const storage = await page.evaluate(async (approvedKeys) => {
-    const localKeys = Object.keys(localStorage);
-    const sessionKeys = Object.keys(sessionStorage);
-    const indexedDbNames =
-      "databases" in indexedDB
-        ? (await indexedDB.databases()).map((database) => database.name ?? "")
-        : [];
-    const serviceWorkers =
-      "serviceWorker" in navigator ? await navigator.serviceWorker.getRegistrations() : [];
-    return {
-      localKeys,
-      sessionKeys,
-      indexedDbNames,
-      serviceWorkerCount: serviceWorkers.length,
-      unexpectedLocalKeys: localKeys.filter((key) => !approvedKeys.includes(key)),
-      unexpectedSessionKeys: sessionKeys.filter((key) => !approvedKeys.includes(key))
-    };
-  }, approvedSyntheticStorageKeys);
+  const storage = await page.evaluate(
+    async ({ approvedKeys, approvedPrefixes }) => {
+      const isApproved = (key: string) =>
+        approvedKeys.includes(key) || approvedPrefixes.some((prefix) => key.startsWith(prefix));
+
+      const localKeys = Object.keys(localStorage);
+      const sessionKeys = Object.keys(sessionStorage);
+      const indexedDbNames =
+        "databases" in indexedDB
+          ? (await indexedDB.databases()).map((database) => database.name ?? "")
+          : [];
+      const serviceWorkers =
+        "serviceWorker" in navigator ? await navigator.serviceWorker.getRegistrations() : [];
+      return {
+        localKeys,
+        sessionKeys,
+        indexedDbNames,
+        serviceWorkerCount: serviceWorkers.length,
+        unexpectedLocalKeys: localKeys.filter((key) => !isApproved(key)),
+        unexpectedSessionKeys: sessionKeys.filter((key) => !isApproved(key))
+      };
+    },
+    {
+      approvedKeys: approvedSyntheticStorageKeys,
+      approvedPrefixes: approvedSyntheticStorageKeyPrefixes
+    }
+  );
 
   expect(storage.unexpectedLocalKeys, "unexpected localStorage keys").toEqual([]);
   expect(storage.unexpectedSessionKeys, "unexpected sessionStorage keys").toEqual([]);

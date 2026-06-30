@@ -25,3 +25,5 @@ export const forbiddenProtectedSentinels = [
 ] as const;
 
 export const approvedSyntheticStorageKeys: readonly string[] = [];
+
+export const approvedSyntheticStorageKeyPrefixes = ["__next_debug_channel:"] as const;
