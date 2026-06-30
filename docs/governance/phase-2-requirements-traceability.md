@@ -2,7 +2,7 @@
 
 ## Status
 
-P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-012 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-013 and later implementation issues remain not started.
+P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-013 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-014 and later implementation issues remain not started.
 
 ## Requirement map
 
@@ -12,7 +12,7 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are 
 | P02-REQ-002 | NestJS API | Implementation map Phase 2 | P02-ISS-005 | P02-ISS-006, P02-ISS-011 | WORKSPACE-BOUNDARY-CREATED-PENDING-P02-ISS-005 |
 | P02-REQ-003 | Background worker | Implementation map Phase 2 | P02-ISS-007 | P02-ISS-008, P02-ISS-011 | WORKER-QUEUE-FOUNDATION-IMPLEMENTED-WITH-DETERMINISTIC-RETRY-DLQ-EVIDENCE |
 | P02-REQ-004 | Next.js patient, provider, organization, and admin apps | Implementation map Phase 2 | P02-ISS-012 | P02-ISS-006, P02-ISS-014 | NEXTJS-SHELL-RUNTIMES-IMPLEMENTED-WITH-SYNTHETIC-SMOKE-AND-A11Y-EVIDENCE |
-| P02-REQ-005 | Empty Expo or React Native mobile shell | Implementation map Phase 2 | P02-ISS-013 | P02-ISS-014 | WORKSPACE-BOUNDARY-CREATED-PENDING-P02-ISS-013 |
+| P02-REQ-005 | Empty Expo or React Native mobile shell | Implementation map Phase 2 | P02-ISS-013 | P02-ISS-014 | EMPTY-EXPO-SHELL-IMPLEMENTED-WITH-SYNTHETIC-RUNTIME-SURFACE |
 | P02-REQ-006 | PostgreSQL and PostGIS | Implementation map Phase 2 | P02-ISS-004 | P02-ISS-003 | LOCAL-HARNESS-CONFIGURED-PENDING-DOCKER-RUNTIME-EVIDENCE |
 | P02-REQ-007 | Redis-compatible cache/queue foundation | Implementation map Phase 2 | P02-ISS-003 | P02-ISS-007 | LOCAL-VALKEY-HARNESS-CONFIGURED-PENDING-DOCKER-RUNTIME-EVIDENCE |
 | P02-REQ-008 | Object storage with signed URL support | Implementation map Phase 2 | P02-ISS-009 | P02-ISS-014 | SIGNED-UPLOAD-DOWNLOAD-URL-AND-SYNTHETIC-CLEANUP-HARNESS-IMPLEMENTED |

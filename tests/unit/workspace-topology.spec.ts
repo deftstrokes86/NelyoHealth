@@ -10,7 +10,7 @@ const runtimeApplications = [
   ["worker", "@nelyohealth/worker"]
 ] as const;
 
-const boundaryApplications = [["mobile", "@nelyohealth/mobile"]] as const;
+const mobileShellApplications = [["mobile", "@nelyohealth/mobile"]] as const;
 
 const webShellApplications = [
   ["patient-web", "@nelyohealth/patient-web"],
@@ -136,6 +136,43 @@ function expectWebShellWorkspace(
   expect(source).toContain("featureImplementation: false");
 }
 
+function expectMobileShellWorkspace(
+  relativeDir: string,
+  packageName: string,
+  markerName: string
+): void {
+  const manifest = readManifest(`${relativeDir}/package.json`);
+  expect(manifest).toMatchObject({
+    name: packageName,
+    version: "0.0.0",
+    private: true,
+    type: "module"
+  });
+  expect(manifest.publishConfig).toBeUndefined();
+  expect(manifest.scripts?.start).toBe("expo start --offline");
+  expect(manifest.scripts?.build).toBe("tsc -p tsconfig.json");
+  expect(manifest.scripts?.typecheck).toBe("tsc -p tsconfig.json --noEmit");
+  expect(manifest.scripts?.["validate:expo"]).toBe("expo config --type public");
+
+  expect(manifest.dependencies).toEqual({
+    expo: "56.0.12",
+    react: "19.2.7",
+    "react-native": "0.85.3"
+  });
+
+  expect(fs.existsSync(path.join(rootDir, relativeDir, "README.md"))).toBe(true);
+  expect(fs.existsSync(path.join(rootDir, relativeDir, "tsconfig.json"))).toBe(true);
+  expect(fs.existsSync(path.join(rootDir, relativeDir, "App.tsx"))).toBe(true);
+  expect(fs.existsSync(path.join(rootDir, relativeDir, "expo.entry.ts"))).toBe(true);
+  expect(fs.existsSync(path.join(rootDir, relativeDir, "app.json"))).toBe(true);
+
+  const source = readText(`${relativeDir}/src/index.ts`);
+  expect(source).toContain(markerName);
+  expect(source).toContain('status: "shell-runtime"');
+  expect(source).toContain("runtimeImplementation: true");
+  expect(source).toContain("featureImplementation: false");
+}
+
 function expectRuntimeWorkspace(
   relativeDir: string,
   packageName: string,
@@ -165,7 +202,7 @@ describe("Phase 2 workspace topology", () => {
 
     for (const [appName] of [
       ...runtimeApplications,
-      ...boundaryApplications,
+      ...mobileShellApplications,
       ...webShellApplications
     ]) {
       expect(fs.existsSync(path.join(rootDir, "apps", appName))).toBe(true);
@@ -182,12 +219,12 @@ describe("Phase 2 workspace topology", () => {
     }
   });
 
-  it("keeps non-web application scaffolds private, dependency-free, and boundary-only", () => {
-    for (const [appName, packageName] of boundaryApplications) {
+  it("keeps mobile as an empty Expo shell runtime", () => {
+    for (const [appName, packageName] of mobileShellApplications) {
       const marker = `${appName.replace(/-([a-z])/g, (_, letter: string) =>
         letter.toUpperCase()
       )}ApplicationBoundary`;
-      expectBoundaryWorkspace(`apps/${appName}`, packageName, marker);
+      expectMobileShellWorkspace(`apps/${appName}`, packageName, marker);
       expect(fs.existsSync(path.join(rootDir, "apps", appName, "AGENTS.md"))).toBe(true);
     }
   });

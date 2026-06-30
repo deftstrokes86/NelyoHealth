@@ -174,6 +174,8 @@ Rollback: revert mobile app package and workspace references.
 
 Depends on: P02-ISS-002.
 
+Status: completed with empty Expo shell runtime, synthetic-only UI surface, and validation evidence.
+
 ### P02-ISS-014 - Phase 2 browser harness expansion
 
 Objective: Implement per-app Chromium projects, auth storage states, synthetic builders, DB reset/seed, API helpers, page objects, console/network assertions, privacy checks, traces, screenshots, videos, a11y, sharding, retries, and artifact retention.

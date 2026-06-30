@@ -22,6 +22,7 @@
 - P02-ISS-010: COMPLETED, fake communications and local feature-flag adapter shells with deterministic evaluation/dispatch evidence.
 - P02-ISS-011: COMPLETED, observability foundation links API and worker logs/traces/metrics with safe telemetry redaction.
 - P02-ISS-012: COMPLETED, Next.js patient/provider/organization/admin shell runtimes with typed client wiring and synthetic browser smoke+a11y evidence.
+- P02-ISS-013: COMPLETED, empty Expo mobile shell with synthetic-only runtime surface and validation evidence.
 - AGENTS guidance: IMPLEMENTED.
 - Execution-plan convention: IMPLEMENTED.
 - Browser-validation skill: IMPLEMENTED.
@@ -33,7 +34,7 @@
 - Phase 1 gate: PHASE-1-CONDITIONAL-PASS.
 - Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS.
 - Phase 2 planning: P02-PLAN-001 ACCEPTED.
-- Phase 2 implementation: P02-ISS-003 COMPLETED; local harness files, static checks, and live Docker runtime evidence validated. P02-ISS-004 COMPLETED with migration, status, seed/reset, and rollback evidence. P02-ISS-005 COMPLETED with health/readiness routes, middleware conventions, and integration evidence. P02-ISS-006 COMPLETED with generated OpenAPI and typed client contract artifacts. P02-ISS-007 COMPLETED with worker queue foundation and deterministic retry/DLQ/idempotency test evidence. P02-ISS-008 COMPLETED with transaction helper and transactional outbox dispatch/rollback evidence. P02-ISS-009 COMPLETED with signed upload/download URL and synthetic cleanup adapter evidence. P02-ISS-010 COMPLETED with fake communications and local feature-flag adapter shell evidence. P02-ISS-011 COMPLETED with API-to-worker observability correlation and metric/log/trace evidence. P02-ISS-012 COMPLETED with Next.js shell runtimes and synthetic browser validation evidence.
+- Phase 2 implementation: P02-ISS-003 COMPLETED; local harness files, static checks, and live Docker runtime evidence validated. P02-ISS-004 COMPLETED with migration, status, seed/reset, and rollback evidence. P02-ISS-005 COMPLETED with health/readiness routes, middleware conventions, and integration evidence. P02-ISS-006 COMPLETED with generated OpenAPI and typed client contract artifacts. P02-ISS-007 COMPLETED with worker queue foundation and deterministic retry/DLQ/idempotency test evidence. P02-ISS-008 COMPLETED with transaction helper and transactional outbox dispatch/rollback evidence. P02-ISS-009 COMPLETED with signed upload/download URL and synthetic cleanup adapter evidence. P02-ISS-010 COMPLETED with fake communications and local feature-flag adapter shell evidence. P02-ISS-011 COMPLETED with API-to-worker observability correlation and metric/log/trace evidence. P02-ISS-012 COMPLETED with Next.js shell runtimes and synthetic browser validation evidence. P02-ISS-013 COMPLETED with empty Expo mobile shell validation evidence.
 - Phase 3: NOT STARTED.
 - Pilot launch: PILOT-NO-GO.
 - Production release: NOT APPROVED.
@@ -41,7 +42,7 @@
 - Interactive browser: VERIFIED THROUGH PLAYWRIGHT CLI FALLBACK.
 - Playwright MCP: VERIFIED THROUGH PROJECT-SCOPED LOCAL SMOKE ON 2026-06-25 WITH CODEX-CLI 0.141.0.
 - UI UX Pro Max licence: REVIEW-REQUIRED.
-- Next action: begin P02-ISS-013, Expo or React Native mobile shell.
+- Next action: begin P02-ISS-014, Phase 2 browser harness expansion.
 
 ## Foundation commands
 
