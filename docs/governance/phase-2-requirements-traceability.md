@@ -2,7 +2,7 @@
 
 ## Status
 
-P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-014 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-015 and later implementation issues remain not started.
+P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-015 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-016 and later implementation issues remain not started.
 
 ## Requirement map
 
@@ -18,7 +18,7 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are 
 | P02-REQ-008 | Object storage with signed URL support | Implementation map Phase 2 | P02-ISS-009 | P02-ISS-014 | SIGNED-UPLOAD-DOWNLOAD-URL-AND-SYNTHETIC-CLEANUP-HARNESS-IMPLEMENTED |
 | P02-REQ-009 | Email, SMS, push adapters | Implementation map Phase 2 | P02-ISS-010 | None | PROVIDER-NEUTRAL-PORTS-AND-FAKE-LOCAL-ADAPTERS-IMPLEMENTED |
 | P02-REQ-010 | Feature flags | Implementation map Phase 2 | P02-ISS-010 | P02-ISS-015 | LOCAL-FEATURE-FLAG-ADAPTER-SHELL-IMPLEMENTED-VENDOR-INTEGRATION-DEFERRED |
-| P02-REQ-011 | Secrets manager boundary | Implementation map Phase 2 | P02-ISS-015 | P02-ISS-016 | PLANNED |
+| P02-REQ-011 | Secrets manager boundary | Implementation map Phase 2 | P02-ISS-015 | P02-ISS-016 | CONFIG-TYPED-BOUNDARY-AND-SECRET-REDACTION-IMPLEMENTED |
 | P02-REQ-012 | Managed logging, metrics/tracing, error reporting boundaries | Implementation map Phase 2 | P02-ISS-011 | P02-ISS-015 | API-TO-WORKER-OBSERVABILITY-FOUNDATION-IMPLEMENTED-WITH-SAFE-TELEMETRY-REDACTION |
 | P02-REQ-013 | Modular-monolith, REST, OpenAPI, typed client | Phase 2 prompt and ADR-0005 | P02-ISS-005 | P02-ISS-006 | PLANNED |
 | P02-REQ-014 | Request/correlation IDs and standard errors | Phase 2 prompt | P02-ISS-005 | P02-ISS-011 | API-CORRELATION-IDS-NOW-PROPAGATED-IN-OBSERVABILITY-PROBE-FLOW |
@@ -27,7 +27,7 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are 
 | P02-REQ-017 | Domain event dispatch, retry, DLQ | Phase 2 prompt | P02-ISS-007 | P02-ISS-008, P02-ISS-011 | QUEUE-RETRY-DLQ-AND-OUTBOX-DISPATCH-SKELETON-IMPLEMENTED-END-TO-END-OBSERVABILITY-PENDING-P02-ISS-011 |
 | P02-REQ-018 | Health/readiness endpoints | Phase 2 prompt | P02-ISS-005 | P02-ISS-003, P02-ISS-015 | PLANNED |
 | P02-REQ-019 | Browser harness projects, auth states, seed/reset, API helpers, page objects, assertions, artifacts, a11y, privacy, sharding/retry | Phase 2 prompt and ADR-0003 | P02-ISS-014 | P02-ISS-004, P02-ISS-012, P02-ISS-013 | PER-APP-CHROMIUM-MATRIX-AND-SYNTHETIC-AUTH-STATES-IMPLEMENTED-WITH-ACCESSIBILITY-EVIDENCE |
-| P02-REQ-020 | Environment strategy for local, PR, development, staging, production, partner sandbox | Phase 2 prompt | P02-ISS-015 | P02-ISS-016, P02-ISS-017 | PLANNED |
+| P02-REQ-020 | Environment strategy for local, PR, development, staging, production, partner sandbox | Phase 2 prompt | P02-ISS-015 | P02-ISS-016, P02-ISS-017 | TYPED-ENVIRONMENT-BOUNDARY-AND-SYNTHETIC-PLACEHOLDERS-IMPLEMENTED |
 | P02-REQ-021 | Production data never copied downward | Phase 2 prompt and locked data rules | P02-ISS-015 | P02-ISS-014, P02-ISS-018 | PLANNED |
 | P02-REQ-022 | IaC plan for network, hosting, managed data services, DNS/TLS/CDN/WAF, secrets, backups, monitoring | Phase 2 prompt | P02-ISS-016 | P02-ISS-017 | PLANNED-HUMAN-DECISION-REQUIRED |
 | P02-REQ-023 | Vendor-specific code stays in adapters | Phase 2 prompt and ADR-0005 | P02-ISS-001 | P02-ISS-005 through P02-ISS-011 | ADR-BOUNDARY-RECORDED-PENDING-IMPLEMENTATION-EVIDENCE |

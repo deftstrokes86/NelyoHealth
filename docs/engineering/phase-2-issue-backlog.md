@@ -202,6 +202,8 @@ Rollback: revert config package and app wiring.
 
 Depends on: P02-ISS-001, P02-ISS-003, P02-ISS-011.
 
+Status: completed with typed env config, strict loading, synthetic-safe placeholders, and redaction evidence.
+
 ### P02-ISS-016 - IaC provider selection and deployment contract
 
 Objective: Select IaC tool and cloud/deployment target with human approval, then create provider-neutral deployment contract or approved IaC skeleton.

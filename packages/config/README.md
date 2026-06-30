@@ -1,10 +1,11 @@
 # @nelyohealth/config
 
-Boundary-only package for future typed environment configuration.
+Typed environment configuration boundary for Phase 2.
 
 ## Public API
 
 - Exports `configPackageBoundary` for P02-ISS-002 topology validation.
-- Contains no environment schema, secret values, provider endpoints, production defaults, or live configuration reads.
+- Provides typed runtime config resolution, strict environment loading, and secret-redacted diagnostics.
+- Keeps secret references synthetic-safe and environment scoped.
 
-Environment implementation belongs to P02-ISS-015.
+Environment strategy implementation is now provided for Phase 2, with production provisioning deferred to later issues.
