@@ -2,7 +2,7 @@
 
 ## Status
 
-P02-PLAN-001 planning traceability is accepted. P02-ISS-001 is accepted. P02-ISS-002 is accepted. P02-ISS-003 is partial with local harness files and static checks implemented; live Docker start/stop/health evidence is blocked on the current validation host. P02-ISS-004 and later implementation issues remain NOT STARTED.
+P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-007 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-008 and later implementation issues remain not started.
 
 ## Requirement map
 
@@ -10,7 +10,7 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 is accepted. P02-ISS
 |---|---|---|---|---|---|
 | P02-REQ-001 | Deployable application skeleton with local, development, and staging environments | Implementation map Phase 2 | P02-ISS-017 | P02-ISS-002 through P02-ISS-018 | TOPOLOGY-SCAFFOLDED-PENDING-RUNTIME-IMPLEMENTATION |
 | P02-REQ-002 | NestJS API | Implementation map Phase 2 | P02-ISS-005 | P02-ISS-006, P02-ISS-011 | WORKSPACE-BOUNDARY-CREATED-PENDING-P02-ISS-005 |
-| P02-REQ-003 | Background worker | Implementation map Phase 2 | P02-ISS-007 | P02-ISS-008, P02-ISS-011 | WORKSPACE-BOUNDARY-CREATED-PENDING-P02-ISS-007 |
+| P02-REQ-003 | Background worker | Implementation map Phase 2 | P02-ISS-007 | P02-ISS-008, P02-ISS-011 | WORKER-QUEUE-FOUNDATION-IMPLEMENTED-WITH-DETERMINISTIC-RETRY-DLQ-EVIDENCE |
 | P02-REQ-004 | Next.js patient, provider, organization, and admin apps | Implementation map Phase 2 | P02-ISS-012 | P02-ISS-006, P02-ISS-014 | WORKSPACE-BOUNDARY-CREATED-PENDING-P02-ISS-012 |
 | P02-REQ-005 | Empty Expo or React Native mobile shell | Implementation map Phase 2 | P02-ISS-013 | P02-ISS-014 | WORKSPACE-BOUNDARY-CREATED-PENDING-P02-ISS-013 |
 | P02-REQ-006 | PostgreSQL and PostGIS | Implementation map Phase 2 | P02-ISS-004 | P02-ISS-003 | LOCAL-HARNESS-CONFIGURED-PENDING-DOCKER-RUNTIME-EVIDENCE |
@@ -24,7 +24,7 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 is accepted. P02-ISS
 | P02-REQ-014 | Request/correlation IDs and standard errors | Phase 2 prompt | P02-ISS-005 | P02-ISS-011 | PLANNED |
 | P02-REQ-015 | Idempotency-key middleware | Phase 2 prompt | P02-ISS-005 | P02-ISS-014 | PLANNED |
 | P02-REQ-016 | DB transaction helpers and transactional outbox | Phase 2 prompt and ADR-0005 | P02-ISS-008 | P02-ISS-004, P02-ISS-007 | PLANNED |
-| P02-REQ-017 | Domain event dispatch, retry, DLQ | Phase 2 prompt | P02-ISS-007 | P02-ISS-008, P02-ISS-011 | PLANNED |
+| P02-REQ-017 | Domain event dispatch, retry, DLQ | Phase 2 prompt | P02-ISS-007 | P02-ISS-008, P02-ISS-011 | RETRY-AND-DLQ-FOUNDATION-IMPLEMENTED-DOMAIN-EVENT-DISPATCH-PENDING-P02-ISS-008 |
 | P02-REQ-018 | Health/readiness endpoints | Phase 2 prompt | P02-ISS-005 | P02-ISS-003, P02-ISS-015 | PLANNED |
 | P02-REQ-019 | Browser harness projects, auth states, seed/reset, API helpers, page objects, assertions, artifacts, a11y, privacy, sharding/retry | Phase 2 prompt and ADR-0003 | P02-ISS-014 | P02-ISS-004, P02-ISS-012, P02-ISS-013 | PLANNED |
 | P02-REQ-020 | Environment strategy for local, PR, development, staging, production, partner sandbox | Phase 2 prompt | P02-ISS-015 | P02-ISS-016, P02-ISS-017 | PLANNED |
@@ -40,7 +40,7 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 is accepted. P02-ISS
 | P02-EG-002 | A version can be promoted to staging | P02-ISS-017 | Versioned artifact, promotion evidence, staging smoke | PLANNED |
 | P02-EG-003 | Database migrations run safely | P02-ISS-004 | Migration apply/status/rollback or compensation evidence | PLANNED |
 | P02-EG-004 | Logs, traces, and metrics connect one request across API and worker | P02-ISS-011 | Correlated request/job trace/log/metric evidence | PLANNED |
-| P02-EG-005 | Background job enqueue/process/retry/DLQ | P02-ISS-007 | Deterministic job test evidence | PLANNED |
+| P02-EG-005 | Background job enqueue/process/retry/DLQ | P02-ISS-007 | Deterministic job test evidence | COMPLETED-TEST-EVIDENCE-RECORDED |
 | P02-EG-006 | Document uploaded using signed URL | P02-ISS-009 | Synthetic document upload/download/expiry evidence | PLANNED |
 | P02-EG-007 | Browser tests start apps, seed, sign in, navigate, and retain traces | P02-ISS-014 | Playwright report and artifact retention evidence | PLANNED |
 | P02-EG-008 | Codex can inspect local routes and report console/network failures | P02-ISS-014 | MCP or CLI local inspection evidence | PLANNED |

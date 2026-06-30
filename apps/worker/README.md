@@ -1,10 +1,12 @@
 # @nelyohealth/worker
 
-Boundary-only workspace for the future background worker.
+Background worker foundation with deterministic queue processing for Phase 2 ISS-007.
 
 ## Public API
 
-- Exports `workerApplicationBoundary` for P02-ISS-002 topology validation.
-- Contains no jobs, queue clients, retries, DLQ behavior, outbox dispatch, observability wiring, containers, or live provider integrations.
+- Exports `workerApplicationBoundary` with `queue-foundation-implemented` status.
+- Exports `WorkerQueueRuntime` and queue-envelope safety checks.
+- Exports deterministic synthetic job helpers used by test evidence.
+- Retains synthetic-only data behavior and keeps feature implementation out of scope.
 
-Runtime implementation belongs to P02-ISS-007.
+Outbox dispatch and broader observability wiring remain future work in P02-ISS-008 and P02-ISS-011.

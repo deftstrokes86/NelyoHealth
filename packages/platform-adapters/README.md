@@ -1,10 +1,11 @@
 # @nelyohealth/platform-adapters
 
-Boundary-only package for future provider-neutral ports and adapters.
+Provider-neutral ports and adapter implementations for platform integration boundaries.
 
 ## Public API
 
 - Exports `platformAdaptersPackageBoundary` for P02-ISS-002 topology validation.
-- Contains no AWS, S3, LocalStack, MinIO, Redis, BullMQ, ioredis, OpenFeature, email, SMS, push, payment, analytics, or error-reporting SDK types.
+- Exports queue job-envelope contracts and `SyntheticQueueAdapter` for deterministic ISS-007 retry and DLQ behavior.
+- Keeps queue payloads synthetic-safe by policy; no PHI, protected provider details, payment credentials, or secrets.
 
-Adapter implementation belongs to later authorized Phase 2 issues.
+Additional live provider adapters (object storage, communications, feature flags, observability) remain future Phase 2 work.
