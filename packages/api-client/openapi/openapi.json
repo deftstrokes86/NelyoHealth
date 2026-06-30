@@ -90,6 +90,21 @@
           "storage"
         ]
       }
+    },
+    "/api/observability/probe": {
+      "post": {
+        "operationId": "ObservabilityController_runProbe",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Observability probe envelope"
+          }
+        },
+        "summary": "Run synthetic API-to-worker observability correlation probe",
+        "tags": [
+          "observability"
+        ]
+      }
     }
   },
   "info": {

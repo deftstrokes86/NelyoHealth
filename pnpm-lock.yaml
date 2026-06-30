@@ -85,9 +85,15 @@ importers:
       '@nelyohealth/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@nelyohealth/observability':
+        specifier: workspace:*
+        version: link:../../packages/observability
       '@nelyohealth/platform-adapters':
         specifier: workspace:*
         version: link:../../packages/platform-adapters
+      '@nelyohealth/worker':
+        specifier: workspace:*
+        version: link:../worker
       '@nestjs/common':
         specifier: 11.1.27
         version: 11.1.27(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@10.2.2)

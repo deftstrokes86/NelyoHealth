@@ -2,7 +2,7 @@
 
 ## Status
 
-P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-010 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-011 and later implementation issues remain not started.
+P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-011 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-012 and later implementation issues remain not started.
 
 ## Requirement map
 
@@ -19,9 +19,9 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are 
 | P02-REQ-009 | Email, SMS, push adapters | Implementation map Phase 2 | P02-ISS-010 | None | PROVIDER-NEUTRAL-PORTS-AND-FAKE-LOCAL-ADAPTERS-IMPLEMENTED |
 | P02-REQ-010 | Feature flags | Implementation map Phase 2 | P02-ISS-010 | P02-ISS-015 | LOCAL-FEATURE-FLAG-ADAPTER-SHELL-IMPLEMENTED-VENDOR-INTEGRATION-DEFERRED |
 | P02-REQ-011 | Secrets manager boundary | Implementation map Phase 2 | P02-ISS-015 | P02-ISS-016 | PLANNED |
-| P02-REQ-012 | Managed logging, metrics/tracing, error reporting boundaries | Implementation map Phase 2 | P02-ISS-011 | P02-ISS-015 | LOCAL-OTEL-COLLECTOR-HARNESS-CONFIGURED-PENDING-DOCKER-RUNTIME-EVIDENCE |
+| P02-REQ-012 | Managed logging, metrics/tracing, error reporting boundaries | Implementation map Phase 2 | P02-ISS-011 | P02-ISS-015 | API-TO-WORKER-OBSERVABILITY-FOUNDATION-IMPLEMENTED-WITH-SAFE-TELEMETRY-REDACTION |
 | P02-REQ-013 | Modular-monolith, REST, OpenAPI, typed client | Phase 2 prompt and ADR-0005 | P02-ISS-005 | P02-ISS-006 | PLANNED |
-| P02-REQ-014 | Request/correlation IDs and standard errors | Phase 2 prompt | P02-ISS-005 | P02-ISS-011 | PLANNED |
+| P02-REQ-014 | Request/correlation IDs and standard errors | Phase 2 prompt | P02-ISS-005 | P02-ISS-011 | API-CORRELATION-IDS-NOW-PROPAGATED-IN-OBSERVABILITY-PROBE-FLOW |
 | P02-REQ-015 | Idempotency-key middleware | Phase 2 prompt | P02-ISS-005 | P02-ISS-014 | PLANNED |
 | P02-REQ-016 | DB transaction helpers and transactional outbox | Phase 2 prompt and ADR-0005 | P02-ISS-008 | P02-ISS-004, P02-ISS-007 | IMPLEMENTED-WITH-TRANSACTION-COMMIT-ROLLBACK-AND-OUTBOX-DISPATCH-EVIDENCE |
 | P02-REQ-017 | Domain event dispatch, retry, DLQ | Phase 2 prompt | P02-ISS-007 | P02-ISS-008, P02-ISS-011 | QUEUE-RETRY-DLQ-AND-OUTBOX-DISPATCH-SKELETON-IMPLEMENTED-END-TO-END-OBSERVABILITY-PENDING-P02-ISS-011 |
@@ -39,7 +39,7 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are 
 | P02-EG-001 | Human-merged main deploys automatically to development | P02-ISS-017 | Human merge evidence, dev deployment log, no Codex GitHub writes | PLANNED |
 | P02-EG-002 | A version can be promoted to staging | P02-ISS-017 | Versioned artifact, promotion evidence, staging smoke | PLANNED |
 | P02-EG-003 | Database migrations run safely | P02-ISS-004 | Migration apply/status/rollback or compensation evidence | PLANNED |
-| P02-EG-004 | Logs, traces, and metrics connect one request across API and worker | P02-ISS-011 | Correlated request/job trace/log/metric evidence | PLANNED |
+| P02-EG-004 | Logs, traces, and metrics connect one request across API and worker | P02-ISS-011 | Correlated request/job trace/log/metric evidence | COMPLETED-TEST-EVIDENCE-RECORDED |
 | P02-EG-005 | Background job enqueue/process/retry/DLQ | P02-ISS-007 | Deterministic job test evidence | COMPLETED-TEST-EVIDENCE-RECORDED |
 | P02-EG-006 | Document uploaded using signed URL | P02-ISS-009 | Synthetic document upload/download/expiry evidence | COMPLETED-TEST-EVIDENCE-RECORDED |
 | P02-EG-007 | Browser tests start apps, seed, sign in, navigate, and retain traces | P02-ISS-014 | Playwright report and artifact retention evidence | PLANNED |

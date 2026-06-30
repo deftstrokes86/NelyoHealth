@@ -32,6 +32,7 @@ describe("openapi generation", () => {
       expect(JSON.stringify(document)).toContain("/api/storage/signed-url/upload");
       expect(JSON.stringify(document)).toContain("/api/storage/signed-url/download");
       expect(JSON.stringify(document)).toContain("/api/storage/synthetic-objects");
+      expect(JSON.stringify(document)).toContain("/api/observability/probe");
     } finally {
       await app.close();
     }

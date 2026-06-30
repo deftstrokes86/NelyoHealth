@@ -65,5 +65,6 @@ describe("OpenAPI contract drift", () => {
     expect(serialized).toContain("/api/storage/signed-url/upload");
     expect(serialized).toContain("/api/storage/signed-url/download");
     expect(serialized).toContain("/api/storage/synthetic-objects");
+    expect(serialized).toContain("/api/observability/probe");
   });
 });

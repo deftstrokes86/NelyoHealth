@@ -22,7 +22,9 @@
     "@nestjs/platform-express": "11.1.27",
     "@nestjs/swagger": "11.4.4",
     "@nelyohealth/config": "workspace:*",
+    "@nelyohealth/observability": "workspace:*",
     "@nelyohealth/platform-adapters": "workspace:*",
+    "@nelyohealth/worker": "workspace:*",
     "hono": "4.8.0",
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.2"

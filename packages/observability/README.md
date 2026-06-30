@@ -1,10 +1,11 @@
 # @nelyohealth/observability
 
-Boundary-only package for future logs, traces, metrics, request IDs, correlation IDs, and safe diagnostics helpers.
+Observability foundation package for safe logs, traces, and metrics helpers.
 
 ## Public API
 
-- Exports `observabilityPackageBoundary` for P02-ISS-002 topology validation.
-- Contains no OpenTelemetry setup, logger implementation, exporter configuration, error-reporting vendor, telemetry payload, or runtime instrumentation.
+- Exports `observabilityPackageBoundary` for topology and phase status validation.
+- Exports `InMemoryObservabilityRecorder` and telemetry event contracts for synthetic correlation tests.
+- Includes attribute redaction safeguards for secret-like and protected payload fragments.
 
-Observability implementation belongs to P02-ISS-011 and P02-ISS-015.
+OpenTelemetry exporter wiring and vendor-specific observability backends remain out of scope for this foundation slice.
