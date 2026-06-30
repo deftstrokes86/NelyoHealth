@@ -8,7 +8,7 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are 
 
 | Requirement ID | Requirement | Source | Primary issue | Supporting issue(s) | Status |
 |---|---|---|---|---|---|
-| P02-REQ-001 | Deployable application skeleton with local, development, and staging environments | Implementation map Phase 2 | P02-ISS-017 | P02-ISS-002 through P02-ISS-018 | TOPOLOGY-SCAFFOLDED-PENDING-RUNTIME-IMPLEMENTATION |
+| P02-REQ-001 | Deployable application skeleton with local, development, and staging environments | Implementation map Phase 2 | P02-ISS-017 | P02-ISS-002 through P02-ISS-018 | DEPLOYMENT-WORKFLOW-PENDING-IMPLEMENTATION |
 | P02-REQ-002 | NestJS API | Implementation map Phase 2 | P02-ISS-005 | P02-ISS-006, P02-ISS-011 | WORKSPACE-BOUNDARY-CREATED-PENDING-P02-ISS-005 |
 | P02-REQ-003 | Background worker | Implementation map Phase 2 | P02-ISS-007 | P02-ISS-008, P02-ISS-011 | WORKER-QUEUE-FOUNDATION-IMPLEMENTED-WITH-DETERMINISTIC-RETRY-DLQ-EVIDENCE |
 | P02-REQ-004 | Next.js patient, provider, organization, and admin apps | Implementation map Phase 2 | P02-ISS-012 | P02-ISS-006, P02-ISS-014 | NEXTJS-SHELL-RUNTIMES-IMPLEMENTED-WITH-SYNTHETIC-SMOKE-AND-A11Y-EVIDENCE |

@@ -25,6 +25,7 @@
 - P02-ISS-013: COMPLETED, empty Expo mobile shell with synthetic-only runtime surface and validation evidence.
 - P02-ISS-014: COMPLETED, per-app Chromium browser harness with synthetic auth-state generation, privacy checks, and accessibility evidence.
 - P02-ISS-015: COMPLETED, typed environment configuration boundary with strict loading, synthetic-safe placeholders, and secret redaction.
+- P02-ISS-016: COMPLETED, provider-neutral deployment contract baseline with human-gated cloud decision.
 - AGENTS guidance: IMPLEMENTED.
 - Execution-plan convention: IMPLEMENTED.
 - Browser-validation skill: IMPLEMENTED.
@@ -44,7 +45,7 @@
 - Interactive browser: VERIFIED THROUGH PLAYWRIGHT CLI FALLBACK.
 - Playwright MCP: VERIFIED THROUGH PROJECT-SCOPED LOCAL SMOKE ON 2026-06-25 WITH CODEX-CLI 0.141.0.
 - UI UX Pro Max licence: REVIEW-REQUIRED.
-- Next action: begin P02-ISS-016, IaC provider selection and deployment contract.
+- Next action: begin P02-ISS-017, development deploy and staging promotion path.
 
 ## Foundation commands
 

@@ -853,3 +853,10 @@
 |---|---|---|---|---|
 | DEC-P02-ISS-016-001 | Record the provider-neutral deployment contract in the environment and deployment baseline while leaving cloud provider selection unresolved. | ACCEPTED; HUMAN-CLOUD-DECISION-PENDING | Platform/release owner | docs/engineering/environment-and-deployment-baseline.md; docs/adr/ADR-P02-005-iac-cloud-provider-and-deployment-path.md |
 | DEC-P02-ISS-016-002 | Keep OpenTofu preferred, Pulumi a candidate, and Terraform review-required until human approval exists for the actual IaC path. | ACCEPTED; HUMAN-DECISION-GATED | Platform/release owner | docs/adr/ADR-P02-005-iac-cloud-provider-and-deployment-path.md; docs/engineering/phase-2-environment-strategy.md |
+
+## P02-ISS-017 decisions - 2026-06-30
+
+| Decision ID | Decision | Status | Owner | Evidence |
+|---|---|---|---|---|
+| DEC-P02-ISS-017-001 | Record the deployment workflow as human-merge-to-development followed by versioned staging promotion. | ACCEPTED; IMPLEMENTATION-PENDING | Platform/release owner | docs/engineering/phase-2-environment-strategy.md; docs/engineering/phase-2-issue-backlog.md |
+| DEC-P02-ISS-017-002 | Keep staging promotion gated on migration plan, rollback plan, dependency readiness, and smoke/browser evidence. | ACCEPTED; IMPLEMENTATION-PENDING | Platform/release owner | docs/engineering/phase-2-environment-strategy.md; docs/engineering/environment-and-deployment-baseline.md |
