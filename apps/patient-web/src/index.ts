@@ -99,15 +99,17 @@ export { createInitialRefundState, createRefundStateWithSelection } from "./refu
 export type { RefundState } from "./refund-state.js";
 export { createRefundViewModel } from "./refund.js";
 export type { RefundDraftDtoLike, RefundViewModel } from "./refund.js";
+export { createPatientShellApiClient, patientShellDescriptor } from "./shell.js";
+export type { PatientShellDescriptor } from "./shell.js";
 
 export const patientWebApplicationBoundary = {
   id: "patient-web",
   packageName: "@nelyohealth/patient-web",
   kind: "application",
-  status: "boundary-only",
+  status: "shell-runtime",
   owningIssue: "P02-ISS-012",
   frameworkTarget: "Next.js 16",
-  runtimeImplementation: false,
+  runtimeImplementation: true,
   featureImplementation: false
 } as const;
 

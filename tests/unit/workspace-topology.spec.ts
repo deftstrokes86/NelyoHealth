@@ -5,14 +5,17 @@ import { describe, expect, it } from "vitest";
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
-const applications = [
+const boundaryApplications = [
   ["api", "@nelyohealth/api"],
   ["worker", "@nelyohealth/worker"],
+  ["mobile", "@nelyohealth/mobile"]
+] as const;
+
+const webShellApplications = [
   ["patient-web", "@nelyohealth/patient-web"],
   ["provider-web", "@nelyohealth/provider-web"],
   ["organization-web", "@nelyohealth/organization-web"],
-  ["admin-web", "@nelyohealth/admin-web"],
-  ["mobile", "@nelyohealth/mobile"]
+  ["admin-web", "@nelyohealth/admin-web"]
 ] as const;
 
 const sharedPackages = [
@@ -86,6 +89,48 @@ function expectBoundaryWorkspace(
   expect(source).toContain("featureImplementation: false");
 }
 
+function expectWebShellWorkspace(
+  relativeDir: string,
+  packageName: string,
+  markerName: string
+): void {
+  const manifest = readManifest(`${relativeDir}/package.json`);
+  expect(manifest).toMatchObject({
+    name: packageName,
+    version: "0.0.0",
+    private: true,
+    type: "module"
+  });
+  expect(manifest.publishConfig).toBeUndefined();
+  expect(manifest.scripts?.dev).toBe("next dev");
+  expect(manifest.scripts?.build).toBe("next build");
+  expect(manifest.scripts?.start).toBe("next start");
+  expect(manifest.scripts?.typecheck).toBe("tsc -p tsconfig.json --noEmit");
+
+  for (const lifecycle of ["preinstall", "install", "postinstall", "prepare"]) {
+    expect(manifest.scripts?.[lifecycle]).toBeUndefined();
+  }
+
+  expect(manifest.dependencies).toEqual({
+    "@nelyohealth/api-client": "workspace:*",
+    "@nelyohealth/ui-foundation": "workspace:*",
+    next: "16.2.9",
+    react: "19.2.7",
+    "react-dom": "19.2.7"
+  });
+
+  expect(fs.existsSync(path.join(rootDir, relativeDir, "README.md"))).toBe(true);
+  expect(fs.existsSync(path.join(rootDir, relativeDir, "tsconfig.json"))).toBe(true);
+  expect(fs.existsSync(path.join(rootDir, relativeDir, "app", "page.tsx"))).toBe(true);
+  expect(fs.existsSync(path.join(rootDir, relativeDir, "app", "layout.tsx"))).toBe(true);
+
+  const source = readText(`${relativeDir}/src/index.ts`);
+  expect(source).toContain(markerName);
+  expect(source).toContain('status: "shell-runtime"');
+  expect(source).toContain("runtimeImplementation: true");
+  expect(source).toContain("featureImplementation: false");
+}
+
 describe("Phase 2 workspace topology", () => {
   it("registers the approved apps in the pnpm workspace", () => {
     const workspace = readText("pnpm-workspace.yaml");
@@ -93,17 +138,27 @@ describe("Phase 2 workspace topology", () => {
     expect(workspace).toContain('- "packages/*"');
     expect(workspace).toContain('- "tools/*"');
 
-    for (const [appName] of applications) {
+    for (const [appName] of [...boundaryApplications, ...webShellApplications]) {
       expect(fs.existsSync(path.join(rootDir, "apps", appName))).toBe(true);
     }
   });
 
-  it("keeps application scaffolds private, dependency-free, and boundary-only", () => {
-    for (const [appName, packageName] of applications) {
+  it("keeps non-web application scaffolds private, dependency-free, and boundary-only", () => {
+    for (const [appName, packageName] of boundaryApplications) {
       const marker = `${appName.replace(/-([a-z])/g, (_, letter: string) =>
         letter.toUpperCase()
       )}ApplicationBoundary`;
       expectBoundaryWorkspace(`apps/${appName}`, packageName, marker);
+      expect(fs.existsSync(path.join(rootDir, "apps", appName, "AGENTS.md"))).toBe(true);
+    }
+  });
+
+  it("keeps web applications as Next.js synthetic shell runtimes", () => {
+    for (const [appName, packageName] of webShellApplications) {
+      const marker = `${appName.replace(/-([a-z])/g, (_, letter: string) =>
+        letter.toUpperCase()
+      )}ApplicationBoundary`;
+      expectWebShellWorkspace(`apps/${appName}`, packageName, marker);
       expect(fs.existsSync(path.join(rootDir, "apps", appName, "AGENTS.md"))).toBe(true);
     }
   });

@@ -1,10 +1,17 @@
-import type { BookingDraft } from "@nelyohealth/api";
+type BookingStatus =
+  | "draft"
+  | "requested"
+  | "approved"
+  | "denied"
+  | "scheduled"
+  | "completed"
+  | "cancelled";
 
 export interface BookingViewModel {
   bookingId: string;
   patientId: string;
   providerId: string;
-  status: BookingDraft["status"];
+  status: BookingStatus;
   appointmentId: string | null;
   createdAt: string | null;
   requestedAt: string | null;
@@ -21,9 +28,7 @@ export interface BookingSelectionState {
   error: string | null;
 }
 
-export function createBookingViewModel(
-  draft: Partial<BookingViewModel>
-): BookingViewModel {
+export function createBookingViewModel(draft: Partial<BookingViewModel>): BookingViewModel {
   return {
     bookingId: draft.bookingId ?? "",
     patientId: draft.patientId ?? "",

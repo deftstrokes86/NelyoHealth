@@ -3,6 +3,9 @@ packages:
   - "packages/*"
   - "tools/*"
 
+allowBuilds:
+  sharp: true
+
 minimumReleaseAge: 1440
 minimumReleaseAgeExclude:
   - "@changesets/cli"
