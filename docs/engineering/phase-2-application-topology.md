@@ -18,6 +18,7 @@ apps/
 packages/
   api-client/
   config/
+  database/
   domain/
   observability/
   platform-adapters/
@@ -45,14 +46,15 @@ behavior.
 | `apps/mobile` | `@nelyohealth/mobile` | `mobileApplicationBoundary` | P02-ISS-013 |
 | `packages/api-client` | `@nelyohealth/api-client` | `apiClientPackageBoundary` | P02-ISS-006 |
 | `packages/config` | `@nelyohealth/config` | `configPackageBoundary` | P02-ISS-015 |
+| `packages/database` | `@nelyohealth/database` | `databasePackageBoundary` | P02-ISS-004 |
 | `packages/domain` | `@nelyohealth/domain` | `domainPackageBoundary` | P02-ISS-005 and later bounded-context issues |
 | `packages/observability` | `@nelyohealth/observability` | `observabilityPackageBoundary` | P02-ISS-011 |
 | `packages/platform-adapters` | `@nelyohealth/platform-adapters` | `platformAdaptersPackageBoundary` | P02-ISS-009 through P02-ISS-011 |
 | `packages/testing-factories` | `@nelyohealth/testing-factories` | `testingFactoriesPackageBoundary` | P02-ISS-014 |
 
-All P02-ISS-002 package manifests remain dependency-free except for existing
-workspace tooling inherited from the root install. Later issues must install
-framework or runtime dependencies only in their authorized scope.
+P02-ISS-002 package manifests remain dependency-free except for existing
+workspace tooling inherited from the root install. P02-ISS-004 introduces
+database-specific dependencies in `packages/database` under ADR-P02-002.
 
 ## Application responsibilities
 
@@ -83,6 +85,7 @@ framework or runtime dependencies only in their authorized scope.
 |---|---|---|
 | packages/api-client | Generated typed client from OpenAPI output | Generated artifacts only; no hand-authored domain logic |
 | packages/config | Environment schema and typed config access | No real secrets committed; no production values |
+| packages/database | Migration and synthetic seed command ownership | Local synthetic-only command posture; production reset/seed prohibited |
 | packages/domain | Shared domain primitives and error types | No vendor SDK imports; no persistence code |
 | packages/observability | OpenTelemetry setup helpers, request IDs, logger context | Exporter selection through adapter/config only |
 | packages/platform-adapters | Storage, queue, feature flag, email/SMS/push, error-reporting ports and adapters | Adapter-only vendor dependency boundary |

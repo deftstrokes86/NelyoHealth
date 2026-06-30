@@ -88,7 +88,7 @@ BLOCKS-PHASE-1-FOUNDATION, BLOCKS-SPECIFIC-CAPABILITY-IMPLEMENTATION, BLOCKS-REL
 | BLK-P01-FND-004-002 | Required failed-check merge blocking is not externally evidenced. | Repository administrator | No, if accepted as tracked condition | Yes | OPEN |
 | BLK-P01-FND-004-003 | Project-scoped Playwright MCP local smoke was reverified during P01-FND-004. | Architecture/security owner | No | No | RESOLVED |
 | BLK-P01-FND-004-004 | CODEOWNERS enforcement remains deferred until an independent qualified reviewer exists. | Repository administrator | No | Yes for production-grade review governance | OPEN |
-| BLK-P01-FND-004-005 | Operational database migrations and seed behavior are Phase 2 work and are not started. | Platform/data owner | Yes for database-dependent Phase 2 tasks until authorized | Yes | OPEN |
+| BLK-P01-FND-004-005 | Operational database migrations and seed behavior were implemented in P02-ISS-004 for local synthetic environments. | Platform/data owner | No | Yes for production use because production operation remains prohibited | RESOLVED-FOR-PHASE-2-FOUNDATION |
 
 ## P02-PLAN-001 unresolved conditions - 2026-06-25
 
@@ -96,7 +96,7 @@ BLOCKS-PHASE-1-FOUNDATION, BLOCKS-SPECIFIC-CAPABILITY-IMPLEMENTATION, BLOCKS-REL
 |---|---|---|---|---|---|
 | BLK-P02-PLAN-001 | Cloud provider and IaC/deployment operating model are not selected. | Platform/release owner | Yes for P02-ISS-016 through P02-ISS-018 deployment evidence | Yes | OPEN |
 | BLK-P02-PLAN-002 | Redis-compatible local posture is resolved through Valkey-compatible/BullMQ ADR; P02-ISS-003 configures Moto for local object-storage emulation, while signed URL implementation and production provider posture remain later work. | Engineering/security owner | No for P02-ISS-003 static harness; yes for P02-ISS-009 signed URL/provider evidence | Yes | PARTIAL-SIGNED-URL-PROVIDER-POSTURE-REMAINS |
-| BLK-P02-PLAN-003 | Database migration tool ADR is approved for Drizzle/pg; operational migration and seed implementation are not started. | Platform/data owner | No for P02-ISS-004 start; yes for claiming database exit-gate evidence until implemented | Yes | RESOLVED-FOR-ADR; IMPLEMENTATION-PENDING |
+| BLK-P02-PLAN-003 | Database migration tool ADR was approved and implemented in P02-ISS-004 for local synthetic environments, including migration, status, seed/reset, and rollback evidence. | Platform/data owner | No for P02-ISS-005+ start; Phase 2 exit evidence still depends on later issues | Yes | RESOLVED-FOR-PHASE-2-FOUNDATION |
 | BLK-P02-PLAN-004 | Phase 2 browser harness synthetic auth, seed/reset, and artifact ownership are not implemented. | QA/security owner | Yes for P02-ISS-014 and P02-ISS-018 browser exit evidence | Yes | OPEN |
 
 ## P02-ISS-003 unresolved conditions - 2026-06-25

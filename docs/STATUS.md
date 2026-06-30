@@ -13,18 +13,19 @@
 - P02-ISS-001: ACCEPTED.
 - P02-ISS-002: ACCEPTED.
 - P02-ISS-003: COMPLETED, live Docker start/stop/health evidence validated on a Docker Compose-capable host.
+- P02-ISS-004: COMPLETED, operational migration and synthetic seed/reset commands validated with rollback evidence.
 - AGENTS guidance: IMPLEMENTED.
 - Execution-plan convention: IMPLEMENTED.
 - Browser-validation skill: IMPLEMENTED.
 - Manual Git authority: LOCKED.
 - Automated GitHub writes: PROHIBITED.
 - Visual test command: IMPLEMENTED as `pnpm test:visual`.
-- Database command interfaces: PRESENT, PHASE-2-GATED, NOT-OPERATIONAL.
+- Database command interfaces: OPERATIONAL FOR LOCAL SYNTHETIC ENVIRONMENTS.
 - Branch protection: MANUAL-ADMIN-PENDING.
 - Phase 1 gate: PHASE-1-CONDITIONAL-PASS.
 - Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS.
 - Phase 2 planning: P02-PLAN-001 ACCEPTED.
-- Phase 2 implementation: P02-ISS-003 COMPLETED; local harness files, static checks, and live Docker runtime evidence validated; P02-ISS-004 NOT STARTED.
+- Phase 2 implementation: P02-ISS-003 COMPLETED; local harness files, static checks, and live Docker runtime evidence validated. P02-ISS-004 COMPLETED with migration, status, seed/reset, and rollback evidence.
 - Phase 3: NOT STARTED.
 - Pilot launch: PILOT-NO-GO.
 - Production release: NOT APPROVED.
@@ -32,7 +33,7 @@
 - Interactive browser: VERIFIED THROUGH PLAYWRIGHT CLI FALLBACK.
 - Playwright MCP: VERIFIED THROUGH PROJECT-SCOPED LOCAL SMOKE ON 2026-06-25 WITH CODEX-CLI 0.141.0.
 - UI UX Pro Max licence: REVIEW-REQUIRED.
-- Next action: begin P02-ISS-004, the database and migration foundation.
+- Next action: begin P02-ISS-005, the NestJS API skeleton and backend request conventions.
 
 ## Foundation commands
 
@@ -49,8 +50,11 @@ pnpm infra:doctor # requires local Docker Compose
 pnpm infra:start # requires local Docker Compose
 pnpm infra:health # requires local Docker Compose
 pnpm infra:stop # requires local Docker Compose
-pnpm db:migrate # expected nonzero Phase 2 gate
-pnpm db:seed # expected nonzero Phase 2 gate
+pnpm db:migrate
+pnpm db:seed
+pnpm db:status
+pnpm db:reset
+pnpm db:rollback
 ```
 
 ## Phase 2 planning artifacts
@@ -77,15 +81,22 @@ pnpm db:seed # expected nonzero Phase 2 gate
 - docs/adr/ADR-P02-006-observability-and-error-reporting-boundary.md
 - docs/exec-plans/P02-ISS-002-workspace-topology-and-package-boundaries.md
 - docs/exec-plans/P02-ISS-003-local-infrastructure-harness.md
+- docs/exec-plans/P02-ISS-004-database-and-migration-foundation.md
 - docs/engineering/phase-2-local-infrastructure-harness.md
+- docs/engineering/phase-2-database-migration-runbook.md
 - apps/
 - packages/api-client/
 - packages/config/
+- packages/database/
 - packages/domain/
 - packages/observability/
 - packages/platform-adapters/
 - packages/testing-factories/
 - tests/unit/workspace-topology.spec.ts
+- packages/database/migrations/
+- packages/database/scripts/db-cli.mjs
+- tests/unit/database-foundation.spec.ts
+- tests/integration/database-cli.spec.ts
 - infra/local/
 - tools/local-infra/local-infra.mjs
 - tests/unit/local-infrastructure-harness.spec.ts

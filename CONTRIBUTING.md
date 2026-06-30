@@ -91,9 +91,12 @@ Operational database commands are Phase 2-gated:
 ```bash
 pnpm db:migrate
 pnpm db:seed
+pnpm db:status
+pnpm db:reset
+pnpm db:rollback
 ```
 
-They intentionally exit nonzero in Phase 1 and must not be counted as operational database capability.
+These commands are operational for local synthetic environments in Phase 2 and must not be used against production environments.
 
 Local infrastructure commands exist for P02-ISS-003:
 

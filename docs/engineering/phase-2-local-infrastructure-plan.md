@@ -34,14 +34,16 @@ Runtime start/stop/health evidence has now been validated on a Docker Compose-ca
 
 ## Database plan
 
-P02-ISS-004 must:
+P02-ISS-004 implemented:
 
-- Select database access and migration tooling through ADR.
-- Replace Phase 1 gated `pnpm db:migrate` and `pnpm db:seed` failures with operational Phase 2 behavior.
-- Implement a migration safety checklist.
-- Include migration status checks and rollback or compensating-action documentation.
-- Provide synthetic seed and reset flows for browser harness.
+- Operational `pnpm db:migrate`, `pnpm db:seed`, `pnpm db:status`, `pnpm db:reset`, and `pnpm db:rollback` commands for local synthetic environments.
+- Migration status checks and rollback/compensating-action documentation.
+- Deterministic synthetic seed and reset flows required by later browser harness work.
+
+Remaining database constraints:
+
 - Avoid direct controller database access.
+- Keep production reset/seed behavior prohibited.
 
 ## Queue plan
 

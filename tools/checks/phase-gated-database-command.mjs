@@ -1,10 +1,19 @@
 #!/usr/bin/env node
+import { spawnSync } from "node:child_process";
 
-const command = process.argv[2] ?? "database";
+const command = process.argv[2] ?? "status";
 
-console.error(`Database command '${command}' is not operational in Phase 1.`);
-console.error("Status: COMMAND-INTERFACE-PRESENT.");
-console.error("Implementation: DEFERRED-TO-PHASE-2.");
-console.error("No files, databases, migrations, or seed data were created.");
-console.error("See docs/governance/phase-2-readiness-handoff.md.");
-process.exit(1);
+console.warn(
+  "tools/checks/phase-gated-database-command.mjs is deprecated. Use pnpm db:* commands directly."
+);
+
+const result = spawnSync("node", ["packages/database/scripts/db-cli.mjs", command], {
+  stdio: "inherit"
+});
+
+if (result.error) {
+  console.error(result.error.message);
+  process.exitCode = 1;
+} else {
+  process.exitCode = result.status ?? 1;
+}

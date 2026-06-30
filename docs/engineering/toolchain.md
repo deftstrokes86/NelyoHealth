@@ -52,6 +52,6 @@ This document records development tooling selected for the bounded Phase 1 found
 ## Deferred tooling
 
 - Next.js, NestJS, React, Motion, UI UX Pro Max, Prisma, database clients, authentication SDKs, payment SDKs, provider SDKs, and infrastructure SDKs are intentionally not installed in P01-FND-001.
-- Database migration and seed commands are deferred until the database foundation exists.
+- Database migration and seed commands are operational through the Phase 2 database foundation (`pnpm db:migrate`, `pnpm db:seed`, `pnpm db:status`, `pnpm db:reset`, `pnpm db:rollback`) for local synthetic environments.
 - Firefox and WebKit browser matrices are deferred until the browser-matrix expansion task.
 - Advanced secret-scanning vendor selection is deferred to a later security task; this issue includes only a deterministic basic pattern guard.

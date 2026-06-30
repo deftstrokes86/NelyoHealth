@@ -129,9 +129,12 @@ The fallback is restricted to synthetic local browser validation. Do not use pro
 ```bash
 pnpm db:migrate
 pnpm db:seed
+pnpm db:status
+pnpm db:reset
+pnpm db:rollback
 ```
 
-These commands are present but phase-gated. They intentionally exit nonzero in Phase 1, create no files or databases, and defer operational migration and seed behavior to Phase 2.
+These commands are operational in Phase 2 for local synthetic environments. They apply reviewed SQL migrations, report migration status, seed deterministic synthetic rows, reset synthetic seed state, and support rollback of the latest migration where a reviewed down script exists.
 
 ## Repository instructions and manual Git
 
