@@ -2,7 +2,7 @@
 
 ## Status
 
-P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-008 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-009 and later implementation issues remain not started.
+P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-009 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-010 and later implementation issues remain not started.
 
 ## Requirement map
 
@@ -15,7 +15,7 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are 
 | P02-REQ-005 | Empty Expo or React Native mobile shell | Implementation map Phase 2 | P02-ISS-013 | P02-ISS-014 | WORKSPACE-BOUNDARY-CREATED-PENDING-P02-ISS-013 |
 | P02-REQ-006 | PostgreSQL and PostGIS | Implementation map Phase 2 | P02-ISS-004 | P02-ISS-003 | LOCAL-HARNESS-CONFIGURED-PENDING-DOCKER-RUNTIME-EVIDENCE |
 | P02-REQ-007 | Redis-compatible cache/queue foundation | Implementation map Phase 2 | P02-ISS-003 | P02-ISS-007 | LOCAL-VALKEY-HARNESS-CONFIGURED-PENDING-DOCKER-RUNTIME-EVIDENCE |
-| P02-REQ-008 | Object storage with signed URL support | Implementation map Phase 2 | P02-ISS-009 | P02-ISS-014 | LOCAL-MOTO-EMULATOR-CONFIGURED-PENDING-DOCKER-RUNTIME-EVIDENCE-AND-P02-ISS-009-SIGNED-URL-IMPLEMENTATION |
+| P02-REQ-008 | Object storage with signed URL support | Implementation map Phase 2 | P02-ISS-009 | P02-ISS-014 | SIGNED-UPLOAD-DOWNLOAD-URL-AND-SYNTHETIC-CLEANUP-HARNESS-IMPLEMENTED |
 | P02-REQ-009 | Email, SMS, push adapters | Implementation map Phase 2 | P02-ISS-010 | None | PLANNED |
 | P02-REQ-010 | Feature flags | Implementation map Phase 2 | P02-ISS-010 | P02-ISS-015 | PLANNED |
 | P02-REQ-011 | Secrets manager boundary | Implementation map Phase 2 | P02-ISS-015 | P02-ISS-016 | PLANNED |
@@ -41,7 +41,7 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are 
 | P02-EG-003 | Database migrations run safely | P02-ISS-004 | Migration apply/status/rollback or compensation evidence | PLANNED |
 | P02-EG-004 | Logs, traces, and metrics connect one request across API and worker | P02-ISS-011 | Correlated request/job trace/log/metric evidence | PLANNED |
 | P02-EG-005 | Background job enqueue/process/retry/DLQ | P02-ISS-007 | Deterministic job test evidence | COMPLETED-TEST-EVIDENCE-RECORDED |
-| P02-EG-006 | Document uploaded using signed URL | P02-ISS-009 | Synthetic document upload/download/expiry evidence | PLANNED |
+| P02-EG-006 | Document uploaded using signed URL | P02-ISS-009 | Synthetic document upload/download/expiry evidence | COMPLETED-TEST-EVIDENCE-RECORDED |
 | P02-EG-007 | Browser tests start apps, seed, sign in, navigate, and retain traces | P02-ISS-014 | Playwright report and artifact retention evidence | PLANNED |
 | P02-EG-008 | Codex can inspect local routes and report console/network failures | P02-ISS-014 | MCP or CLI local inspection evidence | PLANNED |
 | P02-EG-009 | Vendor-specific code stays in adapters | P02-ISS-018 | Import boundary checks and review evidence; P02-ISS-001 ADR boundary decisions; P02-ISS-002 dependency-free boundary packages | PARTIAL-ADR-AND-WORKSPACE-BOUNDARY-RECORDED |

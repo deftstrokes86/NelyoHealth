@@ -2,10 +2,11 @@ import { MiddlewareConsumer, Module, NestModule, RequestMethod } from "@nestjs/c
 import { ApiExceptionFilter } from "./api-exception.filter.js";
 import { IdempotencyMiddleware } from "./idempotency.middleware.js";
 import { RequestContextMiddleware } from "./request-context.middleware.js";
+import { StorageModule } from "./storage/storage.module.js";
 import { SystemModule } from "./system/system.module.js";
 
 @Module({
-  imports: [SystemModule],
+  imports: [SystemModule, StorageModule],
   providers: [ApiExceptionFilter, RequestContextMiddleware, IdempotencyMiddleware]
 })
 export class AppModule implements NestModule {

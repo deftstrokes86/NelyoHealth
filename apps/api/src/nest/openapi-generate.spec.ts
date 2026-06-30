@@ -29,6 +29,9 @@ describe("openapi generation", () => {
       expect(JSON.stringify(document)).toContain("/api/health");
       expect(JSON.stringify(document)).toContain("/api/ready");
       expect(JSON.stringify(document)).toContain("/api/idempotency/probe");
+      expect(JSON.stringify(document)).toContain("/api/storage/signed-url/upload");
+      expect(JSON.stringify(document)).toContain("/api/storage/signed-url/download");
+      expect(JSON.stringify(document)).toContain("/api/storage/synthetic-objects");
     } finally {
       await app.close();
     }

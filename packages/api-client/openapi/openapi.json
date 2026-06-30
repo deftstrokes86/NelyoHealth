@@ -45,6 +45,51 @@
           "system"
         ]
       }
+    },
+    "/api/storage/signed-url/upload": {
+      "post": {
+        "operationId": "StorageController_issueUploadUrl",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Signed upload URL envelope"
+          }
+        },
+        "summary": "Issue synthetic signed upload URL",
+        "tags": [
+          "storage"
+        ]
+      }
+    },
+    "/api/storage/signed-url/download": {
+      "post": {
+        "operationId": "StorageController_issueDownloadUrl",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Signed download URL envelope"
+          }
+        },
+        "summary": "Issue synthetic signed download URL",
+        "tags": [
+          "storage"
+        ]
+      }
+    },
+    "/api/storage/synthetic-objects": {
+      "delete": {
+        "operationId": "StorageController_cleanupSyntheticObjects",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Synthetic cleanup envelope"
+          }
+        },
+        "summary": "Cleanup synthetic object-storage keys",
+        "tags": [
+          "storage"
+        ]
+      }
     }
   },
   "info": {
