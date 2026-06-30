@@ -188,6 +188,8 @@ Rollback: disable new project matrix by config while preserving existing Phase 1
 
 Depends on: P02-ISS-004, P02-ISS-006, P02-ISS-007, P02-ISS-009, P02-ISS-012, P02-ISS-013.
 
+Status: completed with per-app Chromium projects, synthetic auth-state generation, privacy assertions, and accessibility smoke evidence.
+
 ### P02-ISS-015 - Environment and secret strategy implementation
 
 Objective: Add typed environment config, local example placeholders, secret reference model, and readiness validation.
