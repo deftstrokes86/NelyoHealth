@@ -858,5 +858,5 @@
 
 | Decision ID | Decision | Status | Owner | Evidence |
 |---|---|---|---|---|
-| DEC-P02-ISS-017-001 | Record the deployment workflow as human-merge-to-development followed by versioned staging promotion. | ACCEPTED; IMPLEMENTATION-PENDING | Platform/release owner | docs/engineering/phase-2-environment-strategy.md; docs/engineering/phase-2-issue-backlog.md |
-| DEC-P02-ISS-017-002 | Keep staging promotion gated on migration plan, rollback plan, dependency readiness, and smoke/browser evidence. | ACCEPTED; IMPLEMENTATION-PENDING | Platform/release owner | docs/engineering/phase-2-environment-strategy.md; docs/engineering/environment-and-deployment-baseline.md |
+| DEC-P02-ISS-017-001 | Record the deployment workflow as human-merge-to-development followed by versioned staging promotion. | PARTIAL-IMPLEMENTATION-ARTIFACTS-RECORDED | Platform/release owner | .github/workflows/deploy-development.yml; .github/workflows/promote-staging.yml; docs/runbooks/development-deploy-and-staging-promotion.md |
+| DEC-P02-ISS-017-002 | Keep staging promotion gated on migration plan, rollback plan, dependency readiness, and smoke/browser evidence. | PARTIAL-IMPLEMENTATION-EVIDENCE-PENDING | Platform/release owner | docs/engineering/phase-2-environment-strategy.md; docs/engineering/environment-and-deployment-baseline.md; docs/runbooks/development-deploy-and-staging-promotion.md |

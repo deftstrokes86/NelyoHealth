@@ -1,0 +1,72 @@
+name: Staging promotion path
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_sha:
+        description: Git commit SHA to validate for promotion
+        required: true
+        type: string
+      candidate_version:
+        description: Candidate version or immutable artifact reference
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  promote:
+    name: Staging promotion contract gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: "true"
+      PLAYWRIGHT_BROWSERS_PATH: .artifacts/playwright/browsers
+      NELYO_DEPLOYMENT_ENV: staging
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
+        with:
+          ref: ${{ inputs.candidate_sha }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@b0f76dfb45f55f8421693e4803ac7bb65143bd34
+        with:
+          version: 11.9.0
+          run_install: false
+
+      - name: Set up Node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Promotion readiness gate
+        run: pnpm release:check
+
+      - name: Migration gate contract check
+        run: pnpm --filter @nelyohealth/database exec node scripts/db-cli.mjs help
+
+      - name: Build staging promotion manifest
+        run: |
+          mkdir -p .artifacts/deploy
+          node -e "const fs=require('node:fs');const p='.artifacts/deploy/staging-promotion-manifest.json';const manifest={environment:'staging',mode:'contract-only',candidateSha:process.env.CANDIDATE_SHA,candidateVersion:process.env.CANDIDATE_VERSION,runId:process.env.GITHUB_RUN_ID,runNumber:process.env.GITHUB_RUN_NUMBER,builtAt:new Date().toISOString(),requiredEvidence:['migration-plan','rollback-plan','dependency-readiness','smoke-browser-evidence'],notes:'No cloud mutation. Human-triggered promotion path only.'};fs.writeFileSync(p,JSON.stringify(manifest,null,2));console.log(fs.readFileSync(p,'utf8'));"
+        env:
+          CANDIDATE_SHA: ${{ inputs.candidate_sha }}
+          CANDIDATE_VERSION: ${{ inputs.candidate_version }}
+
+      - name: Publish summary
+        run: |
+          echo "## Staging Promotion Path" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Candidate SHA: ${{ inputs.candidate_sha }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Candidate version: ${{ inputs.candidate_version }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Mode: contract-only" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Required evidence: migration plan, rollback plan, dependency readiness, smoke/browser" >> "$GITHUB_STEP_SUMMARY"
+          echo "- No cloud promotion action executed by workflow." >> "$GITHUB_STEP_SUMMARY"

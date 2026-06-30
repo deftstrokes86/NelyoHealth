@@ -690,3 +690,19 @@ For all future phase updates:
 - Updated traceability to keep deployment implementation blocked on human provider approval rather than implying cloud selection or IaC implementation.
 - Did not create IaC files, cloud resources, deployment workflows, secrets, or runtime infrastructure.
 - Preserved manual Git/GitHub governance, P02-ISS-017 as blocked on the unresolved human cloud decision, Phase 3 as NOT STARTED, and pilot as PILOT-NO-GO.
+
+## 2026-06-30 - P02-ISS-017
+
+- Advanced the Phase 2 backlog to the development deploy and staging promotion path.
+- Added the P02-ISS-017 execution plan to define the deployment workflow boundary after the environment and deployment contract baseline.
+- Recorded the human-gated deployment workflow and staging promotion requirements in the governance trail.
+- Marked P02-ISS-017 as the next active implementation issue after the deployment-contract baseline work completed.
+- Updated status and traceability so the next active implementation step is the deployment workflow rather than cloud selection or environment-contract work.
+- Updated `docs/STATUS.md` to mark P02-ISS-017 as STARTED and set next action to continue P02-ISS-017.
+- Updated `docs/governance/phase-2-requirements-traceability.md` requirement status wording for P02-REQ-001 to `DEPLOYMENT-WORKFLOW-PLAN-RECORDED-IMPLEMENTATION-PENDING`.
+- Added `.github/workflows/deploy-development.yml` as the human-merge-to-main development deploy workflow artifact using pinned actions and contract-only manifest evidence.
+- Added `.github/workflows/promote-staging.yml` as the human-dispatch staging promotion workflow artifact with candidate SHA/version inputs and evidence gates.
+- Added `docs/runbooks/development-deploy-and-staging-promotion.md` for operational procedure, evidence capture, and rollback sequencing.
+- Updated status, traceability, and decision-register entries to mark P02-ISS-017 as partial implementation with controlled evidence pending.
+- Did not create IaC files, cloud resources, secrets, or runtime infrastructure; deployment workflows remain contract-only and human-gated.
+- Preserved manual Git/GitHub governance, Phase 3 as NOT STARTED, and pilot as PILOT-NO-GO.

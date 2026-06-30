@@ -2,13 +2,13 @@
 
 ## Status
 
-P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-015 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-016 and later implementation issues remain not started.
+P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-015 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-016 is completed and P02-ISS-017 is partial with workflow and runbook artifacts recorded; controlled deployment/promotion evidence remains pending.
 
 ## Requirement map
 
 | Requirement ID | Requirement | Source | Primary issue | Supporting issue(s) | Status |
 |---|---|---|---|---|---|
-| P02-REQ-001 | Deployable application skeleton with local, development, and staging environments | Implementation map Phase 2 | P02-ISS-017 | P02-ISS-002 through P02-ISS-018 | DEPLOYMENT-WORKFLOW-PENDING-IMPLEMENTATION |
+| P02-REQ-001 | Deployable application skeleton with local, development, and staging environments | Implementation map Phase 2 | P02-ISS-017 | P02-ISS-002 through P02-ISS-018 | WORKFLOW-AND-RUNBOOK-ARTIFACTS-RECORDED-EVIDENCE-PENDING |
 | P02-REQ-002 | NestJS API | Implementation map Phase 2 | P02-ISS-005 | P02-ISS-006, P02-ISS-011 | WORKSPACE-BOUNDARY-CREATED-PENDING-P02-ISS-005 |
 | P02-REQ-003 | Background worker | Implementation map Phase 2 | P02-ISS-007 | P02-ISS-008, P02-ISS-011 | WORKER-QUEUE-FOUNDATION-IMPLEMENTED-WITH-DETERMINISTIC-RETRY-DLQ-EVIDENCE |
 | P02-REQ-004 | Next.js patient, provider, organization, and admin apps | Implementation map Phase 2 | P02-ISS-012 | P02-ISS-006, P02-ISS-014 | NEXTJS-SHELL-RUNTIMES-IMPLEMENTED-WITH-SYNTHETIC-SMOKE-AND-A11Y-EVIDENCE |
@@ -36,8 +36,8 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are 
 
 | Gate ID | Exit gate | Primary issue | Evidence required | Status |
 |---|---|---|---|---|
-| P02-EG-001 | Human-merged main deploys automatically to development | P02-ISS-017 | Human merge evidence, dev deployment log, no Codex GitHub writes | PLANNED |
-| P02-EG-002 | A version can be promoted to staging | P02-ISS-017 | Versioned artifact, promotion evidence, staging smoke | PLANNED |
+| P02-EG-001 | Human-merged main deploys automatically to development | P02-ISS-017 | Human merge evidence, dev deployment log, no Codex GitHub writes | PARTIAL-WORKFLOW-ARTIFACTS-RECORDED-EVIDENCE-PENDING |
+| P02-EG-002 | A version can be promoted to staging | P02-ISS-017 | Versioned artifact, promotion evidence, staging smoke | PARTIAL-WORKFLOW-ARTIFACTS-RECORDED-EVIDENCE-PENDING |
 | P02-EG-003 | Database migrations run safely | P02-ISS-004 | Migration apply/status/rollback or compensation evidence | PLANNED |
 | P02-EG-004 | Logs, traces, and metrics connect one request across API and worker | P02-ISS-011 | Correlated request/job trace/log/metric evidence | COMPLETED-TEST-EVIDENCE-RECORDED |
 | P02-EG-005 | Background job enqueue/process/retry/DLQ | P02-ISS-007 | Deterministic job test evidence | COMPLETED-TEST-EVIDENCE-RECORDED |
@@ -82,6 +82,15 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are 
 | Unit test coverage | Added for static config, image pins, local binds, port validation, and port conflict detection | tests/unit/local-infrastructure-harness.spec.ts |
 | Docker runtime evidence | Blocked | Docker CLI unavailable on the validation host |
 | Database implementation | Not started | P02-ISS-004 remains NOT STARTED |
+
+## P02-ISS-017 evidence
+
+| Evidence item | Result | Artifact |
+|---|---|---|
+| Development deploy workflow artifact | Added | .github/workflows/deploy-development.yml |
+| Staging promotion workflow artifact | Added | .github/workflows/promote-staging.yml |
+| Operational runbook | Added | docs/runbooks/development-deploy-and-staging-promotion.md |
+| Controlled deployment/promotion run evidence | Pending | Human merge and workflow run evidence required for P02-EG-001 and P02-EG-002 |
 
 ## Locked requirement preservation
 

@@ -1,0 +1,60 @@
+name: Development deploy path
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  develop:
+    name: Development deployment contract gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: "true"
+      PLAYWRIGHT_BROWSERS_PATH: .artifacts/playwright/browsers
+      NELYO_DEPLOYMENT_ENV: development
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@b0f76dfb45f55f8421693e4803ac7bb65143bd34
+        with:
+          version: 11.9.0
+          run_install: false
+
+      - name: Set up Node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Release readiness gate
+        run: pnpm release:check
+
+      - name: Migration command gate
+        run: pnpm --filter @nelyohealth/database exec node scripts/db-cli.mjs help
+
+      - name: Build development deployment manifest
+        run: |
+          mkdir -p .artifacts/deploy
+          node -e "const fs=require('node:fs');const p='.artifacts/deploy/development-manifest.json';const manifest={environment:'development',mode:'contract-only',trigger:process.env.GITHUB_EVENT_NAME,sha:process.env.GITHUB_SHA,runId:process.env.GITHUB_RUN_ID,runNumber:process.env.GITHUB_RUN_NUMBER,builtAt:new Date().toISOString(),notes:'No cloud mutation. Human merge initiated path only.'};fs.writeFileSync(p,JSON.stringify(manifest,null,2));console.log(fs.readFileSync(p,'utf8'));"
+
+      - name: Publish summary
+        run: |
+          echo "## Development Deploy Path" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Environment: development" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Mode: contract-only" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Source SHA: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "- No cloud deployment action executed by workflow." >> "$GITHUB_STEP_SUMMARY"

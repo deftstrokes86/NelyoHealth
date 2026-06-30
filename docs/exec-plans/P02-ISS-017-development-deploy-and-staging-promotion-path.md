@@ -44,6 +44,7 @@ The repository already contains the environment strategy, the provider-neutral d
 - `docs/STATUS.md`
 - `docs/engineering/phase-2-environment-strategy.md`
 - `docs/engineering/environment-and-deployment-baseline.md`
+- `docs/engineering/phase-2-iss-017-ci-workflow-pattern-map.md`
 - `docs/adr/ADR-P02-005-iac-cloud-provider-and-deployment-path.md`
 - `docs/governance/human-gated-decisions.md`
 - `docs/governance/decision-register.md`
