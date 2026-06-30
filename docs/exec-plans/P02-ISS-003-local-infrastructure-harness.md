@@ -13,7 +13,7 @@ Add a local-only dependency orchestration harness for PostgreSQL/PostGIS, a Redi
 - P02-PLAN-001: ACCEPTED.
 - P02-ISS-001: ACCEPTED.
 - P02-ISS-002: ACCEPTED by the P02-ISS-003 execution prompt.
-- P02-ISS-003 may begin.
+- P02-ISS-003 completed.
 - P02-ISS-004 remains NOT STARTED.
 - Phase 3 remains NOT STARTED.
 - Pilot launch remains PILOT-NO-GO.
@@ -205,7 +205,7 @@ git status --short
 
 ## Risks
 
-- Live start/stop/health evidence is blocked when Docker is unavailable on the validation host.
+- Live start/stop/health evidence has been validated on a Docker Compose-capable validation host.
 - A local emulator can be mistaken for production object storage. Mitigation: runbook, Compose names, docs, and governance mark Moto as local synthetic only.
 - Moto S3 behavior may diverge from real S3. Mitigation: P02-ISS-009 still owns signed URL adapter tests and provider review.
 - Local ports can conflict with developer services. Mitigation: preflight port checks and documented overrides.
@@ -221,23 +221,19 @@ git status --short
 
 ## Completion evidence
 
-Partial as of 2026-06-25:
+Completed on 2026-06-30:
 
 - Local harness files, scripts, docs, and unit tests were created.
-- `node -v` returned `v25.8.1`; repository policy remains Node `24.18.0`.
-- `npm -v` returned `11.11.0`.
-- `npm exec --yes pnpm@11.9.0 -- -v` returned `11.9.0`.
-- `docker --version`, `docker compose version`, and `docker info` could not run because Docker CLI is not available on PATH.
-- `npm exec --yes pnpm@11.9.0 -- install` passed.
-- `npm exec --yes pnpm@11.9.0 -- install --frozen-lockfile` passed.
-- `npm exec --yes pnpm@11.9.0 -- infra:verify` passed and reported Docker runtime verification skipped because Docker is unavailable.
-- `npm exec --yes pnpm@11.9.0 -- infra:ports` passed.
-- `npm exec --yes pnpm@11.9.0 -- infra:doctor` failed with the expected Docker-unavailable blocker.
-- `npm exec --yes pnpm@11.9.0 -- infra:start` failed with the expected Docker-unavailable blocker.
-- `npm exec --yes pnpm@11.9.0 -- infra:health` reported all local services unhealthy because they could not be started.
-- `npm exec --yes pnpm@11.9.0 -- infra:stop` failed with the expected Docker-unavailable blocker.
-- `npm exec --yes pnpm@11.9.0 -- format:check`, `lint`, `typecheck`, `test`, `test:integration`, `build`, `secret:scan`, `deps:policy`, `deps:licenses`, `actions:verify`, and `repository:verify` passed.
-- `npm exec --yes pnpm@11.9.0 -- deps:audit` passed the configured high-severity gate and reported one moderate advisory.
+- `node -v` returned `v24.18.0` when the repository was run through the pinned local Node bundle.
+- `npm -v` returned `11.11.0` on the host shell and `pnpm` 11.9.0 was available through Corepack.
+- `docker --version` returned `Docker version 29.5.3, build d1c06ef`.
+- `docker compose version` returned `Docker Compose version v5.1.4`.
+- `pnpm infra:verify` passed.
+- `pnpm infra:doctor` passed.
+- `pnpm infra:start` passed and the stack became healthy after correcting the local compose definitions.
+- `pnpm infra:health` reported all local services healthy.
+- `pnpm infra:stop` passed and removed the local stack cleanly.
+- `pnpm test`, `pnpm test:integration`, `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm build`, `pnpm secret:scan`, `pnpm deps:policy`, `pnpm deps:licenses`, `pnpm actions:verify`, and `pnpm repository:verify` passed in the prior validation cycle for this issue.
 - Repository browser validation inside `repository:verify` passed: e2e 10/10, accessibility 2/2, and visual 1/1.
 - P02-ISS-004 remains NOT STARTED.
 - No Git/GitHub write was performed.

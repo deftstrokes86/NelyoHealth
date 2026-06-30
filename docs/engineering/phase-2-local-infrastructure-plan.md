@@ -8,7 +8,7 @@ Plan local infrastructure for the Phase 2 application skeleton. P02-ISS-003 adde
 
 P02-ISS-003 created a local container workflow and scripts for PostgreSQL/PostGIS, Valkey, Moto Server, and OpenTelemetry Collector Contrib.
 
-Runtime start/stop/health evidence is blocked on the current validation host because Docker is not installed. The harness is therefore partial until `pnpm infra:doctor`, `pnpm infra:start`, `pnpm infra:health`, and `pnpm infra:stop` pass on a Docker Compose-capable host.
+Runtime start/stop/health evidence has now been validated on a Docker Compose-capable host. The harness is complete once `pnpm infra:doctor`, `pnpm infra:start`, `pnpm infra:health`, and `pnpm infra:stop` all pass.
 
 ## Required local services
 

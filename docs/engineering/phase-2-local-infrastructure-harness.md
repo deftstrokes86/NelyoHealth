@@ -2,7 +2,7 @@
 
 ## Status
 
-P02-ISS-003 implemented a static local infrastructure harness and scripts. Live runtime evidence is blocked on this validation host because Docker is not installed.
+P02-ISS-003 implemented a static local infrastructure harness and scripts. Live runtime evidence has been validated on a Docker Compose-capable host.
 
 ## Scope
 
@@ -44,17 +44,11 @@ pnpm infra:stop
 pnpm infra:reset
 ```
 
-`infra:verify` is static and does not require Docker. The remaining commands require Docker Compose.
+`infra:verify` is static and does not require Docker. The remaining commands require Docker Compose and have been validated on the current host.
 
-## Runtime Blocker
+## Runtime Validation
 
-The local validation host returned:
-
-```text
-docker: The term 'docker' is not recognized as the name of a cmdlet, function, script file, or operable program.
-```
-
-Because of that, live start/stop/healthcheck evidence is not available for this run. The harness remains partial pending a host with Docker Compose.
+The local validation host now provides Docker and Docker Compose. Live start/stop/healthcheck evidence completed successfully with the validated image pins and service health checks.
 
 ## Safety Controls
 
@@ -65,3 +59,11 @@ Because of that, live start/stop/healthcheck evidence is not available for this 
 - No auth token, cloud credential, production origin, deployment command, schema, migration, seed, or product data is included.
 - `infra:ports` refuses to start over occupied local ports.
 - `infra:reset` removes local named volumes created by the harness.
+
+## Completion Evidence
+
+- `pnpm infra:verify` passed.
+- `pnpm infra:doctor` passed and reported Docker / Docker Compose availability.
+- `pnpm infra:start` passed and the stack became healthy.
+- `pnpm infra:health` reported all services healthy.
+- `pnpm infra:stop` passed and removed the local stack cleanly.
