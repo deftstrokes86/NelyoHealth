@@ -681,3 +681,12 @@ For all future phase updates:
 - Updated status, local infrastructure docs, decision register, dependency register, blocker register, risk register, document register, traceability, README, and contributing guidance.
 - Marked P02-ISS-003 PARTIAL because Docker CLI and Docker Compose are unavailable on the validation host, blocking live start/health/stop evidence.
 - Preserved P02-ISS-004 as NOT STARTED, Phase 3 as NOT STARTED, pilot as PILOT-NO-GO, and Git/GitHub writes as HUMAN-ONLY.
+
+## 2026-06-30 - P02-ISS-016
+
+- Refined the Phase 2 environment and deployment baseline into the canonical provider-neutral deployment contract.
+- Kept cloud provider selection explicitly human-gated and preserved the OpenTofu-preferred, Pulumi-candidate, Terraform-review-required posture from ADR-P02-005.
+- Added the P02-ISS-016 execution plan, updated the human-gated decisions tracker, and recorded the deployment-contract decision entries.
+- Updated traceability to keep deployment implementation blocked on human provider approval rather than implying cloud selection or IaC implementation.
+- Did not create IaC files, cloud resources, deployment workflows, secrets, or runtime infrastructure.
+- Preserved manual Git/GitHub governance, P02-ISS-017 as blocked on the unresolved human cloud decision, Phase 3 as NOT STARTED, and pilot as PILOT-NO-GO.

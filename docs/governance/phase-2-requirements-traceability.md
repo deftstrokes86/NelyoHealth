@@ -29,7 +29,7 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are 
 | P02-REQ-019 | Browser harness projects, auth states, seed/reset, API helpers, page objects, assertions, artifacts, a11y, privacy, sharding/retry | Phase 2 prompt and ADR-0003 | P02-ISS-014 | P02-ISS-004, P02-ISS-012, P02-ISS-013 | PER-APP-CHROMIUM-MATRIX-AND-SYNTHETIC-AUTH-STATES-IMPLEMENTED-WITH-ACCESSIBILITY-EVIDENCE |
 | P02-REQ-020 | Environment strategy for local, PR, development, staging, production, partner sandbox | Phase 2 prompt | P02-ISS-015 | P02-ISS-016, P02-ISS-017 | TYPED-ENVIRONMENT-BOUNDARY-AND-SYNTHETIC-PLACEHOLDERS-IMPLEMENTED |
 | P02-REQ-021 | Production data never copied downward | Phase 2 prompt and locked data rules | P02-ISS-015 | P02-ISS-014, P02-ISS-018 | PLANNED |
-| P02-REQ-022 | IaC plan for network, hosting, managed data services, DNS/TLS/CDN/WAF, secrets, backups, monitoring | Phase 2 prompt | P02-ISS-016 | P02-ISS-017 | PLANNED-HUMAN-DECISION-REQUIRED |
+| P02-REQ-022 | IaC plan for network, hosting, managed data services, DNS/TLS/CDN/WAF, secrets, backups, monitoring | Phase 2 prompt | P02-ISS-016 | P02-ISS-017 | CONTRACT-BASELINE-DRAFTED-HUMAN-DECISION-PENDING |
 | P02-REQ-023 | Vendor-specific code stays in adapters | Phase 2 prompt and ADR-0005 | P02-ISS-001 | P02-ISS-005 through P02-ISS-011 | ADR-BOUNDARY-RECORDED-PENDING-IMPLEMENTATION-EVIDENCE |
 
 ## Exit-gate map

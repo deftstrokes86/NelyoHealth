@@ -8,7 +8,7 @@ Draft decision register for implementation work that cannot safely proceed witho
 
 | Decision | Owner | Status | Notes |
 |---|---|---|---|
-| Cloud and IaC provider selection | Human owner | Pending | Required before deployment automation and staging promotion work. |
+| Cloud and IaC provider selection | Human owner | Pending | Required before deployment automation and staging promotion work. The provider-neutral deployment contract baseline is recorded in `docs/engineering/environment-and-deployment-baseline.md`. |
 | Database migration tool and ownership | Human owner | Pending | Required before operational migration and seed workflows. |
 | Queue/cache provider selection | Human owner | Pending | Required before queue foundation and retry behavior finalization. |
 | Object storage provider strategy | Human owner | Pending | Required before signed URL adapter finalization. |

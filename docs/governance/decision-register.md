@@ -846,3 +846,10 @@
 | DEC-P02-ISS-003-003 | Use Moto Server 5.2.2 as the local S3-compatible emulator because it is Apache-2.0 and avoids LocalStack auth-token uncertainty and MinIO AGPL/commercial posture for this local mock scope. | IMPLEMENTED-STATIC; PRODUCTION-PROVIDER-DEFERRED | Platform/data owner | docs/engineering/phase-2-local-infrastructure-harness.md; ADR-P02-004 remains authoritative for production/provider boundary |
 | DEC-P02-ISS-003-004 | Keep Docker-dependent start/stop/health commands explicit and fail when Docker Compose is unavailable rather than weakening validation. | IMPLEMENTED | Engineering/QA owner | tools/local-infra/local-infra.mjs; tests/unit/local-infrastructure-harness.spec.ts |
 | DEC-P02-ISS-003-005 | Add `infra:verify` to repository verification as a static local infrastructure check only; live container start/stop remains manual/runtime evidence. | IMPLEMENTED | Engineering/QA owner | package.json; docs/exec-plans/P02-ISS-003-local-infrastructure-harness.md |
+
+## P02-ISS-016 decisions - 2026-06-30
+
+| Decision ID | Decision | Status | Owner | Evidence |
+|---|---|---|---|---|
+| DEC-P02-ISS-016-001 | Record the provider-neutral deployment contract in the environment and deployment baseline while leaving cloud provider selection unresolved. | ACCEPTED; HUMAN-CLOUD-DECISION-PENDING | Platform/release owner | docs/engineering/environment-and-deployment-baseline.md; docs/adr/ADR-P02-005-iac-cloud-provider-and-deployment-path.md |
+| DEC-P02-ISS-016-002 | Keep OpenTofu preferred, Pulumi a candidate, and Terraform review-required until human approval exists for the actual IaC path. | ACCEPTED; HUMAN-DECISION-GATED | Platform/release owner | docs/adr/ADR-P02-005-iac-cloud-provider-and-deployment-path.md; docs/engineering/phase-2-environment-strategy.md |
