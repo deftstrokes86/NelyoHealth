@@ -94,7 +94,7 @@ BLOCKS-PHASE-1-FOUNDATION, BLOCKS-SPECIFIC-CAPABILITY-IMPLEMENTATION, BLOCKS-REL
 
 | Blocker ID | Condition | Owner | Blocks Phase 2 | Blocks pilot | Status |
 |---|---|---|---|---|---|
-| BLK-P02-PLAN-001 | Cloud provider and IaC/deployment operating model are not selected. | Platform/release owner | Yes for P02-ISS-016 through P02-ISS-018 deployment evidence | Yes | OPEN |
+| BLK-P02-PLAN-001 | Cloud provider and deployment operating model are selected for Phase 2 foundation execution; IaC automation remains intentionally deferred. | Platform/release owner | No for P02-ISS-016 through P02-ISS-018 evidence capture | Yes for production-grade automation and pilot operations | RESOLVED-FOR-PHASE-2-FOUNDATION |
 | BLK-P02-PLAN-002 | Redis-compatible local posture is resolved through Valkey-compatible/BullMQ ADR; P02-ISS-003 configures Moto for local object-storage emulation, while signed URL implementation and production provider posture remain later work. | Engineering/security owner | No for P02-ISS-003 static harness; yes for P02-ISS-009 signed URL/provider evidence | Yes | PARTIAL-SIGNED-URL-PROVIDER-POSTURE-REMAINS |
 | BLK-P02-PLAN-003 | Database migration tool ADR was approved and implemented in P02-ISS-004 for local synthetic environments, including migration, status, seed/reset, and rollback evidence. | Platform/data owner | No for P02-ISS-005+ start; Phase 2 exit evidence still depends on later issues | Yes | RESOLVED-FOR-PHASE-2-FOUNDATION |
 | BLK-P02-PLAN-004 | Phase 2 browser harness synthetic auth, seed/reset, and artifact ownership are not implemented. | QA/security owner | Yes for P02-ISS-014 and P02-ISS-018 browser exit evidence | Yes | OPEN |

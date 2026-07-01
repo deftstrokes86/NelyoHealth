@@ -8,12 +8,12 @@ Draft decision register for implementation work that cannot safely proceed witho
 
 | Decision | Owner | Status | Notes |
 |---|---|---|---|
-| Cloud and IaC provider selection | Human owner | Pending | Required before deployment automation and staging promotion work. The provider-neutral deployment contract baseline is recorded in `docs/engineering/environment-and-deployment-baseline.md`. |
+| Cloud and deployment model selection | Human owner | Approved-for-Phase-2-foundation (2026-07-01) | Supabase primary platform; Hostinger shared hosting selected for web-hosting surface; API/worker runtime on Supabase Edge Functions and scheduled jobs; signed URL storage on Supabase Storage; managed Redis-compatible queue/cache; manual deployment steps for current phase. |
 | Development deploy and staging promotion workflow | Human owner | Pending | Required before the P02-ISS-017 workflow can be treated as operational. |
 | Database migration tool and ownership | Human owner | Pending | Required before operational migration and seed workflows. |
-| Queue/cache provider selection | Human owner | Pending | Required before queue foundation and retry behavior finalization. |
-| Object storage provider strategy | Human owner | Pending | Required before signed URL adapter finalization. |
-| Observability provider strategy | Human owner | Pending | Required before production-grade telemetry design is finalized. |
+| Queue/cache provider selection | Human owner | Approved-for-Phase-2-foundation (2026-07-01) | Managed Redis-compatible provider path selected for non-VPS shared-hosting constraints. |
+| Object storage provider strategy | Human owner | Approved-for-Phase-2-foundation (2026-07-01) | Supabase Storage selected for signed URL flow. |
+| Observability provider strategy | Human owner | Approved-phased-baseline (2026-07-01) | Platform logs plus structured app logs now; self-hosted stack deferred. |
 | Secrets management model | Human owner | Pending | Required before environment and deployment baseline is finalized. |
 | Clinical/legal/privacy domain approval | Human owner | Pending | Required before later feature implementation can be treated as release-ready. |
 

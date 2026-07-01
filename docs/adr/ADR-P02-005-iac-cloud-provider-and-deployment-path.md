@@ -2,11 +2,11 @@
 
 ## Status
 
-PARTIAL-DECISION; CLOUD-PROVIDER-HUMAN-DECISION-REQUIRED; IMPLEMENTATION-PENDING-P02-ISS-016
+ACCEPTED-FOR-PHASE-2-FOUNDATION; PROVIDER-AND-DEPLOYMENT-MODEL-RECORDED; IMPLEMENTATION-EVIDENCE-PENDING-P02-ISS-017-P02-ISS-018
 
 ## Date
 
-2026-06-25
+2026-06-25 (updated 2026-07-01)
 
 ## Decision owners
 
@@ -20,15 +20,20 @@ The Phase 2 technology evaluation compared Terraform, OpenTofu, Pulumi, and prov
 
 ## Decision
 
-No cloud provider is selected in P02-ISS-001.
+Cloud and deployment model choices are now recorded for Phase 2 and early Phase 3 foundation execution.
 
-OpenTofu is the preferred IaC tool path for P02-ISS-016 if the later cloud/provider decision supports the required resources and the platform owner approves an HCL workflow.
+- Supabase is the required primary platform for Postgres and object storage.
+- Hostinger shared hosting is the selected web-hosting surface for shell hosting contexts where shared hosting is applicable.
+- API and worker runtime should use Supabase Edge Functions and scheduled jobs; VPS hosting is out of scope for this decision.
+- Signed upload/download URLs should use Supabase Storage.
+- Redis-compatible queue/cache should use a managed Redis-compatible service (recommended: Upstash) because shared hosting cannot safely host Redis/Valkey daemons.
+- Observability baseline is platform logs plus structured application logs now; self-hosted observability stack is deferred.
+- Budget target remains under 100 USD per month for development/staging foundation.
+- Single-node availability posture is acceptable for this phase; high availability expansion is deferred.
+- Backup baseline is daily backups plus a documented restore drill.
+- IaC delivery for this phase uses documented manual steps; IaC automation choice remains deferred.
 
-Pulumi remains an approved candidate if the platform owner explicitly prefers TypeScript IaC and its state/secrets model is approved.
-
-Terraform is not the default because current Terraform releases use HashiCorp Business Source License and require legal/commercial review before adoption.
-
-P02-ISS-016 owns final IaC/cloud provider selection and may create provider-neutral deployment contracts or approved IaC skeletons only after human decision evidence exists.
+OpenTofu and Pulumi remain future IaC automation candidates. Terraform remains review-required because current Terraform releases use HashiCorp Business Source License.
 
 ## Current version evidence
 
@@ -42,16 +47,16 @@ P02-ISS-016 owns final IaC/cloud provider selection and may create provider-neut
 
 | Alternative | Decision |
 |---|---|
-| Select a cloud provider now | Rejected; prompt and Phase 2 plan require human provider decision. |
-| Create IaC skeleton now | Rejected; P02-ISS-016 owns IaC implementation. |
-| Terraform default | Deferred pending BSL review. |
-| Provider-native templates only | Deferred until provider is selected. |
+| VPS-first deployment path | Rejected; shared-hosting-only constraint was selected by owner. |
+| Self-hosted Redis/Valkey on shared hosting | Rejected; incompatible with shared-hosting process constraints. |
+| Self-hosted observability stack now | Deferred; conflicts with shared-hosting constraints and current budget target. |
+| Full IaC automation now | Deferred; manual documented steps selected for current phase. |
 
 ## Consequences
 
-- P02-ISS-016 remains blocked on human cloud/provider decision.
-- P02-ISS-017 remains blocked until P02-ISS-016 completes.
-- Local app skeleton issues can proceed without live cloud infrastructure.
+- Human cloud/provider decision dependency is resolved for Phase 2 foundation work.
+- P02-ISS-017 and P02-ISS-018 remain evidence-pending for controlled deployment and promotion runs.
+- Production deployment approval, pilot readiness, and production data usage remain separately gated.
 
 ## Security and privacy implications
 
@@ -61,7 +66,7 @@ P02-ISS-016 owns final IaC/cloud provider selection and may create provider-neut
 
 ## Implementation implications
 
-Implementation is pending P02-ISS-016. This ADR creates no `infra/` implementation files, provider configuration, workflow, cloud account link, secret reference, or deployment.
+Implementation evidence remains pending P02-ISS-017 and P02-ISS-018. This ADR itself creates no `infra/` implementation files, cloud account mutation, secret creation, or deployment action.
 
 ## Test implications
 
@@ -69,7 +74,7 @@ P02-ISS-016 must add format/validate/plan-only checks where safe. Apply/deploy r
 
 ## Review triggers
 
-Review before cloud provider selection, IaC file creation, secret-manager implementation, deployment workflow creation, development environment provisioning, staging promotion workflow, or provider contract commitment.
+Review before production deployment approval, high-availability expansion, IaC automation adoption, observability stack expansion, secrets-manager implementation, or provider contract changes.
 
 ## Supersession rule
 

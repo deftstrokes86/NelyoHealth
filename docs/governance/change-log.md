@@ -715,3 +715,13 @@ For all future phase updates:
 - Recorded P02-ISS-018 decision-register entries to keep Phase 2 completion blocked until controlled gate evidence exists.
 - Did not add new runtime features, IaC resources, cloud mutations, secrets, or production operations.
 - Preserved manual Git/GitHub governance, Phase 3 as NOT STARTED, and pilot as PILOT-NO-GO.
+
+## 2026-07-01 - Cloud provider and deployment model finalization
+
+- Finalized cloud/provider and deployment model choices for Phase 2 foundation and early Phase 3 preparation.
+- Recorded Supabase as required primary platform, Hostinger shared hosting as selected web-hosting surface, and Supabase Edge Functions plus scheduled jobs for API/worker runtime.
+- Recorded Supabase Storage for signed upload/download URL flow and managed Redis-compatible queue/cache path for shared-hosting constraints.
+- Recorded observability baseline as platform logs plus structured application logs, with self-hosted stack deferred.
+- Recorded manual deployment steps for the current phase and kept IaC automation as a later decision.
+- Updated ADR-P02-005, environment/deployment baseline, decision register, human-gated decisions tracker, open questions, unresolved blocker register, status, and Phase 2 traceability.
+- Preserved manual Git/GitHub governance, Phase 3 as NOT STARTED, and pilot as PILOT-NO-GO.

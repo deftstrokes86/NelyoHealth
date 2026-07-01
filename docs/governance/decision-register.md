@@ -853,6 +853,7 @@
 |---|---|---|---|---|
 | DEC-P02-ISS-016-001 | Record the provider-neutral deployment contract in the environment and deployment baseline while leaving cloud provider selection unresolved. | ACCEPTED; HUMAN-CLOUD-DECISION-PENDING | Platform/release owner | docs/engineering/environment-and-deployment-baseline.md; docs/adr/ADR-P02-005-iac-cloud-provider-and-deployment-path.md |
 | DEC-P02-ISS-016-002 | Keep OpenTofu preferred, Pulumi a candidate, and Terraform review-required until human approval exists for the actual IaC path. | ACCEPTED; HUMAN-DECISION-GATED | Platform/release owner | docs/adr/ADR-P02-005-iac-cloud-provider-and-deployment-path.md; docs/engineering/phase-2-environment-strategy.md |
+| DEC-P02-ISS-016-003 | Finalized human cloud/provider decision for Phase 2 foundation: Supabase is the required primary platform; Hostinger shared hosting is the selected web-hosting surface; API and worker runtime use Supabase Edge Functions plus scheduled jobs; signed URLs use Supabase Storage; Redis-compatible queue/cache uses managed Redis-compatible service; observability baseline is platform logs plus structured app logs; deployment/IaC execution is documented manual steps for current phase. | ACCEPTED-FOR-PHASE-2-FOUNDATION | Platform/release owner | docs/adr/ADR-P02-005-iac-cloud-provider-and-deployment-path.md; docs/engineering/environment-and-deployment-baseline.md |
 
 ## P02-ISS-017 decisions - 2026-06-30
 

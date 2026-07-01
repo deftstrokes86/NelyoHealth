@@ -2,9 +2,9 @@
 
 ## Status
 
-Draft provider-neutral deployment contract baseline for local, development, and staging readiness.
+Approved Phase 2 foundation deployment baseline for local, development, and staging readiness.
 
-Cloud provider selection remains human-decision gated. The baseline records the contract shape now so later deployment automation can be implemented without revisiting the Phase 2 environment rules.
+Cloud/deployment model is now recorded: Supabase is the primary platform, Hostinger shared hosting is the selected web-hosting surface, and API/worker runtime uses Supabase Edge Functions and scheduled jobs.
 
 ## Target environments
 
@@ -62,10 +62,13 @@ Each environment should expose a typed configuration surface with:
 
 ## Deployment contract
 
-- The deployment contract is provider-neutral until a human cloud decision is recorded.
-- OpenTofu remains the preferred IaC candidate, Pulumi remains a candidate, and Terraform remains review-required.
-- No cloud provider, cloud account, or IaC skeleton is selected by this baseline.
-- Development and staging remain planning targets only until later deployment workflow implementation is authorized.
+- Supabase is the selected platform for Postgres and signed URL object storage.
+- Hostinger shared hosting is selected for web hosting where shared hosting applies.
+- API/worker runtime is Supabase Edge Functions plus scheduled jobs.
+- Redis-compatible queue/cache uses a managed Redis-compatible service (recommended: Upstash).
+- Observability baseline is platform logs plus structured app logs; self-hosted observability expansion is deferred.
+- IaC for the current phase uses documented manual steps; OpenTofu and Pulumi remain future automation candidates, and Terraform remains review-required.
+- Development and staging remain evidence-gated targets until controlled deployment/promotion evidence is captured.
 - Any future IaC implementation must preserve the synthetic-only data rule and the separation between local, development, staging, production, and partner sandbox boundaries.
 
 ## Initial implementation checklist

@@ -25,7 +25,7 @@
 - P02-ISS-013: COMPLETED, empty Expo mobile shell with synthetic-only runtime surface and validation evidence.
 - P02-ISS-014: COMPLETED, per-app Chromium browser harness with synthetic auth-state generation, privacy checks, and accessibility evidence.
 - P02-ISS-015: COMPLETED, typed environment configuration boundary with strict loading, synthetic-safe placeholders, and secret redaction.
-- P02-ISS-016: COMPLETED, provider-neutral deployment contract baseline with human-gated cloud decision.
+- P02-ISS-016: COMPLETED, cloud/provider and deployment model recorded (Supabase primary platform, Hostinger shared-hosting web surface, Supabase Edge Functions+scheduled jobs for API/worker, Supabase Storage signed URLs, managed Redis-compatible queue/cache path, manual deployment steps for current phase).
 - P02-ISS-017: PARTIAL, development deploy and staging promotion workflow artifacts and runbook added; controlled evidence still pending.
 - P02-ISS-018: STARTED, Phase 2 exit-gate rehearsal and rollback evidence execution plan recorded; gate evidence capture pending.
 - AGENTS guidance: IMPLEMENTED.
@@ -162,6 +162,6 @@ pnpm db:rollback
 - Project-scoped Playwright MCP is currently verified for local synthetic smoke; Playwright CLI remains the verified fallback if MCP becomes unavailable.
 - UI UX Pro Max external license/commercial review remains pending before broader redistribution or commercial reliance.
 - Phase 0 domain approvals remain required before implementation or pilot decisions in clinical, legal, privacy, payment, pharmacy, laboratory, HMO, employer, sponsor, guardian, or emergency domains.
-- Cloud provider selection remains human-decision gated before operational deployment/promotion evidence can complete P02-ISS-017.
+- Cloud/provider and deployment model decision is recorded for Phase 2 foundation; controlled deployment/promotion run evidence remains required to complete P02-ISS-017 and P02-ISS-018.
 - P02-ISS-003 live start/stop/health evidence has been validated on a Docker Compose-capable host.
 - Moto Server is configured and validated as a local synthetic object-storage emulator for P02-ISS-003; production object-storage provider selection and signed URL implementation remain P02-ISS-009 work.
