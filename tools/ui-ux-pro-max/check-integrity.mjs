@@ -10,6 +10,12 @@ const allowed = JSON.parse(
 const allowedMap = new Map(allowed.map((item) => [item.path, item.sha256]));
 const scanRoots = [".agents/skills/ui-ux-pro-max", "tools/vendor/ui-ux-pro-max"];
 const discovered = [];
+
+function bytesForIntegrityHash(filePath, bytes) {
+  if (!filePath.endsWith(".csv")) return bytes;
+  return Buffer.from(bytes.toString("utf8").replace(/\r\n/g, "\n"), "utf8");
+}
+
 for (const scanRoot of scanRoots) {
   const absoluteRoot = path.join(root, scanRoot);
   if (!fs.existsSync(absoluteRoot)) continue;
@@ -40,7 +46,10 @@ for (const item of allowed) {
     throw new Error("Missing vendored UI UX Pro Max file: " + item.path);
   const stat = fs.lstatSync(absolute);
   if (stat.isSymbolicLink()) throw new Error("Symlink or junction is not allowed: " + item.path);
-  const hash = crypto.createHash("sha256").update(fs.readFileSync(absolute)).digest("hex");
+  const hash = crypto
+    .createHash("sha256")
+    .update(bytesForIntegrityHash(item.path, fs.readFileSync(absolute)))
+    .digest("hex");
   if (hash !== item.sha256) throw new Error("Hash mismatch for " + item.path);
 }
 const extras = discovered.filter((rel) => !allowedMap.has(rel));

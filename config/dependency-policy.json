@@ -42,7 +42,8 @@
     "AGPL",
     "LGPL",
     "MPL",
-    "MPL-2.0"
+    "MPL-2.0",
+    "LGPL-3.0-or-later"
   ],
   "packageRules": {
     "rootPrivate": true,
