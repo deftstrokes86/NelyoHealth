@@ -46,19 +46,19 @@
     },
     {
       "path": ".agents/skills/ui-ux-pro-max/scripts/core.py",
-      "sha256": "a34113784a58b807d21db8178296069f2901e609325c0b6a84deca9d9fed92f9"
+      "sha256": "ba4c944d6c6184da27bcef028d0d124c994f504195e2ed14cb8d1ddfc575f0ec"
     },
     {
       "path": ".agents/skills/ui-ux-pro-max/scripts/design_system.py",
-      "sha256": "ee9dfd9e5d19161ff1aaa1b84c54f265ebfddbb055f7830d367e12ded974ed54"
+      "sha256": "f7a21e83739c5ac6ca3738846220f6a9eb7f3c1ae7a44989c5aaa2061ca60310"
     },
     {
       "path": ".agents/skills/ui-ux-pro-max/scripts/search.py",
-      "sha256": "f21c47a5ac0978267bccee24cacde531dc0c4921173c33049177a742c0dee326"
+      "sha256": "40dd9a9f9144c531e86267bd04e87cdbb032451c3172d36f8c6c62b4bd984b20"
     },
     {
       "path": ".agents/skills/ui-ux-pro-max/UPSTREAM_SKILL_REFERENCE.md",
-      "sha256": "3ae3e75c1ba3fb51fb16e2ddafcbb6954f7c0a19dc46e05069235110060b8856"
+      "sha256": "f571a0ab228ad3ad3ac41a51c2c3450a9edb6ac3eb65f16baf5b459d01d53689"
     },
     {
       "path": "tools/vendor/ui-ux-pro-max/LICENSE",
