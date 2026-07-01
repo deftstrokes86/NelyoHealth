@@ -12,11 +12,14 @@ const scanRoots = [".agents/skills/ui-ux-pro-max", "tools/vendor/ui-ux-pro-max"]
 const discovered = [];
 
 function bytesForIntegrityHash(filePath, bytes) {
-  if (!filePath.startsWith(".agents/skills/ui-ux-pro-max/")) return bytes;
+  const inAgents = filePath.startsWith(".agents/skills/ui-ux-pro-max/");
+  const inVendor = filePath.startsWith("tools/vendor/ui-ux-pro-max/");
+  if (!inAgents && !inVendor) return bytes;
 
-  const textExtensions = [".csv", ".py", ".md", ".json", ".txt"];
+  const textExtensions = [".csv", ".py", ".md", ".json", ".txt", ".license", ".licence"];
   const isTextFile = textExtensions.some((extension) => filePath.endsWith(extension));
-  if (!isTextFile) return bytes;
+  const vendorLicenseFile = filePath === "tools/vendor/ui-ux-pro-max/LICENSE";
+  if (!isTextFile && !vendorLicenseFile) return bytes;
 
   return Buffer.from(bytes.toString("utf8").replace(/\r\n/g, "\n"), "utf8");
 }
