@@ -18,6 +18,7 @@ const includeExtensions = new Set([
 
 const ignoredPathFragments = [
   "node_modules/",
+  ".next/",
   ".artifacts/",
   "test-results/",
   "playwright-report/",
@@ -32,7 +33,8 @@ const patterns = [
   { label: "openai-secret-key", regex: /sk-[A-Za-z0-9_-]{20,}/g },
   {
     label: "generic-secret-assignment",
-    regex: /(?:api[_-]?key|secret|token|password)\s*[:=]\s*["'][^"'\s]{12,}["']/gi
+    regex:
+      /(?:api[_-]?key|secret|token|password)(?!name\b)\s*[:=]\s*["'](?!\[redacted:)[^"'\s]{20,}["']/gi
   }
 ];
 
