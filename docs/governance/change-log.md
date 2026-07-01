@@ -733,3 +733,11 @@ For all future phase updates:
 - Recorded manual deployment steps for the current phase and kept IaC automation as a later decision.
 - Updated ADR-P02-005, environment/deployment baseline, decision register, human-gated decisions tracker, open questions, unresolved blocker register, status, and Phase 2 traceability.
 - Preserved manual Git/GitHub governance, Phase 3 as NOT STARTED, and pilot as PILOT-NO-GO.
+
+## 2026-07-02 - P02-ISS-017 and P02-ISS-018 controlled workflow evidence closure
+
+- Captured successful controlled GitHub workflow evidence for development deployment and staging promotion.
+- Recorded development deploy success run evidence at https://github.com/deftstrokes86/NelyoHealth/actions/runs/28553002018 on commit 387a1efd499eafbdd459dd9c644aacbdd6d6af51.
+- Recorded staging promotion success run evidence at https://github.com/deftstrokes86/NelyoHealth/actions/runs/28553368068 using candidate version phase2-foundation-387a1ef in contract-only mode.
+- Updated status and traceability to move P02-ISS-017 and P02-ISS-018 from partial to completed with controlled evidence captured.
+- Preserved manual Git/GitHub governance boundaries, Phase 3 as NOT STARTED, and pilot as PILOT-NO-GO.

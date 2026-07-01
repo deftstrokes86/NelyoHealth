@@ -2,13 +2,13 @@
 
 ## Status
 
-P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-015 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-016 is completed, P02-ISS-017 is partial with workflow and runbook artifacts recorded, and P02-ISS-018 is partial with local exit-gate rehearsal and rollback evidence recorded while GitHub workflow evidence remains pending.
+P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-015 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-016 is completed, P02-ISS-017 is completed with workflow and runbook artifacts plus controlled GitHub workflow evidence, and P02-ISS-018 is completed with local exit-gate rehearsal/rollback evidence plus GitHub workflow evidence.
 
 ## Requirement map
 
 | Requirement ID | Requirement | Source | Primary issue | Supporting issue(s) | Status |
 |---|---|---|---|---|---|
-| P02-REQ-001 | Deployable application skeleton with local, development, and staging environments | Implementation map Phase 2 | P02-ISS-017 | P02-ISS-002 through P02-ISS-018 | WORKFLOW-AND-RUNBOOK-ARTIFACTS-RECORDED-EVIDENCE-PENDING |
+| P02-REQ-001 | Deployable application skeleton with local, development, and staging environments | Implementation map Phase 2 | P02-ISS-017 | P02-ISS-002 through P02-ISS-018 | WORKFLOW-AND-RUNBOOK-ARTIFACTS-VALIDATED-WITH-CONTROLLED-RUN-EVIDENCE |
 | P02-REQ-002 | NestJS API | Implementation map Phase 2 | P02-ISS-005 | P02-ISS-006, P02-ISS-011 | WORKSPACE-BOUNDARY-CREATED-PENDING-P02-ISS-005 |
 | P02-REQ-003 | Background worker | Implementation map Phase 2 | P02-ISS-007 | P02-ISS-008, P02-ISS-011 | WORKER-QUEUE-FOUNDATION-IMPLEMENTED-WITH-DETERMINISTIC-RETRY-DLQ-EVIDENCE |
 | P02-REQ-004 | Next.js patient, provider, organization, and admin apps | Implementation map Phase 2 | P02-ISS-012 | P02-ISS-006, P02-ISS-014 | NEXTJS-SHELL-RUNTIMES-IMPLEMENTED-WITH-SYNTHETIC-SMOKE-AND-A11Y-EVIDENCE |
@@ -36,8 +36,8 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are 
 
 | Gate ID | Exit gate | Primary issue | Evidence required | Status |
 |---|---|---|---|---|
-| P02-EG-001 | Human-merged main deploys automatically to development | P02-ISS-017 | Human merge evidence, dev deployment log, and no Codex repository mutation or settings changes (owner-requested workflow dispatch/rerun allowed) | PARTIAL-WORKFLOW-ARTIFACTS-RECORDED-WORKFLOW-RUN-PENDING |
-| P02-EG-002 | A version can be promoted to staging | P02-ISS-017 | Versioned artifact, promotion evidence, staging smoke, and no Codex repository mutation or settings changes (owner-requested workflow dispatch/rerun allowed) | PARTIAL-WORKFLOW-ARTIFACTS-RECORDED-WORKFLOW-RUN-PENDING |
+| P02-EG-001 | Human-merged main deploys automatically to development | P02-ISS-017 | Human merge evidence, dev deployment log, and no Codex repository mutation or settings changes (owner-requested workflow dispatch/rerun allowed) | COMPLETED-CONTROLLED-WORKFLOW-RUN-EVIDENCE-RECORDED |
+| P02-EG-002 | A version can be promoted to staging | P02-ISS-017 | Versioned artifact, promotion evidence, staging smoke, and no Codex repository mutation or settings changes (owner-requested workflow dispatch/rerun allowed) | COMPLETED-CONTROLLED-WORKFLOW-RUN-EVIDENCE-RECORDED |
 | P02-EG-003 | Database migrations run safely | P02-ISS-004 | Migration apply/status/rollback or compensation evidence | COMPLETED-ROLLBACK-EVIDENCE-RECORDED |
 | P02-EG-004 | Logs, traces, and metrics connect one request across API and worker | P02-ISS-011 | Correlated request/job trace/log/metric evidence | COMPLETED-TEST-EVIDENCE-RECORDED |
 | P02-EG-005 | Background job enqueue/process/retry/DLQ | P02-ISS-007 | Deterministic job test evidence | COMPLETED-TEST-EVIDENCE-RECORDED |
@@ -90,7 +90,7 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are 
 | Development deploy workflow artifact | Added | .github/workflows/deploy-development.yml |
 | Staging promotion workflow artifact | Added | .github/workflows/promote-staging.yml |
 | Operational runbook | Added | docs/runbooks/development-deploy-and-staging-promotion.md |
-| Controlled deployment/promotion run evidence | Pending | Human merge and workflow run evidence required for P02-EG-001 and P02-EG-002 |
+| Controlled deployment/promotion run evidence | Recorded | Development deploy run https://github.com/deftstrokes86/NelyoHealth/actions/runs/28553002018 and staging promotion run https://github.com/deftstrokes86/NelyoHealth/actions/runs/28553368068 |
 
 ## P02-ISS-018 evidence
 
@@ -99,8 +99,8 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are 
 | Exit-gate rehearsal and rollback execution plan | Added | docs/exec-plans/P02-ISS-018-phase-2-exit-gate-rehearsal-and-rollback-evidence.md |
 | Local synthetic infrastructure start/health evidence | Recorded | pnpm infra:start and pnpm infra:health |
 | Database migration apply/status/rollback evidence | Recorded | pnpm db:status, pnpm db:rollback, pnpm db:migrate |
-| Full Phase 2 gate rehearsal run evidence | Partial | Controlled evidence capture for P02-EG-001 through P02-EG-009; GitHub workflow dispatch remains pending |
-| Phase 2 closure recommendation package | Pending | Status, decision-register, and traceability updates after gate rehearsals |
+| Full Phase 2 gate rehearsal run evidence | Completed | Controlled evidence captured for local rehearsal plus GitHub development/staging workflow runs |
+| Phase 2 closure recommendation package | Recorded | Status and traceability updates completed after gate rehearsals and workflow evidence capture |
 
 ## Locked requirement preservation
 
