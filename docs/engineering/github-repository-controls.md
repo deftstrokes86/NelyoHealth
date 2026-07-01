@@ -21,7 +21,7 @@
 - External GitHub Actions are pinned to full commit SHAs.
 - Release-readiness workflow is manual and read-only.
 - Visual contract tests are included in Foundation CI.
-- Manual Git and GitHub workflow is documented; Codex must not commit, push, create PRs, merge, tag, release, deploy, publish, or change settings.
+- Manual Git and GitHub workflow is documented; Codex must not commit, push, create PRs, merge, tag, release, deploy, publish, or change settings. Codex may trigger or re-run GitHub Actions workflows when explicitly requested by the owner for controlled evidence runs.
 
 ## Required default-branch administration
 
@@ -59,7 +59,7 @@ Required checks block invalid changes from entering `main`; they do not enable a
 
 ## Manual administration boundary
 
-`docs/engineering/github-manual-ruleset-checklist.md` records the human-only setup steps and required evidence fields. Codex may read settings when authenticated read-only access already exists, but must not mutate GitHub repository settings or claim branch protection is active without evidence.
+`docs/engineering/github-manual-ruleset-checklist.md` records the human-owned setup steps and required evidence fields. Codex may read settings when authenticated read-only access already exists, may trigger or re-run workflows when explicitly requested by the owner, and must not mutate GitHub repository settings or claim branch protection is active without evidence.
 
 ## Official source basis
 

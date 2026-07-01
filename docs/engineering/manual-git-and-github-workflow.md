@@ -15,7 +15,24 @@ The project owner retains exclusive control of repository-changing Git and GitHu
 - Deployment
 - Repository settings
 
-Codex may inspect repository state with read-only commands and may suggest a commit message. Codex must not commit, push, merge, tag, release, deploy, alter GitHub settings, enable auto-merge, publish packages, or use GitHub API write actions.
+Codex may inspect repository state with read-only commands and may suggest a commit message. Codex must not commit, push, merge, tag, release, deploy, alter GitHub settings, enable auto-merge, or publish packages.
+
+## Workflow Dispatch Exception
+
+Codex may execute GitHub Actions workflow-dispatch and workflow re-run operations only when explicitly requested by the project owner for controlled evidence or verification runs.
+
+Allowed Codex GitHub workflow operations:
+
+- Trigger `workflow_dispatch` runs.
+- Re-run failed jobs or full workflow runs.
+- Read workflow logs, summaries, and artifacts.
+
+Forbidden Codex GitHub operations remain:
+
+- Repository-content mutation through GitHub API writes.
+- Pull-request creation or merge.
+- Tag or release publication.
+- Repository settings or ruleset mutation.
 
 ## Manual Operating Model
 
@@ -41,6 +58,8 @@ Direct pushes to `main` do not satisfy the failed-check merge gate. The intended
 - No automatic package publication.
 - No automatic deployment.
 - No autonomous Git or release orchestration.
+
+Workflow dispatch or re-run commands are permitted when explicitly requested by the human owner and when they do not mutate repository content or settings.
 
 ## Read-Only Inspection Allowed
 

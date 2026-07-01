@@ -45,7 +45,7 @@ Pilot readiness remains independently blocked by unresolved clinical, legal, pri
 | Root and nested AGENTS.md | PASS | AGENTS.md files and community health checks | Repository guidance only; no autonomous agents |
 | Execution-plan convention | PASS | .agent/PLANS.md | Convention only; no background execution |
 | Browser-validation skill | PASS | nelyo-browser-validation skill and references | Skill only; no autonomous agent |
-| Manual Git authority | PASS | AGENTS.md, governance docs, manual-git rules file | Human-only GitHub and Git writes |
+| Manual Git authority | PASS | AGENTS.md, governance docs, manual-git rules file | Repository-changing GitHub and Git writes are human-only; owner-requested workflow dispatch and rerun are allowed |
 | Visual foundation test | PASS | test:visual visual-contract suite | Screenshot baseline deferred pending controlled environment |
 | Database command interfaces | CONDITIONAL PASS | db:migrate and db:seed phase-gated scripts | Present but intentionally non-operational until Phase 2 |
 | GitHub repository settings | CONDITIONAL PASS | controls doc | External admin verification pending |

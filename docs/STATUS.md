@@ -31,8 +31,8 @@
 - AGENTS guidance: IMPLEMENTED.
 - Execution-plan convention: IMPLEMENTED.
 - Browser-validation skill: IMPLEMENTED.
-- Manual Git authority: LOCKED.
-- Automated GitHub writes: PROHIBITED.
+- Manual Git authority: LOCKED-FOR-REPOSITORY-CHANGES.
+- Automated GitHub writes: LIMITED-WORKFLOW-DISPATCH-AND-RERUN-ALLOWED-BY-OWNER-REQUEST.
 - Visual test command: IMPLEMENTED as `pnpm test:visual`.
 - Database command interfaces: OPERATIONAL FOR LOCAL SYNTHETIC ENVIRONMENTS.
 - Branch protection: MANUAL-ADMIN-PENDING.
@@ -154,7 +154,7 @@ pnpm db:rollback
 - Sponsors, employers, family-plan administrators, HMOs, and guardians receive only explicitly granted permissions.
 - Browser testing includes interactive local browser access and deterministic Playwright tests using synthetic data only.
 - Phase 1 foundation work does not implement production application features.
-- Codex must never commit, push, merge, tag, release, deploy, publish, create pull requests, or mutate GitHub settings.
+- Codex must never commit, push, merge, tag, release, deploy, publish, create pull requests, or mutate GitHub settings. Owner-requested workflow dispatch and rerun actions are allowed.
 
 ## Open conditions
 

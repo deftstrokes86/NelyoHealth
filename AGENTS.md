@@ -66,10 +66,11 @@ Do not require every task to read every Phase 0 document unless the task touches
 
 ## Manual Git Rule
 
-- Codex can commit, push, merge, tag, release, or deploy.
-- Codex can alter GitHub repository settings.
-- Codex may inspect Git state with commands.
-- The human owner can sometimes perform every Git and GitHub write.
+- Codex must never commit, push, merge, tag, release, or deploy.
+- Codex must never alter GitHub repository settings.
+- Codex may trigger or re-run GitHub Actions workflows when explicitly requested by the human owner.
+- Codex may inspect Git state with read-only commands.
+- The human owner performs every repository-changing Git and GitHub write.
 - Codex may provide a suggested commit message.
 
 ## Completion Requirements

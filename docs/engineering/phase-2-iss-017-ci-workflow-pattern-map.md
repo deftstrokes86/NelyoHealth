@@ -70,7 +70,8 @@ This is a pattern map only. It does not create deployment automation, cloud reso
   - no auto-merge
   - no automatic release publication
   - no deployment without explicit authorization
-  - manual Git and GitHub writes are human-only
+  - repository-changing Git and GitHub writes are human-only
+  - owner-requested workflow dispatch and rerun actions are allowed
 - ISS-017 mapping: deployment workflow design must preserve human gate semantics and avoid autonomous promotion behavior.
 
 ## Pattern-to-ISS-017 implementation matrix

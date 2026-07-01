@@ -1,6 +1,6 @@
 # GitHub Manual Ruleset Checklist
 
-This checklist is performed manually by the repository owner in GitHub settings. Codex does not execute it, create commits, push branches, merge pull requests, publish releases, or modify repository settings.
+This checklist is performed manually by the repository owner in GitHub settings. Codex does not execute settings changes, create commits, push branches, merge pull requests, or publish releases. Codex may trigger or re-run GitHub Actions workflows when explicitly requested for controlled verification.
 
 The goal is to prevent invalid changes from entering `main`.
 
