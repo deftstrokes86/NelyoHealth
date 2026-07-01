@@ -860,3 +860,10 @@
 |---|---|---|---|---|
 | DEC-P02-ISS-017-001 | Record the deployment workflow as human-merge-to-development followed by versioned staging promotion. | PARTIAL-IMPLEMENTATION-ARTIFACTS-RECORDED | Platform/release owner | .github/workflows/deploy-development.yml; .github/workflows/promote-staging.yml; docs/runbooks/development-deploy-and-staging-promotion.md |
 | DEC-P02-ISS-017-002 | Keep staging promotion gated on migration plan, rollback plan, dependency readiness, and smoke/browser evidence. | PARTIAL-IMPLEMENTATION-EVIDENCE-PENDING | Platform/release owner | docs/engineering/phase-2-environment-strategy.md; docs/engineering/environment-and-deployment-baseline.md; docs/runbooks/development-deploy-and-staging-promotion.md |
+
+## P02-ISS-018 decisions - 2026-06-30
+
+| Decision ID | Decision | Status | Owner | Evidence |
+|---|---|---|---|---|
+| DEC-P02-ISS-018-001 | Use P02-ISS-018 to rehearse and evidence all Phase 2 exit gates before claiming Phase 2 completion. | STARTED-PLAN-RECORDED | Platform/release owner | docs/exec-plans/P02-ISS-018-phase-2-exit-gate-rehearsal-and-rollback-evidence.md; docs/engineering/phase-2-issue-backlog.md |
+| DEC-P02-ISS-018-002 | Keep Phase 2 completion blocked until controlled evidence exists for deployment, promotion, migration safety, browser validation, route inspection, signed URL, queue/DLQ, and observability gates. | EVIDENCE-PENDING | Platform/release owner | docs/governance/phase-2-requirements-traceability.md; docs/runbooks/development-deploy-and-staging-promotion.md |

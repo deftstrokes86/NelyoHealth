@@ -20,13 +20,13 @@ const webShellApplications = [
 ] as const;
 
 const boundarySharedPackages = [
-  ["config", "@nelyohealth/config"],
   ["domain", "@nelyohealth/domain"],
   ["testing-factories", "@nelyohealth/testing-factories"]
 ] as const;
 
 const runtimeSharedPackages = [
   ["api-client", "@nelyohealth/api-client"],
+  ["config", "@nelyohealth/config"],
   ["observability", "@nelyohealth/observability"],
   ["platform-adapters", "@nelyohealth/platform-adapters"],
   ["database", "@nelyohealth/database"]

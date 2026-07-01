@@ -706,3 +706,12 @@ For all future phase updates:
 - Updated status, traceability, and decision-register entries to mark P02-ISS-017 as partial implementation with controlled evidence pending.
 - Did not create IaC files, cloud resources, secrets, or runtime infrastructure; deployment workflows remain contract-only and human-gated.
 - Preserved manual Git/GitHub governance, Phase 3 as NOT STARTED, and pilot as PILOT-NO-GO.
+
+## 2026-06-30 - P02-ISS-018
+
+- Advanced the Phase 2 backlog to the exit-gate rehearsal and rollback-evidence issue.
+- Added the P02-ISS-018 execution plan to define full gate rehearsal sequence and closure evidence expectations.
+- Updated status and traceability so P02-ISS-018 is now the active implementation issue and next action.
+- Recorded P02-ISS-018 decision-register entries to keep Phase 2 completion blocked until controlled gate evidence exists.
+- Did not add new runtime features, IaC resources, cloud mutations, secrets, or production operations.
+- Preserved manual Git/GitHub governance, Phase 3 as NOT STARTED, and pilot as PILOT-NO-GO.

@@ -1,11 +1,23 @@
 import { defineConfig, devices } from "@playwright/test";
 import { iss014ShellApps } from "./tests/helpers/iss014-browser-harness.js";
 
-const webServerConfigs = iss014ShellApps.map((shellApp) => ({
+const requestedShellApps = process.env.NELYO_ISS014_APPS
+  ? new Set(
+      process.env.NELYO_ISS014_APPS.split(",")
+        .map((value) => value.trim())
+        .filter(Boolean)
+    )
+  : null;
+
+const activeShellApps = requestedShellApps
+  ? iss014ShellApps.filter((shellApp) => requestedShellApps.has(shellApp.appName))
+  : iss014ShellApps;
+
+const webServerConfigs = activeShellApps.map((shellApp) => ({
   command: `pnpm --filter @nelyohealth/${shellApp.appName} exec next dev --hostname 127.0.0.1 --port ${shellApp.port}`,
   url: `http://127.0.0.1:${shellApp.port}`,
   reuseExistingServer: !process.env.CI,
-  timeout: 120_000
+  timeout: 300_000
 }));
 
 const authStateDir = ".artifacts/playwright-auth";

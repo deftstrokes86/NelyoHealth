@@ -2,7 +2,7 @@
 
 ## Status
 
-P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-015 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-016 is completed and P02-ISS-017 is partial with workflow and runbook artifacts recorded; controlled deployment/promotion evidence remains pending.
+P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are accepted. P02-ISS-003 through P02-ISS-015 are completed with local runtime evidence and deterministic synthetic test coverage. P02-ISS-016 is completed, P02-ISS-017 is partial with workflow and runbook artifacts recorded, and P02-ISS-018 is started with exit-gate rehearsal planning recorded.
 
 ## Requirement map
 
@@ -91,6 +91,14 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are 
 | Staging promotion workflow artifact | Added | .github/workflows/promote-staging.yml |
 | Operational runbook | Added | docs/runbooks/development-deploy-and-staging-promotion.md |
 | Controlled deployment/promotion run evidence | Pending | Human merge and workflow run evidence required for P02-EG-001 and P02-EG-002 |
+
+## P02-ISS-018 evidence
+
+| Evidence item | Result | Artifact |
+|---|---|---|
+| Exit-gate rehearsal and rollback execution plan | Added | docs/exec-plans/P02-ISS-018-phase-2-exit-gate-rehearsal-and-rollback-evidence.md |
+| Full Phase 2 gate rehearsal run evidence | Pending | Controlled evidence capture for P02-EG-001 through P02-EG-009 |
+| Phase 2 closure recommendation package | Pending | Status, decision-register, and traceability updates after gate rehearsals |
 
 ## Locked requirement preservation
 

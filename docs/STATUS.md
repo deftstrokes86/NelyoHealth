@@ -27,6 +27,7 @@
 - P02-ISS-015: COMPLETED, typed environment configuration boundary with strict loading, synthetic-safe placeholders, and secret redaction.
 - P02-ISS-016: COMPLETED, provider-neutral deployment contract baseline with human-gated cloud decision.
 - P02-ISS-017: PARTIAL, development deploy and staging promotion workflow artifacts and runbook added; controlled evidence still pending.
+- P02-ISS-018: STARTED, Phase 2 exit-gate rehearsal and rollback evidence execution plan recorded; gate evidence capture pending.
 - AGENTS guidance: IMPLEMENTED.
 - Execution-plan convention: IMPLEMENTED.
 - Browser-validation skill: IMPLEMENTED.
@@ -38,7 +39,7 @@
 - Phase 1 gate: PHASE-1-CONDITIONAL-PASS.
 - Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS.
 - Phase 2 planning: P02-PLAN-001 ACCEPTED.
-- Phase 2 implementation: P02-ISS-003 COMPLETED; local harness files, static checks, and live Docker runtime evidence validated. P02-ISS-004 COMPLETED with migration, status, seed/reset, and rollback evidence. P02-ISS-005 COMPLETED with health/readiness routes, middleware conventions, and integration evidence. P02-ISS-006 COMPLETED with generated OpenAPI and typed client contract artifacts. P02-ISS-007 COMPLETED with worker queue foundation and deterministic retry/DLQ/idempotency test evidence. P02-ISS-008 COMPLETED with transaction helper and transactional outbox dispatch/rollback evidence. P02-ISS-009 COMPLETED with signed upload/download URL and synthetic cleanup adapter evidence. P02-ISS-010 COMPLETED with fake communications and local feature-flag adapter shell evidence. P02-ISS-011 COMPLETED with API-to-worker observability correlation and metric/log/trace evidence. P02-ISS-012 COMPLETED with Next.js shell runtimes and synthetic browser validation evidence. P02-ISS-013 COMPLETED with empty Expo mobile shell validation evidence. P02-ISS-014 COMPLETED with per-app Chromium browser harness, synthetic auth-state generation, and privacy/a11y evidence. P02-ISS-015 COMPLETED with typed environment configuration, strict loading, and secret-redaction evidence. P02-ISS-016 COMPLETED with provider-neutral deployment contract baseline and human-gated cloud decision trail. P02-ISS-017 PARTIAL with development deploy and staging promotion workflow artifacts plus runbook, pending controlled deployment/promotion evidence.
+- Phase 2 implementation: P02-ISS-003 COMPLETED; local harness files, static checks, and live Docker runtime evidence validated. P02-ISS-004 COMPLETED with migration, status, seed/reset, and rollback evidence. P02-ISS-005 COMPLETED with health/readiness routes, middleware conventions, and integration evidence. P02-ISS-006 COMPLETED with generated OpenAPI and typed client contract artifacts. P02-ISS-007 COMPLETED with worker queue foundation and deterministic retry/DLQ/idempotency test evidence. P02-ISS-008 COMPLETED with transaction helper and transactional outbox dispatch/rollback evidence. P02-ISS-009 COMPLETED with signed upload/download URL and synthetic cleanup adapter evidence. P02-ISS-010 COMPLETED with fake communications and local feature-flag adapter shell evidence. P02-ISS-011 COMPLETED with API-to-worker observability correlation and metric/log/trace evidence. P02-ISS-012 COMPLETED with Next.js shell runtimes and synthetic browser validation evidence. P02-ISS-013 COMPLETED with empty Expo mobile shell validation evidence. P02-ISS-014 COMPLETED with per-app Chromium browser harness, synthetic auth-state generation, and privacy/a11y evidence. P02-ISS-015 COMPLETED with typed environment configuration, strict loading, and secret-redaction evidence. P02-ISS-016 COMPLETED with provider-neutral deployment contract baseline and human-gated cloud decision trail. P02-ISS-017 PARTIAL with development deploy and staging promotion workflow artifacts plus runbook, pending controlled deployment/promotion evidence. P02-ISS-018 STARTED with exit-gate rehearsal and rollback evidence planning artifacts.
 - Phase 3: NOT STARTED.
 - Pilot launch: PILOT-NO-GO.
 - Production release: NOT APPROVED.
@@ -46,7 +47,7 @@
 - Interactive browser: VERIFIED THROUGH PLAYWRIGHT CLI FALLBACK.
 - Playwright MCP: VERIFIED THROUGH PROJECT-SCOPED LOCAL SMOKE ON 2026-06-25 WITH CODEX-CLI 0.141.0.
 - UI UX Pro Max licence: REVIEW-REQUIRED.
-- Next action: continue P02-ISS-017, development deploy and staging promotion path.
+- Next action: continue P02-ISS-018, Phase 2 exit-gate rehearsal and rollback evidence.
 
 ## Foundation commands
 
@@ -104,6 +105,7 @@ pnpm db:rollback
 - docs/exec-plans/P02-ISS-011-observability-foundation-across-api-and-worker.md
 - docs/exec-plans/P02-ISS-012-nextjs-web-application-shells.md
 - docs/exec-plans/P02-ISS-017-development-deploy-and-staging-promotion-path.md
+- docs/exec-plans/P02-ISS-018-phase-2-exit-gate-rehearsal-and-rollback-evidence.md
 - docs/engineering/phase-2-local-infrastructure-harness.md
 - docs/engineering/phase-2-database-migration-runbook.md
 - docs/engineering/phase-2-iss-017-ci-workflow-pattern-map.md
