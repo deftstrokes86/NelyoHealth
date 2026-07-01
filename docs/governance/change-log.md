@@ -716,6 +716,14 @@ For all future phase updates:
 - Did not add new runtime features, IaC resources, cloud mutations, secrets, or production operations.
 - Preserved manual Git/GitHub governance, Phase 3 as NOT STARTED, and pilot as PILOT-NO-GO.
 
+## 2026-07-01 - P02-ISS-018 local exit-gate rehearsal evidence
+
+- Started and verified the synthetic local infrastructure on an alternate free port set after loopback port conflicts on the defaults.
+- Captured local infra health evidence for Postgres/PostGIS, Valkey, synthetic object storage, and OpenTelemetry collector.
+- Captured database migration apply, rollback, and restore evidence against the synthetic stack.
+- Confirmed GitHub workflow dispatch evidence for P02-EG-001 and P02-EG-002 remains blocked in this environment because the GitHub workflow page resolves to sign-in/404 and `gh` is unavailable.
+- Updated status and traceability to distinguish local rehearsal evidence from the remaining GitHub workflow evidence.
+
 ## 2026-07-01 - Cloud provider and deployment model finalization
 
 - Finalized cloud/provider and deployment model choices for Phase 2 foundation and early Phase 3 preparation.
