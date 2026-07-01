@@ -35,7 +35,7 @@
 - Automated GitHub writes: LIMITED-WORKFLOW-DISPATCH-AND-RERUN-ALLOWED-BY-OWNER-REQUEST.
 - Visual test command: IMPLEMENTED as `pnpm test:visual`.
 - Database command interfaces: OPERATIONAL FOR LOCAL SYNTHETIC ENVIRONMENTS.
-- Branch protection: MANUAL-ADMIN-PENDING.
+- Branch protection: ADMIN-VERIFIED-NOT-CONFIGURED-BLOCKING.
 - Phase 1 gate: PHASE-1-CONDITIONAL-PASS.
 - Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS.
 - Phase 2 planning: P02-PLAN-001 ACCEPTED.
@@ -47,7 +47,7 @@
 - Interactive browser: VERIFIED THROUGH PLAYWRIGHT CLI FALLBACK.
 - Playwright MCP: VERIFIED THROUGH PROJECT-SCOPED LOCAL SMOKE ON 2026-06-25 WITH CODEX-CLI 0.141.0.
 - UI UX Pro Max licence: REVIEW-REQUIRED.
-- Next action: perform final Phase 2 closure review and owner-admin verification of branch protection and required checks before Phase 3 kickoff.
+- Next action: owner-admin must configure and enable branch rulesets/protection, required checks, and dependency-security controls, then re-verify before Phase 3 kickoff.
 
 ## Foundation commands
 
@@ -158,7 +158,7 @@ pnpm db:rollback
 
 ## Open conditions
 
-- GitHub branch protection/rulesets, required checks, CODEOWNERS enforcement, Dependency Review, and private vulnerability reporting require repository administrator verification.
+- GitHub branch protection/rulesets and required checks were owner-admin verified on 2026-07-02 and are not configured; CODEOWNERS file exists but is not enforced without protections; dependency/security controls are currently disabled in repository security analysis. These controls remain mandatory blockers before Phase 3 kickoff.
 - Project-scoped Playwright MCP is currently verified for local synthetic smoke; Playwright CLI remains the verified fallback if MCP becomes unavailable.
 - UI UX Pro Max external license/commercial review remains pending before broader redistribution or commercial reliance.
 - Phase 0 domain approvals remain required before implementation or pilot decisions in clinical, legal, privacy, payment, pharmacy, laboratory, HMO, employer, sponsor, guardian, or emergency domains.

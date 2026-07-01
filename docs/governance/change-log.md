@@ -741,3 +741,11 @@ For all future phase updates:
 - Recorded staging promotion success run evidence at https://github.com/deftstrokes86/NelyoHealth/actions/runs/28553368068 using candidate version phase2-foundation-387a1ef in contract-only mode.
 - Updated status and traceability to move P02-ISS-017 and P02-ISS-018 from partial to completed with controlled evidence captured.
 - Preserved manual Git/GitHub governance boundaries, Phase 3 as NOT STARTED, and pilot as PILOT-NO-GO.
+
+## 2026-07-02 - Owner-admin verification of repository controls
+
+- Completed owner-admin settings verification for branch rulesets, classic branch protection, CODEOWNERS enforceability prerequisites, and repository security/dependency controls.
+- Verified no rulesets are configured (`settings/rules` reports no rulesets) and no classic branch protection rules are configured (`settings/branches` reports classic protections not configured).
+- Verified CODEOWNERS file exists in the repository at `.github/CODEOWNERS`, but enforcement is inactive while branch protection/rulesets remain unset.
+- Verified repository security analysis/dependency controls are currently disabled (dependency graph and dependabot alert/update controls show enable actions).
+- Updated status to mark administrator verification complete with controls still blocking, and kept Phase 3 as NOT STARTED pending control enablement.
