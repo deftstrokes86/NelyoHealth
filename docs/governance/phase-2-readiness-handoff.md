@@ -66,7 +66,7 @@ The implementation map identifies Phase 2 as Platform and infrastructure foundat
 - Signed clinical records are amended or versioned, never silently overwritten.
 - Sponsors, employers, family-plan administrators, HMOs, and guardians receive only explicitly granted permissions.
 - Browser testing uses interactive browser access and deterministic Playwright tests with synthetic data only.
-- Git and GitHub writes remain human-only.
+- Repository-changing Git and GitHub writes remain human-only; owner-requested workflow dispatch and rerun are allowed.
 
 ## Current blockers and conditions
 

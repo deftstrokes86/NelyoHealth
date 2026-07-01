@@ -14,7 +14,7 @@ Implement human-merge-to-development deployment and version promotion to staging
 - P02-ISS-001 through P02-ISS-016 are completed or accepted.
 - P02-ISS-017 is the next backlog issue.
 - Pilot launch remains PILOT-NO-GO.
-- Manual Git and GitHub writes remain human-only.
+- Repository-changing Git and GitHub writes remain human-only; owner-requested workflow dispatch and rerun are allowed.
 
 The repository already contains the environment strategy, the provider-neutral deployment contract baseline, and the human-gated cloud/IaC decision trail. This issue is where deployment workflow and release promotion are introduced for the first time.
 
@@ -23,7 +23,7 @@ The repository already contains the environment strategy, the provider-neutral d
 - Add the development deployment workflow that triggers after a human merge to main.
 - Add the staging promotion workflow for versioned artifacts or immutable image references.
 - Define the release documentation and runbook content needed to operate those paths safely.
-- Preserve synthetic-only, no-production-data-downward, and human-only Git/GitHub rules.
+- Preserve synthetic-only, no-production-data-downward, and repository-mutation Git/GitHub restrictions.
 - Keep deployment and promotion adapter-owned and environment-scoped.
 
 ## Non-goals
@@ -34,7 +34,7 @@ The repository already contains the environment strategy, the provider-neutral d
 - No production promotion.
 - No emergency, clinical, payment, provider-detail, pharmacy, or laboratory feature work.
 - No direct production data copying or live partner integration.
-- No Codex GitHub writes.
+- No Codex repository mutation or GitHub settings mutation.
 
 ## Source documents
 
@@ -57,7 +57,7 @@ The repository already contains the environment strategy, the provider-neutral d
 - Development deployment may only follow a human merge to main.
 - Staging promotion uses a versioned artifact or immutable image reference.
 - Staging promotion requires migration plan, rollback plan, dependency readiness, and smoke/browser evidence.
-- Git and GitHub writes remain human-only.
+- Repository-changing Git and GitHub writes remain human-only; owner-requested workflow dispatch and rerun are allowed.
 - No production deploy or cloud mutation by Codex.
 
 ## Files affected

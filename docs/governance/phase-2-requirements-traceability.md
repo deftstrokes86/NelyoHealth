@@ -36,8 +36,8 @@ P02-PLAN-001 planning traceability is accepted. P02-ISS-001 and P02-ISS-002 are 
 
 | Gate ID | Exit gate | Primary issue | Evidence required | Status |
 |---|---|---|---|---|
-| P02-EG-001 | Human-merged main deploys automatically to development | P02-ISS-017 | Human merge evidence, dev deployment log, and no Codex repository mutation or settings changes | PARTIAL-WORKFLOW-ARTIFACTS-RECORDED-EVIDENCE-PENDING |
-| P02-EG-002 | A version can be promoted to staging | P02-ISS-017 | Versioned artifact, promotion evidence, staging smoke | PARTIAL-WORKFLOW-ARTIFACTS-RECORDED-EVIDENCE-PENDING |
+| P02-EG-001 | Human-merged main deploys automatically to development | P02-ISS-017 | Human merge evidence, dev deployment log, and no Codex repository mutation or settings changes (owner-requested workflow dispatch/rerun allowed) | PARTIAL-WORKFLOW-ARTIFACTS-RECORDED-EVIDENCE-PENDING |
+| P02-EG-002 | A version can be promoted to staging | P02-ISS-017 | Versioned artifact, promotion evidence, staging smoke, and no Codex repository mutation or settings changes (owner-requested workflow dispatch/rerun allowed) | PARTIAL-WORKFLOW-ARTIFACTS-RECORDED-EVIDENCE-PENDING |
 | P02-EG-003 | Database migrations run safely | P02-ISS-004 | Migration apply/status/rollback or compensation evidence | PLANNED |
 | P02-EG-004 | Logs, traces, and metrics connect one request across API and worker | P02-ISS-011 | Correlated request/job trace/log/metric evidence | COMPLETED-TEST-EVIDENCE-RECORDED |
 | P02-EG-005 | Background job enqueue/process/retry/DLQ | P02-ISS-007 | Deterministic job test evidence | COMPLETED-TEST-EVIDENCE-RECORDED |

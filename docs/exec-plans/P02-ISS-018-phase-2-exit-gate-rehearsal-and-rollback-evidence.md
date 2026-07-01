@@ -15,7 +15,7 @@ Rehearse each Phase 2 exit gate, capture deterministic evidence, and record roll
 - P02-ISS-017 is partial with workflow and runbook artifacts recorded; controlled deployment and promotion run evidence remains pending.
 - P02-ISS-018 is the current backlog issue.
 - Pilot launch remains PILOT-NO-GO.
-- Manual Git and GitHub writes remain human-only.
+- Repository-changing Git and GitHub writes remain human-only; owner-requested workflow dispatch and rerun are allowed.
 
 The repository already contains the local infrastructure harness, migration foundation, queue and DLQ behavior, signed URL adapter, observability correlation flow, and browser-harness matrix. This issue consolidates exit-gate rehearsal and rollback evidence across those foundations.
 
@@ -37,7 +37,7 @@ The repository already contains the local infrastructure harness, migration foun
 - No live partner/provider operations.
 - No new cloud provider or IaC selection work.
 - No expansion of clinical, payment, emergency, pharmacy, or laboratory runtime scope.
-- No Codex GitHub writes.
+- No Codex repository mutation or GitHub settings mutation.
 
 ## Source documents
 
