@@ -28,9 +28,9 @@ describe("worker queue envelope safety", () => {
       }
     };
 
-    await expect(
-      runtime.enqueueJob(unsafeEnvelope as never)
-    ).rejects.toThrow(/violates synthetic-safety constraints/);
+    await expect(runtime.enqueueJob(unsafeEnvelope as never)).rejects.toThrow(
+      /violates synthetic-safety constraints/
+    );
   });
 
   it("accepts a deterministic synthetic envelope with safe keys", () => {

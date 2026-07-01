@@ -50,7 +50,7 @@ export function createApiEnvelope<T>(input: ApiEnvelopeInput<T>): ApiEnvelope<T>
   };
 }
 
-export function createErrorEnvelope(input: ErrorEnvelopeInput): ApiEnvelope<null> {
+export function createErrorEnvelope<T = null>(input: ErrorEnvelopeInput): ApiEnvelope<T> {
   return {
     data: null,
     meta: {
@@ -67,5 +67,5 @@ export function createErrorEnvelope(input: ErrorEnvelopeInput): ApiEnvelope<null
         code: input.code
       }
     ]
-  };
+  } as ApiEnvelope<T>;
 }

@@ -12,7 +12,9 @@ export function createInitialProviderDisclosureState(): ProviderDisclosureState 
   };
 }
 
-export function createProviderDisclosureStateWithSelection(orderId: string): ProviderDisclosureState {
+export function createProviderDisclosureStateWithSelection(
+  orderId: string
+): ProviderDisclosureState {
   return {
     selectedOrderId: orderId,
     isLoading: false,

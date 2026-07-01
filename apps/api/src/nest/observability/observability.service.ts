@@ -1,11 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InMemoryObservabilityRecorder } from "@nelyohealth/observability";
 import { SyntheticQueueAdapter } from "@nelyohealth/platform-adapters";
-import {
-  WorkerQueueRuntime,
-  type DeterministicSyntheticJobPayload,
-  type WorkerQueueProcessResult
-} from "@nelyohealth/worker";
+import { WorkerQueueRuntime, type DeterministicSyntheticJobPayload } from "@nelyohealth/worker";
 
 interface CorrelationProbeInput {
   syntheticTaskId: string;

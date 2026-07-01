@@ -61,7 +61,9 @@ describe("object-storage signed URL adapter", () => {
   });
 
   it("enforces synthetic-safe keys and expiry window", () => {
-    expect(() => assertSafeSyntheticStorageKey("synthetic/documents/safe-key/source.bin")).not.toThrow();
+    expect(() =>
+      assertSafeSyntheticStorageKey("synthetic/documents/safe-key/source.bin")
+    ).not.toThrow();
     expect(() => assertSafeSyntheticStorageKey("prod/documents/unsafe")).toThrow(/synthetic\//);
     expect(() => assertSignedUrlExpiry(10)).toThrow(/between 30 and 3600/);
   });

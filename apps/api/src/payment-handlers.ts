@@ -1,6 +1,9 @@
 import type { PaymentDraft } from "./payments.js";
 
-const allowedPaymentTransitions: Record<PaymentDraft["status"], ReadonlyArray<PaymentDraft["status"]>> = {
+const allowedPaymentTransitions: Record<
+  PaymentDraft["status"],
+  ReadonlyArray<PaymentDraft["status"]>
+> = {
   quoted: ["initiated", "failed"],
   initiated: ["authorized", "failed"],
   authorized: ["settled", "failed"],
@@ -18,9 +21,7 @@ export function transitionPaymentStatus(input: PaymentTransitionInput): PaymentD
   const allowed = allowedPaymentTransitions[input.payment.status];
 
   if (!allowed.includes(input.toStatus)) {
-    throw new Error(
-      `Invalid payment transition from ${input.payment.status} to ${input.toStatus}`
-    );
+    throw new Error(`Invalid payment transition from ${input.payment.status} to ${input.toStatus}`);
   }
 
   return {

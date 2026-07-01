@@ -12,6 +12,11 @@ test.describe("ISS-014 browser harness shell smoke", () => {
   test("renders each web shell with per-app storage state and privacy guards", async ({
     page
   }, testInfo) => {
+    test.skip(
+      testInfo.project.name === "chromium",
+      "ISS-014 shell harness expects per-shell project names and storage states."
+    );
+
     const shellApp = getIss014ShellAppByProjectName(testInfo.project.name);
     const guards = installBrowserGuards(page, testInfo);
 

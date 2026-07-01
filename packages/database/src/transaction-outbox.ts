@@ -18,8 +18,9 @@ export interface DomainEventEnvelope<TPayload extends Record<string, unknown>> {
 
 export type DispatchStatus = "pending" | "dispatched" | "dead-lettered";
 
-export interface OutboxEventRecord<TPayload extends Record<string, unknown>>
-  extends DomainEventEnvelope<TPayload> {
+export interface OutboxEventRecord<
+  TPayload extends Record<string, unknown>
+> extends DomainEventEnvelope<TPayload> {
   dispatchStatus: DispatchStatus;
   dispatchAttempts: number;
   lastError: string | null;
@@ -76,14 +77,12 @@ export async function runTransactionalWorkWithOutbox<
   TClient,
   TPayload extends Record<string, unknown>,
   TResult
->(
-  input: {
-    transaction: TransactionAdapter<TClient>;
-    outbox: TransactionalOutboxPort<TClient, TPayload>;
-    externalCallPolicy: ExternalCallPolicy;
-    work: (ctx: TransactionWorkContext<TClient, TPayload>) => Promise<TResult>;
-  }
-): Promise<TResult> {
+>(input: {
+  transaction: TransactionAdapter<TClient>;
+  outbox: TransactionalOutboxPort<TClient, TPayload>;
+  externalCallPolicy: ExternalCallPolicy;
+  work: (ctx: TransactionWorkContext<TClient, TPayload>) => Promise<TResult>;
+}): Promise<TResult> {
   const client = await input.transaction.begin();
   input.externalCallPolicy.onTransactionStart();
 
@@ -109,15 +108,16 @@ export async function runTransactionalWorkWithOutbox<
   }
 }
 
-export async function dispatchPendingOutboxEvents<TClient, TPayload extends Record<string, unknown>>(
-  input: {
-    outbox: TransactionalOutboxPort<TClient, TPayload>;
-    publisher: DomainEventPublisher<TPayload>;
-    externalCallPolicy: ExternalCallPolicy;
-    maxAttempts: number;
-    batchSize?: number;
-  }
-): Promise<{
+export async function dispatchPendingOutboxEvents<
+  TClient,
+  TPayload extends Record<string, unknown>
+>(input: {
+  outbox: TransactionalOutboxPort<TClient, TPayload>;
+  publisher: DomainEventPublisher<TPayload>;
+  externalCallPolicy: ExternalCallPolicy;
+  maxAttempts: number;
+  batchSize?: number;
+}): Promise<{
   dispatched: number;
   retried: number;
   deadLettered: number;
@@ -172,12 +172,15 @@ export function createDomainEventEnvelope<TPayload extends Record<string, unknow
   };
 }
 
-export class SyntheticInMemoryOutboxStore<TPayload extends Record<string, unknown>>
-  implements TransactionalOutboxPort<{ txId: string }, TPayload>
-{
+export class SyntheticInMemoryOutboxStore<
+  TPayload extends Record<string, unknown>
+> implements TransactionalOutboxPort<{ txId: string }, TPayload> {
   private readonly records = new Map<string, OutboxEventRecord<TPayload>>();
 
-  async insertPending(_client: { txId: string }, event: DomainEventEnvelope<TPayload>): Promise<void> {
+  async insertPending(
+    _client: { txId: string },
+    event: DomainEventEnvelope<TPayload>
+  ): Promise<void> {
     this.records.set(event.eventId, {
       ...event,
       dispatchStatus: "pending",
@@ -228,7 +231,9 @@ export class SyntheticInMemoryOutboxStore<TPayload extends Record<string, unknow
   }
 
   listAll(): Array<OutboxEventRecord<TPayload>> {
-    return [...this.records.values()].sort((left, right) => left.createdAt.localeCompare(right.createdAt));
+    return [...this.records.values()].sort((left, right) =>
+      left.createdAt.localeCompare(right.createdAt)
+    );
   }
 
   private requireEvent(eventId: string): OutboxEventRecord<TPayload> {

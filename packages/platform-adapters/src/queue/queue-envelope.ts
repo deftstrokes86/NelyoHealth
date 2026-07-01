@@ -35,9 +35,7 @@ export interface QueueEnqueueResult {
   fingerprint: string;
 }
 
-export type QueueProcessor<TPayload> = (
-  envelope: QueueJobEnvelope<TPayload>
-) => Promise<void>;
+export type QueueProcessor<TPayload> = (envelope: QueueJobEnvelope<TPayload>) => Promise<void>;
 
 export type QueueProcessResult<TPayload> =
   | {
@@ -62,13 +60,14 @@ export type QueueProcessResult<TPayload> =
 export interface QueueAdapter<TPayload> {
   enqueue(envelope: QueueJobEnvelope<TPayload>): Promise<QueueEnqueueResult>;
   processNext(processor: QueueProcessor<TPayload>): Promise<QueueProcessResult<TPayload>>;
-  drain(processor: QueueProcessor<TPayload>, maxIterations?: number): Promise<QueueProcessResult<TPayload>[]>;
+  drain(
+    processor: QueueProcessor<TPayload>,
+    maxIterations?: number
+  ): Promise<QueueProcessResult<TPayload>[]>;
   readDeadLetters(): Promise<QueueDeadLetterEntry<TPayload>[]>;
   getHealthSnapshot(): Promise<QueueHealthSnapshot>;
 }
 
-export function buildQueueFingerprint<TPayload>(
-  envelope: QueueJobEnvelope<TPayload>
-): string {
+export function buildQueueFingerprint<TPayload>(envelope: QueueJobEnvelope<TPayload>): string {
   return `${envelope.jobType}::${envelope.safeContext.idempotencyKey}`;
 }

@@ -8,7 +8,7 @@ import {
 
 describe("database foundation package", () => {
   it("resolves default local database config", () => {
-    expect(resolveDatabaseCommandConfig({})).toMatchObject({
+    expect(resolveDatabaseCommandConfig({ NODE_ENV: "test" })).toMatchObject({
       host: "127.0.0.1",
       port: 55432,
       database: "nelyohealth_local",

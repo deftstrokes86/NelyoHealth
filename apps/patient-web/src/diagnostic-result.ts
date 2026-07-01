@@ -12,7 +12,9 @@ export interface DiagnosticResultViewModel {
   summary: string;
 }
 
-export function createDiagnosticResultViewModel(dto: DiagnosticResultDraftDtoLike): DiagnosticResultViewModel {
+export function createDiagnosticResultViewModel(
+  dto: DiagnosticResultDraftDtoLike
+): DiagnosticResultViewModel {
   return {
     diagnosticResultId: dto.diagnosticResultId,
     orderId: dto.orderId,

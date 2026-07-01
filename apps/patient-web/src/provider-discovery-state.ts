@@ -12,7 +12,9 @@ export function createInitialProviderDiscoveryState(): ProviderDiscoveryState {
   };
 }
 
-export function createProviderDiscoveryStateWithSelection(providerId: string): ProviderDiscoveryState {
+export function createProviderDiscoveryStateWithSelection(
+  providerId: string
+): ProviderDiscoveryState {
   return {
     selectedProviderId: providerId,
     isLoading: false,

@@ -1,8 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  createAppointmentScheduleDto,
-  createBookingDto
-} from "./appointment-booking.js";
+import { createAppointmentScheduleDto, createBookingDto } from "./appointment-booking.js";
 
 describe("appointment and booking DTOs", () => {
   it("creates an appointment schedule DTO", () => {

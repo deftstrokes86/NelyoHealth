@@ -10,6 +10,11 @@ import { getIss014ShellAppByProjectName } from "../helpers/iss014-browser-harnes
 
 test.describe("ISS-014 browser harness shell accessibility smoke", () => {
   test("passes accessibility checks for each web shell project", async ({ page }, testInfo) => {
+    test.skip(
+      testInfo.project.name === "accessibility-chromium",
+      "ISS-014 shell harness accessibility checks expect per-shell project names."
+    );
+
     const shellApp = getIss014ShellAppByProjectName(testInfo.project.name);
     const guards = installBrowserGuards(page, testInfo);
 

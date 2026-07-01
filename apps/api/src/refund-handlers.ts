@@ -1,6 +1,9 @@
 import type { RefundDraft } from "./refunds.js";
 
-const allowedRefundTransitions: Record<RefundDraft["status"], ReadonlyArray<RefundDraft["status"]>> = {
+const allowedRefundTransitions: Record<
+  RefundDraft["status"],
+  ReadonlyArray<RefundDraft["status"]>
+> = {
   requested: ["eligibility-review", "failed"],
   "eligibility-review": ["approved", "failed"],
   approved: ["processing", "failed"],

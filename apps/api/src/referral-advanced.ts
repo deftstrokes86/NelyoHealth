@@ -28,7 +28,9 @@ export interface ReferralDraftAdvancedInput {
   cancelledAt: string | null;
 }
 
-export function createReferralDraftAdvanced(input: ReferralDraftAdvancedInput): ReferralDraftAdvanced {
+export function createReferralDraftAdvanced(
+  input: ReferralDraftAdvancedInput
+): ReferralDraftAdvanced {
   return {
     referralId: input.referralId,
     patientId: input.patientId,

@@ -40,7 +40,9 @@ export class S3SignedUrlObjectStorageAdapter implements ObjectStoragePort {
     });
   }
 
-  async createSignedUrl(request: ObjectStorageSignedUrlRequest): Promise<ObjectStorageSignedUrlGrant> {
+  async createSignedUrl(
+    request: ObjectStorageSignedUrlRequest
+  ): Promise<ObjectStorageSignedUrlGrant> {
     const expiresInSeconds = request.expiresInSeconds || this.config.defaultExpirySeconds;
     assertSignedUrlExpiry(expiresInSeconds);
     assertSafeSyntheticStorageKey(request.key);

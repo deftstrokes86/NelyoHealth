@@ -8,7 +8,7 @@ import {
   type DomainEventEnvelope
 } from "../../packages/database/src/index.js";
 
-interface SyntheticPayload {
+interface SyntheticPayload extends Record<string, unknown> {
   syntheticTaskId: string;
   retryBucket: string;
 }

@@ -12,17 +12,16 @@ export interface BookingCompleteInput {
   completedAt: string;
 }
 
-const BOOKING_TRANSITIONS: Record<
-  BookingDraft["status"],
-  BookingDraft["status"][]
-> = {
-  "draft": ["requested"],
-  "requested": ["approved", "denied"],
-  "approved": ["scheduled", "cancelled"],
-  "denied": [],
-  "scheduled": ["completed", "cancelled"],
-  "completed": [],
-  "cancelled": []
+const BOOKING_TRANSITIONS: Record<BookingDraft["status"], BookingDraft["status"][]> = {
+  pending: ["confirmed", "cancelled"],
+  confirmed: ["cancelled"],
+  draft: ["requested"],
+  requested: ["approved", "denied"],
+  approved: ["scheduled", "cancelled"],
+  denied: [],
+  scheduled: ["completed", "cancelled"],
+  completed: [],
+  cancelled: []
 };
 
 /**
@@ -37,9 +36,7 @@ export function createBookingWithAppointment(input: BookingCreateInput): Booking
   ];
 
   if (!validAppointmentStates.includes(input.appointment.status)) {
-    throw new Error(
-      `Cannot create booking for appointment in ${input.appointment.status} state`
-    );
+    throw new Error(`Cannot create booking for appointment in ${input.appointment.status} state`);
   }
 
   return {
@@ -62,9 +59,7 @@ export function transitionBookingStatus(
   const allowedTransitions = BOOKING_TRANSITIONS[booking.status];
 
   if (!allowedTransitions.includes(toStatus)) {
-    throw new Error(
-      `Invalid booking transition from ${booking.status} to ${toStatus}`
-    );
+    throw new Error(`Invalid booking transition from ${booking.status} to ${toStatus}`);
   }
 
   return {

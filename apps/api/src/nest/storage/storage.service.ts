@@ -70,7 +70,9 @@ function normalizeSyntheticDocumentIdPrefix(value: string): string {
     return "";
   }
   if (!/^[a-z0-9-/]{0,64}$/.test(normalized)) {
-    throw new Error("syntheticDocumentIdPrefix must contain only lowercase letters, numbers, hyphens, and slashes.");
+    throw new Error(
+      "syntheticDocumentIdPrefix must contain only lowercase letters, numbers, hyphens, and slashes."
+    );
   }
   return normalized;
 }

@@ -45,7 +45,9 @@ const apiModules = getContractModules(apiDir).filter(
   (moduleName) => !apiOnlyModules.has(moduleName)
 );
 const apiClientModules = getContractModules(apiClientDir);
-const missingInApiClient = apiModules.filter((moduleName) => !apiClientModules.includes(moduleName));
+const missingInApiClient = apiModules.filter(
+  (moduleName) => !apiClientModules.includes(moduleName)
+);
 const missingInApi = apiClientModules.filter((moduleName) => !apiModules.includes(moduleName));
 
 if (missingInApiClient.length > 0) {
@@ -82,5 +84,7 @@ if (failures.length > 0) {
   console.error(failures.map((failure) => `FAIL: ${failure}`).join("\n"));
   process.exitCode = 1;
 } else {
-  console.log("Contract drift gate passed: API and API client contracts are in parity and exported.");
+  console.log(
+    "Contract drift gate passed: API and API client contracts are in parity and exported."
+  );
 }

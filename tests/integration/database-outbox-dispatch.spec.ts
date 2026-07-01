@@ -10,7 +10,7 @@ import {
   type OutboxEventRecord
 } from "../../packages/database/src/index.js";
 
-interface DispatchPayload {
+interface DispatchPayload extends Record<string, unknown> {
   syntheticTaskId: string;
   routeKey: string;
 }
@@ -31,7 +31,9 @@ function createPublisher(options: {
         options.failForEventId === event.eventId &&
         nextAttempt <= (options.failUntilAttempt ?? 0)
       ) {
-        throw new Error(`Synthetic dispatch failure for ${event.eventId} at attempt ${nextAttempt}.`);
+        throw new Error(
+          `Synthetic dispatch failure for ${event.eventId} at attempt ${nextAttempt}.`
+        );
       }
 
       options.delivered.push(event.eventId);

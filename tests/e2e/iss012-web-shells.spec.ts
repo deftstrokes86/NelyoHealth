@@ -19,6 +19,11 @@ test.describe("ISS-012 Next.js web shell smoke", () => {
     page
   }, testInfo) => {
     const expectedHeading = expectedHeadingByProject[testInfo.project.name];
+    test.skip(
+      !expectedHeading,
+      `ISS-012 shell smoke requires shell project names, got '${testInfo.project.name}'.`
+    );
+
     const guards = installBrowserGuards(page, testInfo);
 
     await page.emulateMedia({ reducedMotion: "reduce" });

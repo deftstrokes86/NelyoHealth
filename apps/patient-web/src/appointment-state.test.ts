@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { createInitialAppointmentState, createAppointmentStateWithSelection } from "./appointment-state.js";
+import {
+  createInitialAppointmentState,
+  createAppointmentStateWithSelection
+} from "./appointment-state.js";
 
 describe("patient appointment state", () => {
   it("creates an initial appointment state", () => {

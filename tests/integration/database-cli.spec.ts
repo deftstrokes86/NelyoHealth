@@ -8,19 +8,15 @@ const shouldRun = process.env.NELYO_RUN_DB_INTEGRATION === "1";
 const dbCliScript = path.join(rootDir, "packages/database/scripts/db-cli.mjs");
 
 function runDb(command: string): string {
-  return execFileSync(
-    process.execPath,
-    [dbCliScript, command],
-    {
-      cwd: rootDir,
-      encoding: "utf8",
-      env: {
-        ...process.env,
-        NODE_ENV: "test",
-        NELYO_DEPLOYMENT_ENV: "local"
-      }
+  return execFileSync(process.execPath, [dbCliScript, command], {
+    cwd: rootDir,
+    encoding: "utf8",
+    env: {
+      ...process.env,
+      NODE_ENV: "test",
+      NELYO_DEPLOYMENT_ENV: "local"
     }
-  );
+  });
 }
 
 describe.skipIf(!shouldRun)("database cli integration", () => {

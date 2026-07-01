@@ -6,15 +6,12 @@ export interface AppointmentScheduleInput {
   scheduledAt: string;
 }
 
-const APPOINTMENT_TRANSITIONS: Record<
-  AppointmentDraft["status"],
-  AppointmentDraft["status"][]
-> = {
-  "pending": ["scheduled", "cancelled"],
-  "scheduled": ["confirmed", "cancelled", "completed"],
-  "confirmed": ["completed", "cancelled"],
-  "completed": [],
-  "cancelled": []
+const APPOINTMENT_TRANSITIONS: Record<AppointmentDraft["status"], AppointmentDraft["status"][]> = {
+  pending: ["scheduled", "cancelled"],
+  scheduled: ["confirmed", "cancelled", "completed"],
+  confirmed: ["completed", "cancelled"],
+  completed: [],
+  cancelled: []
 };
 
 export function scheduleAppointmentStatus(input: AppointmentScheduleInput): AppointmentDraft {

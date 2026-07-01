@@ -12,7 +12,9 @@ export function createInitialDiagnosticResultState(): DiagnosticResultState {
   };
 }
 
-export function createDiagnosticResultStateWithSelection(diagnosticResultId: string): DiagnosticResultState {
+export function createDiagnosticResultStateWithSelection(
+  diagnosticResultId: string
+): DiagnosticResultState {
   return {
     selectedDiagnosticResultId: diagnosticResultId,
     isLoading: false,

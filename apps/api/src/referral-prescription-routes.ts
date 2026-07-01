@@ -1,8 +1,15 @@
 import { createApiEnvelope, createErrorEnvelope, type ApiEnvelope } from "./response.js";
-import { transitionReferralStatus, transitionPrescriptionStatus } from "./referral-prescription-handlers.js";
+import {
+  transitionReferralStatus,
+  transitionPrescriptionStatus
+} from "./referral-prescription-handlers.js";
 import type { RuntimeRouteMeta } from "./runtime-routes.js";
-import type { ReferralDraftAdvanced, ReferralStatusUpdateInput } from "./referral-advanced.js";
-import type { PrescriptionDraftAdvanced, PrescriptionStatusUpdateInput } from "./prescription-advanced.js";
+import type { ReferralDraftAdvanced } from "./referral-advanced.js";
+import type { PrescriptionDraftAdvanced } from "./prescription-advanced.js";
+import type {
+  ReferralStatusUpdateInput,
+  PrescriptionStatusUpdateInput
+} from "./referral-prescription-handlers.js";
 
 export interface ReferralStatusRouteRequest extends RuntimeRouteMeta {
   input: ReferralStatusUpdateInput;

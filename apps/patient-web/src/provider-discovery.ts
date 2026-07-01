@@ -16,7 +16,9 @@ export interface ProviderDiscoveryViewModel {
   availabilityStatus: "available" | "booked" | "unavailable";
 }
 
-export function createProviderDiscoveryViewModel(dto: ProviderSearchResponseDtoLike): ProviderDiscoveryViewModel {
+export function createProviderDiscoveryViewModel(
+  dto: ProviderSearchResponseDtoLike
+): ProviderDiscoveryViewModel {
   return {
     providerId: dto.providerId,
     providerDisplayName: dto.providerDisplayName,

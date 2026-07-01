@@ -7,7 +7,8 @@ import {
 } from "./communications-port.js";
 
 export class FakeCommunicationsAdapter implements CommunicationsPort {
-  private readonly outbox: Array<CommunicationMessage & { messageId: string; queuedAt: string }> = [];
+  private readonly outbox: Array<CommunicationMessage & { messageId: string; queuedAt: string }> =
+    [];
 
   async dispatch(message: CommunicationMessage): Promise<CommunicationDispatchReceipt> {
     assertSafeCommunicationMessage(message);

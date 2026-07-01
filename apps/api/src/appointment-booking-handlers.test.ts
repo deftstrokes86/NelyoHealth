@@ -2,10 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createAppointmentDraft } from "./appointments.js";
 import { createBookingDraft } from "./bookings.js";
 import { scheduleAppointmentStatus } from "./appointment-handlers.js";
-import {
-  createBookingWithAppointment,
-  transitionBookingStatus
-} from "./booking-handlers.js";
+import { createBookingWithAppointment, transitionBookingStatus } from "./booking-handlers.js";
 
 describe("appointment and booking handlers with cross-dependencies", () => {
   it("schedules an appointment through valid transitions", () => {
@@ -136,17 +133,6 @@ describe("appointment and booking handlers with cross-dependencies", () => {
   });
 
   it("transitions booking through valid states tied to appointment", () => {
-    const appointment = createAppointmentDraft({
-      appointmentId: "apt-5",
-      patientId: "patient-5",
-      providerId: "provider-5",
-      status: "scheduled",
-      scheduledAt: "2026-07-20T10:00:00.000Z",
-      confirmedAt: null,
-      completedAt: null,
-      cancelledAt: null
-    });
-
     const booking = createBookingDraft({
       bookingId: "booking-3",
       patientId: "patient-5",
@@ -162,35 +148,19 @@ describe("appointment and booking handlers with cross-dependencies", () => {
       cancelledAt: null
     });
 
-    const requested = transitionBookingStatus(
-      booking,
-      "requested",
-      "2026-07-19T09:05:00.000Z"
-    );
+    const requested = transitionBookingStatus(booking, "requested", "2026-07-19T09:05:00.000Z");
     expect(requested.status).toBe("requested");
     expect(requested.requestedAt).toBe("2026-07-19T09:05:00.000Z");
 
-    const approved = transitionBookingStatus(
-      requested,
-      "approved",
-      "2026-07-19T09:10:00.000Z"
-    );
+    const approved = transitionBookingStatus(requested, "approved", "2026-07-19T09:10:00.000Z");
     expect(approved.status).toBe("approved");
     expect(approved.approvedAt).toBe("2026-07-19T09:10:00.000Z");
 
-    const scheduled = transitionBookingStatus(
-      approved,
-      "scheduled",
-      "2026-07-19T09:15:00.000Z"
-    );
+    const scheduled = transitionBookingStatus(approved, "scheduled", "2026-07-19T09:15:00.000Z");
     expect(scheduled.status).toBe("scheduled");
     expect(scheduled.scheduledAt).toBe("2026-07-19T09:15:00.000Z");
 
-    const completed = transitionBookingStatus(
-      scheduled,
-      "completed",
-      "2026-07-20T11:00:00.000Z"
-    );
+    const completed = transitionBookingStatus(scheduled, "completed", "2026-07-20T11:00:00.000Z");
     expect(completed.status).toBe("completed");
     expect(completed.completedAt).toBe("2026-07-20T11:00:00.000Z");
   });
@@ -211,8 +181,8 @@ describe("appointment and booking handlers with cross-dependencies", () => {
       cancelledAt: null
     });
 
-    expect(() =>
-      transitionBookingStatus(booking, "completed", "2026-07-19T09:05:00.000Z")
-    ).toThrow(/Invalid booking transition/);
+    expect(() => transitionBookingStatus(booking, "completed", "2026-07-19T09:05:00.000Z")).toThrow(
+      /Invalid booking transition/
+    );
   });
 });

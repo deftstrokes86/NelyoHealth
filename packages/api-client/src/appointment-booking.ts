@@ -23,7 +23,9 @@ export interface BookingDto {
   cancelledAt: string | null;
 }
 
-export function createAppointmentScheduleDto(input: Partial<AppointmentScheduleDto>): AppointmentScheduleDto {
+export function createAppointmentScheduleDto(
+  input: Partial<AppointmentScheduleDto>
+): AppointmentScheduleDto {
   return {
     appointmentId: input.appointmentId ?? "",
     patientId: input.patientId ?? "",

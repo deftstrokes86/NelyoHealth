@@ -87,7 +87,12 @@ export class InMemoryObservabilityRecorder {
     return spanId;
   }
 
-  endSpan(name: string, context: TelemetryContext, spanId: string, parentSpanId: string | null = null): void {
+  endSpan(
+    name: string,
+    context: TelemetryContext,
+    spanId: string,
+    parentSpanId: string | null = null
+  ): void {
     this.spans.push({
       recordedAt: new Date().toISOString(),
       spanId,

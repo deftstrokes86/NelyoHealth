@@ -14,7 +14,9 @@ export interface PrescriptionDraftRequestDto {
   status: "draft" | "issued" | "cancelled";
 }
 
-export function createPrescriptionDraftDto(input: PrescriptionDraftRequestDto): PrescriptionDraftDto {
+export function createPrescriptionDraftDto(
+  input: PrescriptionDraftRequestDto
+): PrescriptionDraftDto {
   return {
     prescriptionId: input.prescriptionId,
     referralId: input.referralId,

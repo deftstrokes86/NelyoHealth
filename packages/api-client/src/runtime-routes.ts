@@ -11,13 +11,7 @@ export interface PaymentTransitionRouteRequestDto extends RuntimeRouteMetaDto {
 
 export interface RefundTransitionRouteRequestDto extends RuntimeRouteMetaDto {
   refundId: string;
-  toStatus:
-    | "requested"
-    | "eligibility-review"
-    | "approved"
-    | "processing"
-    | "completed"
-    | "failed";
+  toStatus: "requested" | "eligibility-review" | "approved" | "processing" | "completed" | "failed";
   transitionedAt: string;
 }
 

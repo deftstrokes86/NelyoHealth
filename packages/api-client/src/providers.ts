@@ -16,7 +16,9 @@ export interface ProviderSearchRequestDto {
   availabilityStatus: "available" | "booked" | "unavailable";
 }
 
-export function createProviderSearchResponseDto(input: ProviderSearchRequestDto): ProviderSearchResponseDto {
+export function createProviderSearchResponseDto(
+  input: ProviderSearchRequestDto
+): ProviderSearchResponseDto {
   return {
     providerId: input.providerId,
     providerDisplayName: input.providerDisplayName,

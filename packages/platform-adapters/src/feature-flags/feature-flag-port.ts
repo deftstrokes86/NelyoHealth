@@ -34,6 +34,8 @@ export interface FeatureFlagPort {
 
 export function assertSafeFeatureFlagKey(key: string): void {
   if (!/^[a-z0-9._-]{3,80}$/.test(key)) {
-    throw new Error("Feature flag key must be 3-80 chars and contain lowercase letters, numbers, dot, underscore, or hyphen.");
+    throw new Error(
+      "Feature flag key must be 3-80 chars and contain lowercase letters, numbers, dot, underscore, or hyphen."
+    );
   }
 }

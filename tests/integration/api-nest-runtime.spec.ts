@@ -1,9 +1,10 @@
 import { afterEach, describe, expect, it } from "vitest";
-import type { INestApplication } from "@nestjs/common";
 import type { AddressInfo } from "node:net";
 import { createNestApiApp } from "../../apps/api/src/nest/bootstrap.js";
 
-async function startApp(app: INestApplication): Promise<number> {
+type NestApiApp = Awaited<ReturnType<typeof createNestApiApp>>;
+
+async function startApp(app: NestApiApp): Promise<number> {
   await app.init();
   const server = app.getHttpServer();
   await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", () => resolve()));
@@ -12,7 +13,7 @@ async function startApp(app: INestApplication): Promise<number> {
 }
 
 describe("Nest API skeleton runtime", () => {
-  let app: INestApplication | undefined;
+  let app: NestApiApp | undefined;
 
   afterEach(async () => {
     if (app) {

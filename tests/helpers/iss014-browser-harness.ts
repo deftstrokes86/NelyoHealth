@@ -32,7 +32,9 @@ export const iss014ShellApps = [
 export type Iss014ShellApp = (typeof iss014ShellApps)[number];
 
 export function getIss014ShellAppByProjectName(projectName: string): Iss014ShellApp {
-  const shellApp = iss014ShellApps.find((entry) => entry.appName === projectName.split("-")[0] + "-web");
+  const shellApp = iss014ShellApps.find(
+    (entry) => entry.appName === projectName.split("-")[0] + "-web"
+  );
   if (!shellApp) {
     throw new Error(`Unknown ISS-014 shell project: ${projectName}`);
   }

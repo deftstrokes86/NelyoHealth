@@ -45,9 +45,7 @@ export class SyntheticQueueAdapter<TPayload> implements QueueAdapter<TPayload> {
     };
   }
 
-  async processNext(
-    processor: QueueProcessor<TPayload>
-  ): Promise<QueueProcessResult<TPayload>> {
+  async processNext(processor: QueueProcessor<TPayload>): Promise<QueueProcessResult<TPayload>> {
     const envelope = this.waiting.shift();
     this.syncWaitingCount();
 

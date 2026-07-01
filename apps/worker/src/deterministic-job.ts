@@ -1,6 +1,6 @@
 import type { WorkerJobEnvelope, WorkerQueueProcessor } from "./worker-runtime.js";
 
-export interface DeterministicSyntheticJobPayload {
+export interface DeterministicSyntheticJobPayload extends Record<string, unknown> {
   syntheticTaskId: string;
   failUntilAttempt: number;
 }

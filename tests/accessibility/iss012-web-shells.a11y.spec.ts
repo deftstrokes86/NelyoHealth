@@ -17,6 +17,11 @@ const expectedHeadingByProject: Record<string, string> = {
 test.describe("ISS-012 Next.js web shell accessibility smoke", () => {
   test("passes shell-level accessibility assertions", async ({ page }, testInfo) => {
     const expectedHeading = expectedHeadingByProject[testInfo.project.name];
+    test.skip(
+      !expectedHeading,
+      `ISS-012 shell accessibility smoke requires shell project names, got '${testInfo.project.name}'.`
+    );
+
     const guards = installBrowserGuards(page, testInfo);
 
     await page.emulateMedia({ reducedMotion: "reduce" });

@@ -27,6 +27,7 @@ export class LocalFeatureFlagAdapter implements FeatureFlagPort {
     defaultValue: boolean,
     _context: FeatureFlagContext
   ): Promise<FeatureFlagEvaluation<boolean>> {
+    void _context;
     assertSafeFeatureFlagKey(key);
     const value = this.flags.get(key);
     if (typeof value === "boolean") {
@@ -51,6 +52,7 @@ export class LocalFeatureFlagAdapter implements FeatureFlagPort {
     defaultValue: string,
     _context: FeatureFlagContext
   ): Promise<FeatureFlagEvaluation<string>> {
+    void _context;
     assertSafeFeatureFlagKey(key);
     const value = this.flags.get(key);
     if (typeof value === "string") {
@@ -75,6 +77,7 @@ export class LocalFeatureFlagAdapter implements FeatureFlagPort {
     defaultValue: number,
     _context: FeatureFlagContext
   ): Promise<FeatureFlagEvaluation<number>> {
+    void _context;
     assertSafeFeatureFlagKey(key);
     const value = this.flags.get(key);
     if (typeof value === "number") {

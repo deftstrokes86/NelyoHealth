@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { createProviderSearchResponse, createProviderSearchResponseWithProtectedFields } from "./providers.js";
+import {
+  createProviderSearchResponse,
+  createProviderSearchResponseWithProtectedFields
+} from "./providers.js";
 
 describe("provider discovery contract", () => {
   it("returns a safe pre-payment provider response", () => {

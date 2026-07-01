@@ -12,7 +12,9 @@ export interface DiagnosticResultDraftInput {
   summary: string;
 }
 
-export function createDiagnosticResultDraft(input: DiagnosticResultDraftInput): DiagnosticResultDraft {
+export function createDiagnosticResultDraft(
+  input: DiagnosticResultDraftInput
+): DiagnosticResultDraft {
   return {
     diagnosticResultId: input.diagnosticResultId,
     orderId: input.orderId,

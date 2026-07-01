@@ -1,5 +1,8 @@
 import { createApiEnvelope, createErrorEnvelope, type ApiEnvelope } from "./response.js";
-import { scheduleAppointmentStatus, type AppointmentScheduleInput } from "./appointment-handlers.js";
+import {
+  scheduleAppointmentStatus,
+  type AppointmentScheduleInput
+} from "./appointment-handlers.js";
 import {
   createBookingWithAppointment,
   transitionBookingStatus,

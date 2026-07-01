@@ -22,7 +22,9 @@ function assertSafe(command, env = process.env) {
   const nodeEnv = (env.NODE_ENV ?? "development").toLowerCase();
   const deploymentEnv = (env.NELYO_DEPLOYMENT_ENV ?? "local").toLowerCase();
   if (nodeEnv === "production" || deploymentEnv === "production") {
-    throw new Error(`Refusing to run db:${command} when NODE_ENV or NELYO_DEPLOYMENT_ENV is production.`);
+    throw new Error(
+      `Refusing to run db:${command} when NODE_ENV or NELYO_DEPLOYMENT_ENV is production.`
+    );
   }
   if (env.NELYO_ALLOW_PRODUCTION_DB_COMMANDS === "true") {
     throw new Error("NELYO_ALLOW_PRODUCTION_DB_COMMANDS=true is not allowed.");
@@ -116,7 +118,9 @@ async function migrate(client) {
   }
 
   const pendingBefore = migrations.filter((migration) => !appliedMap.has(migration.id)).length;
-  console.log(`Migration complete. Applied in this run: ${appliedCount}. Pending before run: ${pendingBefore}.`);
+  console.log(
+    `Migration complete. Applied in this run: ${appliedCount}. Pending before run: ${pendingBefore}.`
+  );
 }
 
 async function status(client) {
@@ -210,7 +214,9 @@ async function run() {
   const command = process.argv[2] ?? "help";
 
   if (command === "help") {
-    console.log("Usage: node packages/database/scripts/db-cli.mjs <migrate|seed|status|reset|rollback>");
+    console.log(
+      "Usage: node packages/database/scripts/db-cli.mjs <migrate|seed|status|reset|rollback>"
+    );
     return;
   }
 
@@ -234,6 +240,8 @@ async function run() {
 }
 
 run().catch((error) => {
-  console.error(`Database command failed: ${error instanceof Error ? error.message : String(error)}`);
+  console.error(
+    `Database command failed: ${error instanceof Error ? error.message : String(error)}`
+  );
   process.exitCode = 1;
 });
