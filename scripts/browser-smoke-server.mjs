@@ -516,6 +516,150 @@ const server = http.createServer((request, response) => {
     );
     return;
   }
+  if ((request.url ?? "").startsWith("/api/authorization-policy")) {
+    const requestUrl = new URL(
+      request.url ?? "/api/authorization-policy",
+      `http://${host}:${port}`
+    );
+    const sameTenant = requestUrl.searchParams.get("sameTenant") !== "false";
+    const sessionStatus = requestUrl.searchParams.get("sessionStatus") ?? "active";
+    const consentStatus = requestUrl.searchParams.get("consentStatus") ?? "granted";
+    const relationshipStatus = requestUrl.searchParams.get("relationshipStatus") ?? "active";
+    const requiresRelationship = requestUrl.searchParams.get("requiresRelationship") !== "false";
+    const sponsorPaymentOnly = requestUrl.searchParams.get("sponsorPaymentOnly") === "true";
+    const requestedResource =
+      requestUrl.searchParams.get("requestedResource") ?? "clinical-record-summary";
+    const breakGlassRequested = requestUrl.searchParams.get("breakGlassRequested") === "true";
+    const breakGlassReason = requestUrl.searchParams.get("breakGlassReason") ?? "";
+    const breakGlassWindowMinutes = Number(
+      requestUrl.searchParams.get("breakGlassWindowMinutes") ?? "0"
+    );
+    const actorRole = requestUrl.searchParams.get("actorRole") ?? "guardian";
+    const impersonationAttempt = requestUrl.searchParams.get("impersonationAttempt") === "true";
+    const auditEventEditAttempt = requestUrl.searchParams.get("auditEventEditAttempt") === "true";
+
+    let data = {
+      decisionRequestId: "policy-route-1",
+      status: "allowed",
+      reasonCode: "allowed",
+      breakGlassActive: false,
+      nextSteps: ["proceed"],
+      auditIntent: {
+        appendOnly: true,
+        eventType: "authorization-policy-decision",
+        actorId: "actor-route-1",
+        patientId: "patient-route-1",
+        organizationId: "tenant-route-1",
+        requestedResource,
+        requestedAction: "read",
+        purpose: "care-delivery",
+        decisionStatus: "allowed",
+        reasonCode: "allowed",
+        breakGlassUsed: breakGlassRequested,
+        requestId: "policy-route-1",
+        occurredAt: new Date(0).toISOString()
+      },
+      evaluatedAt: new Date(0).toISOString()
+    };
+
+    if (!sameTenant) {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "tenant-mismatch",
+        nextSteps: ["select-correct-organization-context"]
+      };
+    } else if (sessionStatus !== "active") {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "stale-session",
+        nextSteps: ["reauthenticate"]
+      };
+    } else if (auditEventEditAttempt) {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "audit-event-append-only",
+        nextSteps: ["create-amendment-event"]
+      };
+    } else if (impersonationAttempt && actorRole.includes("admin")) {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "administrator-impersonation-denied",
+        nextSteps: ["request-explicit-delegation"]
+      };
+    } else if (sponsorPaymentOnly && requestedResource.startsWith("clinical")) {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "sponsor-payment-no-clinical-access",
+        nextSteps: ["request-clinical-authorization"]
+      };
+    } else if (consentStatus !== "granted") {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "consent-revoked",
+        nextSteps: ["restore-consent"]
+      };
+    } else if (requiresRelationship && relationshipStatus === "revoked") {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "relationship-revoked",
+        nextSteps: ["request-relationship-reinstatement"]
+      };
+    } else if (requiresRelationship && relationshipStatus === "expired") {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "relationship-expired",
+        nextSteps: ["renew-relationship-verification"]
+      };
+    } else if (breakGlassRequested && !breakGlassReason) {
+      data = {
+        ...data,
+        status: "challenge-required",
+        reasonCode: "break-glass-reason-required",
+        nextSteps: ["capture-break-glass-reason"]
+      };
+    } else if (breakGlassRequested && breakGlassWindowMinutes > 15) {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "break-glass-window-exceeded",
+        nextSteps: ["request-short-lived-break-glass"]
+      };
+    }
+
+    data = {
+      ...data,
+      breakGlassActive:
+        breakGlassRequested && data.status === "allowed" && Boolean(breakGlassReason),
+      auditIntent: {
+        ...data.auditIntent,
+        decisionStatus: data.status,
+        reasonCode: data.reasonCode
+      }
+    };
+
+    response.writeHead(200, apiJsonHeaders);
+    response.end(
+      JSON.stringify({
+        data,
+        meta: {
+          requestId: "req-authorization-policy-route",
+          correlationId: "corr-authorization-policy-route",
+          operationTag: "authorization.policy.evaluate",
+          decisionReasonTag: data.reasonCode
+        },
+        errors: []
+      })
+    );
+    return;
+  }
   if (request.url === "/" || request.url === "/healthz") {
     response.writeHead(200, {
       "content-type":

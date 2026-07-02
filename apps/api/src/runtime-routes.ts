@@ -13,11 +13,16 @@ import {
   evaluateTenancyAccessDecision,
   type EvaluateTenancyAccessDecisionInput
 } from "./tenancy-handlers.js";
+import { evaluateAuthorizationPolicyDecision } from "./authorization-policy-handlers.js";
 import type { PaymentDraft } from "./payments.js";
 import type { RefundDraft } from "./refunds.js";
 import type { ProviderDisclosureDecisionDraft } from "./provider-disclosure.js";
 import type { AuthenticationDecisionDraft } from "./authentication.js";
 import type { TenancyAccessDecisionDraft } from "./tenancy.js";
+import type {
+  AuthorizationPolicyDecisionDraft,
+  AuthorizationPolicyDecisionDraftInput
+} from "./authorization-policy.js";
 
 export interface RuntimeRouteMeta {
   requestId: string;
@@ -42,6 +47,10 @@ export interface AuthenticationDecisionRouteRequest extends RuntimeRouteMeta {
 
 export interface TenancyAccessDecisionRouteRequest extends RuntimeRouteMeta {
   input: EvaluateTenancyAccessDecisionInput;
+}
+
+export interface AuthorizationPolicyDecisionRouteRequest extends RuntimeRouteMeta {
+  input: AuthorizationPolicyDecisionDraftInput;
 }
 
 export function handlePaymentTransitionRoute(
@@ -129,6 +138,20 @@ export function handleTenancyAccessDecisionRoute(
     requestId: request.requestId,
     correlationId: request.correlationId,
     operationTag: "tenancy.access.evaluate",
+    decisionReasonTag: decision.reasonCode
+  });
+}
+
+export function handleAuthorizationPolicyDecisionRoute(
+  request: AuthorizationPolicyDecisionRouteRequest
+): ApiEnvelope<AuthorizationPolicyDecisionDraft> {
+  const decision = evaluateAuthorizationPolicyDecision(request.input);
+
+  return createApiEnvelope({
+    data: decision,
+    requestId: request.requestId,
+    correlationId: request.correlationId,
+    operationTag: "authorization.policy.evaluate",
     decisionReasonTag: decision.reasonCode
   });
 }

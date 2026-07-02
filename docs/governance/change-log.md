@@ -775,3 +775,12 @@ For all future phase updates:
 - Updated status to mark Phase 3 preparation as started while preserving `Phase 3: NOT STARTED` until implementation work begins.
 - Published a Phase 3 kickoff checklist covering governance confirmation, scope lock, dependency/architecture boundaries, execution-pack creation, and first-issue opening.
 - Explicitly carried forward web-first delivery priority with mobile-forward compatibility requirements in the kickoff sequence.
+
+## 2026-07-02 - Phase 4 kickoff scope and first execution issue initialization
+
+- Added `docs/exec-plans/P04-phase-4-kickoff-scope.md` as the Phase 4 kickoff scope artifact with explicit in-scope, out-of-scope, deferred items, and locked-rule carry-forward.
+- Added `docs/exec-plans/P04-ISS-001-authorization-consent-guardianship-audit-foundation.md` as the first Phase 4 execution issue using evidence-first acceptance criteria, rollback strategy, source set, and risk framing.
+- Added `docs/governance/phase-4-requirements-traceability.md` with initial requirement and exit-gate mapping for `P04-ISS-001`.
+- Updated `docs/STATUS.md` to mark Phase 4 kickoff as started and set `P04-ISS-001` execution as the next action.
+- Preserved web-first delivery priority and mobile-forward compatibility constraints in the kickoff and issue scope.
+- Preserved manual Git/GitHub governance boundaries and synthetic-only evidence expectations.

@@ -64,6 +64,16 @@ export {
   evaluateMembershipLifecycleDecision
 } from "./tenancy-handlers.js";
 export type { EvaluateTenancyAccessDecisionInput } from "./tenancy-handlers.js";
+export { createAuthorizationPolicyDecisionDraftInput } from "./authorization-policy.js";
+export type {
+  ConsentStatus,
+  RelationshipStatus,
+  SessionStatus,
+  AuthorizationPolicyDecisionDraftInput,
+  AuditIntentDraft,
+  AuthorizationPolicyDecisionDraft
+} from "./authorization-policy.js";
+export { evaluateAuthorizationPolicyDecision } from "./authorization-policy-handlers.js";
 export { createPaymentDraft } from "./payments.js";
 export type { PaymentDraft, PaymentDraftInput } from "./payments.js";
 export { createProviderDisclosureDecisionDraft } from "./provider-disclosure.js";
@@ -98,6 +108,7 @@ export type {
 export {
   handleAuthenticationDecisionRoute,
   handleTenancyAccessDecisionRoute,
+  handleAuthorizationPolicyDecisionRoute,
   handlePaymentTransitionRoute,
   handleRefundTransitionRoute,
   handleProviderDisclosureEligibilityRoute
@@ -105,6 +116,7 @@ export {
 export type {
   AuthenticationDecisionRouteRequest,
   TenancyAccessDecisionRouteRequest,
+  AuthorizationPolicyDecisionRouteRequest,
   RuntimeRouteMeta,
   PaymentTransitionRouteRequest,
   RefundTransitionRouteRequest,

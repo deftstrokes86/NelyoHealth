@@ -3,6 +3,7 @@ import { createPaymentDraft } from "./payments.js";
 import { createRefundDraft } from "./refunds.js";
 import {
   handleAuthenticationDecisionRoute,
+  handleAuthorizationPolicyDecisionRoute,
   handlePaymentTransitionRoute,
   handleProviderDisclosureEligibilityRoute,
   handleRefundTransitionRoute,
@@ -232,6 +233,46 @@ describe("runtime route handlers", () => {
     expect(response.meta).toMatchObject({
       operationTag: "tenancy.access.evaluate",
       decisionReasonTag: "tenant-switch-required"
+    });
+  });
+
+  it("returns authorization policy envelope for revoked consent", () => {
+    const response = handleAuthorizationPolicyDecisionRoute({
+      requestId: "req-7",
+      correlationId: "corr-7",
+      input: {
+        decisionRequestId: "policy-route-1",
+        actorId: "actor-route-1",
+        actorRole: "guardian",
+        organizationId: "tenant-route-1",
+        patientId: "patient-route-1",
+        requestedResource: "clinical-record-summary",
+        requestedAction: "read",
+        purpose: "care-delivery",
+        consentStatus: "revoked",
+        relationshipStatus: "active",
+        sessionStatus: "active",
+        sameTenant: true,
+        sponsorPaymentOnly: false,
+        requiresRelationship: true,
+        breakGlassRequested: false,
+        impersonationAttempt: false,
+        auditEventEditAttempt: false,
+        evaluatedAt: "2026-07-10T12:10:00.000Z"
+      }
+    });
+
+    expect(response.data).toMatchObject({
+      status: "denied",
+      reasonCode: "consent-revoked",
+      auditIntent: {
+        appendOnly: true
+      }
+    });
+    expect(response.errors).toEqual([]);
+    expect(response.meta).toMatchObject({
+      operationTag: "authorization.policy.evaluate",
+      decisionReasonTag: "consent-revoked"
     });
   });
 });
