@@ -175,6 +175,347 @@ const server = http.createServer((request, response) => {
     );
     return;
   }
+  if ((request.url ?? "").startsWith("/api/auth-decision")) {
+    const requestUrl = new URL(request.url ?? "/api/auth-decision", `http://${host}:${port}`);
+    const intent = requestUrl.searchParams.get("intent") ?? "login";
+    const mode = requestUrl.searchParams.get("mode") ?? "password";
+    const tier = requestUrl.searchParams.get("tier") ?? "patient";
+    const attempts = Number(requestUrl.searchParams.get("attempts") ?? "0");
+    const maxAttempts = Number(requestUrl.searchParams.get("maxAttempts") ?? "5");
+    const passwordVerified = requestUrl.searchParams.get("passwordVerified") !== "false";
+    const otpVerified = requestUrl.searchParams.get("otpVerified") === "true";
+    const mfaVerified = requestUrl.searchParams.get("mfaVerified") === "true";
+    const trustedDevice = requestUrl.searchParams.get("trustedDevice") === "true";
+    const accountRecoveryApproved =
+      requestUrl.searchParams.get("accountRecoveryApproved") === "true";
+    const phoneChangeOtpVerified = requestUrl.searchParams.get("phoneChangeOtpVerified") === "true";
+    const suspicious = requestUrl.searchParams.get("suspicious") === "true";
+    const requestedPhone = requestUrl.searchParams.get("requestedPhone") ?? null;
+
+    let data = {
+      authRequestId: "auth-route-1",
+      status: "authenticated",
+      reasonCode: "authenticated",
+      requiresMfa: false,
+      sessionAction: "create",
+      trustedDeviceAction: "none",
+      updatedPhoneE164: null,
+      evaluatedAt: new Date(0).toISOString(),
+      nextSteps: ["session-established"]
+    };
+
+    if (attempts >= maxAttempts) {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "rate-limit-exceeded",
+        sessionAction: "none",
+        nextSteps: ["wait-and-retry", "optional-account-recovery"]
+      };
+    } else if (suspicious) {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "suspicious-login-review-required",
+        requiresMfa: true,
+        sessionAction: "revoke",
+        nextSteps: ["security-review", "account-recovery"]
+      };
+    } else if (intent === "recover-account" && !accountRecoveryApproved) {
+      data = {
+        ...data,
+        status: "challenge-required",
+        reasonCode: "recovery-verification-required",
+        sessionAction: "none",
+        nextSteps: ["verify-recovery-proof"]
+      };
+    } else if (intent === "change-phone" && !requestedPhone) {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "phone-change-target-missing",
+        sessionAction: "none",
+        nextSteps: ["supply-target-phone"]
+      };
+    } else if (intent === "change-phone" && !phoneChangeOtpVerified) {
+      data = {
+        ...data,
+        status: "challenge-required",
+        reasonCode: "phone-change-otp-required",
+        sessionAction: "none",
+        nextSteps: ["verify-phone-change-otp"]
+      };
+    } else if (mode === "passwordless" && !otpVerified) {
+      data = {
+        ...data,
+        status: "challenge-required",
+        reasonCode: "otp-verification-required",
+        sessionAction: "none",
+        nextSteps: ["submit-otp"]
+      };
+    } else if (mode === "password" && !passwordVerified) {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "credentials-invalid",
+        sessionAction: "none",
+        nextSteps: ["retry-login", "account-recovery"]
+      };
+    } else if (
+      (tier === "provider" || tier === "organization-admin" || tier === "platform-admin") &&
+      !trustedDevice &&
+      !mfaVerified
+    ) {
+      data = {
+        ...data,
+        status: "challenge-required",
+        reasonCode: "mfa-required",
+        requiresMfa: true,
+        sessionAction: "none",
+        nextSteps: ["complete-mfa"]
+      };
+    } else if (intent === "change-phone") {
+      data = {
+        ...data,
+        updatedPhoneE164: requestedPhone
+      };
+    }
+
+    response.writeHead(200, apiJsonHeaders);
+    response.end(
+      JSON.stringify({
+        data,
+        meta: {
+          requestId: "req-auth-route",
+          correlationId: "corr-auth-route",
+          operationTag: "authentication.decision.evaluate",
+          decisionReasonTag: data.reasonCode
+        },
+        errors: []
+      })
+    );
+    return;
+  }
+  if ((request.url ?? "").startsWith("/api/tenancy-access")) {
+    const requestUrl = new URL(request.url ?? "/api/tenancy-access", `http://${host}:${port}`);
+    const requestedTenantId = requestUrl.searchParams.get("requestedTenantId");
+    const activeTenantId = requestUrl.searchParams.get("activeTenantId");
+    const allowSwitch = requestUrl.searchParams.get("allowSwitch") === "true";
+    const membershipStatus = requestUrl.searchParams.get("membershipStatus") ?? "active";
+    const rolePresent = requestUrl.searchParams.get("rolePresent") !== "false";
+    const roleStatus = requestUrl.searchParams.get("roleStatus") ?? "active";
+    const facilityAllowed = requestUrl.searchParams.get("facilityAllowed") !== "false";
+
+    let data = {
+      accessRequestId: "access-route-1",
+      status: "allowed",
+      reasonCode: "allowed",
+      sessionTenantAction:
+        activeTenantId && requestedTenantId && activeTenantId !== requestedTenantId
+          ? "switch-tenant"
+          : "none",
+      resolvedTenantId: requestedTenantId,
+      nextSteps: ["proceed"],
+      evaluatedAt: new Date(0).toISOString()
+    };
+
+    if (!requestedTenantId) {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "tenant-context-missing",
+        sessionTenantAction: "none",
+        resolvedTenantId: null,
+        nextSteps: ["select-tenant-context"]
+      };
+    } else if (membershipStatus !== "active") {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "membership-not-active",
+        sessionTenantAction: membershipStatus === "offboarded" ? "revoke-session" : "none",
+        resolvedTenantId: requestedTenantId,
+        nextSteps:
+          membershipStatus === "invited"
+            ? ["accept-invitation"]
+            : ["contact-organization-administrator"]
+      };
+    } else if (!rolePresent) {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "role-assignment-missing",
+        sessionTenantAction: "none",
+        resolvedTenantId: requestedTenantId,
+        nextSteps: ["request-role-assignment"]
+      };
+    } else if (roleStatus !== "active") {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "role-assignment-not-active",
+        sessionTenantAction: "none",
+        resolvedTenantId: requestedTenantId,
+        nextSteps: ["contact-organization-administrator"]
+      };
+    } else if (!facilityAllowed) {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "facility-out-of-scope",
+        sessionTenantAction: "none",
+        resolvedTenantId: requestedTenantId,
+        nextSteps: ["switch-facility-context", "request-facility-scope"]
+      };
+    } else if (activeTenantId !== requestedTenantId && !allowSwitch) {
+      data = {
+        ...data,
+        status: "challenge-required",
+        reasonCode: "tenant-switch-required",
+        sessionTenantAction: "none",
+        resolvedTenantId: requestedTenantId,
+        nextSteps: ["confirm-tenant-switch"]
+      };
+    }
+
+    response.writeHead(200, apiJsonHeaders);
+    response.end(
+      JSON.stringify({
+        data,
+        meta: {
+          requestId: "req-tenancy-route",
+          correlationId: "corr-tenancy-route",
+          operationTag: "tenancy.access.evaluate",
+          decisionReasonTag: data.reasonCode
+        },
+        errors: []
+      })
+    );
+    return;
+  }
+  if ((request.url ?? "").startsWith("/api/membership-lifecycle")) {
+    const requestUrl = new URL(
+      request.url ?? "/api/membership-lifecycle",
+      `http://${host}:${port}`
+    );
+    const action = requestUrl.searchParams.get("action") ?? "accept-invitation";
+    const currentStatus = requestUrl.searchParams.get("currentStatus") ?? "invited";
+
+    let data = {
+      membershipId: "membership-route-1",
+      tenantId: "tenant-route-1",
+      action,
+      status: "applied",
+      reasonCode: "applied",
+      updatedStatus: "active",
+      sessionAction: "none",
+      evaluatedAt: new Date(0).toISOString()
+    };
+
+    if (action === "accept-invitation") {
+      if (currentStatus !== "invited") {
+        data = {
+          ...data,
+          status: "denied",
+          reasonCode: "invitation-not-pending",
+          updatedStatus: currentStatus
+        };
+      }
+    } else if (action === "suspend-membership") {
+      if (currentStatus !== "active") {
+        data = {
+          ...data,
+          status: "denied",
+          reasonCode: "membership-not-active",
+          updatedStatus: currentStatus,
+          sessionAction: "none"
+        };
+      } else {
+        data = {
+          ...data,
+          updatedStatus: "suspended",
+          sessionAction: "revoke-session"
+        };
+      }
+    } else if (action === "offboard-membership") {
+      if (currentStatus === "offboarded") {
+        data = {
+          ...data,
+          status: "denied",
+          reasonCode: "membership-already-offboarded",
+          updatedStatus: "offboarded"
+        };
+      } else {
+        data = {
+          ...data,
+          updatedStatus: "offboarded",
+          sessionAction: "revoke-session"
+        };
+      }
+    }
+
+    response.writeHead(200, apiJsonHeaders);
+    response.end(
+      JSON.stringify({
+        data,
+        meta: {
+          requestId: "req-membership-route",
+          correlationId: "corr-membership-route",
+          operationTag: "membership.lifecycle.evaluate",
+          decisionReasonTag: data.reasonCode
+        },
+        errors: []
+      })
+    );
+    return;
+  }
+  if ((request.url ?? "").startsWith("/api/tenant-protected-resource")) {
+    const requestUrl = new URL(
+      request.url ?? "/api/tenant-protected-resource",
+      `http://${host}:${port}`
+    );
+    const sameTenant = requestUrl.searchParams.get("sameTenant") !== "false";
+
+    if (!sameTenant) {
+      response.writeHead(403, apiJsonHeaders);
+      response.end(
+        JSON.stringify({
+          data: null,
+          meta: {
+            requestId: "req-tenant-protected-route",
+            correlationId: "corr-tenant-protected-route",
+            operationTag: "tenant.resource.access",
+            decisionReasonTag: "tenant-mismatch"
+          },
+          errors: [
+            {
+              code: "TENANT_ACCESS_DENIED",
+              message: "Access denied."
+            }
+          ]
+        })
+      );
+      return;
+    }
+
+    response.writeHead(200, apiJsonHeaders);
+    response.end(
+      JSON.stringify({
+        data: {
+          resourceLabel: "tenant-safe-resource",
+          tenantScoped: true
+        },
+        meta: {
+          requestId: "req-tenant-protected-route",
+          correlationId: "corr-tenant-protected-route",
+          operationTag: "tenant.resource.access",
+          decisionReasonTag: "allowed"
+        },
+        errors: []
+      })
+    );
+    return;
+  }
   if (request.url === "/" || request.url === "/healthz") {
     response.writeHead(200, {
       "content-type":

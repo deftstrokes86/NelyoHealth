@@ -2,8 +2,8 @@ export const platformAdaptersPackageBoundary = {
   id: "platform-adapters",
   packageName: "@nelyohealth/platform-adapters",
   kind: "shared-package",
-  status: "queue-storage-communications-feature-flags-foundation-implemented",
-  owningIssue: "P02-ISS-007/P02-ISS-009/P02-ISS-010/P02-ISS-011",
+  status: "phase-2-foundation-plus-phase-3-sso-adapter-scaffold",
+  owningIssue: "P02-ISS-007/P02-ISS-009/P02-ISS-010/P02-ISS-011/P03-ISS-004",
   publicApi: "Provider-neutral platform ports and adapter boundary",
   runtimeImplementation: true,
   featureImplementation: false
@@ -63,3 +63,23 @@ export {
   LocalFeatureFlagAdapter,
   type LocalFeatureFlagAdapterConfig
 } from "./feature-flags/local-feature-flag.adapter.js";
+
+export {
+  assertSafeEnterpriseTenantId,
+  assertSafeExternalSubject,
+  type EnterpriseIdentityProtocol,
+  type EnterpriseIdentityAuthenticationStartRequest,
+  type EnterpriseIdentityAuthenticationStartResult,
+  type EnterpriseIdentityAuthenticationCompleteRequest,
+  type EnterpriseIdentityAuthenticationCompleteResult,
+  type JitProvisioningRequest,
+  type JitProvisioningResult,
+  type ScimUserUpsertRequest,
+  type ScimUserUpsertResult,
+  type WorkforceRosterRecord,
+  type WorkforceRosterImportRequest,
+  type WorkforceRosterImportResult,
+  type EnterpriseIdentityPort
+} from "./sso/enterprise-identity-port.js";
+
+export { InMemoryEnterpriseIdentityAdapter } from "./sso/in-memory-enterprise-identity.adapter.js";
