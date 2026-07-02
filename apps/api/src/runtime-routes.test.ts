@@ -2,10 +2,14 @@ import { describe, expect, it } from "vitest";
 import { createPaymentDraft } from "./payments.js";
 import { createRefundDraft } from "./refunds.js";
 import {
+  handleAuthenticationDecisionRoute,
   handlePaymentTransitionRoute,
   handleProviderDisclosureEligibilityRoute,
-  handleRefundTransitionRoute
+  handleRefundTransitionRoute,
+  handleTenancyAccessDecisionRoute
 } from "./runtime-routes.js";
+import { createAuthenticationDraft } from "./authentication.js";
+import { createTenancyAccessDraft } from "./tenancy.js";
 
 describe("runtime route handlers", () => {
   it("returns an envelope for valid payment transitions", () => {
@@ -142,5 +146,92 @@ describe("runtime route handlers", () => {
       reasonCode: "payment-not-settled"
     });
     expect(response.errors).toEqual([]);
+  });
+
+  it("returns authentication decision envelope for provider login challenge", () => {
+    const response = handleAuthenticationDecisionRoute({
+      requestId: "req-5",
+      correlationId: "corr-5",
+      input: {
+        authentication: createAuthenticationDraft({
+          authRequestId: "auth-route-1",
+          accountId: "account-route-1",
+          personId: "person-route-1",
+          tenantId: "tenant-route-1",
+          intent: "login",
+          mode: "password",
+          tier: "provider",
+          loginIdentifier: "provider@example.com",
+          requestedAt: "2026-07-10T12:00:00.000Z"
+        }),
+        loginAttemptCountInWindow: 0,
+        maxLoginAttempts: 5,
+        passwordVerified: true,
+        otpVerified: true,
+        mfaVerified: false,
+        trustedDevicePresent: false,
+        markDeviceTrusted: true,
+        accountRecoveryApproved: false,
+        phoneChangeOtpVerified: false,
+        riskSignals: {
+          unfamiliarDevice: false,
+          impossibleTravel: false,
+          ipReputation: "low"
+        },
+        evaluatedAt: "2026-07-10T12:01:00.000Z"
+      }
+    });
+
+    expect(response.data).toMatchObject({
+      status: "challenge-required",
+      reasonCode: "mfa-required"
+    });
+    expect(response.errors).toEqual([]);
+    expect(response.meta).toMatchObject({
+      operationTag: "authentication.decision.evaluate",
+      decisionReasonTag: "mfa-required"
+    });
+  });
+
+  it("returns tenancy access decision envelope for tenant switch challenge", () => {
+    const response = handleTenancyAccessDecisionRoute({
+      requestId: "req-6",
+      correlationId: "corr-6",
+      input: {
+        access: createTenancyAccessDraft({
+          accessRequestId: "access-route-1",
+          accountId: "account-route-1",
+          activeTenantId: "tenant-1",
+          requestedTenantId: "tenant-2",
+          requiredRoleCode: "doctor",
+          allowTenantSwitch: false,
+          memberships: [
+            {
+              membershipId: "membership-route-1",
+              tenantId: "tenant-2",
+              status: "active",
+              roleScopes: [
+                {
+                  roleCode: "doctor",
+                  status: "active",
+                  facilityIds: ["facility-2"]
+                }
+              ]
+            }
+          ],
+          evaluatedAt: "2026-07-10T12:05:00.000Z"
+        })
+      }
+    });
+
+    expect(response.data).toMatchObject({
+      status: "challenge-required",
+      reasonCode: "tenant-switch-required"
+    });
+    expect(response.errors).toEqual([]);
+    expect(response.meta).toMatchObject({
+      operationTag: "tenancy.access.evaluate",
+      decisionReasonTag: "tenant-switch-required"
+    });
   });
 });

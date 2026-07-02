@@ -1,10 +1,11 @@
 # @nelyohealth/domain
 
-Boundary-only package for future domain-neutral primitives and errors.
+Domain contracts package for shared domain primitives and early model scaffolds.
 
 ## Public API
 
-- Exports `domainPackageBoundary` for P02-ISS-002 topology validation.
-- Contains no domain entities, schemas, persistence, framework imports, vendor SDK types, clinical logic, payment logic, identity logic, or provider matching.
+- Exports `domainPackageBoundary` for topology and execution-phase tracking.
+- Exports Phase 3 step 1 identity and tenancy model contracts in `identity-tenancy-model`.
+- Contains no runtime persistence, framework imports, vendor SDK types, or feature workflows.
 
-Domain-neutral primitives belong to later authorized implementation issues.
+Authentication flows, tenancy enforcement, and workflow behavior remain implementation work in later Phase 3 steps.

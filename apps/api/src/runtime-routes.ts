@@ -5,9 +5,19 @@ import {
   evaluateProviderDisclosureEligibility,
   type ProviderDisclosureEligibilityInput
 } from "./provider-disclosure-handlers.js";
+import {
+  evaluateAuthenticationDecision,
+  type EvaluateAuthenticationDecisionInput
+} from "./authentication-handlers.js";
+import {
+  evaluateTenancyAccessDecision,
+  type EvaluateTenancyAccessDecisionInput
+} from "./tenancy-handlers.js";
 import type { PaymentDraft } from "./payments.js";
 import type { RefundDraft } from "./refunds.js";
 import type { ProviderDisclosureDecisionDraft } from "./provider-disclosure.js";
+import type { AuthenticationDecisionDraft } from "./authentication.js";
+import type { TenancyAccessDecisionDraft } from "./tenancy.js";
 
 export interface RuntimeRouteMeta {
   requestId: string;
@@ -24,6 +34,14 @@ export interface RefundTransitionRouteRequest extends RuntimeRouteMeta {
 
 export interface ProviderDisclosureEligibilityRouteRequest extends RuntimeRouteMeta {
   input: ProviderDisclosureEligibilityInput;
+}
+
+export interface AuthenticationDecisionRouteRequest extends RuntimeRouteMeta {
+  input: EvaluateAuthenticationDecisionInput;
+}
+
+export interface TenancyAccessDecisionRouteRequest extends RuntimeRouteMeta {
+  input: EvaluateTenancyAccessDecisionInput;
 }
 
 export function handlePaymentTransitionRoute(
@@ -83,6 +101,34 @@ export function handleProviderDisclosureEligibilityRoute(
     requestId: request.requestId,
     correlationId: request.correlationId,
     operationTag: "provider-disclosure.eligibility.evaluate",
+    decisionReasonTag: decision.reasonCode
+  });
+}
+
+export function handleAuthenticationDecisionRoute(
+  request: AuthenticationDecisionRouteRequest
+): ApiEnvelope<AuthenticationDecisionDraft> {
+  const decision = evaluateAuthenticationDecision(request.input);
+
+  return createApiEnvelope({
+    data: decision,
+    requestId: request.requestId,
+    correlationId: request.correlationId,
+    operationTag: "authentication.decision.evaluate",
+    decisionReasonTag: decision.reasonCode
+  });
+}
+
+export function handleTenancyAccessDecisionRoute(
+  request: TenancyAccessDecisionRouteRequest
+): ApiEnvelope<TenancyAccessDecisionDraft> {
+  const decision = evaluateTenancyAccessDecision(request.input);
+
+  return createApiEnvelope({
+    data: decision,
+    requestId: request.requestId,
+    correlationId: request.correlationId,
+    operationTag: "tenancy.access.evaluate",
     decisionReasonTag: decision.reasonCode
   });
 }

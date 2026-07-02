@@ -2,11 +2,13 @@ export const domainPackageBoundary = {
   id: "domain",
   packageName: "@nelyohealth/domain",
   kind: "shared-package",
-  status: "boundary-only",
-  owningIssue: "P02-ISS-005",
-  publicApi: "Domain-neutral primitives and errors boundary",
+  status: "phase-3-identity-tenancy-model-scaffold",
+  owningIssue: "P03-ISS-001",
+  publicApi: "Domain model contracts for identity and tenancy foundations",
   runtimeImplementation: false,
   featureImplementation: false
 } as const;
 
 export type DomainPackageBoundary = typeof domainPackageBoundary;
+
+export * from "./identity-tenancy-model.js";

@@ -34,6 +34,36 @@ export type {
   AuthorizationPermissionDraft,
   AuthorizationPermissionDraftInput
 } from "./authorization.js";
+export { createAuthenticationDraft } from "./authentication.js";
+export type {
+  AuthenticationIntent,
+  AuthenticationMode,
+  AuthenticationTier,
+  AuthenticationDraft,
+  AuthenticationDraftInput,
+  AuthenticationDecisionDraft
+} from "./authentication.js";
+export { evaluateAuthenticationDecision } from "./authentication-handlers.js";
+export type {
+  AuthenticationRiskSignals,
+  EvaluateAuthenticationDecisionInput
+} from "./authentication-handlers.js";
+export { createTenancyAccessDraft } from "./tenancy.js";
+export type {
+  MembershipStatus,
+  RoleScope,
+  TenantMembershipDraft,
+  TenancyAccessDraft,
+  TenancyAccessDraftInput,
+  TenancyAccessDecisionDraft,
+  MembershipLifecycleDecisionDraft,
+  MembershipLifecycleDecisionInput
+} from "./tenancy.js";
+export {
+  evaluateTenancyAccessDecision,
+  evaluateMembershipLifecycleDecision
+} from "./tenancy-handlers.js";
+export type { EvaluateTenancyAccessDecisionInput } from "./tenancy-handlers.js";
 export { createPaymentDraft } from "./payments.js";
 export type { PaymentDraft, PaymentDraftInput } from "./payments.js";
 export { createProviderDisclosureDecisionDraft } from "./provider-disclosure.js";
@@ -66,11 +96,15 @@ export type {
   BookingTransitionRouteRequest
 } from "./appointment-booking.js";
 export {
+  handleAuthenticationDecisionRoute,
+  handleTenancyAccessDecisionRoute,
   handlePaymentTransitionRoute,
   handleRefundTransitionRoute,
   handleProviderDisclosureEligibilityRoute
 } from "./runtime-routes.js";
 export type {
+  AuthenticationDecisionRouteRequest,
+  TenancyAccessDecisionRouteRequest,
   RuntimeRouteMeta,
   PaymentTransitionRouteRequest,
   RefundTransitionRouteRequest,
