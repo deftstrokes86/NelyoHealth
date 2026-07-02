@@ -99,8 +99,26 @@ export { createInitialRefundState, createRefundStateWithSelection } from "./refu
 export type { RefundState } from "./refund-state.js";
 export { createRefundViewModel } from "./refund.js";
 export type { RefundDraftDtoLike, RefundViewModel } from "./refund.js";
-export { createPatientShellApiClient, patientShellDescriptor } from "./shell.js";
-export type { PatientShellDescriptor } from "./shell.js";
+export {
+  createPatientShellApiClient,
+  patientShellDescriptor,
+  patientShellNavigation,
+  patientShellStateScaffolds
+} from "./shell.js";
+export type { PatientShellDescriptor, PatientShellStateScaffold } from "./shell.js";
+export {
+  beginWorkflowAttempt,
+  createInitialWorkflowResilienceState,
+  isWorkflowRetryDue,
+  markWorkflowConnectionRestored,
+  registerWorkflowSuccess,
+  registerWorkflowTransientFailure
+} from "./workflow-resilience.js";
+export type {
+  WorkflowConnectionMode,
+  WorkflowExecutionStatus,
+  WorkflowResilienceState
+} from "./workflow-resilience.js";
 
 export const patientWebApplicationBoundary = {
   id: "patient-web",

@@ -1,5 +1,10 @@
-export { createAdminShellApiClient, adminShellDescriptor } from "./shell.js";
-export type { AdminShellDescriptor } from "./shell.js";
+export {
+  createAdminShellApiClient,
+  adminShellDescriptor,
+  adminShellNavigation,
+  adminShellStateScaffolds
+} from "./shell.js";
+export type { AdminShellDescriptor, AdminShellStateScaffold } from "./shell.js";
 
 export const adminWebApplicationBoundary = {
   id: "admin-web",

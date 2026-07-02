@@ -154,6 +154,61 @@
   gap: var(--nh-spacing-space-6);
 }
 
+.nh-shell {
+  gap: 1rem;
+  width: min(100% - 2rem, 72rem);
+  margin: 0 auto;
+  padding: 1.5rem 0 3rem;
+  display: grid;
+}
+
+.nh-shell__header {
+  gap: .75rem;
+  display: grid;
+}
+
+.nh-shell__nav {
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+}
+
+.nh-shell__nav-item {
+  border: 1px solid var(--nh-color-grid-200);
+  border-radius: var(--nh-radius-pill);
+  background: var(--nh-color-paper-000);
+  font-size: var(--nh-typography-size-sm);
+  padding: .35rem .75rem;
+}
+
+.nh-shell__state-grid {
+  grid-template-columns: repeat(auto-fit, minmax(14.5rem, 1fr));
+  gap: .75rem;
+  display: grid;
+}
+
+.nh-shell__state-card {
+  gap: .5rem;
+  display: grid;
+}
+
+.nh-shell__state-card h3 {
+  font-size: var(--nh-typography-size-md);
+  margin: 0;
+}
+
+.nh-shell__state-card p {
+  margin: 0;
+}
+
+.nh-shell__state-meta {
+  color: var(--nh-color-ink-500);
+  font-size: var(--nh-typography-size-sm);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, :before, :after {
     scroll-behavior: auto !important;

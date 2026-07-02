@@ -1,5 +1,10 @@
-export { createOrganizationShellApiClient, organizationShellDescriptor } from "./shell.js";
-export type { OrganizationShellDescriptor } from "./shell.js";
+export {
+  createOrganizationShellApiClient,
+  organizationShellDescriptor,
+  organizationShellNavigation,
+  organizationShellStateScaffolds
+} from "./shell.js";
+export type { OrganizationShellDescriptor, OrganizationShellStateScaffold } from "./shell.js";
 
 export const organizationWebApplicationBoundary = {
   id: "organization-web",

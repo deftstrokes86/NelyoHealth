@@ -346,14 +346,64 @@ __turbopack_context__.s([
     "createProviderShellApiClient",
     ()=>createProviderShellApiClient,
     "providerShellDescriptor",
-    ()=>providerShellDescriptor
+    ()=>providerShellDescriptor,
+    "providerShellNavigation",
+    ()=>providerShellNavigation,
+    "providerShellStateScaffolds",
+    ()=>providerShellStateScaffolds
 ]);
 const providerShellDescriptor = {
     appId: "provider-web",
     issue: "P02-ISS-012",
+    phase5Issue: "P05-ISS-001",
     syntheticOnly: true,
     protectedProviderDetailsExposed: false
 };
+const providerShellNavigation = [
+    "Queue",
+    "Encounters",
+    "Prescriptions",
+    "Diagnostics",
+    "Configuration"
+];
+const providerShellStateScaffolds = [
+    {
+        key: "loading",
+        title: "Loading",
+        message: "Show deterministic queue-loading placeholders while context is resolving.",
+        stateTone: "info"
+    },
+    {
+        key: "empty",
+        title: "Empty",
+        message: "Show explicit empty-care-queue guidance with no hidden assumptions.",
+        stateTone: "success"
+    },
+    {
+        key: "error",
+        title: "Error",
+        message: "Show retry-safe error state without exposing protected provider details.",
+        stateTone: "danger"
+    },
+    {
+        key: "unauthorized",
+        title: "Unauthorized",
+        message: "Fail closed when practitioner scope, tenant, or consent requirements are not met.",
+        stateTone: "warning"
+    },
+    {
+        key: "offline",
+        title: "Offline",
+        message: "Show explicit offline treatment-state messaging and recoverable actions.",
+        stateTone: "warning"
+    },
+    {
+        key: "reduced-motion",
+        title: "Reduced motion",
+        message: "Disable nonessential motion while preserving focus and clinical readability.",
+        stateTone: "info"
+    }
+];
 function createProviderShellApiClient(baseUrl, factory) {
     return factory(baseUrl);
 }
@@ -376,50 +426,154 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$provider$2d$web$2f$s
 ;
 function ProviderWebHomePage() {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2d$foundation$2f$lib$2f$primitives$2f$Surface$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Surface"], {
-            as: "section",
-            "aria-labelledby": "provider-shell-title",
-            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2d$foundation$2f$lib$2f$primitives$2f$Stack$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Stack"], {
-                gap: "md",
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                        id: "provider-shell-title",
-                        children: "Provider Web Shell"
-                    }, void 0, false, {
-                        fileName: "[project]/apps/provider-web/app/page.tsx",
-                        lineNumber: 9,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                        children: "This shell is synthetic-only and does not expose protected pharmacy or laboratory provider details before payment authorization."
-                    }, void 0, false, {
-                        fileName: "[project]/apps/provider-web/app/page.tsx",
-                        lineNumber: 10,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2d$foundation$2f$lib$2f$primitives$2f$Alert$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Alert"], {
-                        tone: "info",
-                        title: "Phase 2 Foundation",
-                        children: `Issue: ${__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$provider$2d$web$2f$src$2f$shell$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["providerShellDescriptor"].issue} | App: ${__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$provider$2d$web$2f$src$2f$shell$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["providerShellDescriptor"].appId}`
-                    }, void 0, false, {
-                        fileName: "[project]/apps/provider-web/app/page.tsx",
-                        lineNumber: 14,
-                        columnNumber: 11
-                    }, this)
-                ]
-            }, void 0, true, {
+        className: "nh-shell",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2d$foundation$2f$lib$2f$primitives$2f$Surface$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Surface"], {
+                as: "section",
+                "aria-labelledby": "provider-shell-title",
+                className: "nh-shell__header",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2d$foundation$2f$lib$2f$primitives$2f$Stack$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Stack"], {
+                    gap: "md",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                            id: "provider-shell-title",
+                            children: "Provider Web Shell"
+                        }, void 0, false, {
+                            fileName: "[project]/apps/provider-web/app/page.tsx",
+                            lineNumber: 13,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                            children: "This shell is synthetic-only and does not expose protected pharmacy or laboratory provider details before payment authorization."
+                        }, void 0, false, {
+                            fileName: "[project]/apps/provider-web/app/page.tsx",
+                            lineNumber: 14,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
+                            "aria-label": "Provider shell navigation scaffold",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
+                                className: "nh-shell__nav",
+                                children: __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$provider$2d$web$2f$src$2f$shell$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["providerShellNavigation"].map((item)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
+                                        className: "nh-shell__nav-item",
+                                        children: item
+                                    }, item, false, {
+                                        fileName: "[project]/apps/provider-web/app/page.tsx",
+                                        lineNumber: 21,
+                                        columnNumber: 17
+                                    }, this))
+                            }, void 0, false, {
+                                fileName: "[project]/apps/provider-web/app/page.tsx",
+                                lineNumber: 19,
+                                columnNumber: 13
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/apps/provider-web/app/page.tsx",
+                            lineNumber: 18,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2d$foundation$2f$lib$2f$primitives$2f$Alert$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Alert"], {
+                            tone: "info",
+                            title: "Phase 2 Foundation",
+                            children: `Issue: ${__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$provider$2d$web$2f$src$2f$shell$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["providerShellDescriptor"].issue} | App: ${__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$provider$2d$web$2f$src$2f$shell$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["providerShellDescriptor"].appId}`
+                        }, void 0, false, {
+                            fileName: "[project]/apps/provider-web/app/page.tsx",
+                            lineNumber: 27,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2d$foundation$2f$lib$2f$primitives$2f$Alert$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Alert"], {
+                            tone: "success",
+                            title: "Phase 5 Foundation",
+                            children: `Issue: ${__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$provider$2d$web$2f$src$2f$shell$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["providerShellDescriptor"].phase5Issue} | State scaffolds: ${__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$provider$2d$web$2f$src$2f$shell$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["providerShellStateScaffolds"].length}`
+                        }, void 0, false, {
+                            fileName: "[project]/apps/provider-web/app/page.tsx",
+                            lineNumber: 30,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/apps/provider-web/app/page.tsx",
+                    lineNumber: 12,
+                    columnNumber: 9
+                }, this)
+            }, void 0, false, {
                 fileName: "[project]/apps/provider-web/app/page.tsx",
-                lineNumber: 8,
-                columnNumber: 9
+                lineNumber: 11,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
+                "aria-labelledby": "provider-shell-state-title",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2d$foundation$2f$lib$2f$primitives$2f$Stack$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Stack"], {
+                    gap: "sm",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                            id: "provider-shell-state-title",
+                            children: "Provider shell state scaffolds"
+                        }, void 0, false, {
+                            fileName: "[project]/apps/provider-web/app/page.tsx",
+                            lineNumber: 38,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "nh-shell__state-grid",
+                            children: __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$provider$2d$web$2f$src$2f$shell$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["providerShellStateScaffolds"].map((state)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2d$foundation$2f$lib$2f$primitives$2f$Surface$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Surface"], {
+                                    as: "article",
+                                    tone: "raised",
+                                    className: "nh-shell__state-card",
+                                    "aria-label": `Provider shell ${state.title} state`,
+                                    "data-shell-state": state.key,
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                            children: state.title
+                                        }, void 0, false, {
+                                            fileName: "[project]/apps/provider-web/app/page.tsx",
+                                            lineNumber: 49,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            children: state.message
+                                        }, void 0, false, {
+                                            fileName: "[project]/apps/provider-web/app/page.tsx",
+                                            lineNumber: 50,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "nh-shell__state-meta",
+                                            children: [
+                                                "Tone: ",
+                                                state.stateTone
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/apps/provider-web/app/page.tsx",
+                                            lineNumber: 51,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, state.key, true, {
+                                    fileName: "[project]/apps/provider-web/app/page.tsx",
+                                    lineNumber: 41,
+                                    columnNumber: 15
+                                }, this))
+                        }, void 0, false, {
+                            fileName: "[project]/apps/provider-web/app/page.tsx",
+                            lineNumber: 39,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/apps/provider-web/app/page.tsx",
+                    lineNumber: 37,
+                    columnNumber: 9
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/apps/provider-web/app/page.tsx",
+                lineNumber: 36,
+                columnNumber: 7
             }, this)
-        }, void 0, false, {
-            fileName: "[project]/apps/provider-web/app/page.tsx",
-            lineNumber: 7,
-            columnNumber: 7
-        }, this)
-    }, void 0, false, {
+        ]
+    }, void 0, true, {
         fileName: "[project]/apps/provider-web/app/page.tsx",
-        lineNumber: 6,
+        lineNumber: 10,
         columnNumber: 5
     }, this);
 }

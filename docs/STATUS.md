@@ -43,13 +43,15 @@
 - Phase 3: STEP-1-THROUGH-STEP-6 COMPLETED WITH SYNTHETIC CROSS-VIEWPORT EXIT-GATE EVIDENCE.
 - Phase 3 prep: COMPLETED, kickoff checklist executed and governance evidence recorded.
 - Phase 4: CLOSED-WITH-EVIDENCE, EXIT GATES COMPLETED WITH DETERMINISTIC API AND CROSS-VIEWPORT BROWSER COVERAGE; OWNER SIGNOFF RECORDED.
+- Phase 5: IN-PROGRESS, P05-ISS-001 COMPLETED WITH FOUR-SHELL STATE SCAFFOLDS, CROSS-VIEWPORT BROWSER EVIDENCE, AND ACCESSIBILITY EVIDENCE.
+- P05-ISS-002: STARTED, WORKFLOW-LEVEL LOW-BANDWIDTH RESILIENCE AND RETRY SEMANTICS IMPLEMENTED WITH UNIT+INTEGRATION EVIDENCE.
 - Pilot launch: PILOT-NO-GO.
 - Production release: NOT APPROVED.
 - Production data: NOT APPROVED.
 - Interactive browser: VERIFIED THROUGH PLAYWRIGHT CLI FALLBACK.
 - Playwright MCP: VERIFIED THROUGH PROJECT-SCOPED LOCAL SMOKE ON 2026-06-25 WITH CODEX-CLI 0.141.0.
 - UI UX Pro Max licence: REVIEW-REQUIRED.
-- Next action: open Phase 5 kickoff scope and define P05-ISS-001 execution using the same evidence-first governance pattern, preserving fail-closed policy behavior and synthetic-only validation boundaries.
+- Next action: extend P05-ISS-002 from state-machine and integration coverage into browser-observable low-bandwidth UX scenarios across mobile/tablet/desktop shells.
 
 ## Foundation commands
 
@@ -153,6 +155,23 @@ pnpm db:rollback
 - docs/exec-plans/P04-phase-4-kickoff-scope.md
 - docs/exec-plans/P04-ISS-001-authorization-consent-guardianship-audit-foundation.md
 - docs/governance/phase-4-requirements-traceability.md
+
+## Phase 5 prep artifacts
+
+- docs/exec-plans/P05-phase-5-kickoff-scope.md
+- docs/exec-plans/P05-ISS-001-design-system-and-shell-foundation.md
+- docs/exec-plans/P05-ISS-002-low-bandwidth-resilience-and-retry-semantics.md
+- docs/governance/phase-5-requirements-traceability.md
+
+## Phase 5 execution evidence
+
+- tests/unit/phase5-shell-scaffolds.spec.ts
+- tests/e2e/iss014-web-shells.spec.ts
+- tests/accessibility/iss014-web-shells.a11y.spec.ts
+- playwright.iss014.config.ts
+- apps/patient-web/src/workflow-resilience.ts
+- apps/patient-web/src/workflow-resilience.test.ts
+- tests/integration/patient-workflow-resilience-runtime.spec.ts
 
 ## Locked requirements retained
 

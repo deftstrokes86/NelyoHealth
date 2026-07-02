@@ -1,5 +1,10 @@
-export { createProviderShellApiClient, providerShellDescriptor } from "./shell.js";
-export type { ProviderShellDescriptor } from "./shell.js";
+export {
+  createProviderShellApiClient,
+  providerShellDescriptor,
+  providerShellNavigation,
+  providerShellStateScaffolds
+} from "./shell.js";
+export type { ProviderShellDescriptor, ProviderShellStateScaffold } from "./shell.js";
 
 export const providerWebApplicationBoundary = {
   id: "provider-web",

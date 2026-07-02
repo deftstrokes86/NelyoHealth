@@ -2,6 +2,25 @@
 
 Status: COMPLETE FOR P01-FND-002 - advisory only.
 
+## Pass C - phase 5 library inclusion advisory
+
+Advisory output: `.artifacts/ui-ux-pro-max/foundation-review-2026-07-02T17-31-47-635Z.md`
+
+Accepted direction:
+
+- Use Tailwind utility classes in web-shell UI increment work when tokenized color/spacing constraints are preserved.
+- Use shadcn-style component patterns (CVA variants, `cn` utility, and Radix slot composition) for reusable UI primitives.
+- Keep motion restrained and task-oriented while supporting reduced-motion behavior.
+
+Rejected direction:
+
+- Any recommendation that bypasses locked provider-disclosure privacy boundaries.
+- Any recommendation that introduces unlicensed external fonts or unmanaged remote assets.
+
+Deferred direction:
+
+- Full shadcn component catalog rollout across all web shells remains a later Phase 5 increment.
+
 ## Pass A - foundation direction
 
 Advisory output: `.artifacts/ui-ux-pro-max/foundation-review-2026-06-25T03-37-42-994Z.md`

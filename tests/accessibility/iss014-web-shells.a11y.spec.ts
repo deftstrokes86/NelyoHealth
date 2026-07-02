@@ -24,6 +24,8 @@ test.describe("ISS-014 browser harness shell accessibility smoke", () => {
     await expect(page.getByRole("heading", { level: 1, name: shellApp.heading })).toBeVisible();
     await expect(page.getByText("This shell is synthetic-only", { exact: false })).toBeVisible();
     await expect(page.getByText("Phase 2 Foundation")).toBeVisible();
+    await expect(page.getByText("Phase 5 Foundation")).toBeVisible();
+    await expect(page.locator("[data-shell-state]")).toHaveCount(6);
 
     await expectNoViewportOverflow(page);
     await expectNoProtectedSentinels(page);

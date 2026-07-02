@@ -808,3 +808,49 @@ For all future phase updates:
   - Signoff authority: Stephen Igwebuike
   - Date: 2026-07-02
   - Transition status: READY-FOR-PHASE-5-KICKOFF
+
+## 2026-07-02 - Phase 5 kickoff and P05-ISS-001 initialization
+
+- Added `docs/exec-plans/P05-phase-5-kickoff-scope.md` as the Phase 5 kickoff scope artifact with web-first, mobile-forward, evidence-first boundaries.
+- Added `docs/exec-plans/P05-ISS-001-design-system-and-shell-foundation.md` as the first Phase 5 execution issue with scoped acceptance criteria, non-goals, risks, and rollback strategy.
+- Added `docs/governance/phase-5-requirements-traceability.md` as the baseline requirement and exit-gate map for Phase 5.
+- Updated `docs/STATUS.md` to mark Phase 5 kickoff as started and set `P05-ISS-001` execution as the next action.
+
+## 2026-07-02 - P05-ISS-001 execution evidence (design-system and shell foundation)
+
+- Implemented shared shell scaffold styling in `packages/ui-foundation/src/styles.css` using tokenized classes for shell layout, navigation chips, and state-card grid behavior.
+- Implemented deterministic shell state scaffolds and role-aware navigation contracts across:
+  - `apps/patient-web/src/shell.ts`
+  - `apps/provider-web/src/shell.ts`
+  - `apps/organization-web/src/shell.ts`
+  - `apps/admin-web/src/shell.ts`
+- Updated four shell pages to render Phase 5 scaffold output and six required shell states (loading, empty, error, unauthorized, offline, reduced-motion).
+- Updated browser and accessibility assertions for shell state scaffolds:
+  - `tests/e2e/iss014-web-shells.spec.ts`
+  - `tests/accessibility/iss014-web-shells.a11y.spec.ts`
+- Added deterministic unit scaffold validation in `tests/unit/phase5-shell-scaffolds.spec.ts`.
+- Updated `playwright.iss014.config.ts` to launch app-local Next.js binaries directly, avoiding pnpm lockfile policy blockers in this environment.
+- Validation evidence captured:
+  - `node node_modules/vitest/vitest.mjs run tests/unit/phase5-shell-scaffolds.spec.ts` -> passed (3 tests).
+  - `node node_modules/@playwright/test/cli.js test -c playwright.iss014.config.ts` -> passed (24 tests, desktop/tablet/mobile+a11y matrix).
+- Updated governance state tracking:
+  - `docs/governance/phase-5-requirements-traceability.md`
+  - `docs/STATUS.md`
+
+## 2026-07-02 - P05-ISS-002 low-bandwidth workflow resilience and retry semantics
+
+- Added execution-plan artifact `docs/exec-plans/P05-ISS-002-low-bandwidth-resilience-and-retry-semantics.md` for the second Phase 5 increment.
+- Implemented workflow-level resilience state transitions in `apps/patient-web/src/workflow-resilience.ts` with deterministic support for:
+  - offline queueing,
+  - retry-pending backoff,
+  - connection-restore resume,
+  - bounded retry termination,
+  - explicit success/failure terminal states.
+- Exported new resilience APIs through `apps/patient-web/src/index.ts`.
+- Added direct patient-web resilience unit coverage in `apps/patient-web/src/workflow-resilience.test.ts`.
+- Added deeper integration transition coverage in `tests/integration/patient-workflow-resilience-runtime.spec.ts`, including offline recovery and payment-to-disclosure gating behavior.
+- Validation evidence captured:
+  - `node node_modules/vitest/vitest.mjs run apps/patient-web/src/workflow-resilience.test.ts tests/integration/patient-workflow-resilience-runtime.spec.ts` -> passed (`2 files`, `6 tests`).
+- Updated governance state tracking:
+  - `docs/governance/phase-5-requirements-traceability.md`
+  - `docs/STATUS.md`

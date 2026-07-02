@@ -14,7 +14,8 @@ const activeShellApps = requestedShellApps
   : iss014ShellApps;
 
 const webServerConfigs = activeShellApps.map((shellApp) => ({
-  command: `pnpm --filter @nelyohealth/${shellApp.appName} exec next dev --hostname 127.0.0.1 --port ${shellApp.port}`,
+  command: `node node_modules/next/dist/bin/next dev --hostname 127.0.0.1 --port ${shellApp.port}`,
+  cwd: `apps/${shellApp.appName}`,
   url: `http://127.0.0.1:${shellApp.port}`,
   reuseExistingServer: !process.env.CI,
   timeout: 300_000

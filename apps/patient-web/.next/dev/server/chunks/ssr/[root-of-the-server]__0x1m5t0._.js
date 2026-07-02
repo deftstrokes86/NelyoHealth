@@ -346,14 +346,64 @@ __turbopack_context__.s([
     "createPatientShellApiClient",
     ()=>createPatientShellApiClient,
     "patientShellDescriptor",
-    ()=>patientShellDescriptor
+    ()=>patientShellDescriptor,
+    "patientShellNavigation",
+    ()=>patientShellNavigation,
+    "patientShellStateScaffolds",
+    ()=>patientShellStateScaffolds
 ]);
 const patientShellDescriptor = {
     appId: "patient-web",
     issue: "P02-ISS-012",
+    phase5Issue: "P05-ISS-001",
     syntheticOnly: true,
     protectedProviderDetailsExposed: false
 };
+const patientShellNavigation = [
+    "Overview",
+    "Appointments",
+    "Care timeline",
+    "Billing",
+    "Settings"
+];
+const patientShellStateScaffolds = [
+    {
+        key: "loading",
+        title: "Loading",
+        message: "Show predictable loading placeholders while shell context initializes.",
+        stateTone: "info"
+    },
+    {
+        key: "empty",
+        title: "Empty",
+        message: "Show clear empty-state guidance when no records are available.",
+        stateTone: "success"
+    },
+    {
+        key: "error",
+        title: "Error",
+        message: "Show safe retry messaging when shell data fetch fails.",
+        stateTone: "danger"
+    },
+    {
+        key: "unauthorized",
+        title: "Unauthorized",
+        message: "Fail closed when access scope is missing or revoked.",
+        stateTone: "warning"
+    },
+    {
+        key: "offline",
+        title: "Offline",
+        message: "Preserve draft-safe behavior when connectivity is unavailable.",
+        stateTone: "warning"
+    },
+    {
+        key: "reduced-motion",
+        title: "Reduced motion",
+        message: "Respect reduced-motion preference while preserving readable shell transitions.",
+        stateTone: "info"
+    }
+];
 function createPatientShellApiClient(baseUrl, factory) {
     return factory(baseUrl);
 }
@@ -376,50 +426,154 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$patient$2d$web$2f$sr
 ;
 function PatientWebHomePage() {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2d$foundation$2f$lib$2f$primitives$2f$Surface$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Surface"], {
-            as: "section",
-            "aria-labelledby": "patient-shell-title",
-            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2d$foundation$2f$lib$2f$primitives$2f$Stack$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Stack"], {
-                gap: "md",
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                        id: "patient-shell-title",
-                        children: "Patient Web Shell"
-                    }, void 0, false, {
-                        fileName: "[project]/apps/patient-web/app/page.tsx",
-                        lineNumber: 9,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                        children: "This shell is synthetic-only and does not expose protected pharmacy or laboratory provider details before payment authorization."
-                    }, void 0, false, {
-                        fileName: "[project]/apps/patient-web/app/page.tsx",
-                        lineNumber: 10,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2d$foundation$2f$lib$2f$primitives$2f$Alert$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Alert"], {
-                        tone: "info",
-                        title: "Phase 2 Foundation",
-                        children: `Issue: ${__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$patient$2d$web$2f$src$2f$shell$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["patientShellDescriptor"].issue} | App: ${__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$patient$2d$web$2f$src$2f$shell$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["patientShellDescriptor"].appId}`
-                    }, void 0, false, {
-                        fileName: "[project]/apps/patient-web/app/page.tsx",
-                        lineNumber: 14,
-                        columnNumber: 11
-                    }, this)
-                ]
-            }, void 0, true, {
+        className: "nh-shell",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2d$foundation$2f$lib$2f$primitives$2f$Surface$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Surface"], {
+                as: "section",
+                "aria-labelledby": "patient-shell-title",
+                className: "nh-shell__header",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2d$foundation$2f$lib$2f$primitives$2f$Stack$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Stack"], {
+                    gap: "md",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                            id: "patient-shell-title",
+                            children: "Patient Web Shell"
+                        }, void 0, false, {
+                            fileName: "[project]/apps/patient-web/app/page.tsx",
+                            lineNumber: 13,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                            children: "This shell is synthetic-only and does not expose protected pharmacy or laboratory provider details before payment authorization."
+                        }, void 0, false, {
+                            fileName: "[project]/apps/patient-web/app/page.tsx",
+                            lineNumber: 14,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
+                            "aria-label": "Patient shell navigation scaffold",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
+                                className: "nh-shell__nav",
+                                children: __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$patient$2d$web$2f$src$2f$shell$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["patientShellNavigation"].map((item)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
+                                        className: "nh-shell__nav-item",
+                                        children: item
+                                    }, item, false, {
+                                        fileName: "[project]/apps/patient-web/app/page.tsx",
+                                        lineNumber: 21,
+                                        columnNumber: 17
+                                    }, this))
+                            }, void 0, false, {
+                                fileName: "[project]/apps/patient-web/app/page.tsx",
+                                lineNumber: 19,
+                                columnNumber: 13
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/apps/patient-web/app/page.tsx",
+                            lineNumber: 18,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2d$foundation$2f$lib$2f$primitives$2f$Alert$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Alert"], {
+                            tone: "info",
+                            title: "Phase 2 Foundation",
+                            children: `Issue: ${__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$patient$2d$web$2f$src$2f$shell$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["patientShellDescriptor"].issue} | App: ${__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$patient$2d$web$2f$src$2f$shell$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["patientShellDescriptor"].appId}`
+                        }, void 0, false, {
+                            fileName: "[project]/apps/patient-web/app/page.tsx",
+                            lineNumber: 27,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2d$foundation$2f$lib$2f$primitives$2f$Alert$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Alert"], {
+                            tone: "success",
+                            title: "Phase 5 Foundation",
+                            children: `Issue: ${__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$patient$2d$web$2f$src$2f$shell$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["patientShellDescriptor"].phase5Issue} | State scaffolds: ${__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$patient$2d$web$2f$src$2f$shell$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["patientShellStateScaffolds"].length}`
+                        }, void 0, false, {
+                            fileName: "[project]/apps/patient-web/app/page.tsx",
+                            lineNumber: 30,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/apps/patient-web/app/page.tsx",
+                    lineNumber: 12,
+                    columnNumber: 9
+                }, this)
+            }, void 0, false, {
                 fileName: "[project]/apps/patient-web/app/page.tsx",
-                lineNumber: 8,
-                columnNumber: 9
+                lineNumber: 11,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
+                "aria-labelledby": "patient-shell-state-title",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2d$foundation$2f$lib$2f$primitives$2f$Stack$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Stack"], {
+                    gap: "sm",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                            id: "patient-shell-state-title",
+                            children: "Patient shell state scaffolds"
+                        }, void 0, false, {
+                            fileName: "[project]/apps/patient-web/app/page.tsx",
+                            lineNumber: 38,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "nh-shell__state-grid",
+                            children: __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$patient$2d$web$2f$src$2f$shell$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["patientShellStateScaffolds"].map((state)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$ui$2d$foundation$2f$lib$2f$primitives$2f$Surface$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Surface"], {
+                                    as: "article",
+                                    tone: "raised",
+                                    className: "nh-shell__state-card",
+                                    "aria-label": `Patient shell ${state.title} state`,
+                                    "data-shell-state": state.key,
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                            children: state.title
+                                        }, void 0, false, {
+                                            fileName: "[project]/apps/patient-web/app/page.tsx",
+                                            lineNumber: 49,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            children: state.message
+                                        }, void 0, false, {
+                                            fileName: "[project]/apps/patient-web/app/page.tsx",
+                                            lineNumber: 50,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$2$2e$9_$40$playwright$2b$tes_46889c56b216b77b7b53033aa3329009$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "nh-shell__state-meta",
+                                            children: [
+                                                "Tone: ",
+                                                state.stateTone
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/apps/patient-web/app/page.tsx",
+                                            lineNumber: 51,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, state.key, true, {
+                                    fileName: "[project]/apps/patient-web/app/page.tsx",
+                                    lineNumber: 41,
+                                    columnNumber: 15
+                                }, this))
+                        }, void 0, false, {
+                            fileName: "[project]/apps/patient-web/app/page.tsx",
+                            lineNumber: 39,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/apps/patient-web/app/page.tsx",
+                    lineNumber: 37,
+                    columnNumber: 9
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/apps/patient-web/app/page.tsx",
+                lineNumber: 36,
+                columnNumber: 7
             }, this)
-        }, void 0, false, {
-            fileName: "[project]/apps/patient-web/app/page.tsx",
-            lineNumber: 7,
-            columnNumber: 7
-        }, this)
-    }, void 0, false, {
+        ]
+    }, void 0, true, {
         fileName: "[project]/apps/patient-web/app/page.tsx",
-        lineNumber: 6,
+        lineNumber: 10,
         columnNumber: 5
     }, this);
 }
