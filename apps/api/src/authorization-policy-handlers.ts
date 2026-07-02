@@ -1,9 +1,146 @@
 import {
+  type AuthorizationActorRole,
   type AuthorizationPolicyDimensionOutcome,
   type AuditIntentDraft,
   type AuthorizationPolicyDecisionDraft,
   type AuthorizationPolicyDecisionDraftInput
 } from "./authorization-policy.js";
+
+interface AuthorizationPolicyRule {
+  actorRole: AuthorizationActorRole;
+  resource: string;
+  action: string;
+  purposes: string[];
+}
+
+const policyRules: AuthorizationPolicyRule[] = [
+  {
+    actorRole: "patient",
+    resource: "clinical-record-summary",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
+  {
+    actorRole: "patient",
+    resource: "clinical-record-summary",
+    action: "write",
+    purposes: ["care-delivery", "emergency-care"]
+  },
+  {
+    actorRole: "patient",
+    resource: "consent-preferences",
+    action: "update-consent",
+    purposes: ["consent-management"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "clinical-record-summary",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "consent-preferences",
+    action: "update-consent",
+    purposes: ["consent-management"]
+  },
+  {
+    actorRole: "caregiver",
+    resource: "clinical-record-summary",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "caregiver",
+    resource: "consultation-room",
+    action: "read",
+    purposes: ["care-delivery"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "clinical-record-summary",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "clinical-record-summary",
+    action: "write",
+    purposes: ["care-delivery", "emergency-care"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "clinical-record-summary",
+    action: "amend",
+    purposes: ["care-delivery", "emergency-care"]
+  },
+  {
+    actorRole: "sponsor",
+    resource: "billing-ledger",
+    action: "read-billing",
+    purposes: ["payment-operations"]
+  },
+  {
+    actorRole: "sponsor",
+    resource: "payment-status",
+    action: "read-payment-status",
+    purposes: ["payment-operations"]
+  },
+  {
+    actorRole: "payer",
+    resource: "billing-ledger",
+    action: "read-billing",
+    purposes: ["payment-operations"]
+  },
+  {
+    actorRole: "payer",
+    resource: "payment-status",
+    action: "read-payment-status",
+    purposes: ["payment-operations"]
+  },
+  {
+    actorRole: "employer",
+    resource: "billing-ledger",
+    action: "read-billing",
+    purposes: ["payment-operations"]
+  },
+  {
+    actorRole: "hmo",
+    resource: "billing-ledger",
+    action: "read-billing",
+    purposes: ["payment-operations"]
+  },
+  {
+    actorRole: "hmo",
+    resource: "payment-status",
+    action: "read-payment-status",
+    purposes: ["payment-operations"]
+  },
+  {
+    actorRole: "support",
+    resource: "support-case",
+    action: "read-support",
+    purposes: ["support-operations"]
+  },
+  {
+    actorRole: "organization-admin",
+    resource: "tenant-membership",
+    action: "manage-tenant-membership",
+    purposes: ["tenant-administration"]
+  },
+  {
+    actorRole: "platform-admin",
+    resource: "tenant-membership",
+    action: "manage-tenant-membership",
+    purposes: ["tenant-administration"]
+  },
+  {
+    actorRole: "platform-admin",
+    resource: "support-case",
+    action: "read-support",
+    purposes: ["support-operations"]
+  }
+];
 
 export function evaluateAuthorizationPolicyDecision(
   input: AuthorizationPolicyDecisionDraftInput
@@ -88,21 +225,11 @@ function evaluateRbacOutcome(
     };
   }
 
-  const permittedActionsByRole: Record<string, string[]> = {
-    guardian: ["read", "update-consent"],
-    sponsor: ["read-billing", "read-payment-status"],
-    "platform-admin": ["read-support", "manage-tenant-membership"],
-    clinician: ["read", "write", "amend"],
-    support: ["read-support"],
-    patient: ["read", "write"],
-    caregiver: ["read", "update-consent"]
-  };
-  const permittedActions = permittedActionsByRole[input.actorRole] ?? [];
-
-  if (!permittedActions.includes(input.requestedAction)) {
+  const matchingRule = findPolicyRule(input);
+  if (!matchingRule) {
     return {
       status: "denied",
-      reasonCode: "rbac-role-not-permitted"
+      reasonCode: "rbac-policy-unmapped-deny-default"
     };
   }
 
@@ -115,6 +242,14 @@ function evaluateRbacOutcome(
 function evaluateAbacOutcome(
   input: AuthorizationPolicyDecisionDraftInput
 ): AuthorizationPolicyDimensionOutcome {
+  const matchingRule = findPolicyRule(input);
+  if (!matchingRule) {
+    return {
+      status: "denied",
+      reasonCode: "rbac-policy-unmapped-deny-default"
+    };
+  }
+
   if (!input.sameTenant) {
     return {
       status: "denied",
@@ -163,19 +298,7 @@ function evaluateAbacOutcome(
     }
   }
 
-  const allowedPurposesByAction: Record<string, string[]> = {
-    read: ["care-delivery", "care-coordination", "emergency-care"],
-    write: ["care-delivery", "emergency-care"],
-    amend: ["care-delivery", "emergency-care"],
-    "update-consent": ["care-delivery", "consent-management"],
-    "read-billing": ["payment-operations"],
-    "read-payment-status": ["payment-operations"],
-    "read-support": ["support-operations"],
-    "manage-tenant-membership": ["tenant-administration"]
-  };
-  const allowedPurposes = allowedPurposesByAction[input.requestedAction] ?? [];
-
-  if (allowedPurposes.length > 0 && !allowedPurposes.includes(input.purpose)) {
+  if (!matchingRule.purposes.includes(input.purpose)) {
     return {
       status: "denied",
       reasonCode: "abac-purpose-not-allowed"
@@ -368,6 +491,7 @@ function evaluateRebacOutcome(
 function getNextSteps(reasonCode: AuthorizationPolicyDecisionDraft["reasonCode"]): string[] {
   const stepsByReason: Record<AuthorizationPolicyDecisionDraft["reasonCode"], string[]> = {
     allowed: ["proceed"],
+    "rbac-policy-unmapped-deny-default": ["request-policy-exception-review"],
     "rbac-role-not-permitted": ["request-role-assignment"],
     "abac-purpose-not-allowed": ["resubmit-with-allowed-purpose"],
     "abac-time-window-not-allowed": ["retry-within-policy-window"],
@@ -393,4 +517,15 @@ function getNextSteps(reasonCode: AuthorizationPolicyDecisionDraft["reasonCode"]
   };
 
   return stepsByReason[reasonCode];
+}
+
+function findPolicyRule(
+  input: AuthorizationPolicyDecisionDraftInput
+): AuthorizationPolicyRule | undefined {
+  return policyRules.find(
+    (rule) =>
+      rule.actorRole === input.actorRole &&
+      rule.resource === input.requestedResource &&
+      rule.action === input.requestedAction
+  );
 }

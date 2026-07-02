@@ -66,6 +66,7 @@ export {
 export type { EvaluateTenancyAccessDecisionInput } from "./tenancy-handlers.js";
 export { createAuthorizationPolicyDecisionDraftInput } from "./authorization-policy.js";
 export type {
+  AuthorizationActorRole,
   ConsentStatus,
   RelationshipStatus,
   SessionStatus,
@@ -89,6 +90,18 @@ export type {
   ClinicalProxy,
   AuthorizationRelationshipDraft
 } from "./relationship-model.js";
+export {
+  InMemoryRelationshipRepository,
+  RelationshipWorkflowService
+} from "./relationship-workflows.js";
+export type {
+  RelationshipRepository,
+  CreateRelationshipInput,
+  VerifyRelationshipInput,
+  ReviewRelationshipInput,
+  AddRelationshipDocumentInput,
+  RevokeRelationshipInput
+} from "./relationship-workflows.js";
 export { createConsentRecordDraft } from "./granular-consent.js";
 export type {
   ConsentDomain,

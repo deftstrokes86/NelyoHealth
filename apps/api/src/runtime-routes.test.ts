@@ -12,6 +12,81 @@ import {
 import { createAuthenticationDraft } from "./authentication.js";
 import { createTenancyAccessDraft } from "./tenancy.js";
 
+function createPolicyRouteInput(overrides: Record<string, unknown> = {}) {
+  return {
+    decisionRequestId: "policy-route-base",
+    actorId: "actor-route-base",
+    actorRole: "guardian",
+    actorType: "guardian",
+    organizationId: "tenant-route-1",
+    patientId: "patient-route-1",
+    relationshipType: "guardian",
+    relationship: {
+      relationshipId: "rel-route-1",
+      relationshipType: "guardian",
+      actorId: "actor-route-base",
+      patientId: "patient-route-1",
+      organizationId: "tenant-route-1",
+      lifecycle: {
+        status: "active",
+        verificationMethod: "legal-document",
+        effectiveDate: "2026-01-01T00:00:00.000Z",
+        expiryDate: "2027-01-01T00:00:00.000Z",
+        permittedActions: ["read", "update-consent"],
+        supportingDocuments: [],
+        reviewHistory: []
+      }
+    },
+    requestedResource: "clinical-record-summary",
+    requestedConsentDomains: ["telemedicine", "provider-data-sharing"],
+    consent: {
+      consentId: "consent-route-base",
+      patientId: "patient-route-1",
+      organizationId: "tenant-route-1",
+      currentVersion: 1,
+      updatedAt: "2026-07-10T12:09:00.000Z",
+      versions: [
+        {
+          version: 1,
+          status: "granted",
+          grantedDomains: [
+            "telemedicine",
+            "provider-data-sharing",
+            "sponsor-participation",
+            "family-participation",
+            "caregiver-participation",
+            "consultation-participants",
+            "recording",
+            "marketing",
+            "research",
+            "cross-border-processing",
+            "emergency-access"
+          ],
+          effectiveDate: "2026-01-01T00:00:00.000Z",
+          expiryDate: "2027-01-01T00:00:00.000Z",
+          createdAt: "2026-01-01T00:00:00.000Z",
+          createdByActorId: "patient-route-1"
+        }
+      ]
+    },
+    requestedAction: "read",
+    purpose: "care-delivery",
+    consentStatus: "granted",
+    relationshipStatus: "active",
+    sessionStatus: "active",
+    activeEncounter: true,
+    emergencyStatus: "none",
+    sameTenant: true,
+    sponsorPaymentOnly: false,
+    requiresRelationship: true,
+    breakGlassRequested: false,
+    impersonationAttempt: false,
+    auditEventEditAttempt: false,
+    evaluatedAt: "2026-07-10T12:10:00.000Z",
+    ...overrides
+  };
+}
+
 describe("runtime route handlers", () => {
   it("returns an envelope for valid payment transitions", () => {
     const response = handlePaymentTransitionRoute({
@@ -358,5 +433,180 @@ describe("runtime route handlers", () => {
       operationTag: "authorization.policy.evaluate",
       decisionReasonTag: "consent-version-stale"
     });
+  });
+
+  it("covers all protected policy endpoints with at least one allowed matrix combination", () => {
+    const allowedCases = [
+      {
+        actorRole: "guardian",
+        actorType: "guardian",
+        requestedResource: "clinical-record-summary",
+        requestedAction: "read",
+        purpose: "care-delivery"
+      },
+      {
+        actorRole: "sponsor",
+        actorType: "sponsor",
+        requestedResource: "billing-ledger",
+        requestedAction: "read-billing",
+        purpose: "payment-operations",
+        requiresRelationship: false,
+        relationshipType: "none",
+        relationshipStatus: "none",
+        relationship: undefined,
+        requestedConsentDomains: []
+      },
+      {
+        actorRole: "hmo",
+        actorType: "sponsor",
+        requestedResource: "payment-status",
+        requestedAction: "read-payment-status",
+        purpose: "payment-operations",
+        requiresRelationship: false,
+        relationshipType: "none",
+        relationshipStatus: "none",
+        relationship: undefined,
+        requestedConsentDomains: []
+      },
+      {
+        actorRole: "support",
+        actorType: "support",
+        requestedResource: "support-case",
+        requestedAction: "read-support",
+        purpose: "support-operations",
+        requiresRelationship: false,
+        relationshipType: "none",
+        relationshipStatus: "none",
+        relationship: undefined,
+        requestedConsentDomains: []
+      },
+      {
+        actorRole: "organization-admin",
+        actorType: "admin",
+        requestedResource: "tenant-membership",
+        requestedAction: "manage-tenant-membership",
+        purpose: "tenant-administration",
+        requiresRelationship: false,
+        relationshipType: "none",
+        relationshipStatus: "none",
+        relationship: undefined,
+        requestedConsentDomains: []
+      },
+      {
+        actorRole: "caregiver",
+        actorType: "caregiver",
+        requestedResource: "consultation-room",
+        requestedAction: "read",
+        purpose: "care-delivery"
+      },
+      {
+        actorRole: "patient",
+        actorType: "patient",
+        requestedResource: "consent-preferences",
+        requestedAction: "update-consent",
+        purpose: "consent-management",
+        relationshipType: "none",
+        relationshipStatus: "none",
+        relationship: undefined,
+        requiresRelationship: false,
+        requestedConsentDomains: []
+      }
+    ];
+
+    for (const inputCase of allowedCases) {
+      const response = handleAuthorizationPolicyDecisionRoute({
+        requestId: "req-policy-allowed",
+        correlationId: "corr-policy-allowed",
+        input: createPolicyRouteInput(inputCase)
+      });
+
+      expect(response.data).toMatchObject({
+        status: "allowed",
+        reasonCode: "allowed"
+      });
+      expect(response.meta).toMatchObject({
+        operationTag: "authorization.policy.evaluate",
+        decisionReasonTag: "allowed"
+      });
+    }
+  });
+
+  it("denies unmapped combinations for protected endpoints by deterministic deny-default", () => {
+    const denyCases = [
+      {
+        actorRole: "payer",
+        actorType: "sponsor",
+        requestedResource: "clinical-record-summary",
+        requestedAction: "read",
+        purpose: "care-delivery"
+      },
+      {
+        actorRole: "guardian",
+        actorType: "guardian",
+        requestedResource: "billing-ledger",
+        requestedAction: "read-billing",
+        purpose: "payment-operations"
+      },
+      {
+        actorRole: "support",
+        actorType: "support",
+        requestedResource: "tenant-membership",
+        requestedAction: "manage-tenant-membership",
+        purpose: "tenant-administration",
+        requiresRelationship: false,
+        relationshipType: "none",
+        relationshipStatus: "none",
+        relationship: undefined,
+        requestedConsentDomains: []
+      },
+      {
+        actorRole: "sponsor",
+        actorType: "sponsor",
+        requestedResource: "support-case",
+        requestedAction: "read-support",
+        purpose: "support-operations",
+        requiresRelationship: false,
+        relationshipType: "none",
+        relationshipStatus: "none",
+        relationship: undefined,
+        requestedConsentDomains: []
+      },
+      {
+        actorRole: "clinician",
+        actorType: "clinician",
+        requestedResource: "consultation-room",
+        requestedAction: "read",
+        purpose: "care-delivery"
+      },
+      {
+        actorRole: "organization-admin",
+        actorType: "admin",
+        requestedResource: "consent-preferences",
+        requestedAction: "update-consent",
+        purpose: "consent-management",
+        relationshipType: "none",
+        relationshipStatus: "none",
+        relationship: undefined,
+        requiresRelationship: false,
+        requestedConsentDomains: []
+      }
+    ];
+
+    for (const inputCase of denyCases) {
+      const response = handleAuthorizationPolicyDecisionRoute({
+        requestId: "req-policy-deny",
+        correlationId: "corr-policy-deny",
+        input: createPolicyRouteInput(inputCase)
+      });
+
+      expect(response.data).toMatchObject({
+        status: "denied",
+        reasonCode: "rbac-policy-unmapped-deny-default"
+      });
+      expect(response.meta).toMatchObject({
+        operationTag: "authorization.policy.evaluate",
+        decisionReasonTag: "rbac-policy-unmapped-deny-default"
+      });
+    }
   });
 });

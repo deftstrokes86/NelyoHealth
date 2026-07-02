@@ -4,6 +4,18 @@ import type { ConsentDomain, ConsentRecordDraft } from "./granular-consent.js";
 export type ConsentStatus = "granted" | "revoked" | "expired";
 export type RelationshipStatus = "active" | "revoked" | "expired" | "none";
 export type SessionStatus = "active" | "stale" | "revoked";
+export type AuthorizationActorRole =
+  | "patient"
+  | "guardian"
+  | "sponsor"
+  | "caregiver"
+  | "clinician"
+  | "support"
+  | "organization-admin"
+  | "platform-admin"
+  | "payer"
+  | "employer"
+  | "hmo";
 export type RelationshipType =
   | "guardian"
   | "household"
@@ -23,7 +35,7 @@ export interface AuthorizationPolicyDimensionOutcome {
 export interface AuthorizationPolicyDecisionDraftInput {
   decisionRequestId: string;
   actorId: string;
-  actorRole: string;
+  actorRole: AuthorizationActorRole;
   actorType: "patient" | "guardian" | "sponsor" | "caregiver" | "clinician" | "support" | "admin";
   organizationId: string;
   patientId: string;
@@ -71,6 +83,7 @@ export interface AuthorizationPolicyDecisionDraft {
   status: "allowed" | "denied" | "challenge-required";
   reasonCode:
     | "allowed"
+    | "rbac-policy-unmapped-deny-default"
     | "rbac-role-not-permitted"
     | "abac-purpose-not-allowed"
     | "abac-time-window-not-allowed"

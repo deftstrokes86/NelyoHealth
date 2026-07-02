@@ -122,6 +122,9 @@ describe("authorization policy decision handler", () => {
     const decision = evaluateAuthorizationPolicyDecision({
       ...baseInput,
       actorRole: "sponsor",
+      requestedResource: "clinical-record-summary",
+      requestedAction: "read-billing",
+      purpose: "payment-operations",
       sponsorPaymentOnly: true
     });
 
@@ -143,9 +146,28 @@ describe("authorization policy decision handler", () => {
 
     expect(decision).toMatchObject({
       status: "denied",
-      reasonCode: "rbac-role-not-permitted",
+      reasonCode: "rbac-policy-unmapped-deny-default",
       dimensionOutcomes: {
-        rbac: { status: "denied", reasonCode: "rbac-role-not-permitted" }
+        rbac: { status: "denied", reasonCode: "rbac-policy-unmapped-deny-default" }
+      }
+    });
+  });
+
+  it("denies unmapped role-resource-action combinations by default", () => {
+    const decision = evaluateAuthorizationPolicyDecision({
+      ...baseInput,
+      actorRole: "payer",
+      actorType: "sponsor",
+      requestedResource: "clinical-record-summary",
+      requestedAction: "read",
+      purpose: "care-delivery"
+    });
+
+    expect(decision).toMatchObject({
+      status: "denied",
+      reasonCode: "rbac-policy-unmapped-deny-default",
+      dimensionOutcomes: {
+        rbac: { status: "denied", reasonCode: "rbac-policy-unmapped-deny-default" }
       }
     });
   });
@@ -303,6 +325,7 @@ describe("authorization policy decision handler", () => {
       ...baseInput,
       actorRole: "support",
       actorType: "support",
+      requestedResource: "support-case",
       requestedAction: "read-support",
       purpose: "support-operations",
       evaluatedAt: "2026-07-02T02:00:00.000Z"
@@ -385,7 +408,9 @@ describe("authorization policy decision handler", () => {
   it("denies when relationship permitted actions do not include requested action", () => {
     const decision = evaluateAuthorizationPolicyDecision({
       ...baseInput,
+      requestedResource: "consent-preferences",
       requestedAction: "update-consent",
+      purpose: "consent-management",
       relationship: {
         ...baseInput.relationship,
         lifecycle: {
@@ -401,6 +426,27 @@ describe("authorization policy decision handler", () => {
       dimensionOutcomes: {
         rebac: { status: "denied", reasonCode: "relationship-action-not-permitted" }
       }
+    });
+  });
+
+  it("allows mapped payer billing read combination", () => {
+    const decision = evaluateAuthorizationPolicyDecision({
+      ...baseInput,
+      actorRole: "payer",
+      actorType: "sponsor",
+      requestedResource: "billing-ledger",
+      requestedAction: "read-billing",
+      purpose: "payment-operations",
+      requiresRelationship: false,
+      relationshipType: "none",
+      relationshipStatus: "none",
+      relationship: undefined,
+      requestedConsentDomains: []
+    });
+
+    expect(decision).toMatchObject({
+      status: "allowed",
+      reasonCode: "allowed"
     });
   });
 
