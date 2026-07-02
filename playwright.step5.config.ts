@@ -24,9 +24,29 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 1000 } }
     },
     {
+      name: "tablet-chromium",
+      testMatch: ["tests/e2e/identity-tenancy-journeys.spec.ts"],
+      use: { ...devices["iPad Pro 11 landscape"], browserName: "chromium" }
+    },
+    {
+      name: "mobile-chromium",
+      testMatch: ["tests/e2e/identity-tenancy-journeys.spec.ts"],
+      use: { ...devices["Pixel 7"], browserName: "chromium" }
+    },
+    {
       name: "accessibility-chromium",
       testMatch: ["tests/accessibility/identity-tenancy-journeys.a11y.spec.ts"],
       use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 1000 } }
+    },
+    {
+      name: "accessibility-tablet-chromium",
+      testMatch: ["tests/accessibility/identity-tenancy-journeys.a11y.spec.ts"],
+      use: { ...devices["iPad Pro 11 landscape"], browserName: "chromium" }
+    },
+    {
+      name: "accessibility-mobile-chromium",
+      testMatch: ["tests/accessibility/identity-tenancy-journeys.a11y.spec.ts"],
+      use: { ...devices["Pixel 7"], browserName: "chromium" }
     }
   ]
 });

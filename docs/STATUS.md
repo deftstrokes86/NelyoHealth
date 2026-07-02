@@ -40,15 +40,15 @@
 - Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS.
 - Phase 2 planning: P02-PLAN-001 ACCEPTED.
 - Phase 2 implementation: P02-ISS-003 COMPLETED; local harness files, static checks, and live Docker runtime evidence validated. P02-ISS-004 COMPLETED with migration, status, seed/reset, and rollback evidence. P02-ISS-005 COMPLETED with health/readiness routes, middleware conventions, and integration evidence. P02-ISS-006 COMPLETED with generated OpenAPI and typed client contract artifacts. P02-ISS-007 COMPLETED with worker queue foundation and deterministic retry/DLQ/idempotency test evidence. P02-ISS-008 COMPLETED with transaction helper and transactional outbox dispatch/rollback evidence. P02-ISS-009 COMPLETED with signed upload/download URL and synthetic cleanup adapter evidence. P02-ISS-010 COMPLETED with fake communications and local feature-flag adapter shell evidence. P02-ISS-011 COMPLETED with API-to-worker observability correlation and metric/log/trace evidence. P02-ISS-012 COMPLETED with Next.js shell runtimes and synthetic browser validation evidence. P02-ISS-013 COMPLETED with empty Expo mobile shell validation evidence. P02-ISS-014 COMPLETED with per-app Chromium browser harness, synthetic auth-state generation, and privacy/a11y evidence. P02-ISS-015 COMPLETED with typed environment configuration, strict loading, and secret-redaction evidence. P02-ISS-016 COMPLETED with provider-neutral deployment contract baseline and human-gated cloud decision trail. P02-ISS-017 COMPLETED with development deploy and staging promotion workflow artifacts plus controlled workflow evidence. P02-ISS-018 COMPLETED with local exit-gate rehearsal and rollback evidence plus GitHub workflow evidence.
-- Phase 3: NOT STARTED.
-- Phase 3 prep: STARTED, kickoff checklist published and governance controls verified.
+- Phase 3: STEP-1-THROUGH-STEP-6 COMPLETED WITH SYNTHETIC CROSS-VIEWPORT EXIT-GATE EVIDENCE.
+- Phase 3 prep: COMPLETED, kickoff checklist executed and governance evidence recorded.
 - Pilot launch: PILOT-NO-GO.
 - Production release: NOT APPROVED.
 - Production data: NOT APPROVED.
 - Interactive browser: VERIFIED THROUGH PLAYWRIGHT CLI FALLBACK.
 - Playwright MCP: VERIFIED THROUGH PROJECT-SCOPED LOCAL SMOKE ON 2026-06-25 WITH CODEX-CLI 0.141.0.
 - UI UX Pro Max licence: REVIEW-REQUIRED.
-- Next action: execute the Phase 3 kickoff checklist and open the first approved Phase 3 execution issue with web-first scope and mobile-forward compatibility.
+- Next action: prepare Phase 4 kickoff scope and execution issue after reviewing Phase 3 traceability and residual policy conditions.
 
 ## Foundation commands
 
@@ -145,6 +145,7 @@ pnpm db:rollback
 ## Phase 3 prep artifacts
 
 - docs/exec-plans/P03-phase-3-kickoff-checklist.md
+- docs/governance/phase-3-requirements-traceability.md
 
 ## Locked requirements retained
 
@@ -170,3 +171,4 @@ pnpm db:rollback
 - Cloud/provider and deployment model decision is recorded for Phase 2 foundation; controlled deployment/promotion run evidence has been captured and documented for P02-ISS-017 and P02-ISS-018.
 - P02-ISS-003 live start/stop/health evidence has been validated on a Docker Compose-capable host.
 - Moto Server is configured and validated as a local synthetic object-storage emulator for P02-ISS-003; production object-storage provider selection and signed URL implementation remain P02-ISS-009 work.
+- Lockfile minimum-release-age policy currently blocks full pnpm repository-level verification commands in this environment; targeted file diagnostics and direct Playwright Step 5 evidence are recorded.
