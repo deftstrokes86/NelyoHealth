@@ -39,6 +39,49 @@ const baseInput = {
       ]
     }
   },
+  requestedConsentDomains: ["telemedicine", "provider-data-sharing"] as const,
+  consent: {
+    consentId: "consent-1",
+    patientId: "patient-1",
+    organizationId: "tenant-1",
+    currentVersion: 2,
+    updatedAt: "2026-07-01T00:00:00.000Z",
+    versions: [
+      {
+        version: 1,
+        status: "revoked" as const,
+        grantedDomains: ["telemedicine", "provider-data-sharing"],
+        effectiveDate: "2026-01-01T00:00:00.000Z",
+        revokedAt: "2026-05-01T00:00:00.000Z",
+        revokedByActorId: "patient-1",
+        revocationReason: "prior-version",
+        createdAt: "2026-01-01T00:00:00.000Z",
+        createdByActorId: "patient-1",
+        supersededByVersion: 2
+      },
+      {
+        version: 2,
+        status: "granted" as const,
+        grantedDomains: [
+          "telemedicine",
+          "provider-data-sharing",
+          "sponsor-participation",
+          "family-participation",
+          "caregiver-participation",
+          "consultation-participants",
+          "recording",
+          "marketing",
+          "research",
+          "cross-border-processing",
+          "emergency-access"
+        ],
+        effectiveDate: "2026-06-01T00:00:00.000Z",
+        expiryDate: "2027-06-01T00:00:00.000Z",
+        createdAt: "2026-06-01T00:00:00.000Z",
+        createdByActorId: "patient-1"
+      }
+    ]
+  },
   requestedResource: "clinical-record-summary",
   requestedAction: "read",
   purpose: "care-delivery",
@@ -110,12 +153,130 @@ describe("authorization policy decision handler", () => {
   it("denies revoked consent immediately", () => {
     const decision = evaluateAuthorizationPolicyDecision({
       ...baseInput,
-      consentStatus: "revoked"
+      consentStatus: "revoked",
+      consent: {
+        ...baseInput.consent,
+        versions: [
+          {
+            ...baseInput.consent.versions[0],
+            version: 2,
+            status: "revoked",
+            revokedAt: "2026-07-02T00:00:00.000Z",
+            revokedByActorId: "patient-1",
+            revocationReason: "withdrawn"
+          }
+        ]
+      }
     });
 
     expect(decision).toMatchObject({
       status: "denied",
       reasonCode: "consent-revoked"
+    });
+  });
+
+  it("denies when required consent domain is not granted", () => {
+    const decision = evaluateAuthorizationPolicyDecision({
+      ...baseInput,
+      requestedConsentDomains: ["telemedicine", "research"],
+      consent: {
+        ...baseInput.consent,
+        versions: [
+          {
+            ...baseInput.consent.versions[1],
+            grantedDomains: ["telemedicine", "provider-data-sharing"]
+          }
+        ]
+      }
+    });
+
+    expect(decision).toMatchObject({
+      status: "denied",
+      reasonCode: "consent-scope-not-granted",
+      dimensionOutcomes: {
+        abac: { status: "denied", reasonCode: "consent-scope-not-granted" }
+      }
+    });
+  });
+
+  it("denies when consent version pointer is stale", () => {
+    const decision = evaluateAuthorizationPolicyDecision({
+      ...baseInput,
+      consent: {
+        ...baseInput.consent,
+        currentVersion: 99
+      }
+    });
+
+    expect(decision).toMatchObject({
+      status: "denied",
+      reasonCode: "consent-version-stale",
+      dimensionOutcomes: {
+        abac: { status: "denied", reasonCode: "consent-version-stale" }
+      }
+    });
+  });
+
+  it("denies when consent record is missing", () => {
+    const decision = evaluateAuthorizationPolicyDecision({
+      ...baseInput,
+      consent: undefined
+    });
+
+    expect(decision).toMatchObject({
+      status: "denied",
+      reasonCode: "consent-missing",
+      dimensionOutcomes: {
+        abac: { status: "denied", reasonCode: "consent-missing" }
+      }
+    });
+  });
+
+  it("denies when current consent version is expired", () => {
+    const decision = evaluateAuthorizationPolicyDecision({
+      ...baseInput,
+      consentStatus: "expired",
+      consent: {
+        ...baseInput.consent,
+        versions: [
+          {
+            ...baseInput.consent.versions[1],
+            status: "expired",
+            expiryDate: "2026-01-01T00:00:00.000Z"
+          }
+        ]
+      }
+    });
+
+    expect(decision).toMatchObject({
+      status: "denied",
+      reasonCode: "consent-expired",
+      dimensionOutcomes: {
+        abac: { status: "denied", reasonCode: "consent-expired" }
+      }
+    });
+  });
+
+  it("denies when consent has not reached effective time", () => {
+    const decision = evaluateAuthorizationPolicyDecision({
+      ...baseInput,
+      consent: {
+        ...baseInput.consent,
+        versions: [
+          {
+            ...baseInput.consent.versions[1],
+            effectiveDate: "2027-01-01T00:00:00.000Z"
+          }
+        ]
+      }
+    });
+
+    expect(decision).toMatchObject({
+      status: "denied",
+      reasonCode: "consent-not-yet-effective",
+      dimensionOutcomes: {
+        abac: { status: "denied", reasonCode: "consent-not-yet-effective" }
+      }
     });
   });
 
@@ -200,7 +361,16 @@ describe("authorization policy decision handler", () => {
   it("denies when relationship is not yet effective", () => {
     const decision = evaluateAuthorizationPolicyDecision({
       ...baseInput,
-      evaluatedAt: "2025-12-01T00:00:00.000Z"
+      evaluatedAt: "2025-12-01T00:00:00.000Z",
+      consent: {
+        ...baseInput.consent,
+        versions: [
+          {
+            ...baseInput.consent.versions[1],
+            effectiveDate: "2025-01-01T00:00:00.000Z"
+          }
+        ]
+      }
     });
 
     expect(decision).toMatchObject({
@@ -243,6 +413,26 @@ describe("authorization policy decision handler", () => {
     expect(decision).toMatchObject({
       status: "challenge-required",
       reasonCode: "break-glass-reason-required"
+    });
+  });
+
+  it("allows emergency break-glass flow even when consent status is revoked", () => {
+    const decision = evaluateAuthorizationPolicyDecision({
+      ...baseInput,
+      emergencyStatus: "declared",
+      purpose: "emergency-care",
+      breakGlassRequested: true,
+      breakGlassReason: "critical-hemorrhage",
+      consentStatus: "revoked"
+    });
+
+    expect(decision).toMatchObject({
+      status: "allowed",
+      reasonCode: "allowed",
+      breakGlassActive: true,
+      dimensionOutcomes: {
+        abac: { status: "allowed", reasonCode: "allowed" }
+      }
     });
   });
 

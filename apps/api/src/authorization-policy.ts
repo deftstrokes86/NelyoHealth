@@ -1,4 +1,5 @@
 import type { AuthorizationRelationshipDraft } from "./relationship-model.js";
+import type { ConsentDomain, ConsentRecordDraft } from "./granular-consent.js";
 
 export type ConsentStatus = "granted" | "revoked" | "expired";
 export type RelationshipStatus = "active" | "revoked" | "expired" | "none";
@@ -28,6 +29,8 @@ export interface AuthorizationPolicyDecisionDraftInput {
   patientId: string;
   relationshipType: RelationshipType;
   relationship?: AuthorizationRelationshipDraft;
+  requestedConsentDomains: ConsentDomain[];
+  consent?: ConsentRecordDraft;
   requestedResource: string;
   requestedAction: string;
   purpose: string;
@@ -74,7 +77,12 @@ export interface AuthorizationPolicyDecisionDraft {
     | "abac-encounter-required"
     | "tenant-mismatch"
     | "stale-session"
+    | "consent-missing"
+    | "consent-version-stale"
+    | "consent-scope-not-granted"
+    | "consent-not-yet-effective"
     | "consent-revoked"
+    | "consent-expired"
     | "relationship-missing"
     | "relationship-not-yet-effective"
     | "relationship-action-not-permitted"

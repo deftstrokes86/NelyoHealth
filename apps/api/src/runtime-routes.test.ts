@@ -249,6 +249,27 @@ describe("runtime route handlers", () => {
         patientId: "patient-route-1",
         relationshipType: "guardian",
         requestedResource: "clinical-record-summary",
+        requestedConsentDomains: ["telemedicine", "provider-data-sharing"],
+        consent: {
+          consentId: "consent-route-1",
+          patientId: "patient-route-1",
+          organizationId: "tenant-route-1",
+          currentVersion: 1,
+          updatedAt: "2026-07-10T12:09:00.000Z",
+          versions: [
+            {
+              version: 1,
+              status: "revoked",
+              grantedDomains: ["telemedicine", "provider-data-sharing"],
+              effectiveDate: "2026-01-01T00:00:00.000Z",
+              revokedAt: "2026-07-10T12:00:00.000Z",
+              revokedByActorId: "patient-route-1",
+              revocationReason: "withdrawn",
+              createdAt: "2026-01-01T00:00:00.000Z",
+              createdByActorId: "patient-route-1"
+            }
+          ]
+        },
         requestedAction: "read",
         purpose: "care-delivery",
         consentStatus: "revoked",
@@ -277,6 +298,65 @@ describe("runtime route handlers", () => {
     expect(response.meta).toMatchObject({
       operationTag: "authorization.policy.evaluate",
       decisionReasonTag: "consent-revoked"
+    });
+  });
+
+  it("returns authorization policy envelope for stale consent version", () => {
+    const response = handleAuthorizationPolicyDecisionRoute({
+      requestId: "req-8",
+      correlationId: "corr-8",
+      input: {
+        decisionRequestId: "policy-route-2",
+        actorId: "actor-route-2",
+        actorRole: "guardian",
+        actorType: "guardian",
+        organizationId: "tenant-route-1",
+        patientId: "patient-route-1",
+        relationshipType: "guardian",
+        requestedResource: "clinical-record-summary",
+        requestedConsentDomains: ["telemedicine"],
+        consent: {
+          consentId: "consent-route-2",
+          patientId: "patient-route-1",
+          organizationId: "tenant-route-1",
+          currentVersion: 99,
+          updatedAt: "2026-07-10T12:09:00.000Z",
+          versions: [
+            {
+              version: 1,
+              status: "granted",
+              grantedDomains: ["telemedicine"],
+              effectiveDate: "2026-01-01T00:00:00.000Z",
+              createdAt: "2026-01-01T00:00:00.000Z",
+              createdByActorId: "patient-route-1"
+            }
+          ]
+        },
+        requestedAction: "read",
+        purpose: "care-delivery",
+        consentStatus: "granted",
+        relationshipStatus: "active",
+        sessionStatus: "active",
+        activeEncounter: true,
+        emergencyStatus: "none",
+        sameTenant: true,
+        sponsorPaymentOnly: false,
+        requiresRelationship: false,
+        breakGlassRequested: false,
+        impersonationAttempt: false,
+        auditEventEditAttempt: false,
+        evaluatedAt: "2026-07-10T12:11:00.000Z"
+      }
+    });
+
+    expect(response.data).toMatchObject({
+      status: "denied",
+      reasonCode: "consent-version-stale"
+    });
+    expect(response.errors).toEqual([]);
+    expect(response.meta).toMatchObject({
+      operationTag: "authorization.policy.evaluate",
+      decisionReasonTag: "consent-version-stale"
     });
   });
 });

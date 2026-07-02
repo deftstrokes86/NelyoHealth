@@ -89,6 +89,13 @@ export type {
   ClinicalProxy,
   AuthorizationRelationshipDraft
 } from "./relationship-model.js";
+export { createConsentRecordDraft } from "./granular-consent.js";
+export type {
+  ConsentDomain,
+  ConsentVersionStatus,
+  ConsentVersionDraft,
+  ConsentRecordDraft
+} from "./granular-consent.js";
 export { evaluateAuthorizationPolicyDecision } from "./authorization-policy-handlers.js";
 export { createPaymentDraft } from "./payments.js";
 export type { PaymentDraft, PaymentDraftInput } from "./payments.js";

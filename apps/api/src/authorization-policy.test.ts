@@ -41,6 +41,25 @@ describe("authorization policy draft input contract", () => {
           ]
         }
       },
+      requestedConsentDomains: ["telemedicine", "provider-data-sharing"],
+      consent: {
+        consentId: "consent-1",
+        patientId: "patient-1",
+        organizationId: "tenant-1",
+        currentVersion: 1,
+        updatedAt: "2026-01-01T00:00:00.000Z",
+        versions: [
+          {
+            version: 1,
+            status: "granted",
+            grantedDomains: ["telemedicine", "provider-data-sharing"],
+            effectiveDate: "2026-01-01T00:00:00.000Z",
+            expiryDate: "2027-01-01T00:00:00.000Z",
+            createdAt: "2026-01-01T00:00:00.000Z",
+            createdByActorId: "patient-1"
+          }
+        ]
+      },
       requestedResource: "clinical-record-summary",
       requestedAction: "read",
       purpose: "care-delivery",
@@ -67,6 +86,10 @@ describe("authorization policy draft input contract", () => {
         lifecycle: {
           verificationMethod: "legal-document"
         }
+      },
+      requestedConsentDomains: ["telemedicine", "provider-data-sharing"],
+      consent: {
+        currentVersion: 1
       },
       requestedResource: "clinical-record-summary",
       consentStatus: "granted",

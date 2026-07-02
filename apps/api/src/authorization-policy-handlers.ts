@@ -156,11 +156,11 @@ function evaluateAbacOutcome(
     input.breakGlassRequested &&
     Boolean(input.breakGlassReason);
 
-  if (!emergencyBypass && input.consentStatus !== "granted") {
-    return {
-      status: "denied",
-      reasonCode: "consent-revoked"
-    };
+  if (!emergencyBypass) {
+    const consentOutcome = evaluateConsentOutcome(input);
+    if (consentOutcome.status !== "allowed") {
+      return consentOutcome;
+    }
   }
 
   const allowedPurposesByAction: Record<string, string[]> = {
@@ -202,6 +202,86 @@ function evaluateAbacOutcome(
     return {
       status: "denied",
       reasonCode: "abac-encounter-required"
+    };
+  }
+
+  return {
+    status: "allowed",
+    reasonCode: "allowed"
+  };
+}
+
+function evaluateConsentOutcome(
+  input: AuthorizationPolicyDecisionDraftInput
+): AuthorizationPolicyDimensionOutcome {
+  if (!input.consent) {
+    return {
+      status: "denied",
+      reasonCode: "consent-missing"
+    };
+  }
+
+  if (input.consentStatus !== "granted") {
+    return {
+      status: "denied",
+      reasonCode: input.consentStatus === "expired" ? "consent-expired" : "consent-revoked"
+    };
+  }
+
+  const currentVersion = input.consent.versions.find(
+    (version) => version.version === input.consent?.currentVersion
+  );
+
+  if (!currentVersion) {
+    return {
+      status: "denied",
+      reasonCode: "consent-version-stale"
+    };
+  }
+
+  const evaluatedAtMs = Date.parse(input.evaluatedAt);
+  const effectiveAtMs = Date.parse(currentVersion.effectiveDate);
+
+  if (
+    !Number.isNaN(effectiveAtMs) &&
+    !Number.isNaN(evaluatedAtMs) &&
+    evaluatedAtMs < effectiveAtMs
+  ) {
+    return {
+      status: "denied",
+      reasonCode: "consent-not-yet-effective"
+    };
+  }
+
+  const expiryAtMs = currentVersion.expiryDate ? Date.parse(currentVersion.expiryDate) : Number.NaN;
+  if (!Number.isNaN(expiryAtMs) && !Number.isNaN(evaluatedAtMs) && evaluatedAtMs > expiryAtMs) {
+    return {
+      status: "denied",
+      reasonCode: "consent-expired"
+    };
+  }
+
+  if (currentVersion.status === "revoked") {
+    return {
+      status: "denied",
+      reasonCode: "consent-revoked"
+    };
+  }
+
+  if (currentVersion.status === "expired") {
+    return {
+      status: "denied",
+      reasonCode: "consent-expired"
+    };
+  }
+
+  const hasAllRequiredDomains = input.requestedConsentDomains.every((domain) =>
+    currentVersion.grantedDomains.includes(domain)
+  );
+  if (!hasAllRequiredDomains) {
+    return {
+      status: "denied",
+      reasonCode: "consent-scope-not-granted"
     };
   }
 
@@ -294,7 +374,12 @@ function getNextSteps(reasonCode: AuthorizationPolicyDecisionDraft["reasonCode"]
     "abac-encounter-required": ["start-or-link-encounter"],
     "tenant-mismatch": ["select-correct-organization-context"],
     "stale-session": ["reauthenticate"],
+    "consent-missing": ["capture-consent-record"],
+    "consent-version-stale": ["refresh-consent-version"],
+    "consent-scope-not-granted": ["request-required-consent-scope"],
+    "consent-not-yet-effective": ["wait-for-consent-effective-date"],
     "consent-revoked": ["restore-consent"],
+    "consent-expired": ["renew-consent"],
     "relationship-missing": ["establish-relationship"],
     "relationship-not-yet-effective": ["wait-for-relationship-effective-date"],
     "relationship-action-not-permitted": ["request-expanded-relationship-permissions"],
