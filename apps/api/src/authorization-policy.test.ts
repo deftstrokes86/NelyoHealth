@@ -7,14 +7,48 @@ describe("authorization policy draft input contract", () => {
       decisionRequestId: "policy-1",
       actorId: "actor-1",
       actorRole: "guardian",
+      actorType: "guardian",
       organizationId: "tenant-1",
       patientId: "patient-1",
+      relationshipType: "guardian",
+      relationship: {
+        relationshipId: "rel-1",
+        relationshipType: "guardian",
+        actorId: "actor-1",
+        patientId: "patient-1",
+        organizationId: "tenant-1",
+        lifecycle: {
+          status: "active",
+          verificationMethod: "legal-document",
+          effectiveDate: "2026-01-01T00:00:00.000Z",
+          expiryDate: "2027-01-01T00:00:00.000Z",
+          permittedActions: ["read", "update-consent"],
+          supportingDocuments: [
+            {
+              documentId: "doc-1",
+              documentType: "court-order",
+              addedAt: "2026-01-01T00:00:00.000Z",
+              addedByActorId: "reviewer-1"
+            }
+          ],
+          reviewHistory: [
+            {
+              reviewId: "review-1",
+              reviewedAt: "2026-01-02T00:00:00.000Z",
+              reviewedByActorId: "reviewer-1",
+              outcome: "approved"
+            }
+          ]
+        }
+      },
       requestedResource: "clinical-record-summary",
       requestedAction: "read",
       purpose: "care-delivery",
       consentStatus: "granted",
       relationshipStatus: "active",
       sessionStatus: "active",
+      activeEncounter: true,
+      emergencyStatus: "none",
       sameTenant: true,
       sponsorPaymentOnly: false,
       requiresRelationship: true,
@@ -27,6 +61,13 @@ describe("authorization policy draft input contract", () => {
     expect(payload).toMatchObject({
       decisionRequestId: "policy-1",
       actorRole: "guardian",
+      relationshipType: "guardian",
+      relationship: {
+        relationshipType: "guardian",
+        lifecycle: {
+          verificationMethod: "legal-document"
+        }
+      },
       requestedResource: "clinical-record-summary",
       consentStatus: "granted",
       relationshipStatus: "active",

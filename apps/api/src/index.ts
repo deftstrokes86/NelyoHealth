@@ -73,6 +73,22 @@ export type {
   AuditIntentDraft,
   AuthorizationPolicyDecisionDraft
 } from "./authorization-policy.js";
+export { createAuthorizationRelationshipDraft } from "./relationship-model.js";
+export type {
+  RelationshipLifecycleStatus,
+  RelationshipVerificationMethod,
+  RelationshipSupportingDocumentDraft,
+  RelationshipReviewHistoryEntryDraft,
+  RelationshipRevocationInfoDraft,
+  RelationshipLifecycleDraft,
+  GuardianRelationship,
+  HouseholdRelationship,
+  SponsorRelationship,
+  CaregiverDelegation,
+  EmergencyContact,
+  ClinicalProxy,
+  AuthorizationRelationshipDraft
+} from "./relationship-model.js";
 export { evaluateAuthorizationPolicyDecision } from "./authorization-policy-handlers.js";
 export { createPaymentDraft } from "./payments.js";
 export type { PaymentDraft, PaymentDraftInput } from "./payments.js";

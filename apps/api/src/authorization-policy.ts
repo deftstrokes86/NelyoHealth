@@ -1,19 +1,41 @@
+import type { AuthorizationRelationshipDraft } from "./relationship-model.js";
+
 export type ConsentStatus = "granted" | "revoked" | "expired";
 export type RelationshipStatus = "active" | "revoked" | "expired" | "none";
 export type SessionStatus = "active" | "stale" | "revoked";
+export type RelationshipType =
+  | "guardian"
+  | "household"
+  | "sponsor"
+  | "caregiver-delegation"
+  | "emergency-contact"
+  | "clinical-proxy"
+  | "none";
+export type EmergencyStatus = "none" | "declared";
+export type AuthorizationPolicyDimensionStatus = "allowed" | "denied" | "challenge-required";
+
+export interface AuthorizationPolicyDimensionOutcome {
+  status: AuthorizationPolicyDimensionStatus;
+  reasonCode: AuthorizationPolicyDecisionDraft["reasonCode"];
+}
 
 export interface AuthorizationPolicyDecisionDraftInput {
   decisionRequestId: string;
   actorId: string;
   actorRole: string;
+  actorType: "patient" | "guardian" | "sponsor" | "caregiver" | "clinician" | "support" | "admin";
   organizationId: string;
   patientId: string;
+  relationshipType: RelationshipType;
+  relationship?: AuthorizationRelationshipDraft;
   requestedResource: string;
   requestedAction: string;
   purpose: string;
   consentStatus: ConsentStatus;
   relationshipStatus: RelationshipStatus;
   sessionStatus: SessionStatus;
+  activeEncounter: boolean;
+  emergencyStatus: EmergencyStatus;
   sameTenant: boolean;
   sponsorPaymentOnly: boolean;
   requiresRelationship: boolean;
@@ -46,9 +68,16 @@ export interface AuthorizationPolicyDecisionDraft {
   status: "allowed" | "denied" | "challenge-required";
   reasonCode:
     | "allowed"
+    | "rbac-role-not-permitted"
+    | "abac-purpose-not-allowed"
+    | "abac-time-window-not-allowed"
+    | "abac-encounter-required"
     | "tenant-mismatch"
     | "stale-session"
     | "consent-revoked"
+    | "relationship-missing"
+    | "relationship-not-yet-effective"
+    | "relationship-action-not-permitted"
     | "relationship-revoked"
     | "relationship-expired"
     | "sponsor-payment-no-clinical-access"
@@ -56,6 +85,11 @@ export interface AuthorizationPolicyDecisionDraft {
     | "break-glass-window-exceeded"
     | "administrator-impersonation-denied"
     | "audit-event-append-only";
+  dimensionOutcomes: {
+    rbac: AuthorizationPolicyDimensionOutcome;
+    abac: AuthorizationPolicyDimensionOutcome;
+    rebac: AuthorizationPolicyDimensionOutcome;
+  };
   breakGlassActive: boolean;
   nextSteps: string[];
   auditIntent: AuditIntentDraft;

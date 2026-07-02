@@ -784,3 +784,17 @@ For all future phase updates:
 - Updated `docs/STATUS.md` to mark Phase 4 kickoff as started and set `P04-ISS-001` execution as the next action.
 - Preserved web-first delivery priority and mobile-forward compatibility constraints in the kickoff and issue scope.
 - Preserved manual Git/GitHub governance boundaries and synthetic-only evidence expectations.
+
+## 2026-07-02 - P04-ISS-001 authorization policy scaffold and evidence closure
+
+- Implemented `apps/api/src/authorization-policy.ts` and `apps/api/src/authorization-policy-handlers.ts` to scaffold deterministic authorization-policy decisions for consent, relationship, session freshness, tenancy scope, sponsor limitations, break-glass rules, impersonation denial, and append-only audit intent.
+- Added focused policy and envelope tests in `apps/api/src/authorization-policy.test.ts`, `apps/api/src/authorization-policy-handlers.test.ts`, and `apps/api/src/runtime-routes.test.ts`.
+- Wired runtime and package exports for policy evaluation through `apps/api/src/runtime-routes.ts` and `apps/api/src/index.ts`.
+- Extended synthetic browser evidence surface with `/api/authorization-policy` in `scripts/browser-smoke-server.mjs`.
+- Added cross-viewport browser and accessibility evidence suites in `tests/e2e/authorization-policy-journeys.spec.ts`, `tests/accessibility/authorization-policy-journeys.a11y.spec.ts`, and `playwright.step4.config.ts`.
+- Captured deterministic test evidence with:
+  - `node node_modules/vitest/vitest.mjs run apps/api/src/authorization-policy.test.ts apps/api/src/authorization-policy-handlers.test.ts apps/api/src/runtime-routes.test.ts` -> `3 passed files, 16 passed tests`.
+  - `node node_modules/@playwright/test/cli.js test -c playwright.step4.config.ts` -> `9 passed (10.6s)` across desktop/tablet/mobile journey and accessibility projects.
+- Updated `docs/governance/phase-4-requirements-traceability.md` from STARTED/NOT-STARTED to evidence-backed completion statuses for P04 requirement and exit-gate mapping.
+- Updated `docs/STATUS.md` to mark P04-ISS-001 completed and move next action to P04-ISS-002 definition/execution.
+- Recorded residual condition: full `pnpm` repository-level verification remains blocked by lockfile minimum-release-age policy in this environment.
