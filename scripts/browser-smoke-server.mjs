@@ -537,6 +537,25 @@ const server = http.createServer((request, response) => {
     const actorRole = requestUrl.searchParams.get("actorRole") ?? "guardian";
     const impersonationAttempt = requestUrl.searchParams.get("impersonationAttempt") === "true";
     const auditEventEditAttempt = requestUrl.searchParams.get("auditEventEditAttempt") === "true";
+    const consentCurrentVersion = Number(
+      requestUrl.searchParams.get("consentCurrentVersion") ?? "1"
+    );
+    const knownConsentVersions = (requestUrl.searchParams.get("knownConsentVersions") ?? "1")
+      .split(",")
+      .map((value) => Number(value.trim()))
+      .filter((value) => !Number.isNaN(value));
+    const consentDomains = (
+      requestUrl.searchParams.get("consentDomains") ?? "telemedicine,provider-data-sharing"
+    )
+      .split(",")
+      .map((value) => value.trim())
+      .filter(Boolean);
+    const requestedConsentDomains = (
+      requestUrl.searchParams.get("requestedConsentDomains") ?? "telemedicine,provider-data-sharing"
+    )
+      .split(",")
+      .map((value) => value.trim())
+      .filter(Boolean);
 
     let data = {
       decisionRequestId: "policy-route-1",
@@ -597,12 +616,26 @@ const server = http.createServer((request, response) => {
         reasonCode: "sponsor-payment-no-clinical-access",
         nextSteps: ["request-clinical-authorization"]
       };
+    } else if (!knownConsentVersions.includes(consentCurrentVersion)) {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "consent-version-stale",
+        nextSteps: ["refresh-consent-version"]
+      };
     } else if (consentStatus !== "granted") {
       data = {
         ...data,
         status: "denied",
         reasonCode: "consent-revoked",
         nextSteps: ["restore-consent"]
+      };
+    } else if (!requestedConsentDomains.every((domain) => consentDomains.includes(domain))) {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "consent-scope-not-granted",
+        nextSteps: ["request-required-consent-scope"]
       };
     } else if (requiresRelationship && relationshipStatus === "revoked") {
       data = {
@@ -656,6 +689,100 @@ const server = http.createServer((request, response) => {
           decisionReasonTag: data.reasonCode
         },
         errors: []
+      })
+    );
+    return;
+  }
+  if ((request.url ?? "").startsWith("/api/audit-events")) {
+    const requestUrl = new URL(request.url ?? "/api/audit-events", `http://${host}:${port}`);
+    const operation = requestUrl.searchParams.get("operation") ?? "append";
+    const targetEventId = requestUrl.searchParams.get("targetEventId") ?? "audit-event-1";
+
+    let statusCode = 200;
+    let data = {
+      eventId: "audit-event-1",
+      eventVersion: 1,
+      appendOnly: true,
+      actorId: "actor-route-1",
+      subjectId: "patient-route-1",
+      organizationId: "tenant-route-1",
+      action: "read",
+      resource: "clinical-record-summary",
+      purpose: "care-delivery",
+      occurredAt: new Date(0).toISOString(),
+      requestId: "req-audit-route-1",
+      ipAddress: "198.51.100.50",
+      device: {
+        deviceId: "device-route-1",
+        deviceType: "browser",
+        userAgent: "SyntheticBrowser/1.0"
+      },
+      breakGlassUsed: false,
+      priorState: {
+        status: "pending"
+      },
+      newState: {
+        status: "allowed"
+      }
+    };
+    let errors = [];
+    let decisionReasonTag = "appended";
+
+    if (operation === "mutate") {
+      statusCode = 409;
+      data = null;
+      decisionReasonTag = "append-only-rejected";
+      errors = [
+        {
+          code: "AUDIT_APPEND_ONLY_ENFORCED",
+          message: "Audit events are append-only and cannot be edited through application routes."
+        }
+      ];
+    } else if (operation === "amend") {
+      data = {
+        eventId: "audit-event-1-amendment",
+        eventVersion: 2,
+        appendOnly: true,
+        actorId: "clinician-route-1",
+        subjectId: "patient-route-1",
+        organizationId: "tenant-route-1",
+        action: "amend",
+        resource: "clinical-record-summary",
+        purpose: "care-delivery",
+        occurredAt: new Date(0).toISOString(),
+        requestId: "req-audit-route-2",
+        ipAddress: "198.51.100.51",
+        device: {
+          deviceId: "device-route-2",
+          deviceType: "desktop",
+          userAgent: "SyntheticDesktop/1.0"
+        },
+        breakGlassUsed: false,
+        priorState: {
+          status: "allowed",
+          version: 1
+        },
+        newState: {
+          status: "allowed-amended",
+          version: 2
+        },
+        supersedesEventId: targetEventId,
+        amendmentReason: "post-sign-correction"
+      };
+      decisionReasonTag = "amended";
+    }
+
+    response.writeHead(statusCode, apiJsonHeaders);
+    response.end(
+      JSON.stringify({
+        data,
+        meta: {
+          requestId: "req-audit-route-envelope",
+          correlationId: "corr-audit-route-envelope",
+          operationTag: `audit.event.${operation}`,
+          decisionReasonTag
+        },
+        errors
       })
     );
     return;

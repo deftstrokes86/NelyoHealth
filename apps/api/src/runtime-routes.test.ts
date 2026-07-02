@@ -3,6 +3,9 @@ import { createPaymentDraft } from "./payments.js";
 import { createRefundDraft } from "./refunds.js";
 import {
   handleAuthenticationDecisionRoute,
+  handleAuditEventAmendRoute,
+  handleAuditEventAppendRoute,
+  handleAuditEventMutationAttemptRoute,
   handleAuthorizationPolicyDecisionRoute,
   handlePaymentTransitionRoute,
   handleProviderDisclosureEligibilityRoute,
@@ -11,6 +14,10 @@ import {
 } from "./runtime-routes.js";
 import { createAuthenticationDraft } from "./authentication.js";
 import { createTenancyAccessDraft } from "./tenancy.js";
+import {
+  AuditEventWorkflowService,
+  InMemoryAuditEventRepository
+} from "./audit-event-workflows.js";
 
 function createPolicyRouteInput(overrides: Record<string, unknown> = {}) {
   return {
@@ -608,5 +615,179 @@ describe("runtime route handlers", () => {
         decisionReasonTag: "rbac-policy-unmapped-deny-default"
       });
     }
+  });
+
+  it("appends audit events with full metadata through application route", () => {
+    const workflowService = new AuditEventWorkflowService(new InMemoryAuditEventRepository());
+
+    const response = handleAuditEventAppendRoute({
+      requestId: "req-audit-1",
+      correlationId: "corr-audit-1",
+      workflowService,
+      input: {
+        eventId: "audit-route-1",
+        actorId: "actor-route-1",
+        subjectId: "patient-route-1",
+        organizationId: "tenant-route-1",
+        action: "read",
+        resource: "clinical-record-summary",
+        purpose: "care-delivery",
+        occurredAt: "2026-07-10T12:10:00.000Z",
+        requestId: "policy-route-1",
+        ipAddress: "198.51.100.30",
+        device: {
+          deviceId: "device-route-1",
+          deviceType: "browser",
+          userAgent: "SyntheticBrowser/1.0"
+        },
+        breakGlassUsed: false,
+        priorState: {
+          status: "pending"
+        },
+        newState: {
+          status: "allowed"
+        }
+      }
+    });
+
+    expect(response.errors).toEqual([]);
+    expect(response.data).toMatchObject({
+      eventId: "audit-route-1",
+      eventVersion: 1,
+      appendOnly: true,
+      actorId: "actor-route-1",
+      subjectId: "patient-route-1",
+      organizationId: "tenant-route-1",
+      action: "read",
+      resource: "clinical-record-summary",
+      purpose: "care-delivery",
+      occurredAt: "2026-07-10T12:10:00.000Z",
+      requestId: "policy-route-1",
+      ipAddress: "198.51.100.30",
+      device: {
+        deviceId: "device-route-1",
+        deviceType: "browser",
+        userAgent: "SyntheticBrowser/1.0"
+      },
+      breakGlassUsed: false,
+      priorState: {
+        status: "pending"
+      },
+      newState: {
+        status: "allowed"
+      }
+    });
+    expect(response.meta).toMatchObject({
+      operationTag: "audit.event.append",
+      decisionReasonTag: "appended"
+    });
+  });
+
+  it("rejects audit mutation attempts at application boundary", () => {
+    const workflowService = new AuditEventWorkflowService(new InMemoryAuditEventRepository());
+
+    const response = handleAuditEventMutationAttemptRoute({
+      requestId: "req-audit-2",
+      correlationId: "corr-audit-2",
+      workflowService,
+      input: {
+        eventId: "audit-route-2",
+        attemptedOperation: "update",
+        attemptedAt: "2026-07-10T12:12:00.000Z",
+        actorId: "actor-route-2"
+      }
+    });
+
+    expect(response.data).toBeNull();
+    expect(response.errors).toMatchObject([
+      {
+        code: "AUDIT_APPEND_ONLY_ENFORCED"
+      }
+    ]);
+    expect(response.meta).toMatchObject({
+      operationTag: "audit.event.mutation",
+      decisionReasonTag: "append-only-rejected"
+    });
+  });
+
+  it("enforces amendment/versioning route instead of edits", () => {
+    const workflowService = new AuditEventWorkflowService(new InMemoryAuditEventRepository());
+
+    handleAuditEventAppendRoute({
+      requestId: "req-audit-3",
+      correlationId: "corr-audit-3",
+      workflowService,
+      input: {
+        eventId: "audit-route-3",
+        actorId: "actor-route-3",
+        subjectId: "patient-route-1",
+        organizationId: "tenant-route-1",
+        action: "write",
+        resource: "clinical-note",
+        purpose: "care-delivery",
+        occurredAt: "2026-07-10T12:13:00.000Z",
+        requestId: "req-audit-3",
+        ipAddress: "198.51.100.31",
+        device: {
+          deviceId: "device-route-3",
+          deviceType: "desktop",
+          userAgent: "SyntheticDesktop/1.0"
+        },
+        breakGlassUsed: false,
+        priorState: {
+          noteVersion: 1
+        },
+        newState: {
+          noteVersion: 1,
+          status: "signed"
+        }
+      }
+    });
+
+    const amendResponse = handleAuditEventAmendRoute({
+      requestId: "req-audit-3-amend",
+      correlationId: "corr-audit-3-amend",
+      workflowService,
+      input: {
+        amendmentEventId: "audit-route-3-amendment",
+        targetEventId: "audit-route-3",
+        actorId: "clinician-route-3",
+        subjectId: "patient-route-1",
+        organizationId: "tenant-route-1",
+        action: "amend",
+        resource: "clinical-note",
+        purpose: "care-delivery",
+        occurredAt: "2026-07-10T12:14:00.000Z",
+        requestId: "req-audit-3-amend",
+        ipAddress: "198.51.100.32",
+        device: {
+          deviceId: "device-route-3-amend",
+          deviceType: "desktop",
+          userAgent: "SyntheticDesktop/1.0"
+        },
+        breakGlassUsed: false,
+        priorState: {
+          noteVersion: 1,
+          status: "signed"
+        },
+        newState: {
+          noteVersion: 2,
+          status: "signed-amended"
+        },
+        amendmentReason: "post-sign-correction"
+      }
+    });
+
+    expect(amendResponse.errors).toEqual([]);
+    expect(amendResponse.data).toMatchObject({
+      eventId: "audit-route-3-amendment",
+      eventVersion: 2,
+      supersedesEventId: "audit-route-3",
+      amendmentReason: "post-sign-correction"
+    });
+    expect(amendResponse.meta).toMatchObject({
+      operationTag: "audit.event.amend",
+      decisionReasonTag: "amended"
+    });
   });
 });

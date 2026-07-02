@@ -109,6 +109,33 @@ export type {
   ConsentVersionDraft,
   ConsentRecordDraft
 } from "./granular-consent.js";
+export {
+  InMemoryConsentRepository,
+  GranularConsentWorkflowService,
+  ConsentVersionStaleError
+} from "./granular-consent-workflows.js";
+export type {
+  ConsentRepository,
+  CreateConsentRecordInput,
+  SupersedeConsentVersionInput,
+  RevokeConsentVersionInput
+} from "./granular-consent-workflows.js";
+export {
+  createAuditEventDraft,
+  InMemoryAuditEventRepository,
+  AuditEventWorkflowService,
+  AuditAppendOnlyViolationError,
+  AuditEventNotFoundError
+} from "./audit-event-workflows.js";
+export type {
+  AuditStateSnapshot,
+  AuditDeviceMetadata,
+  AuditEventDraft,
+  AuditEventRepository,
+  AppendAuditEventInput,
+  AmendAuditEventInput,
+  MutationAttemptInput
+} from "./audit-event-workflows.js";
 export { evaluateAuthorizationPolicyDecision } from "./authorization-policy-handlers.js";
 export { createPaymentDraft } from "./payments.js";
 export type { PaymentDraft, PaymentDraftInput } from "./payments.js";
@@ -145,6 +172,9 @@ export {
   handleAuthenticationDecisionRoute,
   handleTenancyAccessDecisionRoute,
   handleAuthorizationPolicyDecisionRoute,
+  handleAuditEventAppendRoute,
+  handleAuditEventAmendRoute,
+  handleAuditEventMutationAttemptRoute,
   handlePaymentTransitionRoute,
   handleRefundTransitionRoute,
   handleProviderDisclosureEligibilityRoute
@@ -153,6 +183,9 @@ export type {
   AuthenticationDecisionRouteRequest,
   TenancyAccessDecisionRouteRequest,
   AuthorizationPolicyDecisionRouteRequest,
+  AuditEventAppendRouteRequest,
+  AuditEventAmendRouteRequest,
+  AuditEventMutationAttemptRouteRequest,
   RuntimeRouteMeta,
   PaymentTransitionRouteRequest,
   RefundTransitionRouteRequest,

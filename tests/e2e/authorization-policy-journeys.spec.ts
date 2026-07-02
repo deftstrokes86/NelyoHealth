@@ -161,4 +161,132 @@ test.describe("authorization policy browser journeys", () => {
     await expectNoProtectedSentinels(page);
     await expectNoBrowserGuardFailures(guards);
   });
+
+  test("applies domain-specific consent toggles and stale-version checks immediately", async ({
+    page
+  }, testInfo) => {
+    const guards = installBrowserGuards(page, testInfo);
+
+    await page.goto("/");
+
+    const baselineAllowed = await page.request.get(
+      "/api/authorization-policy?consentStatus=granted&requestedConsentDomains=telemedicine,provider-data-sharing&consentDomains=telemedicine,provider-data-sharing&consentCurrentVersion=1&knownConsentVersions=1"
+    );
+    expect(baselineAllowed.ok()).toBe(true);
+    const baselineAllowedBody = await baselineAllowed.json();
+    expect(baselineAllowedBody).toMatchObject({
+      data: {
+        status: "allowed",
+        reasonCode: "allowed"
+      }
+    });
+
+    const afterToggleDenied = await page.request.get(
+      "/api/authorization-policy?consentStatus=granted&requestedConsentDomains=telemedicine,provider-data-sharing&consentDomains=telemedicine&consentCurrentVersion=2&knownConsentVersions=1,2"
+    );
+    expect(afterToggleDenied.ok()).toBe(true);
+    const afterToggleDeniedBody = await afterToggleDenied.json();
+    expect(afterToggleDeniedBody).toMatchObject({
+      data: {
+        status: "denied",
+        reasonCode: "consent-scope-not-granted"
+      }
+    });
+
+    const staleVersionDenied = await page.request.get(
+      "/api/authorization-policy?consentStatus=granted&requestedConsentDomains=telemedicine&consentDomains=telemedicine&consentCurrentVersion=3&knownConsentVersions=1,2"
+    );
+    expect(staleVersionDenied.ok()).toBe(true);
+    const staleVersionDeniedBody = await staleVersionDenied.json();
+    expect(staleVersionDeniedBody).toMatchObject({
+      data: {
+        status: "denied",
+        reasonCode: "consent-version-stale"
+      }
+    });
+
+    await expectNoUnexpectedStorage(page);
+    await expectNoProtectedSentinels(page);
+    await expectNoBrowserGuardFailures(guards);
+  });
+
+  test("proves audit edits are blocked and amendment/versioning paths are enforced", async ({
+    page
+  }, testInfo) => {
+    const guards = installBrowserGuards(page, testInfo);
+
+    await page.goto("/");
+
+    const appendResponse = await page.request.get("/api/audit-events?operation=append");
+    expect(appendResponse.ok()).toBe(true);
+    const appendBody = await appendResponse.json();
+    expect(appendBody).toMatchObject({
+      data: {
+        eventVersion: 1,
+        appendOnly: true,
+        actorId: "actor-route-1",
+        subjectId: "patient-route-1",
+        organizationId: "tenant-route-1",
+        action: "read",
+        resource: "clinical-record-summary",
+        purpose: "care-delivery",
+        requestId: "req-audit-route-1",
+        ipAddress: "198.51.100.50",
+        device: {
+          deviceId: "device-route-1",
+          deviceType: "browser"
+        },
+        breakGlassUsed: false,
+        priorState: {
+          status: "pending"
+        },
+        newState: {
+          status: "allowed"
+        }
+      },
+      meta: {
+        operationTag: "audit.event.append",
+        decisionReasonTag: "appended"
+      }
+    });
+
+    const mutateResponse = await page.request.get("/api/audit-events?operation=mutate");
+    expect(mutateResponse.status()).toBe(409);
+    const mutateBody = await mutateResponse.json();
+    expect(mutateBody).toMatchObject({
+      data: null,
+      meta: {
+        operationTag: "audit.event.mutate",
+        decisionReasonTag: "append-only-rejected"
+      },
+      errors: [
+        {
+          code: "AUDIT_APPEND_ONLY_ENFORCED"
+        }
+      ]
+    });
+
+    const amendResponse = await page.request.get(
+      "/api/audit-events?operation=amend&targetEventId=audit-event-1"
+    );
+    expect(amendResponse.ok()).toBe(true);
+    const amendBody = await amendResponse.json();
+    expect(amendBody).toMatchObject({
+      data: {
+        eventVersion: 2,
+        appendOnly: true,
+        action: "amend",
+        supersedesEventId: "audit-event-1",
+        amendmentReason: "post-sign-correction"
+      },
+      meta: {
+        operationTag: "audit.event.amend",
+        decisionReasonTag: "amended"
+      }
+    });
+
+    await expectNoUnexpectedStorage(page);
+    await expectNoProtectedSentinels(page);
+    await expectNoBrowserGuardFailures(guards);
+  });
 });
