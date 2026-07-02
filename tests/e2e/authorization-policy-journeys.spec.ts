@@ -289,4 +289,108 @@ test.describe("authorization policy browser journeys", () => {
     await expectNoProtectedSentinels(page);
     await expectNoBrowserGuardFailures(guards);
   });
+
+  test("runs break-glass operational controls with notification, review, patient history, and ttl expiry", async ({
+    page
+  }, testInfo) => {
+    const guards = installBrowserGuards(page, testInfo);
+
+    await page.goto("/");
+
+    const requestResponse = await page.request.get(
+      "/api/break-glass?operation=request&requestedAt=2026-07-02T12:00:00.000Z&ttlMinutes=5"
+    );
+    expect(requestResponse.ok()).toBe(true);
+    const requestBody = await requestResponse.json();
+    expect(requestBody).toMatchObject({
+      data: {
+        accessId: "bg-route-1",
+        status: "requested",
+        expiresAt: "2026-07-02T12:05:00.000Z"
+      },
+      meta: {
+        operationTag: "break-glass.request",
+        decisionReasonTag: "requested"
+      }
+    });
+
+    const activateResponse = await page.request.get(
+      "/api/break-glass?operation=activate&requestedAt=2026-07-02T12:00:00.000Z&activatedAt=2026-07-02T12:01:00.000Z&ttlMinutes=5"
+    );
+    expect(activateResponse.ok()).toBe(true);
+    const activateBody = await activateResponse.json();
+    expect(activateBody).toMatchObject({
+      data: {
+        status: "active",
+        complianceNotificationId: "compliance-bg-route-1-2026-07-02T12:01:00.000Z",
+        complianceNotifiedAt: "2026-07-02T12:01:00.000Z"
+      },
+      meta: {
+        operationTag: "break-glass.activate",
+        decisionReasonTag: "activated"
+      }
+    });
+
+    const reviewResponse = await page.request.get(
+      "/api/break-glass?operation=review&requestedAt=2026-07-02T12:00:00.000Z&activatedAt=2026-07-02T12:01:00.000Z&ttlMinutes=5"
+    );
+    expect(reviewResponse.ok()).toBe(true);
+    const reviewBody = await reviewResponse.json();
+    expect(reviewBody).toMatchObject({
+      data: {
+        status: "review-completed",
+        reviews: [
+          {
+            reviewId: "review-bg-route-1",
+            outcome: "approved"
+          }
+        ]
+      },
+      meta: {
+        operationTag: "break-glass.review",
+        decisionReasonTag: "review-completed"
+      }
+    });
+
+    const historyResponse = await page.request.get(
+      "/api/break-glass?operation=history&requestedAt=2026-07-02T12:00:00.000Z&activatedAt=2026-07-02T12:01:00.000Z&ttlMinutes=5"
+    );
+    expect(historyResponse.ok()).toBe(true);
+    const historyBody = await historyResponse.json();
+    expect(historyBody).toMatchObject({
+      data: [
+        {
+          accessId: "bg-route-1",
+          status: "review-completed",
+          reviewOutcome: "approved"
+        }
+      ],
+      meta: {
+        operationTag: "break-glass.history",
+        decisionReasonTag: "history-returned"
+      }
+    });
+
+    const expiredActivationResponse = await page.request.get(
+      "/api/break-glass?operation=activate&requestedAt=2026-07-02T12:00:00.000Z&activatedAt=2026-07-02T12:10:00.000Z&ttlMinutes=5"
+    );
+    expect(expiredActivationResponse.status()).toBe(409);
+    const expiredActivationBody = await expiredActivationResponse.json();
+    expect(expiredActivationBody).toMatchObject({
+      data: null,
+      errors: [
+        {
+          code: "BREAK_GLASS_EXPIRED"
+        }
+      ],
+      meta: {
+        operationTag: "break-glass.activate",
+        decisionReasonTag: "activation-rejected"
+      }
+    });
+
+    await expectNoUnexpectedStorage(page);
+    await expectNoProtectedSentinels(page);
+    await expectNoBrowserGuardFailures(guards);
+  });
 });

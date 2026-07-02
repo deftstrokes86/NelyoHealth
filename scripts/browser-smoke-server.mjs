@@ -787,6 +787,112 @@ const server = http.createServer((request, response) => {
     );
     return;
   }
+  if ((request.url ?? "").startsWith("/api/break-glass")) {
+    const requestUrl = new URL(request.url ?? "/api/break-glass", `http://${host}:${port}`);
+    const operation = requestUrl.searchParams.get("operation") ?? "request";
+    const requestedAt = requestUrl.searchParams.get("requestedAt") ?? "2026-07-02T12:00:00.000Z";
+    const activatedAt = requestUrl.searchParams.get("activatedAt") ?? "2026-07-02T12:01:00.000Z";
+    const ttlMinutes = Number(requestUrl.searchParams.get("ttlMinutes") ?? "5");
+    const requestedAtMs = Date.parse(requestedAt);
+    const expiresAt = Number.isNaN(requestedAtMs)
+      ? requestedAt
+      : new Date(requestedAtMs + ttlMinutes * 60_000).toISOString();
+
+    let statusCode = 200;
+    let decisionReasonTag = "requested";
+    let data = {
+      accessId: "bg-route-1",
+      actorId: "clinician-route-1",
+      patientId: "patient-route-1",
+      organizationId: "tenant-route-1",
+      reason: "critical deterioration",
+      requestedAt,
+      ttlMinutes,
+      expiresAt,
+      status: "requested",
+      reviews: []
+    };
+    let errors = [];
+
+    if (operation === "activate") {
+      const activatedAtMs = Date.parse(activatedAt);
+      const expiresAtMs = Date.parse(expiresAt);
+
+      if (
+        !Number.isNaN(activatedAtMs) &&
+        !Number.isNaN(expiresAtMs) &&
+        activatedAtMs > expiresAtMs
+      ) {
+        statusCode = 409;
+        decisionReasonTag = "activation-rejected";
+        data = null;
+        errors = [
+          {
+            code: "BREAK_GLASS_EXPIRED",
+            message: "Break-glass access expired before activation."
+          }
+        ];
+      } else {
+        decisionReasonTag = "activated";
+        data = {
+          ...data,
+          status: "active",
+          activatedAt,
+          complianceNotificationId: `compliance-bg-route-1-${activatedAt}`,
+          complianceNotifiedAt: activatedAt
+        };
+      }
+    } else if (operation === "review") {
+      decisionReasonTag = "review-completed";
+      data = {
+        ...data,
+        status: "review-completed",
+        activatedAt,
+        complianceNotificationId: `compliance-bg-route-1-${activatedAt}`,
+        complianceNotifiedAt: activatedAt,
+        reviews: [
+          {
+            reviewId: "review-bg-route-1",
+            reviewedByActorId: "compliance-route-1",
+            reviewedAt: "2026-07-02T12:30:00.000Z",
+            outcome: "approved",
+            notes: "review complete"
+          }
+        ]
+      };
+    } else if (operation === "history") {
+      decisionReasonTag = "history-returned";
+      data = [
+        {
+          accessId: "bg-route-1",
+          actorId: "clinician-route-1",
+          patientId: "patient-route-1",
+          organizationId: "tenant-route-1",
+          reason: "critical deterioration",
+          usedAt: activatedAt,
+          expiresAt,
+          status: "review-completed",
+          reviewOutcome: "approved",
+          reviewedAt: "2026-07-02T12:30:00.000Z"
+        }
+      ];
+    }
+
+    response.writeHead(statusCode, apiJsonHeaders);
+    response.end(
+      JSON.stringify({
+        data,
+        meta: {
+          requestId: "req-break-glass-route",
+          correlationId: "corr-break-glass-route",
+          operationTag: `break-glass.${operation}`,
+          decisionReasonTag
+        },
+        errors
+      })
+    );
+    return;
+  }
   if (request.url === "/" || request.url === "/healthz") {
     response.writeHead(200, {
       "content-type":

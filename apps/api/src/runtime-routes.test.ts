@@ -2,6 +2,10 @@ import { describe, expect, it } from "vitest";
 import { createPaymentDraft } from "./payments.js";
 import { createRefundDraft } from "./refunds.js";
 import {
+  handleBreakGlassActivateRoute,
+  handleBreakGlassPatientHistoryRoute,
+  handleBreakGlassRequestRoute,
+  handleBreakGlassReviewRoute,
   handleAuthenticationDecisionRoute,
   handleAuditEventAmendRoute,
   handleAuditEventAppendRoute,
@@ -18,6 +22,11 @@ import {
   AuditEventWorkflowService,
   InMemoryAuditEventRepository
 } from "./audit-event-workflows.js";
+import {
+  BreakGlassWorkflowService,
+  InMemoryBreakGlassRepository,
+  InMemoryComplianceNotifier
+} from "./break-glass-workflows.js";
 
 function createPolicyRouteInput(overrides: Record<string, unknown> = {}) {
   return {
@@ -788,6 +797,145 @@ describe("runtime route handlers", () => {
     expect(amendResponse.meta).toMatchObject({
       operationTag: "audit.event.amend",
       decisionReasonTag: "amended"
+    });
+  });
+
+  it("executes break-glass request, activate, review, and patient history flows", () => {
+    const workflowService = new BreakGlassWorkflowService(
+      new InMemoryBreakGlassRepository(),
+      new InMemoryComplianceNotifier()
+    );
+
+    const requestResponse = handleBreakGlassRequestRoute({
+      requestId: "req-bg-1",
+      correlationId: "corr-bg-1",
+      workflowService,
+      input: {
+        accessId: "bg-route-1",
+        actorId: "clinician-route-1",
+        patientId: "patient-route-1",
+        organizationId: "tenant-route-1",
+        reason: "critical deterioration",
+        requestedAt: "2026-07-10T12:00:00.000Z",
+        ttlMinutes: 5
+      }
+    });
+
+    expect(requestResponse.data).toMatchObject({
+      accessId: "bg-route-1",
+      status: "requested",
+      expiresAt: "2026-07-10T12:05:00.000Z"
+    });
+
+    const activateResponse = handleBreakGlassActivateRoute({
+      requestId: "req-bg-2",
+      correlationId: "corr-bg-2",
+      workflowService,
+      input: {
+        accessId: "bg-route-1",
+        activatedAt: "2026-07-10T12:02:00.000Z"
+      }
+    });
+
+    expect(activateResponse.data).toMatchObject({
+      status: "active",
+      complianceNotificationId: "compliance-bg-route-1-2026-07-10T12:02:00.000Z"
+    });
+
+    const reviewResponse = handleBreakGlassReviewRoute({
+      requestId: "req-bg-3",
+      correlationId: "corr-bg-3",
+      workflowService,
+      input: {
+        accessId: "bg-route-1",
+        reviewId: "bg-review-route-1",
+        reviewedByActorId: "compliance-route-1",
+        reviewedAt: "2026-07-10T12:30:00.000Z",
+        outcome: "approved",
+        notes: "review complete"
+      }
+    });
+
+    expect(reviewResponse.data).toMatchObject({
+      status: "review-completed",
+      reviews: [
+        {
+          reviewId: "bg-review-route-1",
+          outcome: "approved"
+        }
+      ]
+    });
+
+    const historyResponse = handleBreakGlassPatientHistoryRoute({
+      requestId: "req-bg-4",
+      correlationId: "corr-bg-4",
+      workflowService,
+      input: {
+        patientId: "patient-route-1",
+        organizationId: "tenant-route-1"
+      }
+    });
+
+    expect(historyResponse.data).toEqual([
+      {
+        accessId: "bg-route-1",
+        actorId: "clinician-route-1",
+        patientId: "patient-route-1",
+        organizationId: "tenant-route-1",
+        reason: "critical deterioration",
+        usedAt: "2026-07-10T12:02:00.000Z",
+        expiresAt: "2026-07-10T12:05:00.000Z",
+        status: "review-completed",
+        reviewOutcome: "approved",
+        reviewedAt: "2026-07-10T12:30:00.000Z"
+      }
+    ]);
+    expect(historyResponse.meta).toMatchObject({
+      operationTag: "break-glass.patient-history",
+      decisionReasonTag: "history-returned"
+    });
+  });
+
+  it("rejects break-glass activation after expiry at route boundary", () => {
+    const workflowService = new BreakGlassWorkflowService(
+      new InMemoryBreakGlassRepository(),
+      new InMemoryComplianceNotifier()
+    );
+
+    handleBreakGlassRequestRoute({
+      requestId: "req-bg-expired-1",
+      correlationId: "corr-bg-expired-1",
+      workflowService,
+      input: {
+        accessId: "bg-route-expired-1",
+        actorId: "clinician-route-1",
+        patientId: "patient-route-1",
+        organizationId: "tenant-route-1",
+        reason: "critical deterioration",
+        requestedAt: "2026-07-10T12:00:00.000Z",
+        ttlMinutes: 1
+      }
+    });
+
+    const activateResponse = handleBreakGlassActivateRoute({
+      requestId: "req-bg-expired-2",
+      correlationId: "corr-bg-expired-2",
+      workflowService,
+      input: {
+        accessId: "bg-route-expired-1",
+        activatedAt: "2026-07-10T12:05:00.000Z"
+      }
+    });
+
+    expect(activateResponse.data).toBeNull();
+    expect(activateResponse.errors).toMatchObject([
+      {
+        code: "BREAK_GLASS_EXPIRED"
+      }
+    ]);
+    expect(activateResponse.meta).toMatchObject({
+      operationTag: "break-glass.activate",
+      decisionReasonTag: "activation-rejected"
     });
   });
 });

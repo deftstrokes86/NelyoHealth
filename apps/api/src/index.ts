@@ -136,6 +136,27 @@ export type {
   AmendAuditEventInput,
   MutationAttemptInput
 } from "./audit-event-workflows.js";
+export {
+  createBreakGlassAccessDraft,
+  InMemoryBreakGlassRepository,
+  InMemoryComplianceNotifier,
+  BreakGlassWorkflowService,
+  BreakGlassNotFoundError,
+  BreakGlassExpiredError,
+  BreakGlassValidationError
+} from "./break-glass-workflows.js";
+export type {
+  BreakGlassAccessStatus,
+  BreakGlassReviewDraft,
+  BreakGlassAccessDraft,
+  PatientBreakGlassHistoryEntry,
+  BreakGlassRepository,
+  ComplianceNotifier,
+  RequestBreakGlassAccessInput,
+  ActivateBreakGlassAccessInput,
+  ReviewBreakGlassAccessInput,
+  ListPatientBreakGlassHistoryInput
+} from "./break-glass-workflows.js";
 export { evaluateAuthorizationPolicyDecision } from "./authorization-policy-handlers.js";
 export { createPaymentDraft } from "./payments.js";
 export type { PaymentDraft, PaymentDraftInput } from "./payments.js";
@@ -172,6 +193,10 @@ export {
   handleAuthenticationDecisionRoute,
   handleTenancyAccessDecisionRoute,
   handleAuthorizationPolicyDecisionRoute,
+  handleBreakGlassRequestRoute,
+  handleBreakGlassActivateRoute,
+  handleBreakGlassReviewRoute,
+  handleBreakGlassPatientHistoryRoute,
   handleAuditEventAppendRoute,
   handleAuditEventAmendRoute,
   handleAuditEventMutationAttemptRoute,
@@ -183,6 +208,10 @@ export type {
   AuthenticationDecisionRouteRequest,
   TenancyAccessDecisionRouteRequest,
   AuthorizationPolicyDecisionRouteRequest,
+  BreakGlassRequestRouteRequest,
+  BreakGlassActivateRouteRequest,
+  BreakGlassReviewRouteRequest,
+  BreakGlassPatientHistoryRouteRequest,
   AuditEventAppendRouteRequest,
   AuditEventAmendRouteRequest,
   AuditEventMutationAttemptRouteRequest,

@@ -10,6 +10,17 @@ import {
   type EvaluateAuthenticationDecisionInput
 } from "./authentication-handlers.js";
 import {
+  BreakGlassExpiredError,
+  type BreakGlassWorkflowService,
+  type ListPatientBreakGlassHistoryInput,
+  type RequestBreakGlassAccessInput,
+  type ReviewBreakGlassAccessInput,
+  type ActivateBreakGlassAccessInput,
+  type PatientBreakGlassHistoryEntry,
+  type BreakGlassAccessDraft,
+  BreakGlassValidationError
+} from "./break-glass-workflows.js";
+import {
   type AmendAuditEventInput,
   AuditAppendOnlyViolationError,
   type AppendAuditEventInput,
@@ -60,6 +71,26 @@ export interface TenancyAccessDecisionRouteRequest extends RuntimeRouteMeta {
 
 export interface AuthorizationPolicyDecisionRouteRequest extends RuntimeRouteMeta {
   input: AuthorizationPolicyDecisionDraftInput;
+}
+
+export interface BreakGlassRequestRouteRequest extends RuntimeRouteMeta {
+  input: RequestBreakGlassAccessInput;
+  workflowService: BreakGlassWorkflowService;
+}
+
+export interface BreakGlassActivateRouteRequest extends RuntimeRouteMeta {
+  input: ActivateBreakGlassAccessInput;
+  workflowService: BreakGlassWorkflowService;
+}
+
+export interface BreakGlassReviewRouteRequest extends RuntimeRouteMeta {
+  input: ReviewBreakGlassAccessInput;
+  workflowService: BreakGlassWorkflowService;
+}
+
+export interface BreakGlassPatientHistoryRouteRequest extends RuntimeRouteMeta {
+  input: ListPatientBreakGlassHistoryInput;
+  workflowService: BreakGlassWorkflowService;
 }
 
 export interface AuditEventAppendRouteRequest extends RuntimeRouteMeta {
@@ -177,6 +208,98 @@ export function handleAuthorizationPolicyDecisionRoute(
     correlationId: request.correlationId,
     operationTag: "authorization.policy.evaluate",
     decisionReasonTag: decision.reasonCode
+  });
+}
+
+export function handleBreakGlassRequestRoute(
+  request: BreakGlassRequestRouteRequest
+): ApiEnvelope<BreakGlassAccessDraft> {
+  try {
+    const access = request.workflowService.requestAccess(request.input);
+    return createApiEnvelope({
+      data: access,
+      requestId: request.requestId,
+      correlationId: request.correlationId,
+      operationTag: "break-glass.request",
+      decisionReasonTag: "requested"
+    });
+  } catch (error) {
+    return createErrorEnvelope({
+      requestId: request.requestId,
+      correlationId: request.correlationId,
+      message: error instanceof Error ? error.message : "Break-glass request failed",
+      code:
+        error instanceof BreakGlassValidationError
+          ? "BREAK_GLASS_REQUEST_INVALID"
+          : "BREAK_GLASS_REQUEST_FAILED",
+      operationTag: "break-glass.request",
+      decisionReasonTag: "request-rejected"
+    });
+  }
+}
+
+export function handleBreakGlassActivateRoute(
+  request: BreakGlassActivateRouteRequest
+): ApiEnvelope<BreakGlassAccessDraft> {
+  try {
+    const access = request.workflowService.activateAccess(request.input);
+    return createApiEnvelope({
+      data: access,
+      requestId: request.requestId,
+      correlationId: request.correlationId,
+      operationTag: "break-glass.activate",
+      decisionReasonTag: "activated"
+    });
+  } catch (error) {
+    const code =
+      error instanceof BreakGlassExpiredError
+        ? "BREAK_GLASS_EXPIRED"
+        : "BREAK_GLASS_ACTIVATE_FAILED";
+    return createErrorEnvelope({
+      requestId: request.requestId,
+      correlationId: request.correlationId,
+      message: error instanceof Error ? error.message : "Break-glass activation failed",
+      code,
+      operationTag: "break-glass.activate",
+      decisionReasonTag: "activation-rejected"
+    });
+  }
+}
+
+export function handleBreakGlassReviewRoute(
+  request: BreakGlassReviewRouteRequest
+): ApiEnvelope<BreakGlassAccessDraft> {
+  try {
+    const access = request.workflowService.reviewAccess(request.input);
+    return createApiEnvelope({
+      data: access,
+      requestId: request.requestId,
+      correlationId: request.correlationId,
+      operationTag: "break-glass.review",
+      decisionReasonTag: "review-completed"
+    });
+  } catch (error) {
+    return createErrorEnvelope({
+      requestId: request.requestId,
+      correlationId: request.correlationId,
+      message: error instanceof Error ? error.message : "Break-glass review failed",
+      code: "BREAK_GLASS_REVIEW_FAILED",
+      operationTag: "break-glass.review",
+      decisionReasonTag: "review-rejected"
+    });
+  }
+}
+
+export function handleBreakGlassPatientHistoryRoute(
+  request: BreakGlassPatientHistoryRouteRequest
+): ApiEnvelope<PatientBreakGlassHistoryEntry[]> {
+  const history = request.workflowService.listPatientVisibleHistory(request.input);
+  return createApiEnvelope({
+    data: history,
+    requestId: request.requestId,
+    correlationId: request.correlationId,
+    operationTag: "break-glass.patient-history",
+    decisionReasonTag: "history-returned"
   });
 }
 
