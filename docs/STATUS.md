@@ -3,7 +3,7 @@
 ## Current phase state
 
 - Program: NelyoHealth Platform Build.
-- Date: 2026-06-30.
+- Date: 2026-07-02.
 - Phase 0: PHASE-0-CONDITIONAL-PASS.
 - P01-FND-001: ACCEPTED.
 - P01-FND-002: ACCEPTED.
@@ -35,19 +35,20 @@
 - Automated GitHub writes: LIMITED-WORKFLOW-DISPATCH-AND-RERUN-ALLOWED-BY-OWNER-REQUEST.
 - Visual test command: IMPLEMENTED as `pnpm test:visual`.
 - Database command interfaces: OPERATIONAL FOR LOCAL SYNTHETIC ENVIRONMENTS.
-- Branch protection: ADMIN-VERIFIED-NOT-CONFIGURED-BLOCKING.
+- Branch protection: ADMIN-VERIFIED-CONFIGURED-WITH-REQUIRED-CHECKS.
 - Phase 1 gate: PHASE-1-CONDITIONAL-PASS.
 - Phase 2 entry: PHASE-2-GO-WITH-CONDITIONS.
 - Phase 2 planning: P02-PLAN-001 ACCEPTED.
 - Phase 2 implementation: P02-ISS-003 COMPLETED; local harness files, static checks, and live Docker runtime evidence validated. P02-ISS-004 COMPLETED with migration, status, seed/reset, and rollback evidence. P02-ISS-005 COMPLETED with health/readiness routes, middleware conventions, and integration evidence. P02-ISS-006 COMPLETED with generated OpenAPI and typed client contract artifacts. P02-ISS-007 COMPLETED with worker queue foundation and deterministic retry/DLQ/idempotency test evidence. P02-ISS-008 COMPLETED with transaction helper and transactional outbox dispatch/rollback evidence. P02-ISS-009 COMPLETED with signed upload/download URL and synthetic cleanup adapter evidence. P02-ISS-010 COMPLETED with fake communications and local feature-flag adapter shell evidence. P02-ISS-011 COMPLETED with API-to-worker observability correlation and metric/log/trace evidence. P02-ISS-012 COMPLETED with Next.js shell runtimes and synthetic browser validation evidence. P02-ISS-013 COMPLETED with empty Expo mobile shell validation evidence. P02-ISS-014 COMPLETED with per-app Chromium browser harness, synthetic auth-state generation, and privacy/a11y evidence. P02-ISS-015 COMPLETED with typed environment configuration, strict loading, and secret-redaction evidence. P02-ISS-016 COMPLETED with provider-neutral deployment contract baseline and human-gated cloud decision trail. P02-ISS-017 COMPLETED with development deploy and staging promotion workflow artifacts plus controlled workflow evidence. P02-ISS-018 COMPLETED with local exit-gate rehearsal and rollback evidence plus GitHub workflow evidence.
 - Phase 3: NOT STARTED.
+- Phase 3 prep: STARTED, kickoff checklist published and governance controls verified.
 - Pilot launch: PILOT-NO-GO.
 - Production release: NOT APPROVED.
 - Production data: NOT APPROVED.
 - Interactive browser: VERIFIED THROUGH PLAYWRIGHT CLI FALLBACK.
 - Playwright MCP: VERIFIED THROUGH PROJECT-SCOPED LOCAL SMOKE ON 2026-06-25 WITH CODEX-CLI 0.141.0.
 - UI UX Pro Max licence: REVIEW-REQUIRED.
-- Next action: owner-admin must configure and enable branch rulesets/protection, required checks, and dependency-security controls, then re-verify before Phase 3 kickoff.
+- Next action: execute the Phase 3 kickoff checklist and open the first approved Phase 3 execution issue with web-first scope and mobile-forward compatibility.
 
 ## Foundation commands
 
@@ -141,6 +142,10 @@ pnpm db:rollback
 - tools/local-infra/local-infra.mjs
 - tests/unit/local-infrastructure-harness.spec.ts
 
+## Phase 3 prep artifacts
+
+- docs/exec-plans/P03-phase-3-kickoff-checklist.md
+
 ## Locked requirements retained
 
 - One person has one longitudinal patient identity.
@@ -158,7 +163,7 @@ pnpm db:rollback
 
 ## Open conditions
 
-- GitHub branch protection/rulesets and required checks were owner-admin verified on 2026-07-02 and are not configured; CODEOWNERS file exists but is not enforced without protections; dependency/security controls are currently disabled in repository security analysis. These controls remain mandatory blockers before Phase 3 kickoff.
+- GitHub controls were owner-admin verified on 2026-07-02 with classic branch protection on `main`, required status checks including `Repository foundation checks`, CODEOWNERS review requirements enabled, and repository dependency/security controls enabled in security analysis.
 - Project-scoped Playwright MCP is currently verified for local synthetic smoke; Playwright CLI remains the verified fallback if MCP becomes unavailable.
 - UI UX Pro Max external license/commercial review remains pending before broader redistribution or commercial reliance.
 - Phase 0 domain approvals remain required before implementation or pilot decisions in clinical, legal, privacy, payment, pharmacy, laboratory, HMO, employer, sponsor, guardian, or emergency domains.
