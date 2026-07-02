@@ -114,6 +114,13 @@ const server = http.createServer((request, response) => {
     const paymentStatus = requestUrl.searchParams.get("paymentStatus") ?? "quoted";
     const refundStatus = requestUrl.searchParams.get("refundStatus");
     const sameTenant = requestUrl.searchParams.get("sameTenant") !== "false";
+    const sessionStatus = requestUrl.searchParams.get("sessionStatus") ?? "active";
+    const consentStatus = requestUrl.searchParams.get("consentStatus") ?? "granted";
+    const relationshipStatus = requestUrl.searchParams.get("relationshipStatus") ?? "active";
+    const requiresRelationship = requestUrl.searchParams.get("requiresRelationship") === "true";
+    const manipulatedIdentifier = requestUrl.searchParams.get("manipulatedIdentifier") === "true";
+    const backNavigationAfterRevocation =
+      requestUrl.searchParams.get("backNavigationAfterRevocation") === "true";
     const hasAuthorization = requestUrl.searchParams.get("hasAuthorization") !== "false";
     const orderId = requestUrl.searchParams.get("orderId") ?? "order-synthetic";
     const providerDisplayName =
@@ -127,11 +134,50 @@ const server = http.createServer((request, response) => {
       authorizedAt: new Date(0).toISOString()
     };
 
-    if (!sameTenant) {
+    if (manipulatedIdentifier) {
+      payload = {
+        ...payload,
+        status: "denied",
+        reasonCode: "manipulated-identifier-detected",
+        authorizedAt: null
+      };
+    } else if (!sameTenant) {
       payload = {
         ...payload,
         status: "denied",
         reasonCode: "tenant-mismatch",
+        authorizedAt: null
+      };
+    } else if (sessionStatus !== "active") {
+      payload = {
+        ...payload,
+        status: "denied",
+        reasonCode: "stale-session",
+        authorizedAt: null
+      };
+    } else if (
+      backNavigationAfterRevocation &&
+      (consentStatus !== "granted" || (requiresRelationship && relationshipStatus !== "active"))
+    ) {
+      payload = {
+        ...payload,
+        status: "denied",
+        reasonCode: "revocation-persisted-on-back-navigation",
+        authorizedAt: null
+      };
+    } else if (consentStatus !== "granted") {
+      payload = {
+        ...payload,
+        status: "denied",
+        reasonCode: "consent-revoked",
+        authorizedAt: null
+      };
+    } else if (requiresRelationship && relationshipStatus !== "active") {
+      payload = {
+        ...payload,
+        status: "denied",
+        reasonCode:
+          relationshipStatus === "expired" ? "relationship-expired" : "relationship-revoked",
         authorizedAt: null
       };
     } else if (!hasAuthorization) {
@@ -475,6 +521,127 @@ const server = http.createServer((request, response) => {
       `http://${host}:${port}`
     );
     const sameTenant = requestUrl.searchParams.get("sameTenant") !== "false";
+    const sessionStatus = requestUrl.searchParams.get("sessionStatus") ?? "active";
+    const consentStatus = requestUrl.searchParams.get("consentStatus") ?? "granted";
+    const relationshipStatus = requestUrl.searchParams.get("relationshipStatus") ?? "active";
+    const requiresRelationship = requestUrl.searchParams.get("requiresRelationship") === "true";
+    const manipulatedIdentifier = requestUrl.searchParams.get("manipulatedIdentifier") === "true";
+    const backNavigationAfterRevocation =
+      requestUrl.searchParams.get("backNavigationAfterRevocation") === "true";
+
+    if (manipulatedIdentifier) {
+      response.writeHead(403, apiJsonHeaders);
+      response.end(
+        JSON.stringify({
+          data: null,
+          meta: {
+            requestId: "req-tenant-protected-route",
+            correlationId: "corr-tenant-protected-route",
+            operationTag: "tenant.resource.access",
+            decisionReasonTag: "manipulated-identifier-detected"
+          },
+          errors: [
+            {
+              code: "TENANT_ACCESS_DENIED",
+              message: "Access denied."
+            }
+          ]
+        })
+      );
+      return;
+    }
+
+    if (sessionStatus !== "active") {
+      response.writeHead(403, apiJsonHeaders);
+      response.end(
+        JSON.stringify({
+          data: null,
+          meta: {
+            requestId: "req-tenant-protected-route",
+            correlationId: "corr-tenant-protected-route",
+            operationTag: "tenant.resource.access",
+            decisionReasonTag: "stale-session"
+          },
+          errors: [
+            {
+              code: "TENANT_ACCESS_DENIED",
+              message: "Access denied."
+            }
+          ]
+        })
+      );
+      return;
+    }
+
+    if (
+      backNavigationAfterRevocation &&
+      (consentStatus !== "granted" || (requiresRelationship && relationshipStatus !== "active"))
+    ) {
+      response.writeHead(403, apiJsonHeaders);
+      response.end(
+        JSON.stringify({
+          data: null,
+          meta: {
+            requestId: "req-tenant-protected-route",
+            correlationId: "corr-tenant-protected-route",
+            operationTag: "tenant.resource.access",
+            decisionReasonTag: "revocation-persisted-on-back-navigation"
+          },
+          errors: [
+            {
+              code: "TENANT_ACCESS_DENIED",
+              message: "Access denied."
+            }
+          ]
+        })
+      );
+      return;
+    }
+
+    if (consentStatus !== "granted") {
+      response.writeHead(403, apiJsonHeaders);
+      response.end(
+        JSON.stringify({
+          data: null,
+          meta: {
+            requestId: "req-tenant-protected-route",
+            correlationId: "corr-tenant-protected-route",
+            operationTag: "tenant.resource.access",
+            decisionReasonTag: "consent-revoked"
+          },
+          errors: [
+            {
+              code: "TENANT_ACCESS_DENIED",
+              message: "Access denied."
+            }
+          ]
+        })
+      );
+      return;
+    }
+
+    if (requiresRelationship && relationshipStatus !== "active") {
+      response.writeHead(403, apiJsonHeaders);
+      response.end(
+        JSON.stringify({
+          data: null,
+          meta: {
+            requestId: "req-tenant-protected-route",
+            correlationId: "corr-tenant-protected-route",
+            operationTag: "tenant.resource.access",
+            decisionReasonTag:
+              relationshipStatus === "expired" ? "relationship-expired" : "relationship-revoked"
+          },
+          errors: [
+            {
+              code: "TENANT_ACCESS_DENIED",
+              message: "Access denied."
+            }
+          ]
+        })
+      );
+      return;
+    }
 
     if (!sameTenant) {
       response.writeHead(403, apiJsonHeaders);
@@ -529,6 +696,8 @@ const server = http.createServer((request, response) => {
     const sponsorPaymentOnly = requestUrl.searchParams.get("sponsorPaymentOnly") === "true";
     const requestedResource =
       requestUrl.searchParams.get("requestedResource") ?? "clinical-record-summary";
+    const requestedAction = requestUrl.searchParams.get("requestedAction") ?? "read";
+    const purpose = requestUrl.searchParams.get("purpose") ?? "care-delivery";
     const breakGlassRequested = requestUrl.searchParams.get("breakGlassRequested") === "true";
     const breakGlassReason = requestUrl.searchParams.get("breakGlassReason") ?? "";
     const breakGlassWindowMinutes = Number(
@@ -556,6 +725,85 @@ const server = http.createServer((request, response) => {
       .split(",")
       .map((value) => value.trim())
       .filter(Boolean);
+    const manipulatedIdentifier = requestUrl.searchParams.get("manipulatedIdentifier") === "true";
+    const backNavigationAfterRevocation =
+      requestUrl.searchParams.get("backNavigationAfterRevocation") === "true";
+
+    const rolePolicyRules = [
+      {
+        actorRole: "guardian",
+        resource: "clinical-record-summary",
+        action: "read",
+        purpose: "care-delivery"
+      },
+      {
+        actorRole: "caregiver",
+        resource: "clinical-record-summary",
+        action: "read",
+        purpose: "care-delivery"
+      },
+      {
+        actorRole: "clinician",
+        resource: "clinical-record-summary",
+        action: "read",
+        purpose: "care-delivery"
+      },
+      {
+        actorRole: "clinician",
+        resource: "clinical-record-summary",
+        action: "write",
+        purpose: "care-delivery"
+      },
+      {
+        actorRole: "sponsor",
+        resource: "billing-ledger",
+        action: "read-billing",
+        purpose: "payment-operations"
+      },
+      {
+        actorRole: "payer",
+        resource: "billing-ledger",
+        action: "read-billing",
+        purpose: "payment-operations"
+      },
+      {
+        actorRole: "employer",
+        resource: "billing-ledger",
+        action: "read-billing",
+        purpose: "payment-operations"
+      },
+      {
+        actorRole: "hmo",
+        resource: "billing-ledger",
+        action: "read-billing",
+        purpose: "payment-operations"
+      },
+      {
+        actorRole: "support",
+        resource: "support-case",
+        action: "read-support",
+        purpose: "support-operations"
+      },
+      {
+        actorRole: "platform-admin",
+        resource: "tenant-membership",
+        action: "manage-tenant-membership",
+        purpose: "tenant-administration"
+      },
+      {
+        actorRole: "organization-admin",
+        resource: "tenant-membership",
+        action: "manage-tenant-membership",
+        purpose: "tenant-administration"
+      }
+    ];
+    const hasRoleRule = rolePolicyRules.some(
+      (rule) =>
+        rule.actorRole === actorRole &&
+        rule.resource === requestedResource &&
+        rule.action === requestedAction &&
+        rule.purpose === purpose
+    );
 
     let data = {
       decisionRequestId: "policy-route-1",
@@ -570,8 +818,8 @@ const server = http.createServer((request, response) => {
         patientId: "patient-route-1",
         organizationId: "tenant-route-1",
         requestedResource,
-        requestedAction: "read",
-        purpose: "care-delivery",
+        requestedAction,
+        purpose,
         decisionStatus: "allowed",
         reasonCode: "allowed",
         breakGlassUsed: breakGlassRequested,
@@ -581,7 +829,14 @@ const server = http.createServer((request, response) => {
       evaluatedAt: new Date(0).toISOString()
     };
 
-    if (!sameTenant) {
+    if (manipulatedIdentifier) {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "manipulated-identifier-detected",
+        nextSteps: ["refresh-entity-selection"]
+      };
+    } else if (!sameTenant) {
       data = {
         ...data,
         status: "denied",
@@ -593,6 +848,16 @@ const server = http.createServer((request, response) => {
         ...data,
         status: "denied",
         reasonCode: "stale-session",
+        nextSteps: ["reauthenticate"]
+      };
+    } else if (
+      backNavigationAfterRevocation &&
+      (consentStatus !== "granted" || (requiresRelationship && relationshipStatus !== "active"))
+    ) {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "revocation-persisted-on-back-navigation",
         nextSteps: ["reauthenticate"]
       };
     } else if (auditEventEditAttempt) {
@@ -615,6 +880,13 @@ const server = http.createServer((request, response) => {
         status: "denied",
         reasonCode: "sponsor-payment-no-clinical-access",
         nextSteps: ["request-clinical-authorization"]
+      };
+    } else if (!hasRoleRule) {
+      data = {
+        ...data,
+        status: "denied",
+        reasonCode: "rbac-policy-unmapped-deny-default",
+        nextSteps: ["request-policy-exception-review"]
       };
     } else if (!knownConsentVersions.includes(consentCurrentVersion)) {
       data = {

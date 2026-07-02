@@ -42,14 +42,14 @@
 - Phase 2 implementation: P02-ISS-003 COMPLETED; local harness files, static checks, and live Docker runtime evidence validated. P02-ISS-004 COMPLETED with migration, status, seed/reset, and rollback evidence. P02-ISS-005 COMPLETED with health/readiness routes, middleware conventions, and integration evidence. P02-ISS-006 COMPLETED with generated OpenAPI and typed client contract artifacts. P02-ISS-007 COMPLETED with worker queue foundation and deterministic retry/DLQ/idempotency test evidence. P02-ISS-008 COMPLETED with transaction helper and transactional outbox dispatch/rollback evidence. P02-ISS-009 COMPLETED with signed upload/download URL and synthetic cleanup adapter evidence. P02-ISS-010 COMPLETED with fake communications and local feature-flag adapter shell evidence. P02-ISS-011 COMPLETED with API-to-worker observability correlation and metric/log/trace evidence. P02-ISS-012 COMPLETED with Next.js shell runtimes and synthetic browser validation evidence. P02-ISS-013 COMPLETED with empty Expo mobile shell validation evidence. P02-ISS-014 COMPLETED with per-app Chromium browser harness, synthetic auth-state generation, and privacy/a11y evidence. P02-ISS-015 COMPLETED with typed environment configuration, strict loading, and secret-redaction evidence. P02-ISS-016 COMPLETED with provider-neutral deployment contract baseline and human-gated cloud decision trail. P02-ISS-017 COMPLETED with development deploy and staging promotion workflow artifacts plus controlled workflow evidence. P02-ISS-018 COMPLETED with local exit-gate rehearsal and rollback evidence plus GitHub workflow evidence.
 - Phase 3: STEP-1-THROUGH-STEP-6 COMPLETED WITH SYNTHETIC CROSS-VIEWPORT EXIT-GATE EVIDENCE.
 - Phase 3 prep: COMPLETED, kickoff checklist executed and governance evidence recorded.
-- Phase 4: IN-PROGRESS, P04-ISS-001 COMPLETED WITH DETERMINISTIC API AND CROSS-VIEWPORT BROWSER EVIDENCE.
+- Phase 4: CLOSED-WITH-EVIDENCE, EXIT GATES COMPLETED WITH DETERMINISTIC API AND CROSS-VIEWPORT BROWSER COVERAGE; OWNER SIGNOFF RECORDED.
 - Pilot launch: PILOT-NO-GO.
 - Production release: NOT APPROVED.
 - Production data: NOT APPROVED.
 - Interactive browser: VERIFIED THROUGH PLAYWRIGHT CLI FALLBACK.
 - Playwright MCP: VERIFIED THROUGH PROJECT-SCOPED LOCAL SMOKE ON 2026-06-25 WITH CODEX-CLI 0.141.0.
 - UI UX Pro Max licence: REVIEW-REQUIRED.
-- Next action: define and execute P04-ISS-002 using the same evidence-first governance pattern, preserving fail-closed policy behavior and synthetic-only validation boundaries.
+- Next action: open Phase 5 kickoff scope and define P05-ISS-001 execution using the same evidence-first governance pattern, preserving fail-closed policy behavior and synthetic-only validation boundaries.
 
 ## Foundation commands
 

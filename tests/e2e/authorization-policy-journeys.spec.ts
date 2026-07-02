@@ -7,6 +7,15 @@ import {
 } from "../helpers/browser-assertions.js";
 
 test.describe("authorization policy browser journeys", () => {
+  function createQuery(params: Record<string, string | number | boolean>): string {
+    const query = new URLSearchParams();
+    for (const [key, value] of Object.entries(params)) {
+      query.set(key, String(value));
+    }
+
+    return query.toString();
+  }
+
   test("fails closed for consent and relationship revocation and stale-session contexts", async ({
     page
   }, testInfo) => {
@@ -388,6 +397,330 @@ test.describe("authorization policy browser journeys", () => {
         decisionReasonTag: "activation-rejected"
       }
     });
+
+    await expectNoUnexpectedStorage(page);
+    await expectNoProtectedSentinels(page);
+    await expectNoBrowserGuardFailures(guards);
+  });
+
+  test("enforces full role separation matrix across protected authorization policy routes", async ({
+    page
+  }, testInfo) => {
+    const guards = installBrowserGuards(page, testInfo);
+
+    await page.goto("/");
+
+    const roleMatrixCases = [
+      {
+        role: "payer",
+        allowed: {
+          requestedResource: "billing-ledger",
+          requestedAction: "read-billing",
+          purpose: "payment-operations",
+          requiresRelationship: false
+        },
+        denied: {
+          requestedResource: "clinical-record-summary",
+          requestedAction: "read",
+          purpose: "care-delivery",
+          requiresRelationship: false
+        }
+      },
+      {
+        role: "sponsor",
+        allowed: {
+          requestedResource: "billing-ledger",
+          requestedAction: "read-billing",
+          purpose: "payment-operations",
+          requiresRelationship: false
+        },
+        denied: {
+          requestedResource: "clinical-record-summary",
+          requestedAction: "read",
+          purpose: "care-delivery",
+          requiresRelationship: false
+        }
+      },
+      {
+        role: "employer",
+        allowed: {
+          requestedResource: "billing-ledger",
+          requestedAction: "read-billing",
+          purpose: "payment-operations",
+          requiresRelationship: false
+        },
+        denied: {
+          requestedResource: "clinical-record-summary",
+          requestedAction: "read",
+          purpose: "care-delivery",
+          requiresRelationship: false
+        }
+      },
+      {
+        role: "hmo",
+        allowed: {
+          requestedResource: "billing-ledger",
+          requestedAction: "read-billing",
+          purpose: "payment-operations",
+          requiresRelationship: false
+        },
+        denied: {
+          requestedResource: "clinical-record-summary",
+          requestedAction: "read",
+          purpose: "care-delivery",
+          requiresRelationship: false
+        }
+      },
+      {
+        role: "guardian",
+        allowed: {
+          requestedResource: "clinical-record-summary",
+          requestedAction: "read",
+          purpose: "care-delivery",
+          requiresRelationship: true
+        },
+        denied: {
+          requestedResource: "billing-ledger",
+          requestedAction: "read-billing",
+          purpose: "payment-operations",
+          requiresRelationship: true
+        }
+      },
+      {
+        role: "caregiver",
+        allowed: {
+          requestedResource: "clinical-record-summary",
+          requestedAction: "read",
+          purpose: "care-delivery",
+          requiresRelationship: true
+        },
+        denied: {
+          requestedResource: "billing-ledger",
+          requestedAction: "read-billing",
+          purpose: "payment-operations",
+          requiresRelationship: true
+        }
+      },
+      {
+        role: "clinician",
+        allowed: {
+          requestedResource: "clinical-record-summary",
+          requestedAction: "read",
+          purpose: "care-delivery",
+          requiresRelationship: false
+        },
+        denied: {
+          requestedResource: "billing-ledger",
+          requestedAction: "read-billing",
+          purpose: "payment-operations",
+          requiresRelationship: false
+        }
+      },
+      {
+        role: "support",
+        allowed: {
+          requestedResource: "support-case",
+          requestedAction: "read-support",
+          purpose: "support-operations",
+          requiresRelationship: false
+        },
+        denied: {
+          requestedResource: "clinical-record-summary",
+          requestedAction: "read",
+          purpose: "care-delivery",
+          requiresRelationship: false
+        }
+      },
+      {
+        role: "platform-admin",
+        allowed: {
+          requestedResource: "tenant-membership",
+          requestedAction: "manage-tenant-membership",
+          purpose: "tenant-administration",
+          requiresRelationship: false
+        },
+        denied: {
+          requestedResource: "clinical-record-summary",
+          requestedAction: "read",
+          purpose: "care-delivery",
+          requiresRelationship: false
+        }
+      }
+    ];
+
+    for (const roleCase of roleMatrixCases) {
+      const allowedResponse = await page.request.get(
+        `/api/authorization-policy?${createQuery({
+          actorRole: roleCase.role,
+          sessionStatus: "active",
+          consentStatus: "granted",
+          relationshipStatus: "active",
+          ...roleCase.allowed
+        })}`
+      );
+      expect(allowedResponse.ok()).toBe(true);
+      const allowedBody = await allowedResponse.json();
+      expect(allowedBody).toMatchObject({
+        data: {
+          status: "allowed",
+          reasonCode: "allowed"
+        }
+      });
+
+      const deniedResponse = await page.request.get(
+        `/api/authorization-policy?${createQuery({
+          actorRole: roleCase.role,
+          sessionStatus: "active",
+          consentStatus: "granted",
+          relationshipStatus: "active",
+          ...roleCase.denied
+        })}`
+      );
+      expect(deniedResponse.ok()).toBe(true);
+      const deniedBody = await deniedResponse.json();
+      expect(deniedBody).toMatchObject({
+        data: {
+          status: "denied",
+          reasonCode: "rbac-policy-unmapped-deny-default"
+        }
+      });
+    }
+
+    await expectNoUnexpectedStorage(page);
+    await expectNoProtectedSentinels(page);
+    await expectNoBrowserGuardFailures(guards);
+  });
+
+  test("fails closed across critical protected routes for manipulated identifiers, stale sessions, revocation, and back navigation", async ({
+    page
+  }, testInfo) => {
+    const guards = installBrowserGuards(page, testInfo);
+
+    await page.goto("/");
+
+    const criticalRouteCases = [
+      {
+        name: "authorization-policy",
+        route: "/api/authorization-policy",
+        baseParams: {
+          actorRole: "guardian",
+          requestedResource: "clinical-record-summary",
+          requestedAction: "read",
+          purpose: "care-delivery",
+          sameTenant: true,
+          sessionStatus: "active",
+          consentStatus: "granted",
+          relationshipStatus: "active",
+          requiresRelationship: true
+        },
+        expects: {
+          manipulated: "manipulated-identifier-detected",
+          staleSession: "stale-session",
+          revokedConsent: "consent-revoked",
+          revokedRelationship: "relationship-revoked",
+          backNavigation: "revocation-persisted-on-back-navigation"
+        }
+      },
+      {
+        name: "disclosure-eligibility",
+        route: "/api/disclosure-eligibility",
+        baseParams: {
+          sameTenant: true,
+          paymentStatus: "settled",
+          hasAuthorization: true,
+          sessionStatus: "active",
+          consentStatus: "granted",
+          relationshipStatus: "active",
+          requiresRelationship: true
+        },
+        expects: {
+          manipulated: "manipulated-identifier-detected",
+          staleSession: "stale-session",
+          revokedConsent: "consent-revoked",
+          revokedRelationship: "relationship-revoked",
+          backNavigation: "revocation-persisted-on-back-navigation"
+        }
+      },
+      {
+        name: "tenant-protected-resource",
+        route: "/api/tenant-protected-resource",
+        baseParams: {
+          sameTenant: true,
+          sessionStatus: "active",
+          consentStatus: "granted",
+          relationshipStatus: "active",
+          requiresRelationship: true
+        },
+        expects: {
+          manipulated: "manipulated-identifier-detected",
+          staleSession: "stale-session",
+          revokedConsent: "consent-revoked",
+          revokedRelationship: "relationship-revoked",
+          backNavigation: "revocation-persisted-on-back-navigation"
+        }
+      }
+    ];
+
+    for (const routeCase of criticalRouteCases) {
+      const baselineAllowed = await page.request.get(
+        `${routeCase.route}?${createQuery(routeCase.baseParams)}`
+      );
+      expect(
+        baselineAllowed.status(),
+        `${routeCase.name} should allow baseline before failure scenarios`
+      ).toBeLessThan(400);
+
+      const manipulated = await page.request.get(
+        `${routeCase.route}?${createQuery({
+          ...routeCase.baseParams,
+          manipulatedIdentifier: true
+        })}`
+      );
+      const manipulatedBody = await manipulated.json();
+      expect(manipulatedBody.meta.decisionReasonTag).toBe(routeCase.expects.manipulated);
+
+      const staleSession = await page.request.get(
+        `${routeCase.route}?${createQuery({
+          ...routeCase.baseParams,
+          sessionStatus: "stale"
+        })}`
+      );
+      const staleSessionBody = await staleSession.json();
+      expect(staleSessionBody.meta.decisionReasonTag).toBe(routeCase.expects.staleSession);
+
+      const revokedConsent = await page.request.get(
+        `${routeCase.route}?${createQuery({
+          ...routeCase.baseParams,
+          consentStatus: "revoked"
+        })}`
+      );
+      const revokedConsentBody = await revokedConsent.json();
+      expect(revokedConsentBody.meta.decisionReasonTag).toBe(routeCase.expects.revokedConsent);
+
+      const revokedRelationship = await page.request.get(
+        `${routeCase.route}?${createQuery({
+          ...routeCase.baseParams,
+          relationshipStatus: "revoked",
+          requiresRelationship: true
+        })}`
+      );
+      const revokedRelationshipBody = await revokedRelationship.json();
+      expect(revokedRelationshipBody.meta.decisionReasonTag).toBe(
+        routeCase.expects.revokedRelationship
+      );
+
+      const backNavigationDenied = await page.request.get(
+        `${routeCase.route}?${createQuery({
+          ...routeCase.baseParams,
+          consentStatus: "revoked",
+          backNavigationAfterRevocation: true
+        })}`
+      );
+      const backNavigationDeniedBody = await backNavigationDenied.json();
+      expect(backNavigationDeniedBody.meta.decisionReasonTag).toBe(
+        routeCase.expects.backNavigation
+      );
+    }
 
     await expectNoUnexpectedStorage(page);
     await expectNoProtectedSentinels(page);
