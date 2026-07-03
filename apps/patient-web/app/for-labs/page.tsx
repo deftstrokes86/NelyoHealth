@@ -1,16 +1,5 @@
-import Link from "next/link";
+import { Batch1ProductionPage } from "../../src/components/screens/batch1-production-page";
 
 export default function ScreenPage() {
-  return (
-    <main className="nh-shell">
-      <section className="nh-shell__header" aria-labelledby="screen-title">
-        <h1 id="screen-title">For Labs</h1>
-        <p>Screen ID: MED-PUB-009</p>
-        <p>Diagnostics, booking, results upload partner proposition.</p>
-        <p>
-          <Link href="/">Back to Home</Link>
-        </p>
-      </section>
-    </main>
-  );
+  return <Batch1ProductionPage routeKey="for-labs" />;
 }
