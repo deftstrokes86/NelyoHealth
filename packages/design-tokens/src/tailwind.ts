@@ -54,16 +54,22 @@ export const nelyoTailwindTheme = {
   },
   spacing: {
     0: cssVar("spacing", "space-0"),
+    px: cssVar("spacing", "space-px"),
     1: cssVar("spacing", "space-1"),
+    1.5: cssVar("spacing", "space-1-5"),
     2: cssVar("spacing", "space-2"),
+    2.5: cssVar("spacing", "space-2-5"),
     3: cssVar("spacing", "space-3"),
+    3.5: cssVar("spacing", "space-3-5"),
     4: cssVar("spacing", "space-4"),
     5: cssVar("spacing", "space-5"),
     6: cssVar("spacing", "space-6"),
     7: cssVar("spacing", "space-7"),
     8: cssVar("spacing", "space-8"),
     9: cssVar("spacing", "space-9"),
-    10: cssVar("spacing", "space-10")
+    10: cssVar("spacing", "space-10"),
+    11: cssVar("spacing", "space-11"),
+    12: cssVar("spacing", "space-12")
   },
   borderRadius: {
     none: cssVar("radius", "none"),

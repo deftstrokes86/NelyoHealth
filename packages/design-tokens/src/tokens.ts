@@ -106,16 +106,22 @@ export const tokens = {
   },
   spacing: {
     "space-0": d("0", "No spacing"),
+    "space-px": d("1px", "Hairline spacing"),
     "space-1": d("0.25rem", "Tiny spacing"),
+    "space-1-5": d("0.375rem", "Between tiny and small spacing"),
     "space-2": d("0.5rem", "Small spacing"),
+    "space-2-5": d("0.625rem", "Between small and compact spacing"),
     "space-3": d("0.75rem", "Compact spacing"),
+    "space-3-5": d("0.875rem", "Between compact and base spacing"),
     "space-4": d("1rem", "Base spacing"),
     "space-5": d("1.5rem", "Section spacing"),
     "space-6": d("2rem", "Wide spacing"),
     "space-7": d("3rem", "Panel spacing"),
     "space-8": d("4rem", "Hero spacing"),
     "space-9": d("5rem", "Large section spacing"),
-    "space-10": d("6rem", "Page rhythm spacing")
+    "space-10": d("6rem", "Page rhythm spacing"),
+    "space-11": d("7rem", "Extended section spacing"),
+    "space-12": d("8rem", "Landing-level vertical rhythm")
   },
   sizing: {
     "size-touch": d("44px", "Minimum touch target", "interaction"),

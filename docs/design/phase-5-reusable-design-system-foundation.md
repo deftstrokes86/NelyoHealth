@@ -31,7 +31,7 @@ The token source of truth is [packages/design-tokens/src/tokens.ts](packages/des
 - Responsive breakpoints: `mobile`, `phablet`, `mobileWide`, `tablet`, `laptop`, `desktop`, `desktopWide`.
 - Icon guidelines tokens: icon size set, stroke width, baseline offset, decorative opacity.
 - Motion guidelines tokens: durations, easings, stagger, profile set, and movement distances.
-- Spacing scale: `space-0` through `space-10`.
+- Spacing scale: `space-0`, `space-px`, `space-1` through `space-12`, including half-steps (`space-1-5`, `space-2-5`, `space-3-5`).
 - Status colors: semantic foreground/background tokens for success, warning, danger, and info.
 
 ## Component-Level Reusable Tokens
