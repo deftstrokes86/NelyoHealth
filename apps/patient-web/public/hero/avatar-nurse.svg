@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-label="Nurse portrait illustration">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f3faf7"/>
+      <stop offset="1" stop-color="#cde7e1"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" fill="url(#bg)"/>
+  <ellipse cx="128" cy="226" rx="64" ry="14" fill="#8abbb2" opacity="0.18"/>
+  <ellipse cx="128" cy="98" rx="42" ry="50" fill="#efc09a"/>
+  <path d="M84 92c4-38 25-60 46-60 24 0 44 19 50 53v20c-7-2-13-5-18-9l-1 10c-9-3-18-10-27-20-11 12-28 22-50 29V92z" fill="#312421"/>
+  <circle cx="112" cy="103" r="4.5" fill="#143b36"/>
+  <circle cx="145" cy="103" r="4.5" fill="#143b36"/>
+  <path d="M114 121c8 6 21 6 29 0" stroke="#6d4437" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M73 214c6-47 28-79 65-79 42 0 64 29 69 79v16H73z" fill="#3b7d97"/>
+  <path d="M111 56h34v20h16v16H95V76h16z" fill="#ffffff"/>
+  <rect x="121" y="66" width="14" height="36" rx="4" fill="#d95056"/>
+  <rect x="110" y="77" width="36" height="14" rx="4" fill="#d95056"/>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-label="Doctor portrait illustration">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eff8f5"/>
+      <stop offset="1" stop-color="#c7e3dc"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" fill="url(#bg)"/>
+  <ellipse cx="126" cy="226" rx="64" ry="14" fill="#87b9b0" opacity="0.2"/>
+  <ellipse cx="128" cy="94" rx="42" ry="48" fill="#edbf98"/>
+  <path d="M85 92c0-38 23-62 47-62 28 0 50 22 50 61v16c-13-2-25-6-36-13-9-6-17-15-24-25-8 17-20 28-37 34z" fill="#241c1a"/>
+  <circle cx="111" cy="99" r="4.5" fill="#143b36"/>
+  <circle cx="144" cy="99" r="4.5" fill="#143b36"/>
+  <path d="M112 117c7 6 23 6 30 0" stroke="#6b4336" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M66 210c4-47 29-79 69-79 43 0 67 28 72 79v20H66z" fill="#ffffff"/>
+  <path d="M96 142h62l-12 38h-38z" fill="#2f708e"/>
+  <path d="M113 146l-24 78" stroke="#d5e5e2" stroke-width="8" stroke-linecap="round"/>
+  <path d="M154 146l23 78" stroke="#d5e5e2" stroke-width="8" stroke-linecap="round"/>
+</svg>

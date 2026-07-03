@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-label="Clinician portrait illustration">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#edf8f5"/>
+      <stop offset="1" stop-color="#c3e1d9"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" fill="url(#bg)"/>
+  <ellipse cx="128" cy="226" rx="64" ry="14" fill="#8ebdb4" opacity="0.2"/>
+  <ellipse cx="128" cy="97" rx="42" ry="49" fill="#efc6a1"/>
+  <path d="M84 90c0-38 23-61 48-61 29 0 52 25 52 63v15c-12-1-23-4-33-10-10-5-19-13-28-24-8 16-21 27-39 34V90z" fill="#1f1918"/>
+  <circle cx="112" cy="101" r="4.5" fill="#143b36"/>
+  <circle cx="145" cy="101" r="4.5" fill="#143b36"/>
+  <path d="M113 120c8 6 23 6 31 0" stroke="#6c4337" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M65 214c6-48 29-80 67-80 43 0 67 31 72 80v16H65z" fill="#56759b"/>
+  <path d="M89 148h78l-12 34h-54z" fill="#ffffff" opacity="0.9"/>
+</svg>

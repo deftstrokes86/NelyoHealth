@@ -265,7 +265,7 @@ export const batch1RouteCatalog = {
         {
           heading: "Future-ready scope",
           detail:
-            "Employer-specific capabilities are introduced with explicit approval boundaries and phased rollout."
+            "Employer-specific capabilities are delivered with explicit approval boundaries and clear operational controls."
         }
       ],
       faqs: [
@@ -338,7 +338,7 @@ export const batch1RouteCatalog = {
         {
           heading: "Integration narrative",
           detail:
-            "Operational readiness is structured around approved interfaces and phased governance."
+            "Operational readiness is structured around approved interfaces and clear governance controls."
         },
         {
           heading: "Member experience",
@@ -358,11 +358,11 @@ export const batch1RouteCatalog = {
         {
           question: "Is integration available instantly?",
           answer:
-            "Integration is phased and approval-dependent to preserve privacy, security, and operational quality."
+            "Integration is planned and approved through governance controls that preserve privacy, security, and operational quality."
         }
       ],
       finalCallout:
-        "Request a walkthrough to review member access operations, reporting scope, and phased integration readiness."
+        "Request a walkthrough to review member access operations, reporting scope, and integration readiness."
     }
   },
   "for-diaspora": {
@@ -847,7 +847,7 @@ export const batch1RouteCatalog = {
         }
       ],
       finalCallout:
-        "Contact the team to assess referral-network fit, discharge continuity model, and phased collaboration scope."
+        "Contact the team to assess referral-network fit, discharge continuity model, and collaboration scope."
     }
   },
   pricing: {
@@ -972,7 +972,7 @@ export const batch1RouteCatalog = {
         },
         {
           step: "Next-step alignment",
-          detail: "Document phased implementation considerations and ownership boundaries."
+          detail: "Document implementation considerations and ownership boundaries."
         }
       ],
       trustPoints: [
@@ -992,7 +992,7 @@ export const batch1RouteCatalog = {
         },
         {
           heading: "Implementation realism",
-          detail: "Dependencies, phased scope, and approval requirements are made explicit."
+          detail: "Dependencies, scope boundaries, and approval requirements are made explicit."
         }
       ],
       faqs: [
