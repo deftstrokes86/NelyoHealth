@@ -1,5 +1,0 @@
-1:"$Sreact.fragment"
-2:I[34174,["/_next/static/chunks/117e-1mee_cij.js"],"OutletBoundary"]
-3:"$Sreact.suspense"
-0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"children":["$","section",null,{"className":"nh-surface nh-surface--plain","aria-labelledby":"admin-shell-title","children":["$","div",null,{"className":"nh-stack nh-stack--column nh-stack--md","children":[["$","h1",null,{"id":"admin-shell-title","children":"Admin Web Shell"}],["$","p",null,{"children":"This shell is synthetic-only and does not expose protected pharmacy or laboratory provider details before payment authorization."}],["$","section",null,{"className":"nh-alert nh-alert--info","role":"status","aria-label":"Phase 2 Foundation","children":[["$","strong",null,{"children":"Phase 2 Foundation"}],["$","div",null,{"children":"Issue: P02-ISS-012 | App: admin-web"}]]}]]}]}]}],[["$","script","script-0",{"src":"/_next/static/chunks/3rn_d6a2ya0c5.js","async":true}]],["$","$L2",null,{"children":["$","$3",null,{"name":"Next.MetadataOutlet","children":"$@4"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"1R-yRdi0kYJtYnbK2-RbW"}
-4:null
