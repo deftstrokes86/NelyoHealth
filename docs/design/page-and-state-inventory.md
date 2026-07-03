@@ -1,14 +1,4 @@
-﻿# P00-14A Page and State Inventory
-
-## Document Control
-
-| Field | Value |
-|---|---|
-| Version | 0.1 |
-| Status | DRAFT-PENDING-PRODUCT-DESIGN-CONTENT-ACCESSIBILITY-PRIVACY-AND-SECURITY-APPROVAL |
-| Effective date | NOT EFFECTIVE FOR PRODUCTION UNTIL APPROVED |
-| Owner | Product Owner + Design Owner + Content Owner |
-| Required reviewers | Product, Design, Content, Accessibility, Privacy, Security, Clinical Safety, Operations, and domain owners where relevant |
+﻿Safety, Operations, and domain owners where relevant |
 | Approval authority | Product, Design, Content, Accessibility, Privacy, Security, and affected domain owners |
 | Related decisions | REQ-CNT-021 through REQ-CNT-028 |
 | Related open questions | OQ-00-647, OQ-00-660, OQ-00-672 |
