@@ -1,5 +1,12 @@
 # MediReach Screens
 
+## Normalization Note
+
+- For repository implementation, NelyoHealth is the canonical product name.
+- "MediReach" labels in this document are treated as legacy copy references.
+- Screen IDs and routes in this file remain authoritative for scaffolding.
+- Scope gating is applied using [page-and-state-inventory.md](page-and-state-inventory.md).
+
 Generated for the expanded MediReach autonomous Codex build. This documentation targets the full 200-screen multi-role healthcare platform, including B2B, HMO, corporate, diaspora, Care Partner, pediatric, adolescent, hospital, pharmacy, lab, admin, compliance, audit, and clinical safety workflows.
 
 Core product position: MediReach is not just telemedicine. It is coordinated healthcare access infrastructure for Nigeria and diaspora-supported families.
