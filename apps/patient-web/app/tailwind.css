@@ -235,6 +235,17 @@ body {
   gap: 0.7rem;
 }
 
+.nh-marketing__helper-link {
+  margin: 0;
+  font-size: 0.92rem;
+  color: #2c5e5b;
+}
+
+.nh-marketing__helper-link a {
+  color: #0f5d57;
+  font-weight: 700;
+}
+
 .nh-marketing__cta {
   border-radius: 0.65rem;
   padding: 0.6rem 0.95rem;
