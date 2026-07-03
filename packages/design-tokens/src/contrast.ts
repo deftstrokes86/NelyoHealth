@@ -39,13 +39,18 @@ export const contrastRatio = (foreground: string, background: string) => {
 export const requiredContrastPairs = [
   ["text", "background"],
   ["text", "surface"],
+  ["brand-900", "brand-100"],
   ["action", "background"],
   ["danger", "background"],
   ["ink-900", "paper-050"],
   ["teal-900", "teal-100"],
   ["coral-700", "coral-200"],
   ["sky-700", "sky-100"],
-  ["success-700", "success-100"]
+  ["success-700", "success-100"],
+  ["status-success-fg", "status-success-bg"],
+  ["status-warning-fg", "status-warning-bg"],
+  ["status-danger-fg", "status-danger-bg"],
+  ["status-info-fg", "status-info-bg"]
 ] as const;
 export const evaluateContrast = (): ContrastCheck[] =>
   requiredContrastPairs.map(([foreground, background]) => {

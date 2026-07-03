@@ -1619,6 +1619,17 @@ body {
   --ds-color-brand-800: #103f3b;
   --ds-color-brand-900: #123633;
 
+  --ds-color-accent-50: #fff8e8;
+  --ds-color-accent-100: #ffefc8;
+  --ds-color-accent-200: #fde19a;
+  --ds-color-accent-300: #f9d06b;
+  --ds-color-accent-400: #f2b94f;
+  --ds-color-accent-500: #de9a22;
+  --ds-color-accent-600: #b97a12;
+  --ds-color-accent-700: #8c5d0f;
+  --ds-color-accent-800: #6a470f;
+  --ds-color-accent-900: #52390f;
+
   --ds-color-neutral-0: #ffffff;
   --ds-color-neutral-25: #fcfefd;
   --ds-color-neutral-50: #f8fbfa;
@@ -1637,6 +1648,61 @@ body {
   --ds-color-status-danger: #b23a3a;
   --ds-color-status-info: #1e5f97;
 
+  --ds-color-info-50: #eaf4ff;
+  --ds-color-info-100: #d6eaff;
+  --ds-color-info-200: #afccf0;
+  --ds-color-info-300: #82addf;
+  --ds-color-info-400: #4f89c8;
+  --ds-color-info-500: #286eab;
+  --ds-color-info-600: #1e5f97;
+  --ds-color-info-700: #1a4f7e;
+  --ds-color-info-800: #1a4368;
+  --ds-color-info-900: #1a3956;
+
+  --ds-color-success-50: #e8f8ef;
+  --ds-color-success-100: #cff0dd;
+  --ds-color-success-200: #a0dfbe;
+  --ds-color-success-300: #75cc9f;
+  --ds-color-success-400: #4aae7f;
+  --ds-color-success-500: #2f9065;
+  --ds-color-success-600: #15704f;
+  --ds-color-success-700: #125c43;
+  --ds-color-success-800: #124b39;
+  --ds-color-success-900: #133f32;
+
+  --ds-color-warning-50: #fff8ea;
+  --ds-color-warning-100: #ffefcc;
+  --ds-color-warning-200: #fddf9a;
+  --ds-color-warning-300: #f9c96a;
+  --ds-color-warning-400: #edaf3d;
+  --ds-color-warning-500: #cc8a1a;
+  --ds-color-warning-600: #9a640a;
+  --ds-color-warning-700: #7c4e0c;
+  --ds-color-warning-800: #613f10;
+  --ds-color-warning-900: #50350f;
+
+  --ds-color-danger-50: #fdf0f0;
+  --ds-color-danger-100: #fbdedd;
+  --ds-color-danger-200: #f4bcbc;
+  --ds-color-danger-300: #ea9292;
+  --ds-color-danger-400: #de6668;
+  --ds-color-danger-500: #cd4b4f;
+  --ds-color-danger-600: #b23a3a;
+  --ds-color-danger-700: #943131;
+  --ds-color-danger-800: #7a2d2d;
+  --ds-color-danger-900: #662b2d;
+
+  /* Semantic aliases (preferred for component usage) */
+  --ds-color-bg-page: var(--ds-color-neutral-25);
+  --ds-color-bg-surface: var(--ds-color-neutral-0);
+  --ds-color-bg-subtle: var(--ds-color-neutral-100);
+  --ds-color-text-primary: var(--ds-color-neutral-900);
+  --ds-color-text-secondary: var(--ds-color-neutral-700);
+  --ds-color-text-muted: var(--ds-color-neutral-600);
+  --ds-color-border-soft: var(--ds-color-neutral-300);
+  --ds-color-border-strong: var(--ds-color-neutral-400);
+  --ds-color-focus: var(--ds-color-accent-400);
+
   /* Typography scale */
   --ds-font-family-sans:
     "Plus Jakarta Sans",
@@ -1649,22 +1715,46 @@ body {
   --ds-font-h1: clamp(3rem, 5.5vw, 3.5rem);
   --ds-font-h2: clamp(2.25rem, 4.2vw, 2.625rem);
   --ds-font-h3: clamp(1.75rem, 3vw, 2rem);
+  --ds-font-h4: 1.5rem;
+  --ds-font-h5: 1.25rem;
+  --ds-font-lead: 1.25rem;
   --ds-font-body: 1.125rem;
+  --ds-font-body-sm: 1rem;
   --ds-font-nav: 0.95rem;
+  --ds-font-label: 0.875rem;
+  --ds-font-caption: 0.8125rem;
+  --ds-font-overline: 0.75rem;
+  --ds-font-button: 0.95rem;
 
   --ds-line-display: 1.02;
   --ds-line-h1: 1.06;
   --ds-line-h2: 1.12;
   --ds-line-h3: 1.2;
+  --ds-line-h4: 1.28;
+  --ds-line-h5: 1.36;
+  --ds-line-lead: 1.6;
   --ds-line-body: 1.72;
+  --ds-line-body-sm: 1.62;
   --ds-line-nav: 1.35;
+  --ds-line-label: 1.35;
+  --ds-line-caption: 1.4;
+  --ds-line-overline: 1.3;
+  --ds-line-button: 1;
 
   --ds-letter-display: -0.03em;
   --ds-letter-h1: -0.025em;
   --ds-letter-h2: -0.02em;
   --ds-letter-h3: -0.015em;
+  --ds-letter-h4: -0.01em;
+  --ds-letter-h5: -0.006em;
+  --ds-letter-lead: 0.001em;
   --ds-letter-body: 0.002em;
+  --ds-letter-body-sm: 0.002em;
   --ds-letter-nav: 0.015em;
+  --ds-letter-label: 0.01em;
+  --ds-letter-caption: 0.02em;
+  --ds-letter-overline: 0.08em;
+  --ds-letter-button: 0.015em;
 
   /* Spacing scale */
   --ds-space-1: 0.25rem;
@@ -1688,10 +1778,21 @@ body {
   --ds-radius-pill: 9999px;
 
   /* Elevation and shadows */
-  --ds-shadow-1: 0 4px 12px rgba(15, 23, 42, 0.06);
-  --ds-shadow-2: 0 10px 24px rgba(15, 23, 42, 0.08);
-  --ds-shadow-3: 0 18px 38px rgba(15, 23, 42, 0.12);
+  --ds-shadow-0: none;
+  --ds-shadow-1: 0 2px 8px rgba(15, 23, 42, 0.05);
+  --ds-shadow-2: 0 6px 16px rgba(15, 23, 42, 0.08);
+  --ds-shadow-3: 0 12px 28px rgba(15, 23, 42, 0.1);
+  --ds-shadow-4: 0 20px 44px rgba(15, 23, 42, 0.14);
+  --ds-shadow-5: 0 30px 64px rgba(15, 23, 42, 0.18);
   --ds-shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  --ds-shadow-border: inset 0 0 0 1px rgba(15, 23, 42, 0.1);
+  --ds-shadow-focus: 0 0 0 3px rgba(242, 185, 79, 0.22);
+
+  /* Semantic elevation aliases */
+  --ds-elevation-rest: var(--ds-shadow-1);
+  --ds-elevation-hover: var(--ds-shadow-3);
+  --ds-elevation-active: var(--ds-shadow-2);
+  --ds-elevation-overlay: 0 32px 72px rgba(15, 23, 42, 0.22);
 
   /* Motion guidelines */
   --ds-motion-fast: 180ms;
@@ -1742,10 +1843,38 @@ body {
     font-weight: 600;
   }
 
+  .ds-text-h4 {
+    font-size: var(--ds-font-h4);
+    line-height: var(--ds-line-h4);
+    letter-spacing: var(--ds-letter-h4);
+    font-weight: 600;
+  }
+
+  .ds-text-h5 {
+    font-size: var(--ds-font-h5);
+    line-height: var(--ds-line-h5);
+    letter-spacing: var(--ds-letter-h5);
+    font-weight: 600;
+  }
+
+  .ds-text-lead {
+    font-size: var(--ds-font-lead);
+    line-height: var(--ds-line-lead);
+    letter-spacing: var(--ds-letter-lead);
+    font-weight: 400;
+  }
+
   .ds-text-body {
     font-size: var(--ds-font-body);
     line-height: var(--ds-line-body);
     letter-spacing: var(--ds-letter-body);
+  }
+
+  .ds-text-body-sm {
+    font-size: var(--ds-font-body-sm);
+    line-height: var(--ds-line-body-sm);
+    letter-spacing: var(--ds-letter-body-sm);
+    font-weight: 400;
   }
 
   .ds-text-nav {
@@ -1753,6 +1882,35 @@ body {
     line-height: var(--ds-line-nav);
     letter-spacing: var(--ds-letter-nav);
     font-weight: 550;
+  }
+
+  .ds-text-label {
+    font-size: var(--ds-font-label);
+    line-height: var(--ds-line-label);
+    letter-spacing: var(--ds-letter-label);
+    font-weight: 650;
+  }
+
+  .ds-text-caption {
+    font-size: var(--ds-font-caption);
+    line-height: var(--ds-line-caption);
+    letter-spacing: var(--ds-letter-caption);
+    font-weight: 500;
+  }
+
+  .ds-text-overline {
+    font-size: var(--ds-font-overline);
+    line-height: var(--ds-line-overline);
+    letter-spacing: var(--ds-letter-overline);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .ds-text-button {
+    font-size: var(--ds-font-button);
+    line-height: var(--ds-line-button);
+    letter-spacing: var(--ds-letter-button);
+    font-weight: 650;
   }
 }
 
@@ -2056,6 +2214,64 @@ body {
 
   .ds-motion-slide {
     transition: transform var(--ds-motion-base) var(--ds-ease-emphasis);
+  }
+
+  /* Elevation utility classes */
+  .ds-elevation-0 {
+    box-shadow: var(--ds-shadow-0);
+  }
+
+  .ds-elevation-1 {
+    box-shadow: var(--ds-shadow-1);
+  }
+
+  .ds-elevation-2 {
+    box-shadow: var(--ds-shadow-2);
+  }
+
+  .ds-elevation-3 {
+    box-shadow: var(--ds-shadow-3);
+  }
+
+  .ds-elevation-4 {
+    box-shadow: var(--ds-shadow-4);
+  }
+
+  .ds-elevation-5 {
+    box-shadow: var(--ds-shadow-5);
+  }
+
+  .ds-elevation-border {
+    box-shadow: var(--ds-shadow-border);
+  }
+
+  .ds-elevation-inset {
+    box-shadow: var(--ds-shadow-inset);
+  }
+
+  .ds-elevation-focus {
+    box-shadow: var(--ds-shadow-focus);
+  }
+
+  .ds-elevation-surface {
+    box-shadow: var(--ds-elevation-rest);
+    transition:
+      box-shadow var(--ds-motion-base) var(--ds-ease-emphasis),
+      transform var(--ds-motion-base) var(--ds-ease-emphasis);
+  }
+
+  .ds-elevation-surface:hover {
+    box-shadow: var(--ds-elevation-hover);
+    transform: translateY(-1px);
+  }
+
+  .ds-elevation-surface:active {
+    box-shadow: var(--ds-elevation-active);
+    transform: translateY(0);
+  }
+
+  .ds-elevation-overlay {
+    box-shadow: var(--ds-elevation-overlay);
   }
 }
 

@@ -7,3 +7,4 @@ export {
   hexToRgb,
   relativeLuminance
 } from "./contrast.js";
+export { nelyoTailwindRecipes, nelyoTailwindTheme } from "./tailwind.js";

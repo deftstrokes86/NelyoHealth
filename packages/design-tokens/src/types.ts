@@ -12,8 +12,17 @@ export interface DesignTokens {
   sizing: TokenGroup;
   radius: TokenGroup;
   elevation: TokenGroup;
+  shadow: TokenGroup;
   zIndex: TokenGroup;
   breakpoint: TokenGroup;
+  grid: TokenGroup;
+  icon: TokenGroup;
+  status: TokenGroup;
+  button: TokenGroup;
+  card: TokenGroup;
+  formControl: TokenGroup;
+  navigation: TokenGroup;
+  badge: TokenGroup;
   motion: TokenGroup;
 }
 export interface TokenAuditSummary {
