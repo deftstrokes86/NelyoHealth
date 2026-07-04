@@ -58,11 +58,16 @@ export const batch1RouteCatalog = {
       heroSummary:
         "NelyoHealth connects care access across patients, families, sponsors, and provider partners without weakening privacy and consent boundaries.",
       audienceProblem:
-        "Healthcare access is often fragmented across booking, consultation, prescriptions, labs, and follow-up with little transparency for families and organizations.",
+        "Care breaks apart when booking, consultation, diagnostics, medication, and follow-up each live in a different place, leaving families and organizations to stitch the journey together.",
       painPoints: [
-        "Families struggle to coordinate care updates across clinics, pharmacies, and labs.",
-        "Sponsors need funding clarity without overreaching into adult clinical records.",
-        "Employers and HMOs need aggregate visibility without individual-clinical-data leakage."
+        "Long waiting times.",
+        "Repeated paperwork.",
+        "Fragmented records.",
+        "Medication confusion.",
+        "Poor follow-up.",
+        "No family visibility.",
+        "Employers disconnected.",
+        "HMOs disconnected."
       ],
       workflowSteps: [
         {

@@ -514,6 +514,173 @@ body {
   line-height: 1.62;
 }
 
+.nh-marketing__problem-panel {
+  display: grid;
+  gap: 0;
+  border-radius: 1.2rem;
+  border: 1px solid rgba(18, 41, 39, 0.08);
+  padding: clamp(1rem, 2.6vw, 1.4rem);
+  background:
+    linear-gradient(180deg, rgba(247, 244, 237, 0.98), rgba(238, 243, 241, 0.96)),
+    radial-gradient(circle at top left, rgba(200, 214, 209, 0.22), transparent 36%);
+  box-shadow: var(--nh-elevation-1);
+}
+
+.nh-marketing__problem-story {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(18rem, 0.95fr);
+  gap: clamp(1rem, 2.5vw, 2rem);
+  align-items: stretch;
+}
+
+.nh-marketing__problem-copy {
+  display: grid;
+  gap: 1rem;
+}
+
+.nh-marketing__eyebrow--problem {
+  color: #7e5d26;
+}
+
+.nh-marketing__problem-summary {
+  margin: 0;
+  max-width: 60ch;
+  color: #4b5f5a;
+}
+
+.nh-marketing__pain-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.72rem;
+}
+
+.nh-marketing__pain-card {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 4.1rem;
+  border-radius: 0.95rem;
+  border: 1px solid rgba(18, 41, 39, 0.08);
+  background: rgba(250, 247, 240, 0.92);
+  padding: 0.78rem 0.85rem;
+}
+
+.nh-marketing__pain-card--alt {
+  background: rgba(243, 248, 246, 0.98);
+}
+
+.nh-marketing__pain-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.8rem;
+  background: rgba(15, 93, 87, 0.1);
+  color: #0f5d57;
+}
+
+.nh-marketing__pain-label {
+  color: #183f3a;
+  font-size: 0.96rem;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.nh-marketing__problem-bridge {
+  margin: 0;
+  padding: 0.95rem 1rem;
+  border-radius: 0.9rem;
+  background: rgba(15, 93, 87, 0.08);
+  color: #29554f;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.nh-marketing__problem-visual {
+  position: relative;
+  min-height: 100%;
+}
+
+.nh-marketing__problem-visual-frame {
+  position: sticky;
+  top: 1rem;
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  min-height: 100%;
+  padding: 1.1rem;
+  border-radius: 1.2rem;
+  border: 1px solid rgba(18, 41, 39, 0.08);
+  background:
+    linear-gradient(180deg, rgba(244, 240, 229, 0.95), rgba(233, 238, 236, 0.9)),
+    radial-gradient(circle at top right, rgba(174, 188, 185, 0.22), transparent 34%);
+}
+
+.nh-marketing__problem-visual-kicker {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #83622a;
+}
+
+.nh-marketing__problem-flow {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.25rem 0 0.15rem;
+}
+
+.nh-marketing__problem-flow-item {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+}
+
+.nh-marketing__problem-node {
+  width: min(100%, 15rem);
+  min-height: 3.1rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(77, 98, 94, 0.18);
+  background: rgba(255, 255, 255, 0.74);
+  color: #294743;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.nh-marketing__problem-node-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.nh-marketing__problem-arrow {
+  color: rgba(68, 87, 84, 0.54);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.nh-marketing__problem-status {
+  border-radius: 0.9rem;
+  padding: 0.9rem 1rem;
+  text-align: center;
+  font-size: 0.98rem;
+  font-weight: 750;
+  letter-spacing: 0.01em;
+}
+
+.nh-marketing__problem-status--disconnected {
+  background: rgba(149, 102, 62, 0.14);
+  color: #7d4f24;
+}
+
+.nh-marketing__problem-status--broken {
+  background: rgba(89, 104, 101, 0.16);
+  color: #445756;
+}
+
 .nh-marketing__faq-item summary {
   font-size: 1rem;
   line-height: 1.4;
@@ -1493,6 +1660,14 @@ body {
   .nh-auth__hero h1 {
     max-width: 14ch;
   }
+
+  .nh-marketing__problem-story {
+    grid-template-columns: 1fr;
+  }
+
+  .nh-marketing__problem-visual-frame {
+    position: static;
+  }
 }
 
 @media (max-width: 680px) {
@@ -1516,6 +1691,22 @@ body {
   .nh-marketing__card,
   .nh-shell__state-card {
     padding: 1rem;
+  }
+
+  .nh-marketing__problem-story {
+    gap: 0.9rem;
+  }
+
+  .nh-marketing__pain-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nh-marketing__problem-visual-frame {
+    padding: 0.9rem;
+  }
+
+  .nh-marketing__problem-node {
+    width: 100%;
   }
 
   .nh-marketing__hero h1,

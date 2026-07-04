@@ -3,20 +3,25 @@ import type { LucideIcon } from "lucide-react";
 import {
   Activity,
   ArrowRight,
+  BellRing,
   BriefcaseBusiness,
   CheckCircle2,
   ChevronRight,
+  Clock3,
+  FileText,
   HeartHandshake,
   Globe2,
   LockKeyhole,
   Mail,
   Phone,
+  Pill,
   ShieldCheck,
   Stethoscope,
   HeartPulse,
   ClipboardList,
   UserRound,
-  Users
+  Users,
+  Building2
 } from "lucide-react";
 import { MarketingSiteHeader } from "../marketing/site-header";
 import { batch1RouteCatalog, type Batch1RouteKey } from "../../screens/batch1-route-catalog";
@@ -34,6 +39,19 @@ const homeSegments = [
   { href: "/for-doctors", label: "Doctors" },
   { href: "/for-care-partners", label: "Care partners" },
   { href: "/for-pharmacies", label: "Pharmacies and labs" }
+];
+
+const homeBreakdownFlow = ["Patient", "Clinic", "Lab", "Pharmacy", "Hospital"] as const;
+
+const homeBreakdownPainPoints: Array<{ label: string; Icon: LucideIcon }> = [
+  { label: "Long waiting times", Icon: Clock3 },
+  { label: "Repeated paperwork", Icon: ClipboardList },
+  { label: "Fragmented records", Icon: FileText },
+  { label: "Medication confusion", Icon: Pill },
+  { label: "Poor follow-up", Icon: BellRing },
+  { label: "No family visibility", Icon: Users },
+  { label: "Employers disconnected", Icon: BriefcaseBusiness },
+  { label: "HMOs disconnected", Icon: Building2 }
 ];
 
 const trustBarItems: Array<{ title: string; detail: string; Icon: LucideIcon }> = [
@@ -435,14 +453,55 @@ export function Batch1ProductionPage({ routeKey }: Batch1ProductionPageProps) {
             </section>
           )}
 
-          <section className="nh-marketing__card" aria-labelledby="problem-title">
-            <h2 id="problem-title">{sectionTitles.problem}</h2>
-            <p>{route.marketing.audienceProblem}</p>
-            <ul className="nh-marketing__list">
-              {route.marketing.painPoints.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
+          <section className="nh-marketing__problem-panel" aria-labelledby="problem-title">
+            <div className="nh-marketing__problem-story">
+              <div className="nh-marketing__problem-copy">
+                <p className="nh-marketing__eyebrow nh-marketing__eyebrow--problem">Problem</p>
+                <h2 id="problem-title">{sectionTitles.problem}</h2>
+                <p className="nh-marketing__problem-summary">{route.marketing.audienceProblem}</p>
+                <div className="nh-marketing__pain-grid" aria-label="Pain points">
+                  {homeBreakdownPainPoints.map(({ label, Icon }, index) => (
+                    <article
+                      key={label}
+                      className={`nh-marketing__pain-card${index % 2 === 1 ? " nh-marketing__pain-card--alt" : ""}`}
+                    >
+                      <span className="nh-marketing__pain-icon" aria-hidden="true">
+                        <Icon size={18} />
+                      </span>
+                      <span className="nh-marketing__pain-label">{label}</span>
+                    </article>
+                  ))}
+                </div>
+                <p className="nh-marketing__problem-bridge">
+                  NelyoHealth turns those handoffs into one coordinated path, so the next section
+                  can show the solution instead of the friction.
+                </p>
+              </div>
+
+              <div className="nh-marketing__problem-visual" aria-hidden="true">
+                <div className="nh-marketing__problem-visual-frame">
+                  <p className="nh-marketing__problem-visual-kicker">Fragmented healthcare</p>
+                  <div className="nh-marketing__problem-flow">
+                    {homeBreakdownFlow.map((step, index) => (
+                      <div key={step} className="nh-marketing__problem-flow-item">
+                        <div className="nh-marketing__problem-node">
+                          <span className="nh-marketing__problem-node-label">{step}</span>
+                        </div>
+                        {index < homeBreakdownFlow.length - 1 ? (
+                          <span className="nh-marketing__problem-arrow">↓</span>
+                        ) : null}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="nh-marketing__problem-status nh-marketing__problem-status--disconnected">
+                    Disconnected.
+                  </div>
+                  <div className="nh-marketing__problem-status nh-marketing__problem-status--broken">
+                    Broken communication.
+                  </div>
+                </div>
+              </div>
+            </div>
           </section>
 
           <section className="nh-marketing__card" aria-labelledby="solution-title">
