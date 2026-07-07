@@ -52,3 +52,24 @@ export type {
   ComboboxOption,
   ComboboxVariant
 } from "./primitives/Combobox.js";
+export { Link } from "./primitives/Link.js";
+export type { LinkProps, LinkVariant } from "./primitives/Link.js";
+export { Badge } from "./primitives/Badge.js";
+export type { BadgeProps, BadgeTone, BadgeSize } from "./primitives/Badge.js";
+export { StatusIndicator } from "./primitives/StatusIndicator.js";
+export type {
+  StatusIndicatorProps,
+  StatusIndicatorTone
+} from "./primitives/StatusIndicator.js";
+export { Avatar } from "./primitives/Avatar.js";
+export type { AvatarProps, AvatarSize } from "./primitives/Avatar.js";
+export { Divider } from "./primitives/Divider.js";
+export type { DividerProps, DividerOrientation } from "./primitives/Divider.js";
+export { Card } from "./primitives/Card.js";
+export type { CardProps, CardTone, CardPadding } from "./primitives/Card.js";
+export { Skeleton } from "./primitives/Skeleton.js";
+export type { SkeletonProps, SkeletonShape } from "./primitives/Skeleton.js";
+export { Spinner } from "./primitives/Spinner.js";
+export type { SpinnerProps, SpinnerSize } from "./primitives/Spinner.js";
+export { Progress } from "./primitives/Progress.js";
+export type { ProgressProps, ProgressTone } from "./primitives/Progress.js";
