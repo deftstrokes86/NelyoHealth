@@ -21,6 +21,8 @@ Establish the marketing-specific visual language on top of `VIS-DIR-002 Warm Car
   - Marketing max-widths (`content-narrow`, `content-default`, `content-wide`, `content-editorial`) for prose columns and hero blocks.
   - Motion pattern tokens: `motion-hero-enter`, `motion-scroll-reveal`, `motion-cross-fade`, each with reduced-motion equivalents.
   - Illustration tokens: `illustration-max-width`, `illustration-radius`, `illustration-shadow`, `illustration-tone-*`.
+  - **Dark-theme palette** — full semantic pair coverage (background, surface, surface-raised, surface-muted, border, border-strong, text, text-muted, action, focus-ring, on-brand, on-accent, status-* variants) so every semantic token has both a light and dark value. Contrast-tested pairs for both themes. `[data-theme="dark"]` selector on `<html>` toggles the palette; `prefers-color-scheme: dark` provides the default when no user override is set.
+  - **Font strategy** — the design-tokens package continues to declare the semantic families (`family-display: Fraunces`, `family-body: Atkinson Hyperlegible`). Actual font loading uses Google Fonts CDN (see `DEC-P05-MKT-007`) wired via the app-level `<link>` in `apps/patient-web/app/layout.tsx`.
 - Update `packages/design-tokens/src/tailwind.ts` to expose the new tokens via `nelyoTailwindTheme` and add new recipes for editorial layouts.
 - Add `packages/ui-foundation/src/motion/marketing-profiles.ts` with hero, scroll-reveal, and cross-fade profiles reusing the existing `MotionProvider`.
 - Write `docs/design/marketing-visual-language.md`:
@@ -111,10 +113,11 @@ None — pure design system extension.
 
 1. `packages/design-tokens/src/tokens.ts` exports the new marketing token categories; `pnpm tokens:check` (or the offline equivalent) passes.
 2. `packages/design-tokens/src/tailwind.ts` exposes the new tokens through `nelyoTailwindTheme`.
-3. Contrast tests report zero AA failures across every new pair.
-4. `docs/design/marketing-visual-language.md` exists and covers the seven visual pillars, five hero variants, story pattern, trust pattern, motion spec, illustration brief, and contrast audit.
+3. Contrast tests report zero AA failures across every new pair, **for both light and dark themes**.
+4. `docs/design/marketing-visual-language.md` exists and covers the seven visual pillars, five hero variants, story pattern, trust pattern, motion spec, illustration brief, and contrast audit **for both themes**.
 5. Reduced-motion tokens exist for every new motion pattern.
-6. Governance traceability and STATUS updated.
+6. Every semantic color token has both a light and dark value; the `[data-theme="dark"]` selector on `<html>` toggles the palette; the palette follows `prefers-color-scheme: dark` when no user override is set.
+7. Governance traceability and STATUS updated.
 
 ## Validation commands
 

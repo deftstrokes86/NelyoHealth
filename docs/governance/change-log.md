@@ -871,3 +871,27 @@ For all future phase updates:
   - `docs/governance/decision-register.md`
   - `docs/governance/phase-5-requirements-traceability.md`
   - `docs/STATUS.md`
+
+## 2026-07-07 (b) - P05-MKT scope amendments: dark mode, Google Fonts CDN, primitives extension, and P05-MKT-007 plumbing sub-track
+
+- Extended the marketing scope after a plan-coverage review flagged gaps in world-class plumbing (SEO, error pages, cookie consent, perf budgets), primitive coverage (Table, Timeline), content volume, dark theme, and font loading.
+- Recorded four additional owner decisions:
+  - `DEC-P05-MKT-006`: ship both light and dark themes from the first marketing release; every semantic token has both values; `[data-theme="dark"]` toggles; defaults to `prefers-color-scheme`; contrast tests cover both.
+  - `DEC-P05-MKT-007`: use Google Fonts CDN with restricted CSP for Fraunces + Atkinson Hyperlegible. **Approved with residual privacy caveat** — the CDN receives visitor IPs on every page load, creating a coherence gap against the platform's privacy copy. Privacy Owner review required before pilot. Self-hosted migration path recorded.
+  - `DEC-P05-MKT-008`: authorize P05-MKT-007 sub-track for Google Fonts wiring, per-page SEO metadata, sitemap/robots, schema.org structured data, marketing-safe 404/500/global-error pages, dormant cookie-consent shell, and Web Vitals budgets (LCP, CLS, INP, FCP, TBT).
+  - `DEC-P05-MKT-009`: extend P05-ISS-003 primitive set to include Table and Timeline (Phase 5 implementation map requirements).
+- Amended existing exec plans:
+  - `P05-ISS-003`: Table and Timeline primitives added.
+  - `P05-MKT-001`: dark-theme palette added to token scope; font strategy note added.
+  - `P05-MKT-002`: every component renders in both themes; `ThemeToggle` component added.
+  - `P05-MKT-003`: entry target raised from ~200 to ~250-300; new families added (`marketing-seo`, `marketing-error-pages`, `marketing-cookie-consent`).
+  - `P05-MKT-004`: every page renders in both themes; every page exports `generateMetadata` sourcing SEO entries; `ThemeToggle` in `SiteHeader`.
+- New exec plan: `docs/exec-plans/P05-MKT-007-marketing-plumbing-seo-error-and-consent.md`.
+- Traceability updates:
+  - Added `P05-MKT-REQ-008..015` covering dark theme, fonts, SEO, structured data, error pages, cookie consent, Web Vitals, Table/Timeline.
+  - Added `P05-MKT-EG-007..010` covering dual-theme a11y, Web Vitals, SEO surfaces, error pages.
+  - Added residual condition covering the Google Fonts CDN privacy caveat.
+- Updated governance state tracking:
+  - `docs/governance/decision-register.md`
+  - `docs/governance/phase-5-requirements-traceability.md`
+  - `docs/STATUS.md`

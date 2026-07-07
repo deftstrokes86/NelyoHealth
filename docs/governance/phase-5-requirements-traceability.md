@@ -70,6 +70,14 @@ An owner-authorized parallel marketing track was added inside Phase 5 to cover t
 | P05-MKT-REQ-005 | DESIGN-NOW-IMPLEMENT-LATER surfaces (employers, hmos, hospitals-and-referrals, home-care) ship with explicit scope caveats. | docs/content/public-website-content-blueprint.md REVIEW-DEPENDENT rules | apps/patient-web/app/(employers/hmos/hospitals-and-referrals/home-care)/page.tsx | PENDING-P05-MKT-005 |
 | P05-MKT-REQ-006 | Cross-viewport visual + a11y evidence matrix passes for every marketing page and every marketing component. | Implementation map Phase 5 browser matrix | tests/e2e/*, tests/accessibility/* | PENDING-P05-MKT-006 |
 | P05-MKT-REQ-007 | Bespoke illustration system used across marketing pages; no photography until a separate owner approval decision is recorded. | DEC-P05-MKT-003 | packages/ui-foundation/src/marketing/illustrations/ | PENDING-P05-MKT-001 |
+| P05-MKT-REQ-008 | Marketing pages render in both light and dark themes; every semantic token has both values; `[data-theme="dark"]` toggles palette; defaults to `prefers-color-scheme`; contrast tests cover both themes. | DEC-P05-MKT-006 | packages/design-tokens, packages/ui-foundation, apps/patient-web | PENDING-P05-MKT-001 |
+| P05-MKT-REQ-009 | Google Fonts CDN loads Fraunces + Atkinson Hyperlegible with CSP restricting font origins. Residual privacy caveat recorded; Privacy Owner review pending before pilot. | DEC-P05-MKT-007 | apps/patient-web/app/layout.tsx | PENDING-P05-MKT-007 |
+| P05-MKT-REQ-010 | Every marketing page exposes `generateMetadata` resolving `marketing-seo.<page-slug>.*` entries into Next.js metadata (title, description, OG, canonical, robots). `sitemap.xml` and `robots.txt` produced by Next.js metadata routes. | DEC-P05-MKT-008 | apps/patient-web/app/sitemap.ts, robots.ts, **/page.tsx, src/lib/seo.ts | PENDING-P05-MKT-007 |
+| P05-MKT-REQ-011 | Schema.org structured data (Organization, MedicalOrganization, WebSite, WebPage, FAQPage, BreadcrumbList) injected per page; excludes any protected provider details. | DEC-P05-MKT-008 | apps/patient-web/src/lib/structured-data.ts | PENDING-P05-MKT-007 |
+| P05-MKT-REQ-012 | Marketing-safe 404, 500, and global-error pages render with `SiteHeader` + `EmergencyRibbon` + `SiteFooter`; copy sourced from `marketing-error-pages` family. | DEC-P05-MKT-008 | apps/patient-web/app/not-found.tsx, error.tsx, global-error.tsx | PENDING-P05-MKT-007 |
+| P05-MKT-REQ-013 | Cookie-consent shell rendered only when `NEXT_PUBLIC_ENABLE_COOKIE_CONSENT=1`; off by default because no analytics ships today (per ADR-0010). | DEC-P05-MKT-008 | packages/ui-foundation/src/marketing/CookieConsentBanner.tsx | PENDING-P05-MKT-007 |
+| P05-MKT-REQ-014 | Web Vitals budgets pass on every marketing page: LCP ≤ 2.0s, CLS = 0, INP ≤ 200ms, FCP ≤ 1.5s, TBT ≤ 200ms on desktop and mobile traces. | DEC-P05-MKT-008 | playwright.p05-mkt-007.config.ts | PENDING-P05-MKT-007 |
+| P05-MKT-REQ-015 | Primitive set includes Table and Timeline (Phase 5 implementation map). | DEC-P05-MKT-009 | packages/ui-foundation/src/primitives/Table.tsx, Timeline.tsx | PENDING-P05-ISS-003 |
 
 ### Marketing exit-gate map
 
@@ -81,6 +89,10 @@ An owner-authorized parallel marketing track was added inside Phase 5 to cover t
 | P05-MKT-EG-004 | No marketing page contains inline strings; all copy resolves via `useContent`. | Boundary test in `tests/unit/` | PENDING |
 | P05-MKT-EG-005 | LCP ≤2.0s and CLS = 0 on home page at desktop and mobile viewports. | Local perf trace + Playwright | PENDING |
 | P05-MKT-EG-006 | DESIGN-NOW-IMPLEMENT-LATER pages carry visible scope caveats matching REVIEW-DEPENDENT rules. | Content review + Playwright text assertion | PENDING |
+| P05-MKT-EG-007 | Both light and dark themes pass contrast + a11y checks on every marketing page and component. | Playwright + axe-core over both `data-theme` values | PENDING |
+| P05-MKT-EG-008 | Web Vitals budgets pass on every marketing page (LCP, CLS, INP, FCP, TBT). | Playwright performance trace per page × desktop/mobile | PENDING |
+| P05-MKT-EG-009 | SEO surfaces (metadata, sitemap, robots, structured data) valid and complete for every PILOT and non-PILOT page. | JSON-LD unit test + sitemap enumeration test | PENDING |
+| P05-MKT-EG-010 | Marketing-safe error pages (404, 500, global-error) render with emergency access. | Playwright + axe-core over error routes | PENDING |
 
 ## Residual conditions
 
@@ -88,3 +100,4 @@ An owner-authorized parallel marketing track was added inside Phase 5 to cover t
 - `playwright.iss014.config.ts` now uses direct app-local Next.js launch commands to avoid pnpm lockfile policy blockers during deterministic evidence runs.
 - Remaining Phase 5 increments are required for full browser-level low-bandwidth UX coverage and complete exit-gate closure.
 - Marketing photography approval decision is not yet recorded; bespoke illustrations are the only permitted media until an owner decision authorizes photography.
+- Google Fonts CDN privacy coherence caveat recorded in `DEC-P05-MKT-007`. Privacy Owner review is required before pilot. Migration to self-hosted `next/font/google` is a one-issue change if the decision is reversed.

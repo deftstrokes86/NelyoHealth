@@ -57,9 +57,11 @@ Build one Next.js route per URL in the inventory list, each composed of marketin
 
 **Chrome:**
 
-- `SiteHeader` on every page (from P05-MKT-002).
+- `SiteHeader` on every page (from P05-MKT-002) with the `ThemeToggle` control.
 - `EmergencyRibbon` on every page (SAFETY-IMMEDIATE tone; keyboard-first tab stop).
 - `SiteFooter` on every page.
+- Every page renders in both light and dark themes; theme choice persists in `localStorage` and defaults to `prefers-color-scheme`.
+- Every page exports `generateMetadata` that resolves `marketing-seo.<page-slug>.*` entries into Next.js metadata (title, description, OG tags, canonical URL).
 
 **Migration:**
 

@@ -34,10 +34,15 @@ Every component:
 
 - Reads all copy through a `useContent(id)` accessor keyed to the content registry; no inline strings.
 - Renders correctly at 390 / 768 / 1440.
+- Renders correctly in **both light and dark themes** — every gallery route validates both `data-theme="light"` and `data-theme="dark"`.
 - Supports keyboard operation and screen-reader labels.
 - Uses the P05-MKT-001 motion profiles; respects reduced-motion.
 - Ships with unit tests, an accessibility test, and a gallery page.
 - Carries zero domain-specific business logic (Phase 5 exit-gate criterion 6).
+
+Additional shell utility:
+
+- `ThemeToggle` — a small primitive-based control that flips `data-theme` on `<html>`, persists preference in `localStorage` under `nh-theme`, and defaults to `prefers-color-scheme`. Lives in `SiteHeader` mobile drawer and desktop nav trailing slot.
 
 Add a component gallery at `apps/patient-web/app/_gallery/marketing/[component]/page.tsx`, dev-gated by `NEXT_PUBLIC_ENABLE_GALLERY=1`, one route per component.
 

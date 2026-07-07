@@ -46,6 +46,8 @@ Add the following typed React primitives under `packages/ui-foundation/src/primi
 - CMP-PRM-031 Spinner
 - CMP-PRM-032 Progress indicator
 - Card primitive (currently only CSS in `styles.css`; promote to typed component)
+- Table primitive (Phase 5 implementation map calls it out; needed for pricing/comparison and any tabular content)
+- Timeline primitive (Phase 5 implementation map calls it out; needed for storytelling sections and later clinical history views)
 
 Each primitive must:
 

@@ -46,7 +46,8 @@
 - Phase 5: IN-PROGRESS, P05-ISS-001 COMPLETED WITH FOUR-SHELL STATE SCAFFOLDS, CROSS-VIEWPORT BROWSER EVIDENCE, AND ACCESSIBILITY EVIDENCE.
 - P05-ISS-002: STARTED, WORKFLOW-LEVEL LOW-BANDWIDTH RESILIENCE AND RETRY SEMANTICS IMPLEMENTED WITH UNIT+INTEGRATION EVIDENCE.
 - P05-ISS-003: PLANNED, DESIGN-SYSTEM PRIMITIVES EXPANSION (~26 MISSING PRIMITIVES) AUTHORIZED AS PHASE 5 WORK.
-- P05-MKT track: AUTHORIZED 2026-07-07 AS PHASE 5 PARALLEL MARKETING SURFACE BUILD, OVERRIDING THE HOMEPAGE-REDESIGN-OUT-OF-SCOPE NOTE IN docs/design/phase-5-reusable-design-system-foundation.md. Six increments planned: P05-MKT-001 visual language, P05-MKT-002 marketing components, P05-MKT-003 content registry entries, P05-MKT-004 PILOT pages, P05-MKT-005 non-PILOT scope-caveat pages, P05-MKT-006 exit-gate rehearsal.
+- P05-MKT track: AUTHORIZED 2026-07-07 AS PHASE 5 PARALLEL MARKETING SURFACE BUILD, OVERRIDING THE HOMEPAGE-REDESIGN-OUT-OF-SCOPE NOTE IN docs/design/phase-5-reusable-design-system-foundation.md. Seven increments planned: P05-MKT-001 visual language + dual-theme tokens, P05-MKT-002 marketing components + ThemeToggle, P05-MKT-003 content registry entries (250-300 including SEO), P05-MKT-004 PILOT pages + dual-theme + generateMetadata, P05-MKT-005 non-PILOT scope-caveat pages, P05-MKT-006 exit-gate rehearsal, P05-MKT-007 plumbing (Google Fonts CDN, SEO, sitemap, robots, structured data, 404/500 pages, cookie-consent shell, Web Vitals budgets).
+- Google Fonts CDN privacy caveat recorded in DEC-P05-MKT-007; Privacy Owner review required before pilot.
 - Pilot launch: PILOT-NO-GO.
 - Production release: NOT APPROVED.
 - Production data: NOT APPROVED.

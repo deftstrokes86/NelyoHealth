@@ -37,12 +37,17 @@ Populate `packages/content-registry` with the marketing copy required by the PIL
   - `marketing-emergency`
   - `marketing-cta`
   - `marketing-microcopy`
+  - `marketing-seo`
+  - `marketing-error-pages`
+  - `marketing-cookie-consent`
   - `auth-signin`
   - `auth-create-account`
   - `auth-forgot-password`
   - `auth-reset-password`
 
-- Author ~200 draft entries under `packages/content-registry/src/entries/marketing/*.ts`, grouped by family. Per PILOT page, at minimum: hero eyebrow + headline + summary + primary CTA + secondary CTA, one entry per section, one entry per FAQ, one entry per trust-bar item. Non-PILOT pages carry a shorter set with an explicit scope-caveat entry.
+- Author ~250–300 draft entries under `packages/content-registry/src/entries/marketing/*.ts`, grouped by family. Per PILOT page, at minimum: hero eyebrow + headline + summary + primary CTA + secondary CTA, one entry per section, one entry per FAQ, one entry per trust-bar item, plus per-page SEO metadata (`title`, `description`, `og-title`, `og-description`, `og-image-id`, `canonical`). Non-PILOT pages carry a shorter set with an explicit scope-caveat entry plus SEO metadata.
+
+- Add a dedicated `marketing-seo` family so per-page SEO entries live at `marketing-seo.<page-slug>.title`, `.description`, `.og-title`, `.og-description`, `.og-image-id`, `.canonical`. Consumed by `apps/patient-web/app/<route>/page.tsx` via Next.js `generateMetadata`.
 
 - Add `packages/content-registry/src/voice-tone-lint.ts`:
   - Regex checks for banned claims from `docs/content/public-website-content-blueprint.md`: "best doctors", "best clinicians", "guaranteed" (with tolerated forms of "guarantee" allowed only in explicit privacy/security policy language), "fully licensed", "nationwide service", "instant results", "cheapest care", "complete privacy", "zero risk".
@@ -142,7 +147,7 @@ None.
 
 1. `public-site` surface added; existing rules preserved; new release-policy path exercised in tests.
 2. All listed content families exist in `ids.ts`.
-3. At least 200 draft entries populated across the marketing families.
+3. At least 250 draft entries populated across the marketing families (targeting 300 with SEO metadata and error/cookie surfaces included).
 4. Voice-tone lint reports zero banned-claim hits across all `public-site` entries; positive and negative unit tests cover every rule.
 5. CTA-alignment test covers every marketing entry.
 6. `pnpm content:validate` (or offline equivalent) passes.
