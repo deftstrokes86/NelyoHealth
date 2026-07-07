@@ -45,13 +45,15 @@
 - Phase 4: CLOSED-WITH-EVIDENCE, EXIT GATES COMPLETED WITH DETERMINISTIC API AND CROSS-VIEWPORT BROWSER COVERAGE; OWNER SIGNOFF RECORDED.
 - Phase 5: IN-PROGRESS, P05-ISS-001 COMPLETED WITH FOUR-SHELL STATE SCAFFOLDS, CROSS-VIEWPORT BROWSER EVIDENCE, AND ACCESSIBILITY EVIDENCE.
 - P05-ISS-002: STARTED, WORKFLOW-LEVEL LOW-BANDWIDTH RESILIENCE AND RETRY SEMANTICS IMPLEMENTED WITH UNIT+INTEGRATION EVIDENCE.
+- P05-ISS-003: PLANNED, DESIGN-SYSTEM PRIMITIVES EXPANSION (~26 MISSING PRIMITIVES) AUTHORIZED AS PHASE 5 WORK.
+- P05-MKT track: AUTHORIZED 2026-07-07 AS PHASE 5 PARALLEL MARKETING SURFACE BUILD, OVERRIDING THE HOMEPAGE-REDESIGN-OUT-OF-SCOPE NOTE IN docs/design/phase-5-reusable-design-system-foundation.md. Six increments planned: P05-MKT-001 visual language, P05-MKT-002 marketing components, P05-MKT-003 content registry entries, P05-MKT-004 PILOT pages, P05-MKT-005 non-PILOT scope-caveat pages, P05-MKT-006 exit-gate rehearsal.
 - Pilot launch: PILOT-NO-GO.
 - Production release: NOT APPROVED.
 - Production data: NOT APPROVED.
 - Interactive browser: VERIFIED THROUGH PLAYWRIGHT CLI FALLBACK.
 - Playwright MCP: VERIFIED THROUGH PROJECT-SCOPED LOCAL SMOKE ON 2026-06-25 WITH CODEX-CLI 0.141.0.
 - UI UX Pro Max licence: REVIEW-REQUIRED.
-- Next action: extend P05-ISS-002 from state-machine and integration coverage into browser-observable low-bandwidth UX scenarios across mobile/tablet/desktop shells.
+- Next action: execute P05-ISS-003 (design-system primitives expansion) as the hard prerequisite for P05-MKT-002, then run the P05-MKT-* marketing surface build (visual language → components → content registry → PILOT pages → non-PILOT pages → exit-gate rehearsal). P05-ISS-002 browser-observable low-bandwidth UX extension continues in parallel with primitives.
 
 ## Foundation commands
 

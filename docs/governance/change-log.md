@@ -854,3 +854,20 @@ For all future phase updates:
 - Updated governance state tracking:
   - `docs/governance/phase-5-requirements-traceability.md`
   - `docs/STATUS.md`
+
+## 2026-07-07 - P05-MKT-* marketing surface track authorized
+
+- Recorded owner scope authorization for a Phase 5 parallel marketing track (`P05-MKT-001` through `P05-MKT-006`) covering:
+  - homepage redesign and full public marketing surface (segment, trust, privacy, accessibility, FAQ, contact, legal, emergency),
+  - auth chrome around `/sign-in`, `/create-account`, `/forgot-password`, `/reset-password`,
+  - DESIGN-NOW-IMPLEMENT-LATER scope-caveat pages (`/employers`, `/hmos`, `/hospitals-and-referrals`, `/home-care`).
+- Explicit override of the "Homepage redesign: explicitly out of scope" line in `docs/design/phase-5-reusable-design-system-foundation.md` recorded as `DEC-P05-MKT-001` in `docs/governance/decision-register.md`.
+- Design anchor confirmed as `VIS-DIR-002 Warm Care Grid` per `docs/design/brand-and-visual-direction.md`; anti-pattern list enforced.
+- Illustration direction: bespoke illustration system; no photography until a separate owner approval decision is recorded (`DEC-P05-MKT-003`).
+- Content authoring rule: all marketing copy sourced from `packages/content-registry`, `status: "draft"`, voice/tone lint enforces the banned-claim list from `docs/content/public-website-content-blueprint.md` (`DEC-P05-MKT-004`).
+- Dependency ordering: `P05-ISS-003` (primitives expansion) is a hard prerequisite for `P05-MKT-002` (marketing component library) — `DEC-P05-MKT-005`.
+- Reset uncommitted marketing work on `apps/patient-web/app/tailwind.css`, `apps/patient-web/src/components/screens/batch1-production-page.tsx`, and `apps/patient-web/src/screens/batch1-route-catalog.ts` to establish a clean baseline for the marketing rebuild.
+- Updated governance state tracking:
+  - `docs/governance/decision-register.md`
+  - `docs/governance/phase-5-requirements-traceability.md`
+  - `docs/STATUS.md`

@@ -55,8 +55,36 @@ This document now records implemented evidence for the first Phase 5 increment a
   - `tests/integration/patient-workflow-resilience-runtime.spec.ts`
 - Cross-viewport coverage: desktop/tablet/mobile projects per shell plus matching accessibility projects.
 
+## P05-MKT-* marketing surface track (added 2026-07-07)
+
+An owner-authorized parallel marketing track was added inside Phase 5 to cover the full public marketing surface (see `DEC-P05-MKT-001` in `docs/governance/decision-register.md`). This explicitly overrides the "Homepage redesign: explicitly out of scope" note in `docs/design/phase-5-reusable-design-system-foundation.md`.
+
+### Marketing requirement map
+
+| Requirement ID | Requirement | Source | Primary implementation | Status |
+|---|---|---|---|---|
+| P05-MKT-REQ-001 | Marketing visual language extends VIS-DIR-002 with editorial display scale, hero spacing, marketing max-widths, and motion patterns. | docs/design/brand-and-visual-direction.md; DEC-P05-MKT-002 | packages/design-tokens, docs/design/marketing-visual-language.md | PENDING-P05-MKT-001 |
+| P05-MKT-REQ-002 | Marketing components (SiteHeader, SiteFooter, EmergencyRibbon, HeroBlock variants, StorySection, ProofStrip, WorkflowStepper, SegmentGrid, TrustBar, FAQAccordion, CTASection, PricingMatrix, QuoteBlock, LegalNoticeStrip) sit on typed primitives with keyboard/a11y coverage. | docs/design/design-system-specification.md; DEC-P05-MKT-005 | packages/ui-foundation/src/marketing/ | PENDING-P05-MKT-002 |
+| P05-MKT-REQ-003 | Marketing copy is authored exclusively as `packages/content-registry` entries (draft status, synthetic-only) with voice/tone lint enforcing the banned-claim list. | docs/content/public-website-content-blueprint.md; DEC-P05-MKT-004 | packages/content-registry/src/entries/marketing/ | PENDING-P05-MKT-003 |
+| P05-MKT-REQ-004 | PILOT public marketing pages ship for home, how-it-works, patients, family-plans, diaspora, doctors, pharmacies, laboratories, trust-and-safety, privacy-overview, accessibility, faq, contact, legal-and-regulatory-notices, emergency, plus auth chrome. | docs/design/page-and-state-inventory.md | apps/patient-web/app/*/page.tsx | PENDING-P05-MKT-004 |
+| P05-MKT-REQ-005 | DESIGN-NOW-IMPLEMENT-LATER surfaces (employers, hmos, hospitals-and-referrals, home-care) ship with explicit scope caveats. | docs/content/public-website-content-blueprint.md REVIEW-DEPENDENT rules | apps/patient-web/app/(employers/hmos/hospitals-and-referrals/home-care)/page.tsx | PENDING-P05-MKT-005 |
+| P05-MKT-REQ-006 | Cross-viewport visual + a11y evidence matrix passes for every marketing page and every marketing component. | Implementation map Phase 5 browser matrix | tests/e2e/*, tests/accessibility/* | PENDING-P05-MKT-006 |
+| P05-MKT-REQ-007 | Bespoke illustration system used across marketing pages; no photography until a separate owner approval decision is recorded. | DEC-P05-MKT-003 | packages/ui-foundation/src/marketing/illustrations/ | PENDING-P05-MKT-001 |
+
+### Marketing exit-gate map
+
+| Gate ID | Exit gate | Evidence source | Status |
+|---|---|---|---|
+| P05-MKT-EG-001 | All PILOT public marketing pages render across mobile/tablet/desktop with content-registry-sourced copy and pass automated a11y checks. | Playwright + a11y suite over P05-MKT-004 pages | PENDING |
+| P05-MKT-EG-002 | Emergency ribbon and emergency-escalation pathway are visible above commercial hierarchy on every public page. | Playwright assertion per page | PENDING |
+| P05-MKT-EG-003 | Voice/tone lint records zero banned-claim hits across all `public-site` content entries. | CI job on `packages/content-registry` | PENDING |
+| P05-MKT-EG-004 | No marketing page contains inline strings; all copy resolves via `useContent`. | Boundary test in `tests/unit/` | PENDING |
+| P05-MKT-EG-005 | LCP ≤2.0s and CLS = 0 on home page at desktop and mobile viewports. | Local perf trace + Playwright | PENDING |
+| P05-MKT-EG-006 | DESIGN-NOW-IMPLEMENT-LATER pages carry visible scope caveats matching REVIEW-DEPENDENT rules. | Content review + Playwright text assertion | PENDING |
+
 ## Residual conditions
 
 - Full pnpm repository-level verification commands may remain constrained by lockfile minimum-release-age policy in this environment.
 - `playwright.iss014.config.ts` now uses direct app-local Next.js launch commands to avoid pnpm lockfile policy blockers during deterministic evidence runs.
 - Remaining Phase 5 increments are required for full browser-level low-bandwidth UX coverage and complete exit-gate closure.
+- Marketing photography approval decision is not yet recorded; bespoke illustrations are the only permitted media until an owner decision authorizes photography.
