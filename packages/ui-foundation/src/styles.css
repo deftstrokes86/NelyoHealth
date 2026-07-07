@@ -176,6 +176,156 @@
   color: var(--nh-color-ink-500);
   font-size: var(--nh-typography-size-sm);
 }
+.nh-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.nh-label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  color: var(--nh-color-text);
+  font-weight: 700;
+  font-size: var(--nh-typography-size-sm);
+  line-height: 1.4;
+}
+.nh-label__required {
+  color: var(--nh-color-danger);
+  font-weight: 700;
+}
+.nh-helper-text {
+  margin: 0;
+  color: var(--nh-color-ink-500);
+  font-size: var(--nh-typography-size-sm);
+  line-height: 1.5;
+}
+.nh-error-text {
+  margin: 0;
+  color: var(--nh-color-status-danger-fg);
+  font-size: var(--nh-typography-size-sm);
+  line-height: 1.5;
+  font-weight: 600;
+}
+.nh-input {
+  display: inline-flex;
+  align-items: stretch;
+  min-height: var(--nh-sizing-size-touch);
+  border: 1px solid var(--nh-color-border);
+  border-radius: var(--nh-radius-md);
+  background: var(--nh-color-paper-000);
+  color: var(--nh-color-text);
+  transition:
+    border-color var(--nh-motion-duration-fast) var(--nh-motion-ease-standard),
+    box-shadow var(--nh-motion-duration-fast) var(--nh-motion-ease-standard);
+  overflow: hidden;
+}
+.nh-input:focus-within {
+  outline: 3px solid var(--nh-color-focus-ring);
+  outline-offset: 2px;
+  border-color: var(--nh-color-focus-ring);
+}
+.nh-input__control {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  padding: 0.65rem 0.85rem;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+}
+.nh-input__control::placeholder {
+  color: var(--nh-color-ink-500);
+  opacity: 0.75;
+}
+.nh-input__leading,
+.nh-input__trailing {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.65rem;
+  color: var(--nh-color-ink-500);
+  background: transparent;
+}
+.nh-input__leading {
+  border-right: 1px solid var(--nh-color-border);
+}
+.nh-input__trailing {
+  border-left: 1px solid var(--nh-color-border);
+}
+.nh-input--error {
+  border-color: var(--nh-color-status-danger-fg);
+  background: var(--nh-color-status-danger-bg);
+}
+.nh-input--error:focus-within {
+  outline-color: var(--nh-color-status-danger-fg);
+  border-color: var(--nh-color-status-danger-fg);
+}
+.nh-input--success {
+  border-color: var(--nh-color-status-success-fg);
+  background: var(--nh-color-status-success-bg);
+}
+.nh-input--success:focus-within {
+  outline-color: var(--nh-color-status-success-fg);
+  border-color: var(--nh-color-status-success-fg);
+}
+.nh-input--disabled {
+  background: var(--nh-color-surface-muted);
+  color: var(--nh-color-text-muted);
+  cursor: not-allowed;
+}
+.nh-input--disabled .nh-input__control {
+  cursor: not-allowed;
+}
+.nh-textarea {
+  display: block;
+  width: 100%;
+  min-height: calc(var(--nh-sizing-size-touch) * 2);
+  border: 1px solid var(--nh-color-border);
+  border-radius: var(--nh-radius-md);
+  padding: 0.65rem 0.85rem;
+  font: inherit;
+  color: var(--nh-color-text);
+  background: var(--nh-color-paper-000);
+  resize: vertical;
+  transition:
+    border-color var(--nh-motion-duration-fast) var(--nh-motion-ease-standard),
+    box-shadow var(--nh-motion-duration-fast) var(--nh-motion-ease-standard);
+}
+.nh-textarea:focus-visible {
+  outline: 3px solid var(--nh-color-focus-ring);
+  outline-offset: 2px;
+  border-color: var(--nh-color-focus-ring);
+}
+.nh-textarea::placeholder {
+  color: var(--nh-color-ink-500);
+  opacity: 0.75;
+}
+.nh-textarea--error {
+  border-color: var(--nh-color-status-danger-fg);
+  background: var(--nh-color-status-danger-bg);
+}
+.nh-textarea--error:focus-visible {
+  outline-color: var(--nh-color-status-danger-fg);
+}
+.nh-textarea--success {
+  border-color: var(--nh-color-status-success-fg);
+  background: var(--nh-color-status-success-bg);
+}
+.nh-textarea--success:focus-visible {
+  outline-color: var(--nh-color-status-success-fg);
+}
+.nh-textarea--disabled {
+  background: var(--nh-color-surface-muted);
+  color: var(--nh-color-text-muted);
+  cursor: not-allowed;
+}
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
