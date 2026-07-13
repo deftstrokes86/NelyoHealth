@@ -947,3 +947,26 @@ For all future phase updates:
 - Updated governance state tracking:
   - `docs/governance/phase-5-requirements-traceability.md`
   - `docs/STATUS.md`
+
+## 2026-07-13 - P05-MKT-003 content registry marketing entries
+
+- Delivered `P05-MKT-003`. Populated the content registry with the draft marketing copy that P05-MKT-004 pages will consume.
+- Schema and taxonomy:
+  - Added `public-site` to `surfaceSchema` in `packages/content-registry/src/schema.ts`; preserved the existing `preview → syntheticOnly required` rule; `public-site` release requires `status: "approved"` + `approvedBy` (release-policy extended and tested).
+  - Extended `packages/content-registry/src/ids.ts` with 27 new families: `marketing-home`, `marketing-how-it-works`, five `marketing-segment-*` PILOT families (patients, family-diaspora, doctors, pharmacies, laboratories), four non-PILOT `marketing-segment-*` families (employers, hmos, hospitals, home-care), `marketing-trust-and-safety`, `marketing-privacy-overview`, `marketing-accessibility`, `marketing-faq`, `marketing-contact`, `marketing-legal`, `marketing-emergency`, `marketing-cta`, `marketing-microcopy`, `marketing-seo`, `marketing-error-pages`, `marketing-cookie-consent`, `auth-signin`, `auth-create-account`, `auth-forgot-password`, `auth-reset-password`.
+- Entries authored under `packages/content-registry/src/entries/marketing/*.ts` — 296 draft entries total, all `status: "draft"`, `syntheticOnly: true`, `surface: "public-site"`. Every entry carries `DEC-P05-MKT-004` (or `DEC-P05-MKT-008` for SEO/error/cookie) as evidence. Non-PILOT segment pages include a visible `scope.caveat` entry noting the DESIGN-NOW-IMPLEMENT-LATER status.
+- Approved CTA-ID surface in `packages/content-registry/src/cta-ids.ts`: `CTA-CREATE-ACCOUNT`, `CTA-SIGN-IN`, `CTA-CONTACT`, `CTA-FAQ`, `CTA-CALL-LOCAL-HELP`, `CTA-CONTACT-SUPPORT`, `CTA-BACK`, `CTA-LEARN-MORE`, `CTA-BOOK-WALKTHROUGH`, `CTA-GET-STARTED`, `CTA-VIEW-PRICING`, `CTA-DOWNLOAD-APP`. `cta-alignment.test.ts` enforces (a) every `marketing-cta.*` entry sets `cta` to an approved CTA-ID and (b) every approved CTA-ID has at least one entry.
+- Voice-tone lint at `packages/content-registry/src/voice-tone-lint.ts` — regex rules for banned claims (`best doctors`, `guaranteed`, `fully licensed`, `nationwide service`, `instant results`, `cheapest care`, `complete privacy`, `zero risk`), generic error phrasing (`something went wrong` only allowed with recovery guidance), emoji-in-clinical for `clinical-sensitive` / `marketing-emergency` / `marketing-error-pages`, and case-sensitive brand casing (`NelyoHealth`). Standalone runner `lintContentEntry` / `lintContentRegistry`; hard-fail via `assertVoiceToneClean`. Legal/privacy allowlist accepts quoted `guarantee` inside quotation marks.
+- Registry integrity checked in `cta-alignment.test.ts`:
+  - `contentRegistrySchema` parses every marketing entry.
+  - At least 250 draft entries ship (actual 297).
+  - Every marketing entry stays draft/syntheticOnly/public-site.
+  - Zero voice-tone violations across the whole marketing registry.
+  - No protected-provider leakage.
+- Extended `packages/content-registry/scripts/validate.mjs` to run against the marketing registry (schema parse, leakage check, release-policy production block, voice-tone lint). `pnpm content:validate` runs this at CI time.
+- Exposed the new surfaces from `packages/content-registry/src/index.ts`: `approvedCtaIds`, `isApprovedCtaId`, `assertVoiceToneClean`, `lintContentEntry`, `lintContentRegistry`, `voiceToneRules`, `marketingContentEntries`, `marketingContentById`.
+- Traceability: `P05-MKT-REQ-003` -> `COMPLETED-P05-MKT-003 (2026-07-13; 296 draft entries + voice-tone lint)`.
+- Validation evidence: `node ./node_modules/vitest/vitest.mjs run --pool=threads packages/content-registry` — 4 test files, 28 tests passed; `pnpm --filter @nelyohealth/content-registry build` compiles; `node packages/content-registry/scripts/validate.mjs` reports both the 3 synthetic preview entries and the 296 marketing entries validated clean.
+- Updated governance state tracking:
+  - `docs/governance/phase-5-requirements-traceability.md`
+  - `docs/STATUS.md`

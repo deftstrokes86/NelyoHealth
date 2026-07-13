@@ -13,7 +13,8 @@ export const surfaceSchema = z.enum([
   "patient-client",
   "clinician-client",
   "admin-client",
-  "browser-test"
+  "browser-test",
+  "public-site"
 ]);
 export const contentEntrySchema = z
   .object({

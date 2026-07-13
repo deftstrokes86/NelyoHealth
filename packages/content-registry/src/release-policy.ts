@@ -13,6 +13,10 @@ export const evaluateContentRelease = (
       reasons.push("Production release requires approved content status.");
     if (!entry.approvedBy) reasons.push("Production release requires approvedBy evidence.");
     if (entry.syntheticOnly) reasons.push("Synthetic-only content cannot ship to production.");
+    if (entry.surface === "public-site" && entry.status !== "approved")
+      reasons.push(
+        "Public-site content requires Content Owner approval before production release."
+      );
   }
   if (entry.contentClass === "provider-protected" && entry.surface === "patient-client")
     reasons.push(

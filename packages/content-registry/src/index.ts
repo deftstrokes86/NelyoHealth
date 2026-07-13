@@ -12,3 +12,16 @@ export { evaluateContentRelease, assertRegistryReleasable } from "./release-poli
 export type { ReleaseDecision } from "./release-policy.js";
 export { syntheticPreviewContent } from "./synthetic-preview-content.js";
 export { assertNoProtectedProviderLeakage, validateContentRegistry } from "./validation.js";
+export { approvedCtaIds, isApprovedCtaId } from "./cta-ids.js";
+export type { ApprovedCtaId } from "./cta-ids.js";
+export {
+  assertVoiceToneClean,
+  lintContentEntry,
+  lintContentRegistry,
+  voiceToneRules
+} from "./voice-tone-lint.js";
+export type { VoiceToneRule, VoiceToneViolation } from "./voice-tone-lint.js";
+export {
+  marketingContentEntries,
+  marketingContentById
+} from "./entries/marketing/index.js";
