@@ -1,7 +1,9 @@
 import { tokens } from "./tokens.js";
+export type ContrastTheme = "light" | "dark";
 export interface ContrastCheck {
   foreground: string;
   background: string;
+  theme: ContrastTheme;
   ratio: number;
   passesAaNormal: boolean;
 }
@@ -39,6 +41,8 @@ export const contrastRatio = (foreground: string, background: string) => {
 export const requiredContrastPairs = [
   ["text", "background"],
   ["text", "surface"],
+  ["text", "surface-raised"],
+  ["text-muted", "background"],
   ["brand-900", "brand-100"],
   ["action", "background"],
   ["danger", "background"],
@@ -52,17 +56,39 @@ export const requiredContrastPairs = [
   ["status-danger-fg", "status-danger-bg"],
   ["status-info-fg", "status-info-bg"]
 ] as const;
-export const evaluateContrast = (): ContrastCheck[] =>
-  requiredContrastPairs.map(([foreground, background]) => {
-    const foregroundValue = String(tokens.color[foreground].value);
-    const backgroundValue = String(tokens.color[background].value);
-    const ratio = contrastRatio(foregroundValue, backgroundValue);
-    return { foreground, background, ratio, passesAaNormal: ratio >= 4.5 };
-  });
-export const assertAccessibleContrast = () => {
-  const failures = evaluateContrast().filter((item) => !item.passesAaNormal);
+type ColorTokenName = keyof typeof tokens.color;
+const resolveThemeValue = (token: string, theme: ContrastTheme) => {
+  const definition = tokens.color[token as ColorTokenName];
+  if (!definition) throw new Error(`Unknown color token: ${token}`);
+  if (theme === "dark" && definition.dark) return definition.dark;
+  return String(definition.value);
+};
+const hasDarkPair = (foreground: string, background: string) => {
+  const fg = tokens.color[foreground as ColorTokenName];
+  const bg = tokens.color[background as ColorTokenName];
+  return Boolean(fg?.dark || bg?.dark);
+};
+export const evaluateContrast = (theme: ContrastTheme = "light"): ContrastCheck[] =>
+  requiredContrastPairs
+    .filter(([foreground, background]) =>
+      theme === "light" ? true : hasDarkPair(foreground, background)
+    )
+    .map(([foreground, background]) => {
+      const foregroundValue = resolveThemeValue(foreground, theme);
+      const backgroundValue = resolveThemeValue(background, theme);
+      const ratio = contrastRatio(foregroundValue, backgroundValue);
+      return {
+        foreground,
+        background,
+        theme,
+        ratio,
+        passesAaNormal: ratio >= 4.5
+      };
+    });
+export const assertAccessibleContrast = (theme: ContrastTheme = "light") => {
+  const failures = evaluateContrast(theme).filter((item) => !item.passesAaNormal);
   if (failures.length > 0)
     throw new Error(
-      `Contrast failures: ${failures.map((item) => `${item.foreground}/${item.background}=${item.ratio}`).join(", ")}`
+      `Contrast failures (${theme}): ${failures.map((item) => `${item.foreground}/${item.background}=${item.ratio}`).join(", ")}`
     );
 };

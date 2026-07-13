@@ -3,6 +3,7 @@ export interface TokenDefinition<T extends TokenValue = TokenValue> {
   value: T;
   description: string;
   category: string;
+  dark?: string;
 }
 export type TokenGroup<T extends TokenValue = TokenValue> = Record<string, TokenDefinition<T>>;
 export interface DesignTokens {
@@ -24,6 +25,7 @@ export interface DesignTokens {
   navigation: TokenGroup;
   badge: TokenGroup;
   motion: TokenGroup;
+  marketing: TokenGroup;
 }
 export interface TokenAuditSummary {
   category: keyof DesignTokens;

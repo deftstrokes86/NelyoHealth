@@ -12,7 +12,8 @@ export const contentFamilies = [
   "laboratory-matching",
   "provider-disclosure",
   "emergency-escalation",
-  "accessibility"
+  "accessibility",
+  "marketing"
 ] as const;
 export type ContentFamily = (typeof contentFamilies)[number];
 export type ContentId = string;

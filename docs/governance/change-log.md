@@ -895,3 +895,55 @@ For all future phase updates:
   - `docs/governance/decision-register.md`
   - `docs/governance/phase-5-requirements-traceability.md`
   - `docs/STATUS.md`
+
+## 2026-07-13 - P05-MKT-001 marketing visual language and dual-theme tokens
+
+- Delivered `P05-MKT-001`. The marketing surface now has a tokenized visual language on top of `VIS-DIR-002 Warm Care Grid`, and every semantic color has a light + dark value.
+- Design-tokens package:
+  - Extended `TokenDefinition` with an optional `dark` value.
+  - Added dark values to every semantic color token (`background`, `surface`, `surface-raised`, `surface-muted`, `border`, `border-strong`, `text`, `text-muted`, `action`, `danger`, `focus-ring`, `on-brand`, `on-accent`, and every `status-*-fg` / `status-*-bg`).
+  - Added a new `marketing` category with editorial display and prose typography scales (clamp-based ramps), hero/section/story spacing, content max-widths (`content-narrow`, `content-default`, `content-wide`, `content-editorial`), motion pattern tokens (`motion-hero-enter`, `motion-scroll-reveal`, `motion-cross-fade`) with reduced-motion equivalents, and bespoke-illustration tokens (`illustration-max-width`, `illustration-radius`, `illustration-shadow`, `illustration-stroke`, `illustration-tone-*`).
+  - CSS emitter now writes light values under `:root`, dark overrides under `[data-theme="dark"]`, and a `@media (prefers-color-scheme: dark) :root:not([data-theme="light"])` fallback so the theme defaults to system preference until the user overrides it. `packages/design-tokens/generated/tokens.css` regenerated.
+  - `nelyoTailwindTheme` exposes editorial font sizes, content max-widths, and illustration max-width. `nelyoTailwindRecipes.editorial` adds hero, section, story, prose, eyebrow, and illustration recipes.
+  - Contrast test now runs both `evaluateContrast("light")` and `evaluateContrast("dark")` and fails CI if either theme regresses. All 9 vitest cases pass.
+- UI-foundation:
+  - `packages/ui-foundation/src/motion/marketing-profiles.ts` exports `motionHeroEnter`, `motionScrollReveal`, and `motionCrossFade` with default + reduced-motion equivalents.
+- Docs:
+  - New `docs/design/marketing-visual-language.md` covers the seven visual pillars, five hero variants, story pattern, trust/proof pattern, motion spec, illustration brief, dual-theme palette, contrast audit for both themes, and Google Fonts CDN privacy note.
+  - `docs/design/brand-and-visual-direction.md` gains a "Marketing Surface Extension" section pointing at the new doc.
+  - `docs/design/phase-5-reusable-design-system-foundation.md` replaces the "Homepage redesign: explicitly out of scope" line with the `DEC-P05-MKT-001` override and a marketing extension note, and updates the theme strategy line to reflect `DEC-P05-MKT-006` dual-theme delivery.
+- Traceability:
+  - `P05-MKT-REQ-001` moved to `COMPLETED-P05-MKT-001 (2026-07-13)`.
+  - `P05-MKT-REQ-007` and `P05-MKT-REQ-008` moved to `PARTIAL-P05-MKT-001` — the token, motion, and brief scope closed here; illustration SVGs and per-page dual-theme rendering close in `P05-MKT-002` and `P05-MKT-004` respectively.
+- Validation evidence: `node ./node_modules/vitest/vitest.mjs run packages/design-tokens` — 2 test files, 9 tests passed; `pnpm --filter @nelyohealth/design-tokens build` — `tsc -p tsconfig.json && node scripts/build.mjs` clean, generated CSS contains `[data-theme="dark"]` and `prefers-color-scheme: dark` blocks.
+- Updated governance state tracking:
+  - `docs/governance/phase-5-requirements-traceability.md`
+  - `docs/STATUS.md`
+
+## 2026-07-13 - P05-MKT-002 marketing component library
+
+- Delivered `P05-MKT-002`. The public marketing surface now has a full component library sitting on the P05-ISS-003 primitives and the P05-MKT-001 tokens.
+- Content pipeline:
+  - `packages/content-registry/src/ids.ts` — added `marketing` content family so `marketing.*` IDs validate. Copy authoring itself stays P05-MKT-003.
+  - `packages/ui-foundation/src/hooks/useContent.ts` — new `useContent(id)` hook plus `ContentProvider` / `PreviewContentProvider`. Missing IDs throw in development (production mode); preview mode falls back to a tokenized placeholder for gallery use. `useOptionalContent` exposed for callers that want a soft lookup.
+- Marketing components under `packages/ui-foundation/src/marketing/`:
+  - `SiteHeader` — sticky nav with segment-aware active state, primary/secondary CTAs, mobile Drawer, and trailing `ThemeToggle`.
+  - `SiteFooter` — role-aware link groups + legal strip.
+  - `EmergencyRibbon` — SAFETY-IMMEDIATE surface, action link marked `data-focus-first="true"` so PILOT pages can wire it as first tab stop.
+  - `HeroBlock` — single component, five variants (`universal`, `patient`, `family-diaspora`, `provider`, `organization`) via a `variant` prop.
+  - `StorySection`, `ProofStrip`, `WorkflowStepper`, `SegmentGrid`, `TrustBar`, `FAQAccordion`, `CTASection`, `PricingMatrix`, `QuoteBlock`, `LegalNoticeStrip`.
+  - `IllustrationSlot` + illustration registry with 16 bespoke SVGs (`hero-universal-network`, `hero-patient-journey`, `hero-family-diaspora-bridge`, `hero-provider-clinic`, `hero-organization-partnership`, 5 workflow steps, `trust-privacy`, `trust-verified`, `trust-coordination`, `family-diaspora-narrative`, `provider-narrative`, `neutral-placeholder`). All line-forward, `currentColor` strokes, tokenized fills so illustrations track the theme.
+  - `ThemeToggle` — cycles `system → dark → light`, applies `data-theme` on `<html>`, persists preference under `nh-theme`, listens to `prefers-color-scheme` when `system`.
+- CSS: added ~500 lines of `nh-*` marketing selectors to `packages/ui-foundation/src/styles.css` and a small internal `nh-gallery__*` block in `apps/patient-web/app/_gallery/marketing/gallery.css`. Everything reads from the P05-MKT-001 tokens; both themes covered.
+- Gallery: `apps/patient-web/app/_gallery/marketing/[component]/page.tsx` renders every component inside a `PreviewContentProvider` seeded with `gallery-content.ts`. Each route stages both `data-theme="light"` and `data-theme="dark"` frames. Route is dev-gated by `NEXT_PUBLIC_ENABLE_GALLERY=1`; returns `notFound()` when the flag is off.
+- Deletions: `apps/patient-web/src/components/marketing/site-header.tsx` removed (superseded by shared `SiteHeader`). The transitional `apps/patient-web/src/components/screens/batch1-production-page.tsx` no longer imports it; PILOT pages replace batch1 in P05-MKT-004.
+- Playwright: `playwright.p05-mkt-002.config.ts` boots patient-web with `NEXT_PUBLIC_ENABLE_GALLERY=1` on port 4287, six projects covering desktop / tablet / mobile / desktop-a11y / mobile-a11y / reduced-motion. Specs at `tests/e2e/p05-mkt-002-marketing-gallery.spec.ts` and `tests/accessibility/p05-mkt-002-marketing-gallery.a11y.spec.ts` visit every gallery route, assert no horizontal overflow, verify the emergency ribbon renders `SAFETY-IMMEDIATE`, walk the FAQ accordion with the keyboard, and axe-scan for critical/serious violations.
+- Boundary tests: `packages/ui-foundation/src/marketing/marketing.test.tsx` includes a boundary suite that scans every marketing source file and asserts no `from "apps/…"` imports and no forbidden domain identifiers (`Patient`, `PatientRecord`, `OrderFundingSecured`, `providerDisplayName`, `UserAccount`, `PharmacyOrder`, `LaboratoryOrder`).
+- Traceability:
+  - `P05-MKT-REQ-002` → `COMPLETED-P05-MKT-002 (2026-07-13)`.
+  - `P05-MKT-REQ-007` → `COMPLETED-P05-MKT-002 (2026-07-13)` — the 16-SVG bespoke set + IllustrationSlot closed here.
+  - `P05-MKT-REQ-008` → `PARTIAL-P05-MKT-002` — dual-theme palette, components, ThemeToggle, and gallery all render both themes; per-page dual-theme rendering closes in P05-MKT-004.
+- Validation evidence: `node ./node_modules/vitest/vitest.mjs run --pool=threads packages/ui-foundation/src/marketing packages/ui-foundation/src/hooks` — 2 test files, 24 tests passed. Vitest under the default `forks` pool on this Windows / Node 25 host times out spawning workers for pre-existing primitive test files (infrastructure quirk, not a marketing-code regression); `--pool=threads` is the workaround, tracked as follow-up work outside this issue.
+- Updated governance state tracking:
+  - `docs/governance/phase-5-requirements-traceability.md`
+  - `docs/STATUS.md`

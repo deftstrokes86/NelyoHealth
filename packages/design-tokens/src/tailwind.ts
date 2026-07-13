@@ -25,7 +25,46 @@ export const nelyoTailwindTheme = {
     xl: [cssVar("typography", "size-xl"), { lineHeight: cssVar("typography", "line-tight") }],
     "2xl": [cssVar("typography", "size-2xl"), { lineHeight: cssVar("typography", "line-tight") }],
     "3xl": [cssVar("typography", "size-3xl"), { lineHeight: cssVar("typography", "line-tight") }],
-    "4xl": [cssVar("typography", "size-4xl"), { lineHeight: cssVar("typography", "line-tight") }]
+    "4xl": [cssVar("typography", "size-4xl"), { lineHeight: cssVar("typography", "line-tight") }],
+    "display-sm": [
+      cssVar("marketing", "display-sm"),
+      { lineHeight: cssVar("marketing", "display-line-height") }
+    ],
+    "display-md": [
+      cssVar("marketing", "display-md"),
+      { lineHeight: cssVar("marketing", "display-line-height") }
+    ],
+    "display-lg": [
+      cssVar("marketing", "display-lg"),
+      { lineHeight: cssVar("marketing", "display-line-height") }
+    ],
+    "display-xl": [
+      cssVar("marketing", "display-xl"),
+      { lineHeight: cssVar("marketing", "display-line-height") }
+    ],
+    "display-2xl": [
+      cssVar("marketing", "display-2xl"),
+      { lineHeight: cssVar("marketing", "display-line-height") }
+    ],
+    "prose-sm": [
+      cssVar("marketing", "prose-sm"),
+      { lineHeight: cssVar("marketing", "prose-line-height") }
+    ],
+    "prose-md": [
+      cssVar("marketing", "prose-md"),
+      { lineHeight: cssVar("marketing", "prose-line-height") }
+    ],
+    "prose-lg": [
+      cssVar("marketing", "prose-lg"),
+      { lineHeight: cssVar("marketing", "prose-line-height") }
+    ],
+    eyebrow: [
+      cssVar("marketing", "eyebrow-size"),
+      {
+        lineHeight: cssVar("typography", "line-body"),
+        letterSpacing: cssVar("marketing", "eyebrow-tracking")
+      }
+    ]
   },
   colors: {
     nh: {
@@ -92,7 +131,12 @@ export const nelyoTailwindTheme = {
   },
   maxWidth: {
     content: cssVar("grid", "max-content"),
-    reading: cssVar("grid", "max-reading")
+    reading: cssVar("grid", "max-reading"),
+    "content-narrow": cssVar("marketing", "content-narrow"),
+    "content-default": cssVar("marketing", "content-default"),
+    "content-wide": cssVar("marketing", "content-wide"),
+    "content-editorial": cssVar("marketing", "content-editorial"),
+    illustration: cssVar("marketing", "illustration-max-width")
   },
   transitionDuration: {
     fast: cssVar("motion", "duration-fast"),
@@ -206,5 +250,53 @@ export const nelyoTailwindRecipes = {
       lg: "size-[var(--nh-icon-size-lg)]",
       xl: "size-[var(--nh-icon-size-xl)]"
     }
+  },
+  editorial: {
+    hero: [
+      "py-[var(--nh-marketing-hero-y-sm)]",
+      "tablet:py-[var(--nh-marketing-hero-y-md)]",
+      "laptop:py-[var(--nh-marketing-hero-y-lg)]",
+      "mx-auto max-w-[var(--nh-marketing-content-wide)]",
+      "px-[var(--nh-grid-margin-mobile)] tablet:px-[var(--nh-grid-margin-tablet)] laptop:px-[var(--nh-grid-margin-desktop)]"
+    ].join(" "),
+    heroHeading: [
+      "font-display",
+      "text-[length:var(--nh-marketing-display-2xl)]",
+      "leading-[var(--nh-marketing-display-line-height)]",
+      "tracking-[var(--nh-marketing-display-tracking)]",
+      "font-[var(--nh-marketing-display-weight)]",
+      "text-[var(--nh-color-text)]"
+    ].join(" "),
+    section: [
+      "py-[var(--nh-marketing-section-y-sm)]",
+      "tablet:py-[var(--nh-marketing-section-y-md)]",
+      "laptop:py-[var(--nh-marketing-section-y-lg)]",
+      "mx-auto max-w-[var(--nh-marketing-content-default)]",
+      "px-[var(--nh-grid-margin-mobile)] tablet:px-[var(--nh-grid-margin-tablet)] laptop:px-[var(--nh-grid-margin-desktop)]"
+    ].join(" "),
+    story: [
+      "grid gap-[var(--nh-marketing-story-gap-sm)]",
+      "tablet:gap-[var(--nh-marketing-story-gap-md)]",
+      "laptop:gap-[var(--nh-marketing-story-gap-lg)]",
+      "laptop:grid-cols-2 items-center"
+    ].join(" "),
+    prose: [
+      "max-w-[var(--nh-marketing-content-editorial)]",
+      "text-[length:var(--nh-marketing-prose-md)]",
+      "leading-[var(--nh-marketing-prose-line-height)]",
+      "text-[var(--nh-color-text)]"
+    ].join(" "),
+    eyebrow: [
+      "inline-flex items-center gap-2",
+      "text-[length:var(--nh-marketing-eyebrow-size)]",
+      "tracking-[var(--nh-marketing-eyebrow-tracking)]",
+      "font-[var(--nh-marketing-eyebrow-weight)]",
+      "uppercase text-[var(--nh-color-text-muted)]"
+    ].join(" "),
+    illustration: [
+      "block max-w-[var(--nh-marketing-illustration-max-width)]",
+      "rounded-[var(--nh-marketing-illustration-radius)]",
+      "shadow-[var(--nh-marketing-illustration-shadow)]"
+    ].join(" ")
   }
 } as const;

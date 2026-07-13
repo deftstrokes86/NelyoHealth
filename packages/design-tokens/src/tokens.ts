@@ -1,8 +1,14 @@
 ﻿import type { DesignTokens, TokenAuditSummary } from "./types.js";
-const d = (value: string | number, description: string, category = "scale") => ({
+const d = (
+  value: string | number,
+  description: string,
+  category = "scale",
+  dark?: string
+) => ({
   value,
   description,
-  category
+  category,
+  ...(dark ? { dark } : {})
 });
 export const visualDirection = {
   id: "VIS-DIR-002",
@@ -46,27 +52,42 @@ export const tokens = {
     "sky-100": d("#D7EBF4", "Information sky surface", "primitive"),
     "success-700": d("#23613D", "Success text", "primitive"),
     "success-100": d("#DFF1E5", "Success surface", "primitive"),
-    "on-brand": d("#FFFFFF", "Text or icon on brand surfaces", "semantic"),
-    "on-accent": d("#FFFFFF", "Text or icon on accent surfaces", "semantic"),
-    "status-success-fg": d("#1E5A39", "Success readable foreground", "semantic"),
-    "status-success-bg": d("#E3F3EA", "Success background", "semantic"),
-    "status-warning-fg": d("#7D4800", "Warning readable foreground", "semantic"),
-    "status-warning-bg": d("#FFF1D8", "Warning background", "semantic"),
-    "status-danger-fg": d("#7C211A", "Danger readable foreground", "semantic"),
-    "status-danger-bg": d("#FDE6E4", "Danger background", "semantic"),
-    "status-info-fg": d("#1F4F70", "Info readable foreground", "semantic"),
-    "status-info-bg": d("#E6F2FA", "Info background", "semantic"),
-    "focus-ring": d("#1F4FB8", "Focus ring stroke", "semantic"),
-    background: d("#FFFDF8", "Application background", "semantic"),
-    surface: d("#F8F2E7", "Primary surface", "semantic"),
-    "surface-raised": d("#FFFFFF", "Raised cards and panels", "semantic"),
-    "surface-muted": d("#F6F8F7", "Muted grouped sections", "semantic"),
-    border: d("#B8CAB9", "Accessible border", "semantic"),
-    "border-strong": d("#8DA49F", "Strong border", "semantic"),
-    text: d("#102321", "Primary text", "semantic"),
-    "text-muted": d("#4D6661", "Muted text", "semantic"),
-    action: d("#0D5E57", "Primary action", "semantic"),
-    danger: d("#7A1F17", "Safety and destructive state", "semantic")
+    "on-brand": d("#FFFFFF", "Text or icon on brand surfaces", "semantic", "#F5EEE0"),
+    "on-accent": d("#FFFFFF", "Text or icon on accent surfaces", "semantic", "#FFFFFF"),
+    "status-success-fg": d(
+      "#1E5A39",
+      "Success readable foreground",
+      "semantic",
+      "#7EE0A9"
+    ),
+    "status-success-bg": d("#E3F3EA", "Success background", "semantic", "#0F3421"),
+    "status-warning-fg": d(
+      "#7D4800",
+      "Warning readable foreground",
+      "semantic",
+      "#F5C15C"
+    ),
+    "status-warning-bg": d("#FFF1D8", "Warning background", "semantic", "#4A2E00"),
+    "status-danger-fg": d(
+      "#7C211A",
+      "Danger readable foreground",
+      "semantic",
+      "#F0827A"
+    ),
+    "status-danger-bg": d("#FDE6E4", "Danger background", "semantic", "#3E1512"),
+    "status-info-fg": d("#1F4F70", "Info readable foreground", "semantic", "#7BB0F0"),
+    "status-info-bg": d("#E6F2FA", "Info background", "semantic", "#0F2740"),
+    "focus-ring": d("#1F4FB8", "Focus ring stroke", "semantic", "#7BB0F0"),
+    background: d("#FFFDF8", "Application background", "semantic", "#0B1A19"),
+    surface: d("#F8F2E7", "Primary surface", "semantic", "#122927"),
+    "surface-raised": d("#FFFFFF", "Raised cards and panels", "semantic", "#1A3936"),
+    "surface-muted": d("#F6F8F7", "Muted grouped sections", "semantic", "#0F2321"),
+    border: d("#B8CAB9", "Accessible border", "semantic", "#2B4A46"),
+    "border-strong": d("#8DA49F", "Strong border", "semantic", "#4D6661"),
+    text: d("#102321", "Primary text", "semantic", "#F5EEE0"),
+    "text-muted": d("#4D6661", "Muted text", "semantic", "#B8CAB9"),
+    action: d("#0D5E57", "Primary action", "semantic", "#2AA396"),
+    danger: d("#7A1F17", "Safety and destructive state", "semantic", "#F0827A")
   },
   typography: {
     "family-display": d(
@@ -348,6 +369,145 @@ export const tokens = {
     "distance-sm": d("4px", "Small reveal offset"),
     "distance-md": d("10px", "Default reveal offset"),
     "distance-lg": d("18px", "Large reveal offset")
+  },
+  marketing: {
+    "display-2xl": d(
+      "clamp(2.5rem, 4vw + 1.5rem, 4.5rem)",
+      "Editorial display hero heading",
+      "typography"
+    ),
+    "display-xl": d(
+      "clamp(2rem, 3vw + 1.25rem, 3.5rem)",
+      "Editorial display heading",
+      "typography"
+    ),
+    "display-lg": d(
+      "clamp(1.75rem, 2.5vw + 1rem, 2.75rem)",
+      "Editorial section heading",
+      "typography"
+    ),
+    "display-md": d(
+      "clamp(1.5rem, 2vw + 0.75rem, 2.25rem)",
+      "Editorial subsection heading",
+      "typography"
+    ),
+    "display-sm": d(
+      "clamp(1.25rem, 1.5vw + 0.5rem, 1.75rem)",
+      "Editorial minor heading",
+      "typography"
+    ),
+    "display-line-height": d("1.08", "Editorial display line height", "typography"),
+    "display-tracking": d("-0.02em", "Editorial display tracking", "typography"),
+    "display-weight": d("600", "Editorial display weight", "typography"),
+    "prose-lg": d("1.25rem", "Large editorial prose", "typography"),
+    "prose-md": d("1.125rem", "Default editorial prose", "typography"),
+    "prose-sm": d("1rem", "Compact editorial prose", "typography"),
+    "prose-line-height": d("1.7", "Editorial prose line height", "typography"),
+    "eyebrow-size": d("0.8125rem", "Eyebrow label size", "typography"),
+    "eyebrow-tracking": d("0.16em", "Eyebrow label tracking", "typography"),
+    "eyebrow-weight": d("600", "Eyebrow label weight", "typography"),
+    "hero-y-sm": d("3rem", "Mobile hero vertical padding", "spacing"),
+    "hero-y-md": d("5rem", "Tablet hero vertical padding", "spacing"),
+    "hero-y-lg": d("7rem", "Desktop hero vertical padding", "spacing"),
+    "section-y-sm": d("2.5rem", "Mobile section vertical rhythm", "spacing"),
+    "section-y-md": d("3.5rem", "Tablet section vertical rhythm", "spacing"),
+    "section-y-lg": d("5rem", "Desktop section vertical rhythm", "spacing"),
+    "story-gap-sm": d("1.5rem", "Mobile story block gap", "spacing"),
+    "story-gap-md": d("2.5rem", "Tablet story block gap", "spacing"),
+    "story-gap-lg": d("3.5rem", "Desktop story block gap", "spacing"),
+    "content-narrow": d("42rem", "Narrow editorial column", "layout"),
+    "content-default": d("64rem", "Default marketing column", "layout"),
+    "content-wide": d("80rem", "Wide marketing column", "layout"),
+    "content-editorial": d("72ch", "Editorial reading measure", "layout"),
+    "motion-hero-enter-duration": d(
+      "620ms",
+      "Hero enter animation duration",
+      "motion"
+    ),
+    "motion-hero-enter-ease": d(
+      "cubic-bezier(0.16, 1, 0.3, 1)",
+      "Hero enter easing",
+      "motion"
+    ),
+    "motion-hero-enter-distance": d("24px", "Hero enter translate distance", "motion"),
+    "motion-hero-enter-reduced-duration": d(
+      "0ms",
+      "Hero enter reduced-motion duration",
+      "motion"
+    ),
+    "motion-hero-enter-reduced-distance": d(
+      "0px",
+      "Hero enter reduced-motion distance",
+      "motion"
+    ),
+    "motion-scroll-reveal-duration": d(
+      "480ms",
+      "Scroll reveal animation duration",
+      "motion"
+    ),
+    "motion-scroll-reveal-ease": d(
+      "cubic-bezier(0.2, 0.8, 0.2, 1)",
+      "Scroll reveal easing",
+      "motion"
+    ),
+    "motion-scroll-reveal-distance": d(
+      "16px",
+      "Scroll reveal translate distance",
+      "motion"
+    ),
+    "motion-scroll-reveal-reduced-duration": d(
+      "0ms",
+      "Scroll reveal reduced-motion duration",
+      "motion"
+    ),
+    "motion-scroll-reveal-reduced-distance": d(
+      "0px",
+      "Scroll reveal reduced-motion distance",
+      "motion"
+    ),
+    "motion-cross-fade-duration": d(
+      "320ms",
+      "Cross-fade animation duration",
+      "motion"
+    ),
+    "motion-cross-fade-ease": d(
+      "cubic-bezier(0.4, 0, 0.2, 1)",
+      "Cross-fade easing",
+      "motion"
+    ),
+    "motion-cross-fade-reduced-duration": d(
+      "60ms",
+      "Cross-fade reduced-motion duration",
+      "motion"
+    ),
+    "illustration-max-width": d("40rem", "Illustration max width", "illustration"),
+    "illustration-radius": d("1.5rem", "Illustration container radius", "illustration"),
+    "illustration-shadow": d(
+      "0 24px 60px rgba(16, 35, 33, 0.14)",
+      "Illustration container shadow",
+      "illustration"
+    ),
+    "illustration-stroke": d("1.75", "Illustration line stroke width", "illustration"),
+    "illustration-tone-warm": d(
+      "var(--nh-color-paper-050)",
+      "Warm illustration fill",
+      "illustration"
+    ),
+    "illustration-tone-cool": d(
+      "var(--nh-color-teal-100)",
+      "Cool illustration fill",
+      "illustration"
+    ),
+    "illustration-tone-neutral": d(
+      "var(--nh-color-neutral-100)",
+      "Neutral illustration fill",
+      "illustration"
+    ),
+    "illustration-tone-accent": d(
+      "var(--nh-color-brand-100)",
+      "Accent illustration fill",
+      "illustration"
+    )
   }
 } satisfies DesignTokens;
 export const tokenAuditSummary: TokenAuditSummary[] = Object.entries(tokens).map(

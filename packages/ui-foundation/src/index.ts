@@ -8,6 +8,13 @@ export { MotionReveal } from "./motion/MotionReveal.js";
 export type { MotionRevealProps } from "./motion/MotionReveal.js";
 export { motionProfiles, settingsByProfile } from "./motion/profiles.js";
 export type { MotionProfile, MotionSettings } from "./motion/profiles.js";
+export {
+  marketingMotionProfiles,
+  motionCrossFade,
+  motionHeroEnter,
+  motionScrollReveal
+} from "./motion/marketing-profiles.js";
+export type { MarketingMotionProfile } from "./motion/marketing-profiles.js";
 export { Alert } from "./primitives/Alert.js";
 export type { AlertProps } from "./primitives/Alert.js";
 export { Button } from "./primitives/Button.js";
@@ -120,3 +127,15 @@ export type {
 export { useFocusTrap } from "./hooks/useFocusTrap.js";
 export { useDismissable } from "./hooks/useDismissable.js";
 export type { UseDismissableOptions } from "./hooks/useDismissable.js";
+export {
+  ContentProvider,
+  PreviewContentProvider,
+  useContent,
+  useOptionalContent
+} from "./hooks/useContent.js";
+export type {
+  MarketingContent,
+  ContentRegistry,
+  ContentProviderProps
+} from "./hooks/useContent.js";
+export * from "./marketing/index.js";

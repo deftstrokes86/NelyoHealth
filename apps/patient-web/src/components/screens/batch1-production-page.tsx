@@ -23,7 +23,6 @@ import {
   Users,
   Building2
 } from "lucide-react";
-import { MarketingSiteHeader } from "../marketing/site-header";
 import { batch1RouteCatalog, type Batch1RouteKey } from "../../screens/batch1-route-catalog";
 
 type Batch1ProductionPageProps = {
@@ -332,7 +331,6 @@ export function Batch1ProductionPage({ routeKey }: Batch1ProductionPageProps) {
 
     return (
       <>
-        <MarketingSiteHeader />
         <main className="nh-marketing" data-screen-id={route.id}>
           {routeKey === "home" ? (
             <>
@@ -600,7 +598,6 @@ export function Batch1ProductionPage({ routeKey }: Batch1ProductionPageProps) {
 
     return (
       <>
-        <MarketingSiteHeader />
         <main className="nh-auth" data-screen-id={route.id}>
           <section className="nh-auth__layout" aria-labelledby="screen-title">
             <div className="nh-auth__hero">
@@ -687,7 +684,6 @@ export function Batch1ProductionPage({ routeKey }: Batch1ProductionPageProps) {
 
   return (
     <>
-      <MarketingSiteHeader />
       <main className="nh-shell" data-screen-id={route.id}>
         <section className="nh-shell__header" aria-labelledby="screen-title">
           <p className="nh-shell__state-meta">{route.category} screen</p>

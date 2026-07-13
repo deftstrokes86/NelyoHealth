@@ -3,8 +3,9 @@
 ## Status
 
 - Scope: reusable design-system foundations for all platform pages.
-- Homepage redesign: explicitly out of scope.
-- Theme strategy: mobile-first light theme foundation with tokenized extensibility.
+- Homepage redesign: originally out of scope; overridden 2026-07-07 by `DEC-P05-MKT-001`. Marketing surface work now runs as the `P05-MKT-*` track.
+- Marketing extension: editorial typography, hero/section/story spacing, marketing max-widths, hero-enter / scroll-reveal / cross-fade motion patterns, and bespoke-illustration tokens live under `tokens.marketing.*`. See `docs/design/marketing-visual-language.md`.
+- Theme strategy: dual-theme from first marketing release per `DEC-P05-MKT-006`. Every semantic color token has a light and a dark value. `[data-theme="dark"]` on `<html>` toggles the palette; defaults to `prefers-color-scheme` when no explicit theme is set.
 - Compliance target: WCAG 2.2 AA for text contrast and interactive focus behavior.
 
 ## Visual Direction

@@ -47,6 +47,8 @@
 - P05-ISS-002: STARTED, WORKFLOW-LEVEL LOW-BANDWIDTH RESILIENCE AND RETRY SEMANTICS IMPLEMENTED WITH UNIT+INTEGRATION EVIDENCE.
 - P05-ISS-003: PLANNED, DESIGN-SYSTEM PRIMITIVES EXPANSION (~26 MISSING PRIMITIVES) AUTHORIZED AS PHASE 5 WORK.
 - P05-MKT track: AUTHORIZED 2026-07-07 AS PHASE 5 PARALLEL MARKETING SURFACE BUILD, OVERRIDING THE HOMEPAGE-REDESIGN-OUT-OF-SCOPE NOTE IN docs/design/phase-5-reusable-design-system-foundation.md. Seven increments planned: P05-MKT-001 visual language + dual-theme tokens, P05-MKT-002 marketing components + ThemeToggle, P05-MKT-003 content registry entries (250-300 including SEO), P05-MKT-004 PILOT pages + dual-theme + generateMetadata, P05-MKT-005 non-PILOT scope-caveat pages, P05-MKT-006 exit-gate rehearsal, P05-MKT-007 plumbing (Google Fonts CDN, SEO, sitemap, robots, structured data, 404/500 pages, cookie-consent shell, Web Vitals budgets).
+- P05-MKT-001: COMPLETED 2026-07-13, marketing visual language + editorial type/spacing/layout tokens, hero/scroll-reveal/cross-fade motion patterns, illustration tokens, and full dark-theme semantic palette shipped with light+dark contrast tests (9/9 vitest passing). `docs/design/marketing-visual-language.md` records the seven visual pillars, five hero variants, story/trust/proof patterns, motion spec, illustration brief, and contrast audit.
+- P05-MKT-002: COMPLETED 2026-07-13, marketing component library shipped with 14 typed components (SiteHeader with mobile Drawer, SiteFooter, EmergencyRibbon, HeroBlock across 5 variants, StorySection, ProofStrip, WorkflowStepper, SegmentGrid, TrustBar, FAQAccordion, CTASection, PricingMatrix, QuoteBlock, LegalNoticeStrip), plus IllustrationSlot with 16 bespoke SVGs, ThemeToggle, and the useContent hook / PreviewContentProvider content pipeline. Component gallery live at `apps/patient-web/app/_gallery/marketing/[component]/page.tsx` (dev-gated by NEXT_PUBLIC_ENABLE_GALLERY=1). Playwright p05-mkt-002 config plus e2e and axe-core a11y specs cover every gallery route across desktop/tablet/mobile and reduced-motion. Vitest 24/24 passing under the threads pool.
 - Google Fonts CDN privacy caveat recorded in DEC-P05-MKT-007; Privacy Owner review required before pilot.
 - Pilot launch: PILOT-NO-GO.
 - Production release: NOT APPROVED.
@@ -54,7 +56,7 @@
 - Interactive browser: VERIFIED THROUGH PLAYWRIGHT CLI FALLBACK.
 - Playwright MCP: VERIFIED THROUGH PROJECT-SCOPED LOCAL SMOKE ON 2026-06-25 WITH CODEX-CLI 0.141.0.
 - UI UX Pro Max licence: REVIEW-REQUIRED.
-- Next action: execute P05-ISS-003 (design-system primitives expansion) as the hard prerequisite for P05-MKT-002, then run the P05-MKT-* marketing surface build (visual language → components → content registry → PILOT pages → non-PILOT pages → exit-gate rehearsal). P05-ISS-002 browser-observable low-bandwidth UX extension continues in parallel with primitives.
+- Next action: execute P05-MKT-003 (content-registry marketing entries, 250–300 approved-copy IDs across the `marketing` and `marketing-seo`/`marketing-error-pages`/`marketing-cookie-consent` families) so P05-MKT-004 PILOT pages can render production copy. P05-ISS-002 browser-observable low-bandwidth UX extension continues in parallel.
 
 ## Foundation commands
 

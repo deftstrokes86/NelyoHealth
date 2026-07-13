@@ -77,9 +77,13 @@
   --nh-typography-tracking-normal: 0;
   --nh-typography-tracking-wide: 0.03em;
   --nh-spacing-space-0: 0;
+  --nh-spacing-space-px: 1px;
   --nh-spacing-space-1: 0.25rem;
+  --nh-spacing-space-1-5: 0.375rem;
   --nh-spacing-space-2: 0.5rem;
+  --nh-spacing-space-2-5: 0.625rem;
   --nh-spacing-space-3: 0.75rem;
+  --nh-spacing-space-3-5: 0.875rem;
   --nh-spacing-space-4: 1rem;
   --nh-spacing-space-5: 1.5rem;
   --nh-spacing-space-6: 2rem;
@@ -87,6 +91,8 @@
   --nh-spacing-space-8: 4rem;
   --nh-spacing-space-9: 5rem;
   --nh-spacing-space-10: 6rem;
+  --nh-spacing-space-11: 7rem;
+  --nh-spacing-space-12: 8rem;
   --nh-sizing-size-touch: 44px;
   --nh-sizing-size-control-sm: 36px;
   --nh-sizing-size-control-md: 44px;
@@ -263,4 +269,103 @@
   --nh-motion-distance-sm: 4px;
   --nh-motion-distance-md: 10px;
   --nh-motion-distance-lg: 18px;
+  --nh-marketing-display-2xl: clamp(2.5rem, 4vw + 1.5rem, 4.5rem);
+  --nh-marketing-display-xl: clamp(2rem, 3vw + 1.25rem, 3.5rem);
+  --nh-marketing-display-lg: clamp(1.75rem, 2.5vw + 1rem, 2.75rem);
+  --nh-marketing-display-md: clamp(1.5rem, 2vw + 0.75rem, 2.25rem);
+  --nh-marketing-display-sm: clamp(1.25rem, 1.5vw + 0.5rem, 1.75rem);
+  --nh-marketing-display-line-height: 1.08;
+  --nh-marketing-display-tracking: -0.02em;
+  --nh-marketing-display-weight: 600;
+  --nh-marketing-prose-lg: 1.25rem;
+  --nh-marketing-prose-md: 1.125rem;
+  --nh-marketing-prose-sm: 1rem;
+  --nh-marketing-prose-line-height: 1.7;
+  --nh-marketing-eyebrow-size: 0.8125rem;
+  --nh-marketing-eyebrow-tracking: 0.16em;
+  --nh-marketing-eyebrow-weight: 600;
+  --nh-marketing-hero-y-sm: 3rem;
+  --nh-marketing-hero-y-md: 5rem;
+  --nh-marketing-hero-y-lg: 7rem;
+  --nh-marketing-section-y-sm: 2.5rem;
+  --nh-marketing-section-y-md: 3.5rem;
+  --nh-marketing-section-y-lg: 5rem;
+  --nh-marketing-story-gap-sm: 1.5rem;
+  --nh-marketing-story-gap-md: 2.5rem;
+  --nh-marketing-story-gap-lg: 3.5rem;
+  --nh-marketing-content-narrow: 42rem;
+  --nh-marketing-content-default: 64rem;
+  --nh-marketing-content-wide: 80rem;
+  --nh-marketing-content-editorial: 72ch;
+  --nh-marketing-motion-hero-enter-duration: 620ms;
+  --nh-marketing-motion-hero-enter-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --nh-marketing-motion-hero-enter-distance: 24px;
+  --nh-marketing-motion-hero-enter-reduced-duration: 0ms;
+  --nh-marketing-motion-hero-enter-reduced-distance: 0px;
+  --nh-marketing-motion-scroll-reveal-duration: 480ms;
+  --nh-marketing-motion-scroll-reveal-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --nh-marketing-motion-scroll-reveal-distance: 16px;
+  --nh-marketing-motion-scroll-reveal-reduced-duration: 0ms;
+  --nh-marketing-motion-scroll-reveal-reduced-distance: 0px;
+  --nh-marketing-motion-cross-fade-duration: 320ms;
+  --nh-marketing-motion-cross-fade-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --nh-marketing-motion-cross-fade-reduced-duration: 60ms;
+  --nh-marketing-illustration-max-width: 40rem;
+  --nh-marketing-illustration-radius: 1.5rem;
+  --nh-marketing-illustration-shadow: 0 24px 60px rgba(16, 35, 33, 0.14);
+  --nh-marketing-illustration-stroke: 1.75;
+  --nh-marketing-illustration-tone-warm: var(--nh-color-paper-050);
+  --nh-marketing-illustration-tone-cool: var(--nh-color-teal-100);
+  --nh-marketing-illustration-tone-neutral: var(--nh-color-neutral-100);
+  --nh-marketing-illustration-tone-accent: var(--nh-color-brand-100);
+}
+
+[data-theme="dark"] {
+  --nh-color-on-brand: #F5EEE0;
+  --nh-color-on-accent: #FFFFFF;
+  --nh-color-status-success-fg: #7EE0A9;
+  --nh-color-status-success-bg: #0F3421;
+  --nh-color-status-warning-fg: #F5C15C;
+  --nh-color-status-warning-bg: #4A2E00;
+  --nh-color-status-danger-fg: #F0827A;
+  --nh-color-status-danger-bg: #3E1512;
+  --nh-color-status-info-fg: #7BB0F0;
+  --nh-color-status-info-bg: #0F2740;
+  --nh-color-focus-ring: #7BB0F0;
+  --nh-color-background: #0B1A19;
+  --nh-color-surface: #122927;
+  --nh-color-surface-raised: #1A3936;
+  --nh-color-surface-muted: #0F2321;
+  --nh-color-border: #2B4A46;
+  --nh-color-border-strong: #4D6661;
+  --nh-color-text: #F5EEE0;
+  --nh-color-text-muted: #B8CAB9;
+  --nh-color-action: #2AA396;
+  --nh-color-danger: #F0827A;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --nh-color-on-brand: #F5EEE0;
+    --nh-color-on-accent: #FFFFFF;
+    --nh-color-status-success-fg: #7EE0A9;
+    --nh-color-status-success-bg: #0F3421;
+    --nh-color-status-warning-fg: #F5C15C;
+    --nh-color-status-warning-bg: #4A2E00;
+    --nh-color-status-danger-fg: #F0827A;
+    --nh-color-status-danger-bg: #3E1512;
+    --nh-color-status-info-fg: #7BB0F0;
+    --nh-color-status-info-bg: #0F2740;
+    --nh-color-focus-ring: #7BB0F0;
+    --nh-color-background: #0B1A19;
+    --nh-color-surface: #122927;
+    --nh-color-surface-raised: #1A3936;
+    --nh-color-surface-muted: #0F2321;
+    --nh-color-border: #2B4A46;
+    --nh-color-border-strong: #4D6661;
+    --nh-color-text: #F5EEE0;
+    --nh-color-text-muted: #B8CAB9;
+    --nh-color-action: #2AA396;
+    --nh-color-danger: #F0827A;
+  }
 }

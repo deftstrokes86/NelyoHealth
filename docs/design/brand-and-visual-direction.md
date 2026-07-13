@@ -36,3 +36,7 @@ Alternatives were not selected as primary because `VIS-DIR-001` is too operation
 ## Anti-Patterns Rejected
 
 Excessive glassmorphism, excessive gradients, decorative medical symbols everywhere, generic AI-style neon gradients, low-contrast pastel text, over-rounded controls that reduce clarity, excessive card nesting, dashboard wallpaper, emoji as structural icons, stock imagery implying unverified providers, culturally stereotyped decoration, decorative motion on emergency screens, hidden labels, color-only status communication, tiny gray text, and fake trust badges are rejected.
+
+## Marketing Surface Extension
+
+`VIS-DIR-002` is extended for the public marketing surface by `docs/design/marketing-visual-language.md` (delivered by `P05-MKT-001`). The extension adds an editorial display type ramp, hero/section/story spacing, marketing max-widths, hero-enter / scroll-reveal / cross-fade motion patterns, a bespoke-illustration brief, and a full dark-theme palette. The anti-pattern list above still applies to every marketing surface.
