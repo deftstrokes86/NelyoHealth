@@ -73,3 +73,50 @@ export { Spinner } from "./primitives/Spinner.js";
 export type { SpinnerProps, SpinnerSize } from "./primitives/Spinner.js";
 export { Progress } from "./primitives/Progress.js";
 export type { ProgressProps, ProgressTone } from "./primitives/Progress.js";
+export { Tooltip } from "./primitives/Tooltip.js";
+export type { TooltipProps, TooltipPlacement } from "./primitives/Tooltip.js";
+export { Popover } from "./primitives/Popover.js";
+export type { PopoverProps, PopoverPlacement } from "./primitives/Popover.js";
+export { Menu } from "./primitives/Menu.js";
+export type { MenuProps, MenuItem } from "./primitives/Menu.js";
+export { Drawer } from "./primitives/Drawer.js";
+export type { DrawerProps, DrawerSide } from "./primitives/Drawer.js";
+export { Tabs } from "./primitives/Tabs.js";
+export type { TabsProps, TabDefinition } from "./primitives/Tabs.js";
+export { Accordion } from "./primitives/Accordion.js";
+export type { AccordionProps, AccordionItem } from "./primitives/Accordion.js";
+export {
+  ToastProvider,
+  useToast
+} from "./primitives/Toast.js";
+export type {
+  ToastEntry,
+  ToastTone,
+  ToastContextValue,
+  ToastProviderProps
+} from "./primitives/Toast.js";
+export {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableCell
+} from "./primitives/Table.js";
+export type {
+  TableProps,
+  TableSectionProps,
+  TableRowProps,
+  TableCellProps,
+  TableDensity,
+  TableVariant
+} from "./primitives/Table.js";
+export { Timeline } from "./primitives/Timeline.js";
+export type {
+  TimelineProps,
+  TimelineStep,
+  TimelineStatus,
+  TimelineOrientation
+} from "./primitives/Timeline.js";
+export { useFocusTrap } from "./hooks/useFocusTrap.js";
+export { useDismissable } from "./hooks/useDismissable.js";
+export type { UseDismissableOptions } from "./hooks/useDismissable.js";
