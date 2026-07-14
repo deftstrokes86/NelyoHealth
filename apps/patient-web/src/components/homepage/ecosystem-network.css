@@ -1,0 +1,438 @@
+.nh-ecosystem {
+  position: relative;
+  background: var(--nh-color-background);
+  padding: var(--nh-marketing-section-y-md) 0;
+  overflow: hidden;
+}
+
+@media (min-width: 900px) {
+  .nh-ecosystem {
+    padding-block: var(--nh-marketing-section-y-lg);
+  }
+}
+
+.nh-ecosystem__inner {
+  max-width: var(--nh-marketing-content-wide);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .nh-ecosystem__inner {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nh-ecosystem__inner {
+    padding-inline: 3rem;
+  }
+}
+
+.nh-ecosystem__header {
+  max-width: var(--nh-marketing-content-editorial);
+  margin-inline: auto;
+  text-align: center;
+}
+
+.nh-ecosystem__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: var(--nh-marketing-eyebrow-size);
+  letter-spacing: var(--nh-marketing-eyebrow-tracking);
+  font-weight: var(--nh-marketing-eyebrow-weight);
+  text-transform: uppercase;
+  color: var(--nh-color-text-muted);
+}
+
+.nh-ecosystem__headline {
+  margin: 0 0 1rem;
+  font-family: var(--nh-typography-family-display);
+  font-size: var(--nh-marketing-display-lg);
+  line-height: var(--nh-marketing-display-line-height);
+  letter-spacing: var(--nh-marketing-display-tracking);
+  color: var(--nh-color-text);
+  text-wrap: balance;
+}
+
+.nh-ecosystem__subheadline {
+  margin: 0 auto;
+  font-size: var(--nh-marketing-prose-md);
+  line-height: var(--nh-marketing-prose-line-height);
+  color: var(--nh-color-text-muted);
+  max-width: 58ch;
+}
+
+.nh-ecosystem__stage {
+  position: relative;
+  margin-block: 2.5rem 1rem;
+  padding-inline: clamp(0.5rem, 3vw, 2rem);
+}
+
+@media (max-width: 899px) {
+  .nh-ecosystem__stage {
+    display: none;
+  }
+}
+
+.nh-ecosystem__flow {
+  position: relative;
+  width: 100%;
+  height: clamp(520px, 68vh, 720px);
+  background: transparent;
+  --xy-background-color-default: transparent;
+  --xy-edge-stroke-default: var(--nh-color-border-strong);
+  --xy-node-boxshadow-hover-default: none;
+  --xy-node-boxshadow-selected-default: none;
+}
+
+.nh-ecosystem__flow :is(.react-flow__attribution, .react-flow__panel) {
+  display: none;
+}
+
+.nh-ecosystem__handle {
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+}
+
+.nh-ecosystem__node {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 120px;
+  padding: 1rem 0.5rem;
+  border: 1px solid var(--nh-color-border);
+  border-radius: 999px;
+  background: var(--nh-color-surface-raised);
+  color: var(--nh-color-text);
+  font: inherit;
+  font-family: var(--nh-typography-family-body);
+  cursor: pointer;
+  transition:
+    transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    background 220ms ease;
+  box-shadow: 0 12px 26px rgba(18, 41, 39, 0.08);
+  animation: nh-ecosystem-pulse 6s ease-in-out infinite;
+}
+
+.nh-ecosystem__node:hover,
+.nh-ecosystem__node--hovered {
+  transform: translateY(-3px) scale(1.04);
+  border-color: var(--nh-color-action);
+  box-shadow: 0 20px 34px rgba(13, 94, 87, 0.18);
+  animation-play-state: paused;
+}
+
+.nh-ecosystem__node--active {
+  border-color: var(--nh-color-action);
+  background: var(--nh-color-brand-100);
+  color: var(--nh-color-brand-900);
+  animation-play-state: paused;
+}
+
+.nh-ecosystem__node:focus-visible {
+  outline: 3px solid var(--nh-color-focus-ring);
+  outline-offset: 4px;
+}
+
+.nh-ecosystem__node--center {
+  width: 168px;
+  height: 168px;
+  border-radius: 999px;
+  background: var(--nh-color-brand-900);
+  color: var(--nh-color-on-brand);
+  border-color: transparent;
+  box-shadow: 0 24px 60px rgba(13, 71, 75, 0.28);
+  animation: none;
+}
+
+.nh-ecosystem__node--center:hover,
+.nh-ecosystem__node--center.nh-ecosystem__node--hovered {
+  transform: scale(1.03);
+  background: var(--nh-color-brand-700);
+}
+
+.nh-ecosystem__node--center.nh-ecosystem__node--active {
+  background: var(--nh-color-brand-700);
+  color: var(--nh-color-on-brand);
+}
+
+.nh-ecosystem__node-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nh-color-action);
+}
+
+.nh-ecosystem__node--center .nh-ecosystem__node-icon {
+  color: var(--nh-color-on-brand);
+}
+
+.nh-ecosystem__node--active .nh-ecosystem__node-icon {
+  color: var(--nh-color-brand-900);
+}
+
+.nh-ecosystem__node--center.nh-ecosystem__node--active .nh-ecosystem__node-icon {
+  color: var(--nh-color-on-brand);
+}
+
+.nh-ecosystem__node-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: inherit;
+  text-align: center;
+  line-height: 1.15;
+}
+
+.nh-ecosystem__node--center .nh-ecosystem__node-label {
+  font-family: var(--nh-typography-family-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.nh-ecosystem__center-caption {
+  position: absolute;
+  left: 50%;
+  bottom: -1.5rem;
+  transform: translateX(-50%);
+  margin: 0;
+  font-family: var(--nh-typography-family-mono);
+  font-size: var(--nh-typography-size-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nh-color-text-muted);
+}
+
+.nh-ecosystem__detail {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: min(340px, calc(100% - 3rem));
+  padding: 1.5rem 1.5rem 1.75rem;
+  background: var(--nh-color-surface-raised);
+  border: 1px solid var(--nh-color-border);
+  border-radius: var(--nh-radius-xl);
+  box-shadow: 0 32px 64px rgba(18, 41, 39, 0.18);
+  color: var(--nh-color-text);
+  z-index: 5;
+}
+
+.nh-ecosystem__detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.nh-ecosystem__detail-eyebrow {
+  margin: 0;
+  font-size: var(--nh-marketing-eyebrow-size);
+  letter-spacing: var(--nh-marketing-eyebrow-tracking);
+  font-weight: var(--nh-marketing-eyebrow-weight);
+  text-transform: uppercase;
+  color: var(--nh-color-text-muted);
+}
+
+.nh-ecosystem__detail-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--nh-color-border);
+  border-radius: 999px;
+  background: var(--nh-color-surface);
+  color: var(--nh-color-text);
+  cursor: pointer;
+}
+
+.nh-ecosystem__detail-close:hover,
+.nh-ecosystem__detail-close:focus-visible {
+  background: var(--nh-color-brand-100);
+  color: var(--nh-color-brand-900);
+  outline: none;
+}
+
+.nh-ecosystem__detail-close:focus-visible {
+  box-shadow: 0 0 0 3px var(--nh-color-focus-ring);
+}
+
+.nh-ecosystem__detail-title {
+  margin: 0.35rem 0 0.5rem;
+  font-family: var(--nh-typography-family-display);
+  font-size: var(--nh-marketing-display-sm);
+  color: var(--nh-color-text);
+}
+
+.nh-ecosystem__detail-lead {
+  margin: 0 0 0.75rem;
+  font-size: var(--nh-marketing-prose-md);
+  color: var(--nh-color-text);
+  font-weight: 500;
+}
+
+.nh-ecosystem__detail-body {
+  margin: 0;
+  font-size: var(--nh-typography-size-sm);
+  line-height: 1.6;
+  color: var(--nh-color-text-muted);
+}
+
+.nh-ecosystem__hint {
+  margin: 1.5rem auto 0;
+  max-width: 44ch;
+  font-size: var(--nh-typography-size-sm);
+  color: var(--nh-color-text-muted);
+  text-align: center;
+}
+
+@media (max-width: 899px) {
+  .nh-ecosystem__hint {
+    order: -1;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.nh-ecosystem__mobile {
+  display: none;
+}
+
+@media (max-width: 899px) {
+  .nh-ecosystem__mobile {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 0.5rem 1.25rem 2rem;
+    margin-inline: -1.25rem;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+.nh-ecosystem__mobile-slot {
+  flex: 0 0 min(84vw, 320px);
+  scroll-snap-align: start;
+}
+
+.nh-ecosystem__mobile-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  height: 100%;
+  padding: 1.25rem;
+  background: var(--nh-color-surface-raised);
+  border: 1px solid var(--nh-color-border);
+  border-radius: var(--nh-radius-xl);
+  color: var(--nh-color-text);
+  box-shadow: 0 12px 26px rgba(18, 41, 39, 0.06);
+}
+
+.nh-ecosystem__mobile-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.nh-ecosystem__mobile-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: var(--nh-radius-md);
+  background: var(--nh-color-brand-100);
+  color: var(--nh-color-brand-700);
+}
+
+.nh-ecosystem__mobile-eyebrow {
+  margin: 0;
+  font-size: var(--nh-marketing-eyebrow-size);
+  letter-spacing: var(--nh-marketing-eyebrow-tracking);
+  font-weight: var(--nh-marketing-eyebrow-weight);
+  text-transform: uppercase;
+  color: var(--nh-color-text-muted);
+}
+
+.nh-ecosystem__mobile-title {
+  margin: 0.25rem 0 0;
+  font-family: var(--nh-typography-family-display);
+  font-size: 1.25rem;
+  color: var(--nh-color-text);
+}
+
+.nh-ecosystem__mobile-lead {
+  margin: 0;
+  font-size: var(--nh-marketing-prose-md);
+  color: var(--nh-color-text);
+  font-weight: 500;
+}
+
+.nh-ecosystem__mobile-body {
+  margin: 0;
+  font-size: var(--nh-typography-size-sm);
+  color: var(--nh-color-text-muted);
+  line-height: 1.6;
+}
+
+.nh-ecosystem__cta {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.nh-ecosystem__cta-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.5rem;
+  border-radius: var(--nh-radius-pill);
+  background: var(--nh-color-action);
+  color: var(--nh-color-on-brand);
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    transform 160ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 160ms ease;
+}
+
+.nh-ecosystem__cta-primary:hover,
+.nh-ecosystem__cta-primary:focus-visible {
+  background: var(--nh-color-brand-900);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.nh-ecosystem__cta-primary:focus-visible {
+  box-shadow: 0 0 0 3px var(--nh-color-focus-ring);
+}
+
+@keyframes nh-ecosystem-pulse {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nh-ecosystem__node,
+  .nh-ecosystem__node--center,
+  .nh-ecosystem__cta-primary {
+    animation: none !important;
+    transition: none !important;
+  }
+  .nh-ecosystem__detail {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -9,6 +9,7 @@ import {
   WorkflowStepper
 } from "@nelyohealth/ui-foundation";
 import { BadgeCheck, Network, ShieldCheck } from "lucide-react";
+import { EcosystemNetwork } from "../src/components/homepage/EcosystemNetwork";
 import { marketingMetadata } from "../src/lib/seo";
 
 export const metadata = marketingMetadata("home", "/");
@@ -31,6 +32,7 @@ export default function HomePage() {
         secondaryCtaHref="/sign-in"
         illustrationId="hero-connected-care-ecosystem"
       />
+      <EcosystemNetwork />
       <TrustBar
         items={[
           { id: "marketing-home.trust.privacy", icon: trustIcon },

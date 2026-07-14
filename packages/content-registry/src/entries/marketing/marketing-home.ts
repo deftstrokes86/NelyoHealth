@@ -83,5 +83,135 @@ export const marketingHomeEntries: ContentEntry[] = [
     "cta.body",
     "Ready to see it in practice",
     "Pick the tour that matches your role — patient, family sponsor, clinician, or organisation partner. No card required, and no automated call from a sales team on the other end."
+  ),
+  e(
+    "ecosystem.eyebrow",
+    "One connected healthcare ecosystem",
+    "Every participant. Every hand-off. One record."
+  ),
+  e(
+    "ecosystem.headline",
+    "Healthcare doesn't happen in one place.",
+    "It moves between people, buildings, and systems — and it usually loses something at each hand-off."
+  ),
+  e(
+    "ecosystem.subheadline",
+    "Healthcare involves many people.",
+    "From your first symptom to your last follow-up, healthcare involves many people. NelyoHealth keeps everyone connected so your care doesn't fall apart between appointments."
+  ),
+  e(
+    "ecosystem.patient.title",
+    "You",
+    "The record travels with you — and only unfolds for the roles you allow."
+  ),
+  e(
+    "ecosystem.hint",
+    "Tap a role to see what NelyoHealth coordinates for them.",
+    "Interactive hint shown below the network on desktop and above the carousel on mobile."
+  ),
+  e(
+    "ecosystem.cta",
+    "See the coordination in your context",
+    "Book a walkthrough tailored to the role you play in care."
+  ),
+  e(
+    "ecosystem.node.doctor.title",
+    "Doctor",
+    "Diagnose. Treat. Follow up."
+  ),
+  e(
+    "ecosystem.node.doctor.body",
+    "The clinician's role",
+    "The full patient chart shows up before the room does. Diagnoses, prescriptions, and referrals write back to the same record — with amendments, never overwrites."
+  ),
+  e(
+    "ecosystem.node.hospital.title",
+    "Hospital",
+    "Receive referrals with the whole story attached."
+  ),
+  e(
+    "ecosystem.node.hospital.body",
+    "The hospital's role",
+    "Referrals arrive with intake, consent, and clinical context already attached. Records access, care coordination, and discharge summaries all move on the same connected chart — no duplicate paperwork at the front desk."
+  ),
+  e(
+    "ecosystem.node.pharmacy.title",
+    "Pharmacy",
+    "Fulfil prescriptions that are signed, sourced, and traceable."
+  ),
+  e(
+    "ecosystem.node.pharmacy.body",
+    "The pharmacy's role",
+    "Signed prescriptions route with dosage, indication, and any relevant consented history. Fulfilment status flows back to the patient. Provider details unlock only after payment, and only for that order."
+  ),
+  e(
+    "ecosystem.node.laboratory.title",
+    "Laboratory",
+    "Receive digital orders. Return results to the record."
+  ),
+  e(
+    "ecosystem.node.laboratory.body",
+    "The laboratory's role",
+    "Diagnostic orders arrive with indication and consent attached. Results return to the ordering clinician automatically — the platform alerts the clinician the moment a result is signed off."
+  ),
+  e(
+    "ecosystem.node.caregiver.title",
+    "Caregiver",
+    "Support a loved one's care on approved terms."
+  ),
+  e(
+    "ecosystem.node.caregiver.body",
+    "The caregiver's role",
+    "Book appointments, coordinate refills, and stay across follow-ups for someone you look after — under permissions the patient granted, and can revoke, from their account."
+  ),
+  e(
+    "ecosystem.node.employer.title",
+    "Employer",
+    "Provide healthcare benefits your team actually uses."
+  ),
+  e(
+    "ecosystem.node.employer.body",
+    "The employer's role",
+    "Population-level coverage, eligibility, and uptake reporting — never individual clinical detail. The line between commercial data and clinical data is enforced in code, not policy."
+  ),
+  e(
+    "ecosystem.node.hmo.title",
+    "HMO",
+    "Coordinate covered care without overriding the clinician."
+  ),
+  e(
+    "ecosystem.node.hmo.body",
+    "The HMO's role",
+    "Authorisations, utilisation reporting, plan boundary decisions. Coverage runs alongside clinical judgment — never overrides it, and never gates emergency care."
+  ),
+  e(
+    "ecosystem.node.family.title",
+    "Family",
+    "Stay in the loop — only where you've been invited."
+  ),
+  e(
+    "ecosystem.node.family.body",
+    "Family visibility",
+    "Family members see the exact slices of care the patient chooses to share. Usually appointment status and receipts. Never the clinical chart unless it's specifically opened."
+  ),
+  e(
+    "ecosystem.node.emergency.title",
+    "Emergency",
+    "Access critical information in the moment it matters."
+  ),
+  e(
+    "ecosystem.node.emergency.body",
+    "Emergency access",
+    "A pre-authorised emergency view surfaces essential clinical context to responders — allergies, active prescriptions, safeguarding notes — the moment an emergency is flagged. Never blocked by payment or plan authorisation."
+  ),
+  e(
+    "ecosystem.node.records.title",
+    "Medical records",
+    "One authoritative chart. Every role reads their slice."
+  ),
+  e(
+    "ecosystem.node.records.body",
+    "The record itself",
+    "Signed clinical records use versioned amendments — never silent overwrites. Every access is logged. Every consent decision is visible and reversible from the patient's account."
   )
 ];

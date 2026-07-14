@@ -22,6 +22,7 @@
     "@nelyohealth/api-client": "workspace:*",
     "@nelyohealth/content-registry": "workspace:*",
     "@nelyohealth/ui-foundation": "workspace:*",
+    "@xyflow/react": "12.6.4",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "framer-motion": "npm:motion@12.41.0",
