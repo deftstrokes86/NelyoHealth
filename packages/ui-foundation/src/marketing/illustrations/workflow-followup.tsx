@@ -1,3 +1,5 @@
+import { CalendarClock, BellRing } from "lucide-react";
+
 export const WorkflowFollowup = () => (
   <svg
     viewBox="0 0 240 200"
@@ -5,33 +7,32 @@ export const WorkflowFollowup = () => (
     role="img"
     aria-hidden="true"
     focusable="false"
-    stroke="currentColor"
-    fill="none"
-    strokeWidth={1.75}
-    strokeLinecap="round"
-    strokeLinejoin="round"
   >
     <rect
       x={12}
       y={12}
       width={216}
       height={176}
-      rx={20}
+      rx={22}
       fill="var(--nh-marketing-illustration-tone-cool)"
-      stroke="none"
     />
-    <circle cx={120} cy={100} r={54} fill="var(--nh-color-surface-raised)" />
-    <circle cx={120} cy={100} r={54} />
-    <path d="M120 68 v34 l22 12" />
-    <circle
-      cx={172}
-      cy={62}
-      r={18}
-      fill="var(--nh-marketing-illustration-tone-accent)"
+    <CalendarClock
+      x={40}
+      y={44}
+      width={104}
+      height={104}
+      strokeWidth={1.8}
+      color="var(--nh-color-brand-700)"
+      fill="var(--nh-color-surface-raised)"
     />
-    <circle cx={172} cy={62} r={18} />
-    <path d="M167 62 l4 4 l8 -8" />
-    <path d="M56 156 h128" />
-    <path d="M60 172 h44 M120 172 h60" />
+    <BellRing
+      x={128}
+      y={82}
+      width={72}
+      height={72}
+      strokeWidth={1.8}
+      color="var(--nh-color-status-warning-fg)"
+      fill="var(--nh-color-surface-raised)"
+    />
   </svg>
 );

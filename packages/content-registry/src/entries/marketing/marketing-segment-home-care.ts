@@ -14,31 +14,35 @@ const e = (slug: string, title: string, body: string): ContentEntry => ({
 });
 
 export const marketingSegmentHomeCareEntries: ContentEntry[] = [
-  e("hero.eyebrow", "For home care", "Care that reaches the household."),
+  e(
+    "hero.eyebrow",
+    "For home care",
+    "Care that reaches the household — on the same record as clinic care."
+  ),
   e(
     "hero.headline",
-    "Coordinate home-care visits with the same audit surface.",
-    "Home care sits on the same connected record as clinic care."
+    "Home visits, clinic visits, one longitudinal chart.",
+    "Coordinated care shouldn't stop at the clinic door."
   ),
   e(
     "hero.body",
     "Home care overview",
-    "Home-care visits are coordinated on the same record and consent boundaries as clinic-based care — same audit trail, same role permissions."
+    "Home-care visits coordinate on the same record and consent boundaries as clinic-based care. Same audit trail. Same role permissions. Nothing gets lost in a home-visit notebook that never makes it back to the file."
   ),
   e(
     "scope.caveat",
     "Scope caveat",
-    "The home-care surface is designed but not yet implemented in the pilot. Interest and onboarding are being scoped ahead of enablement."
+    "The home-care surface is designed but not yet implemented in the pilot. We're scoping interest and onboarding conversations ahead of enablement — get in touch if you'd like to be on the early-access shortlist."
   ),
   e(
     "story.a.headline",
-    "One record follows the patient.",
-    "Home-visit notes join the same chart as clinic notes."
+    "The chart travels with the patient — not with the visit.",
+    "Home-visit notes join the same connected record as clinic notes."
   ),
   e(
     "story.a.body",
     "One record follows the patient",
-    "Home visits, clinic visits, and follow-ups all sit on one record — with role permissions enforced end-to-end."
+    "Home-visit notes, clinic notes, and follow-ups all sit on one connected record — with role permissions and consent scoping enforced end-to-end."
   ),
   e(
     "cta.headline",

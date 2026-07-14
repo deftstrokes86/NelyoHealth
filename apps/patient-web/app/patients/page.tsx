@@ -5,15 +5,12 @@ import {
   StorySection,
   TrustBar
 } from "@nelyohealth/ui-foundation";
+import { ShieldCheck } from "lucide-react";
 import { marketingMetadata } from "../../src/lib/seo";
 
 export const metadata = marketingMetadata("for-patients", "/patients");
 
-const privacyIcon = (
-  <svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor">
-    <path d="M10 2 L16 5 v5 c0 4.5 -3 7 -6 8 c-3 -1 -6 -3.5 -6 -8 v-5 z" />
-  </svg>
-);
+const privacyIcon = <ShieldCheck size={20} strokeWidth={1.9} aria-hidden />;
 
 export default function PatientsPage() {
   return (

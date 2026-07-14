@@ -1958,6 +1958,98 @@
   box-shadow: var(--nh-marketing-illustration-shadow);
   color: var(--nh-color-text);
 }
+.nh-illustration-slot[data-illustration="hero-connected-care-ecosystem"] {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  max-width: none;
+  width: 100%;
+  align-self: stretch;
+}
+.nh-hero-block__visual:has(
+  .nh-illustration-slot[data-illustration="hero-connected-care-ecosystem"]
+) {
+  align-items: stretch;
+  justify-content: stretch;
+  width: 100%;
+}
+.nh-ecosystem-illustration {
+  display: block;
+  width: 100%;
+  max-width: min(100%, 38rem);
+  height: auto;
+  margin: 0 auto;
+  color: var(--nh-color-teal-700);
+  overflow: visible;
+}
+.nh-ecosystem-ring {
+  fill: none;
+  stroke-dasharray: 6 12;
+}
+.nh-ecosystem-ring--outer {
+  stroke: var(--nh-color-text);
+  stroke-opacity: 0.18;
+  stroke-width: 1.6;
+}
+.nh-ecosystem-ring--inner {
+  stroke: var(--nh-color-text);
+  stroke-opacity: 0.12;
+  stroke-width: 1.4;
+}
+.nh-ecosystem-link {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 5 7;
+  opacity: 0.85;
+}
+.nh-ecosystem-packet {
+  filter: drop-shadow(0 0 6px rgba(31, 127, 140, 0.45));
+  opacity: 0.88;
+}
+.nh-ecosystem-packet--return {
+  opacity: 0.55;
+}
+.nh-ecosystem-node__bubble {
+  fill: var(--nh-color-surface-raised);
+  stroke: var(--nh-color-border);
+  stroke-width: 1.2;
+  filter: drop-shadow(0 10px 20px rgba(18, 41, 39, 0.13));
+}
+.nh-ecosystem-node__icon {
+  color: var(--nh-color-action);
+  stroke: currentColor;
+  fill: none;
+}
+.nh-ecosystem-node__badge {
+  color: var(--nh-color-brand-700);
+  stroke: currentColor;
+  fill: var(--nh-color-surface-raised);
+  filter: drop-shadow(0 1px 3px rgba(18, 41, 39, 0.35));
+}
+.nh-ecosystem-node__label {
+  font-size: 13px;
+  font-weight: 600;
+  fill: var(--nh-color-text);
+  letter-spacing: 0.01em;
+  font-family: var(--nh-typography-family-body);
+}
+.nh-ecosystem-core {
+  filter: drop-shadow(0 10px 26px rgba(13, 94, 87, 0.32));
+}
+.nh-ecosystem-core__title {
+  font-size: 16px;
+  font-weight: 640;
+  letter-spacing: 0.015em;
+  fill: var(--nh-color-on-brand);
+}
+@media (prefers-reduced-motion: reduce) {
+  .nh-ecosystem-packet,
+  .nh-ecosystem-core circle animate,
+  .nh-ecosystem-node-group animateMotion {
+    display: none;
+  }
+}
 .nh-illustration-slot svg {
   display: block;
   width: 100%;

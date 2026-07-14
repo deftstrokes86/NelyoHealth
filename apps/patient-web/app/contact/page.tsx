@@ -2,18 +2,16 @@ import {
   CTASection,
   HeroBlock,
   LegalNoticeStrip,
-  StorySection,
   TrustBar
 } from "@nelyohealth/ui-foundation";
+import { Handshake, LifeBuoy, Newspaper } from "lucide-react";
 import { marketingMetadata } from "../../src/lib/seo";
 
 export const metadata = marketingMetadata("contact", "/contact");
 
-const iconA = (
-  <svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor">
-    <path d="M2 6 h16 v10 h-16 z M2 6 l8 6 l8 -6" stroke="currentColor" strokeWidth={1.5} fill="none" />
-  </svg>
-);
+const supportIcon = <LifeBuoy size={20} strokeWidth={1.9} aria-hidden />;
+const partnerIcon = <Handshake size={20} strokeWidth={1.9} aria-hidden />;
+const pressIcon = <Newspaper size={20} strokeWidth={1.9} aria-hidden />;
 
 export default function ContactPage() {
   return (
@@ -29,9 +27,9 @@ export default function ContactPage() {
       />
       <TrustBar
         items={[
-          { id: "marketing-contact.route.patients", icon: iconA },
-          { id: "marketing-contact.route.partners", icon: iconA },
-          { id: "marketing-contact.route.press", icon: iconA }
+          { id: "marketing-contact.route.patients", icon: supportIcon },
+          { id: "marketing-contact.route.partners", icon: partnerIcon },
+          { id: "marketing-contact.route.press", icon: pressIcon }
         ]}
       />
       <LegalNoticeStrip

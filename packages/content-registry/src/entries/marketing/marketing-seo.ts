@@ -44,56 +44,56 @@ const seo = (
 export const marketingSeoEntries: ContentEntry[] = [
   ...seo(
     "home",
-    "NelyoHealth — Coordinated care that follows the patient.",
-    "Coordinated care from intake to follow-up on one secure surface. For patients, families, providers, and organisations in Nigeria and the diaspora.",
-    "hero-universal-network"
+    "NelyoHealth — Care that keeps up with your life.",
+    "Coordinated care from intake to follow-up on one connected record. For patients, families, clinicians, and organisations in Nigeria and the diaspora.",
+    "hero-connected-care-ecosystem"
   ),
   ...seo(
     "how-it-works",
-    "How NelyoHealth works — intake to follow-up.",
-    "Five clear steps: intake, triage, consult, fulfilment, follow-up. See how care flows through the platform.",
+    "How NelyoHealth works — five stages, one record.",
+    "Intake, triage, consult, fulfilment, follow-up. See exactly how a patient moves through the platform without re-explaining their history.",
     "hero-universal-network"
   ),
   ...seo(
     "for-patients",
     "For patients — NelyoHealth.",
-    "One account for booking, records, prescriptions, and family updates — with consent boundaries that hold.",
+    "Book consults, own your record, and keep the people you trust in the loop. Consent that you can actually see and change.",
     "hero-patient-journey"
   ),
   ...seo(
     "for-family-diaspora",
     "For families and the diaspora — NelyoHealth.",
-    "Support family in Nigeria without losing track. Sponsor care within explicit consent boundaries.",
+    "Sponsor care for family in Nigeria without seeing what you shouldn't. Payment never unlocks the clinical record.",
     "hero-family-diaspora-bridge"
   ),
   ...seo(
     "for-doctors",
     "For doctors and clinics — NelyoHealth.",
-    "One patient view, one workflow, fewer handoffs. Practice in a connected surface built for clinical judgment.",
+    "One patient view, one workflow, fewer hand-offs to the void. Clinical decisions stay with you.",
     "hero-provider-clinic"
   ),
   ...seo(
     "for-pharmacies",
     "For pharmacies — NelyoHealth.",
-    "Receive approved prescriptions with clinical context. Provider details are revealed to patients only after payment.",
+    "Signed prescriptions with clinical context attached. Provider details unlock to patients only after payment.",
     "hero-organization-partnership"
   ),
   ...seo(
     "for-laboratories",
     "For laboratories — NelyoHealth.",
-    "Receive diagnostic orders with clinical context. Results return to the ordering clinician on the same connected record.",
+    "Diagnostic orders arrive with indication, consent, and history attached. Results return to the ordering clinician.",
     "hero-organization-partnership"
   ),
   ...seo(
     "trust-safety",
     "Trust and safety — NelyoHealth.",
-    "See how consent, credentialing, and audit are wired into the platform. Trust is engineered, not claimed.",
+    "Trust is engineered, not claimed. Each principle on this page maps to a specific platform behaviour.",
     "trust-privacy"
   ),
   ...seo(
     "privacy-overview",
     "Privacy overview — NelyoHealth.",
-    "What we collect, why, and the controls you have. Your data supports your care — not marketed elsewhere.",
+    "What we collect, why, and the controls you can act on today. Data supports your care — not third-party marketing.",
     "trust-privacy"
   ),
   ...seo(
@@ -105,73 +105,73 @@ export const marketingSeoEntries: ContentEntry[] = [
   ...seo(
     "faq",
     "Frequently asked questions — NelyoHealth.",
-    "Common questions about coverage, records access, payment, emergencies, and family sponsorship — answered honestly.",
+    "Straight answers to what people actually ask before signing up — records, payment, family, emergencies, provider details.",
     "trust-coordination"
   ),
   ...seo(
     "contact",
     "Contact NelyoHealth.",
-    "Reach the team that fits your question — patients, family sponsors, partners, or press. Not for emergencies.",
+    "Get to the right team on the first try — patients, family sponsors, partners, or press. Not for emergencies.",
     "neutral-placeholder"
   ),
   ...seo(
     "legal",
     "Legal and regulatory notices — NelyoHealth.",
-    "Draft legal notices for review. Terms, privacy, clinical scope, and regulatory disclosure — all pending owner approval.",
+    "Draft legal notices under review. Terms, privacy, clinical scope, and regulatory disclosure — all pending owner approval.",
     "neutral-placeholder"
   ),
   ...seo(
     "emergency",
     "Emergency guidance — NelyoHealth.",
-    "For emergencies, call your local emergency service. This platform is not a substitute for emergency care.",
+    "If care can't wait, call your local emergency service. NelyoHealth does not dispatch emergency response.",
     "trust-privacy"
   ),
   ...seo(
     "for-employers",
     "For employers — NelyoHealth (early access).",
-    "The employer surface is designed and being scoped for enablement. Coordinate workforce care without touching clinical records.",
+    "Sponsor workforce care without touching the clinical record. The employer surface is designed and scoping for enablement.",
     "hero-organization-partnership"
   ),
   ...seo(
     "for-hmos",
     "For HMOs — NelyoHealth (early access).",
-    "The HMO surface is designed and being scoped for enablement. Authorisations don't override clinicians.",
+    "Coordinate covered care with clinicians in the loop. Authorisations respect clinical judgment.",
     "hero-organization-partnership"
   ),
   ...seo(
     "for-hospitals",
     "For hospitals and referrals — NelyoHealth (early access).",
-    "The hospital referral surface is designed and being scoped for enablement. Referrals carry clinical context and consent.",
+    "Receive referrals with the whole story attached — intake, triage, and consent travel with the patient.",
     "hero-organization-partnership"
   ),
   ...seo(
     "for-home-care",
     "For home care — NelyoHealth (early access).",
-    "The home-care surface is designed and being scoped for enablement. One record follows the patient — clinic or home.",
+    "Home visits, clinic visits, one longitudinal chart. Coordinated care shouldn't stop at the clinic door.",
     "family-diaspora-narrative"
   ),
   ...seo(
     "signin",
     "Sign in — NelyoHealth.",
-    "Sign in to continue to your coordinated care surface.",
+    "Continue where you left off on the connected care record.",
     "neutral-placeholder"
   ),
   ...seo(
     "create-account",
     "Create your NelyoHealth account.",
-    "Start with the essentials, then continue into role-specific onboarding.",
+    "Start with the essentials. Role-specific onboarding continues on the next screen.",
     "neutral-placeholder"
   ),
   ...seo(
     "forgot-password",
     "Recover access — NelyoHealth.",
-    "Reset your password. We won't reveal whether an email is registered.",
+    "Reset your password. We won't confirm whether an email is registered.",
     "neutral-placeholder"
   ),
   ...seo(
     "reset-password",
     "Set a new password — NelyoHealth.",
-    "Set a new password. Existing sessions will be signed out.",
+    "Set a new password. Existing sessions will end for safety.",
     "neutral-placeholder"
   )
 ];

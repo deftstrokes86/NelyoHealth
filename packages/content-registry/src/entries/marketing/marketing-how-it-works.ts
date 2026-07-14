@@ -13,60 +13,64 @@ const e = (slug: string, title: string, body: string): ContentEntry => ({
 });
 
 export const marketingHowItWorksEntries: ContentEntry[] = [
-  e("hero.eyebrow", "How the platform works", "Intake through follow-up on one surface."),
+  e(
+    "hero.eyebrow",
+    "How coordinated care actually moves",
+    "Five stages. One record. No re-explaining your history."
+  ),
   e(
     "hero.headline",
-    "Care flows through five clear steps.",
-    "Intake, triage, consult, fulfilment, follow-up."
+    "From first symptom to full follow-up — on the same page.",
+    "See the exact path a patient takes through NelyoHealth."
   ),
   e(
     "hero.body",
     "How coordinated care flows",
-    "Every patient journey passes through the same five stages — with hand-offs the platform routes automatically."
+    "Every journey moves through the same five stages: intake, triage, consult, fulfilment, follow-up. The platform handles the routing so care teams focus on the person in front of them, and you don't have to chase updates between visits."
   ),
   e(
     "step.intake",
-    "Intake",
-    "Structured intake collects the right context without asking twice. Consent boundaries are stated up front."
+    "Intake — context collected once",
+    "Answer a short structured intake before you're in the room. The platform pulls forward what you shared last time so you're never explaining chronic conditions from scratch."
   ),
   e(
     "step.triage",
-    "Triage",
-    "Clinical review routes the patient to the right care path — consult, referral, or emergency guidance."
+    "Triage — the right care path, quickly",
+    "A qualified clinician reviews the intake and routes you to the right care — a video consult, an in-person visit, or emergency guidance when the situation can't wait."
   ),
   e(
     "step.consult",
-    "Consult",
-    "Consult happens in-app or in-person, always on the same connected record."
+    "Consult — with the whole picture in view",
+    "Whether the consult happens in-app or in person, the clinician has your consented history, current prescriptions, and recent results. Decisions get made from context, not guesswork."
   ),
   e(
     "step.fulfilment",
-    "Fulfilment",
-    "Prescriptions and lab orders route to approved partners — with provider details revealed only after payment."
+    "Fulfilment — orders route to approved partners",
+    "Prescriptions and lab orders travel to credentialed pharmacies and labs with the clinical context attached. You see the approved partner before payment and the full pickup details after."
   ),
   e(
     "step.followup",
-    "Follow-up",
-    "Automatic reminders and outcome capture close the loop instead of relying on memory."
+    "Follow-up — automated so nothing slips",
+    "The platform tracks what needs a check-in and when. Reminders arrive with context — not just \"how are you doing?\" — and outcomes go back on the same record."
   ),
   e(
     "trust.a",
-    "No hand-off is left to memory",
-    "Every transition is logged and audit-ready."
+    "Every hand-off is logged",
+    "The audit trail records who saw what, when, and under which consent. Care teams can retrace decisions when they need to."
   ),
   e(
     "trust.b",
-    "Consent boundaries are enforced end-to-end",
-    "Role permissions apply at every step, not just at sign-in."
+    "Consent boundaries hold at every step",
+    "Role permissions are checked at intake, at triage, at fulfilment, and at follow-up — not just at sign-in."
   ),
   e(
     "faq.speed",
-    "How long does it take?",
-    "Time depends on care need. Emergencies escalate immediately; routine consults are usually booked within the same day."
+    "How fast does this actually move?",
+    "Routine consults usually book same-day. Prescription and lab orders route to approved partners within minutes of clinician sign-off. Emergency guidance surfaces immediately, regardless of payment status."
   ),
   e(
     "cta.headline",
-    "See a walkthrough for your role.",
-    "Choose the tour that matches how you'll use the platform."
+    "See a tour tailored to your role",
+    "Book a walkthrough for how you'll actually use the platform."
   )
 ];

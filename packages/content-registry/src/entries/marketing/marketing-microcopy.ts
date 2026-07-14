@@ -21,16 +21,16 @@ export const marketingMicrocopyEntries: ContentEntry[] = [
   e(
     "brand.tagline",
     "Care that follows the patient.",
-    "Short tagline for hero areas and metadata."
+    "Short brand tagline used in hero areas and metadata."
   ),
   e(
     "footer.legal",
     "© NelyoHealth. Draft site — production launch not yet approved.",
-    "Draft footer legal line. Effective wording will replace this after Content Owner approval."
+    "Interim footer legal line. Effective wording replaces this after Content Owner approval."
   ),
   e(
     "footer.description",
-    "Care coordination that respects clinicians, patients, and payers.",
+    "Care coordination that respects clinicians, patients, and payers — with the boundaries between them enforced in code.",
     "One-line brand descriptor for the footer."
   ),
   e(
@@ -55,7 +55,7 @@ export const marketingMicrocopyEntries: ContentEntry[] = [
   ),
   e(
     "empty",
-    "Nothing to show yet",
+    "Nothing here yet",
     "Generic empty state label used when a marketing surface has no items to render."
   ),
   e(
@@ -69,7 +69,11 @@ export const marketingMicrocopyEntries: ContentEntry[] = [
     "How it works",
     "SiteHeader nav label for the how-it-works page."
   ),
-  e("nav.patients", "For patients", "SiteHeader nav label for the patients segment page."),
+  e(
+    "nav.patients",
+    "For patients",
+    "SiteHeader nav label for the patients segment page."
+  ),
   e(
     "nav.doctors",
     "For doctors",

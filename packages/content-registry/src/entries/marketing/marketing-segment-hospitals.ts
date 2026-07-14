@@ -14,31 +14,35 @@ const e = (slug: string, title: string, body: string): ContentEntry => ({
 });
 
 export const marketingSegmentHospitalsEntries: ContentEntry[] = [
-  e("hero.eyebrow", "For hospitals and referrals", "Refer and receive with context."),
+  e(
+    "hero.eyebrow",
+    "For hospitals and referrals",
+    "Referrals that arrive with clinical context — not a blank chart."
+  ),
   e(
     "hero.headline",
-    "Receive referrals with the clinical context attached.",
-    "Referrals arrive with intake, triage, and consent — not a blank chart."
+    "Receive referrals with the whole story attached.",
+    "Intake, triage, consent, and prior notes travel with the patient."
   ),
   e(
     "hero.body",
     "Hospitals overview",
-    "The hospital and referral surface passes clinical context and consent with every referral. It coordinates hand-offs — not admissions."
+    "The hospital and referral surface coordinates hand-offs so your receiving team knows why the patient is arriving. Consent is captured at the referring side and travels with the record — no more \"who sent you?\" at the front desk."
   ),
   e(
     "scope.caveat",
     "Scope caveat",
-    "The hospital referral surface is designed but not yet implemented in the pilot. Interest and onboarding are being scoped ahead of enablement."
+    "The hospital referral surface is designed but not yet implemented in the pilot. We're scoping interest and onboarding conversations ahead of enablement — get in touch if you'd like to be on the early-access shortlist."
   ),
   e(
     "story.a.headline",
-    "Referrals carry consent, not surprise.",
-    "Every referred patient has consented to the referral."
+    "Referrals carry consent — not surprise.",
+    "Patients agree to the referral before it moves."
   ),
   e(
     "story.a.body",
     "Referrals carry consent",
-    "Patient consent is captured before the referral moves. The receiving team knows why the patient is arriving."
+    "Patient consent is captured explicitly before a referral leaves the sending clinician. Your receiving team gets the clinical story, the reason for the referral, and confirmation that the patient knows they're being sent to you."
   ),
   e(
     "cta.headline",

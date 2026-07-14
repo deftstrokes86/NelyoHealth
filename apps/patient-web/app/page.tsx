@@ -8,31 +8,14 @@ import {
   TrustBar,
   WorkflowStepper
 } from "@nelyohealth/ui-foundation";
+import { BadgeCheck, Network, ShieldCheck } from "lucide-react";
 import { marketingMetadata } from "../src/lib/seo";
 
 export const metadata = marketingMetadata("home", "/");
 
-const trustIcon = (
-  <svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor">
-    <path d="M10 2 L16 5 v5 c0 4.5 -3 7 -6 8 c-3 -1 -6 -3.5 -6 -8 v-5 z" />
-  </svg>
-);
-
-const verifiedIcon = (
-  <svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor">
-    <path d="M4 11 l4 4 l8 -9 l-2 -2 l-6 7 l-2 -2 z" />
-  </svg>
-);
-
-const coordinationIcon = (
-  <svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor">
-    <circle cx="10" cy="10" r="3" />
-    <circle cx="4" cy="4" r="2" />
-    <circle cx="16" cy="4" r="2" />
-    <circle cx="4" cy="16" r="2" />
-    <circle cx="16" cy="16" r="2" />
-  </svg>
-);
+const trustIcon = <ShieldCheck size={20} strokeWidth={1.9} aria-hidden />;
+const verifiedIcon = <BadgeCheck size={20} strokeWidth={1.9} aria-hidden />;
+const coordinationIcon = <Network size={20} strokeWidth={1.9} aria-hidden />;
 
 export default function HomePage() {
   return (
@@ -46,7 +29,7 @@ export default function HomePage() {
         primaryCtaHref="/create-account"
         secondaryCtaLabelId="marketing-cta.sign-in"
         secondaryCtaHref="/sign-in"
-        illustrationId="hero-universal-network"
+        illustrationId="hero-connected-care-ecosystem"
       />
       <TrustBar
         items={[

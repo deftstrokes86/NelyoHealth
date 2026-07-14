@@ -13,45 +13,49 @@ const e = (slug: string, title: string, body: string): ContentEntry => ({
 });
 
 export const marketingLegalEntries: ContentEntry[] = [
-  e("hero.eyebrow", "Legal and regulatory notices", "Draft — pending legal approval."),
+  e(
+    "hero.eyebrow",
+    "Legal and regulatory notices",
+    "Draft — under legal review, not yet effective."
+  ),
   e(
     "hero.headline",
-    "Legal notices and regulatory scope.",
-    "This page is a placeholder while legal owners finalise the language."
+    "The legal shape of NelyoHealth — in progress.",
+    "Every notice on this page is a draft. Wording, scope, and effective dates are still moving as owners record their approvals."
   ),
   e(
     "hero.body",
     "Legal notices overview",
-    "Every notice below is a draft under legal and regulatory review. Nothing here is production-approved."
+    "This page is a scaffold, not a filing. Each notice is under legal, regulatory, or clinical review. Nothing here is production-approved — we're publishing it visible-in-draft so reviewers and future users can trace what's under consideration."
   ),
   e(
     "notice.terms",
     "Terms of service (draft)",
-    "Terms describing the platform, user obligations, and dispute resolution. Under legal review."
+    "Terms describing platform use, user obligations, service scope, and dispute resolution. Under review with legal counsel."
   ),
   e(
     "notice.privacy",
     "Privacy notice (draft)",
-    "Full privacy notice covering categories, purposes, legal basis, and controls. Under privacy and legal review."
+    "Full privacy notice covering data categories, processing purposes, legal basis, retention, and user controls. Under review with the privacy owner and legal counsel."
   ),
   e(
     "notice.clinical",
     "Clinical scope statement (draft)",
-    "The platform coordinates care. It does not diagnose or prescribe. Clinical decisions remain with qualified clinicians."
+    "The platform coordinates care. It does not diagnose or prescribe. Clinical decisions stay with qualified clinicians. Under review with the clinical safety owner."
   ),
   e(
     "notice.regulatory",
     "Regulatory scope (draft)",
-    "Regulatory boundaries for the pilot are under review with the relevant regulators. Full regulatory disclosure follows approval."
+    "The regulatory boundaries applicable to the pilot are under review with the relevant regulators. Full regulatory disclosure will follow those conversations."
   ),
   e(
     "note.pending",
-    "Every notice on this page is DRAFT — PENDING APPROVAL.",
-    "Effective dates and final wording will replace the drafts once owners record their approvals."
+    "Every notice on this page is DRAFT — PENDING APPROVAL",
+    "Effective dates and final wording will replace the drafts once owners record their approvals. Until then, treat this page as a work-in-progress transparency surface."
   ),
   e(
     "cta.headline",
     "Questions about a specific notice?",
-    "Reach the legal team through the contact page."
+    "The contact page routes to the legal team."
   )
 ];

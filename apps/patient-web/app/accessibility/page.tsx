@@ -4,15 +4,15 @@ import {
   HeroBlock,
   TrustBar
 } from "@nelyohealth/ui-foundation";
+import { Accessibility, Contrast, Keyboard, Sparkles } from "lucide-react";
 import { marketingMetadata } from "../../src/lib/seo";
 
 export const metadata = marketingMetadata("accessibility", "/accessibility");
 
-const iconA = (
-  <svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor">
-    <path d="M4 11 l4 4 l8 -9 l-2 -2 l-6 7 l-2 -2 z" />
-  </svg>
-);
+const wcagIcon = <Accessibility size={20} strokeWidth={1.9} aria-hidden />;
+const motionIcon = <Sparkles size={20} strokeWidth={1.9} aria-hidden />;
+const keyboardIcon = <Keyboard size={20} strokeWidth={1.9} aria-hidden />;
+const contrastIcon = <Contrast size={20} strokeWidth={1.9} aria-hidden />;
 
 export default function AccessibilityPage() {
   return (
@@ -28,10 +28,10 @@ export default function AccessibilityPage() {
       />
       <TrustBar
         items={[
-          { id: "marketing-accessibility.commitment.wcag", icon: iconA },
-          { id: "marketing-accessibility.commitment.motion", icon: iconA },
-          { id: "marketing-accessibility.commitment.keyboard", icon: iconA },
-          { id: "marketing-accessibility.commitment.contrast", icon: iconA }
+          { id: "marketing-accessibility.commitment.wcag", icon: wcagIcon },
+          { id: "marketing-accessibility.commitment.motion", icon: motionIcon },
+          { id: "marketing-accessibility.commitment.keyboard", icon: keyboardIcon },
+          { id: "marketing-accessibility.commitment.contrast", icon: contrastIcon }
         ]}
       />
       <FAQAccordion

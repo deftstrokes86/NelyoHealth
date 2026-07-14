@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import { HeroConnectedCareEcosystem } from "./hero-connected-care-ecosystem.js";
 import { HeroUniversalNetwork } from "./hero-universal-network.js";
 import { HeroPatientJourney } from "./hero-patient-journey.js";
 import { HeroFamilyDiasporaBridge } from "./hero-family-diaspora-bridge.js";
@@ -17,6 +18,7 @@ import { ProviderNarrative } from "./provider-narrative.js";
 import { NeutralPlaceholder } from "./neutral-placeholder.js";
 
 export type IllustrationId =
+  | "hero-connected-care-ecosystem"
   | "hero-universal-network"
   | "hero-patient-journey"
   | "hero-family-diaspora-bridge"
@@ -35,6 +37,7 @@ export type IllustrationId =
   | "neutral-placeholder";
 
 export const illustrationRegistry: Record<IllustrationId, ComponentType> = {
+  "hero-connected-care-ecosystem": HeroConnectedCareEcosystem,
   "hero-universal-network": HeroUniversalNetwork,
   "hero-patient-journey": HeroPatientJourney,
   "hero-family-diaspora-bridge": HeroFamilyDiasporaBridge,

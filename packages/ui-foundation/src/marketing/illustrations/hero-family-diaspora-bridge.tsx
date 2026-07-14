@@ -1,3 +1,5 @@
+import { Globe2, HeartHandshake, MessagesSquare } from "lucide-react";
+
 export const HeroFamilyDiasporaBridge = () => (
   <svg
     viewBox="0 0 600 400"
@@ -5,11 +7,6 @@ export const HeroFamilyDiasporaBridge = () => (
     role="img"
     aria-hidden="true"
     focusable="false"
-    stroke="currentColor"
-    fill="none"
-    strokeWidth={1.75}
-    strokeLinecap="round"
-    strokeLinejoin="round"
   >
     <rect
       x={20}
@@ -18,23 +15,42 @@ export const HeroFamilyDiasporaBridge = () => (
       height={360}
       rx={32}
       fill="var(--nh-marketing-illustration-tone-warm)"
-      stroke="none"
     />
     <path
-      d="M60 320 C 200 100, 400 100, 540 320"
-      fill="var(--nh-marketing-illustration-tone-cool)"
-      strokeOpacity={0}
+      d="M100 300 C 220 140, 380 140, 500 300"
+      stroke="var(--nh-color-accent-700)"
+      strokeWidth={2.2}
+      strokeDasharray="6 8"
+      strokeLinecap="round"
+      fill="none"
+      opacity={0.45}
     />
-    <path d="M60 320 C 200 100, 400 100, 540 320" />
-    <path d="M60 320 h480" strokeDasharray="1 6" />
-    <path d="M100 320 v-30 M180 320 v-70 M260 320 v-100 M300 320 v-110 M340 320 v-100 M420 320 v-70 M500 320 v-30" />
-    <circle cx={140} cy={330} r={26} fill="var(--nh-marketing-illustration-tone-accent)" />
-    <circle cx={140} cy={330} r={26} />
-    <path d="M128 322 h24 M140 314 v14" />
-    <circle cx={460} cy={330} r={26} fill="var(--nh-marketing-illustration-tone-neutral)" />
-    <circle cx={460} cy={330} r={26} />
-    <path d="M450 330 l6 6 l14 -14" />
-    <path d="M240 100 h120 v40 h-60 l-10 10 v-10 h-50 z" fill="var(--nh-color-surface-raised)" />
-    <path d="M256 116 h88 M256 130 h60" />
+    <Globe2
+      x={60}
+      y={172}
+      width={148}
+      height={148}
+      strokeWidth={1.8}
+      color="var(--nh-color-brand-700)"
+      fill="var(--nh-color-surface-raised)"
+    />
+    <HeartHandshake
+      x={222}
+      y={116}
+      width={168}
+      height={168}
+      strokeWidth={1.8}
+      color="var(--nh-color-status-danger-fg)"
+      fill="var(--nh-color-surface-raised)"
+    />
+    <MessagesSquare
+      x={410}
+      y={168}
+      width={132}
+      height={132}
+      strokeWidth={1.8}
+      color="var(--nh-color-teal-700)"
+      fill="var(--nh-color-surface-raised)"
+    />
   </svg>
 );

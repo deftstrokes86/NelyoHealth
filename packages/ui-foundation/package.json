@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@nelyohealth/design-tokens": "workspace:*",
+    "lucide-react": "0.526.0",
     "motion": "12.41.0",
     "react": "19.2.7",
     "react-dom": "19.2.7"

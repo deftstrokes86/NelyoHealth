@@ -16,26 +16,26 @@ export const authForgotPasswordEntries: ContentEntry[] = [
   e(
     "hero.headline",
     "Recover access to your account.",
-    "Enter your email; we'll send a reset link."
+    "Enter the email you registered with. We'll send a reset link if we find a match."
   ),
   e(
     "hero.body",
     "Recover access",
-    "We won't reveal whether an account exists. If the address is registered, you'll receive a reset link within a few minutes."
+    "The reset link arrives within a few minutes if the address is registered. We won't confirm whether it exists — that small detail keeps your account safer from enumeration attacks."
   ),
   e(
     "field.email",
     "Email address",
-    "Enter the email you used to sign up."
+    "The email you used when you signed up."
   ),
   e(
     "note.privacy",
     "We don't confirm whether an email is registered.",
-    "This protects account privacy against enumeration."
+    "A generic response protects account privacy. If you don't receive a link, try a different email — the one you signed up with may be different from the one you use daily."
   ),
   e(
     "note.support",
     "Still locked out?",
-    "Contact support with the account email and a description of what went wrong."
+    "Contact support with the account email and a short description of what went wrong. We'll verify identity and get you back in."
   )
 ];

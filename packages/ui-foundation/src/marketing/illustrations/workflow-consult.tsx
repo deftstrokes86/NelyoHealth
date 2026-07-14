@@ -1,3 +1,5 @@
+import { Video, MessageCircle } from "lucide-react";
+
 export const WorkflowConsult = () => (
   <svg
     viewBox="0 0 240 200"
@@ -5,42 +7,33 @@ export const WorkflowConsult = () => (
     role="img"
     aria-hidden="true"
     focusable="false"
-    stroke="currentColor"
-    fill="none"
-    strokeWidth={1.75}
-    strokeLinecap="round"
-    strokeLinejoin="round"
   >
     <rect
       x={12}
       y={12}
       width={216}
       height={176}
-      rx={20}
+      rx={22}
       fill="var(--nh-marketing-illustration-tone-warm)"
-      stroke="none"
     />
-    <rect
-      x={40}
-      y={40}
-      width={110}
-      height={120}
-      rx={10}
+    <MessageCircle
+      x={32}
+      y={38}
+      width={96}
+      height={96}
+      strokeWidth={1.4}
+      color="var(--nh-color-accent-700)"
+      opacity={0.5}
+      fill="none"
+    />
+    <Video
+      x={92}
+      y={60}
+      width={112}
+      height={112}
+      strokeWidth={1.8}
+      color="var(--nh-color-brand-700)"
       fill="var(--nh-color-surface-raised)"
     />
-    <rect x={40} y={40} width={110} height={120} rx={10} />
-    <circle cx={95} cy={80} r={16} />
-    <path d="M75 130 c 0 -18 40 -18 40 0" />
-    <rect
-      x={160}
-      y={70}
-      width={64}
-      height={64}
-      rx={10}
-      fill="var(--nh-marketing-illustration-tone-accent)"
-    />
-    <rect x={160} y={70} width={64} height={64} rx={10} />
-    <path d="M170 92 h44 M170 106 h32 M170 120 h44" />
-    <path d="M150 100 h10" />
   </svg>
 );

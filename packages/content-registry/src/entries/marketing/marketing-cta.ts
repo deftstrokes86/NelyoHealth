@@ -17,17 +17,27 @@ export const marketingCtaEntries: ContentEntry[] = [
   cta(
     "create-account",
     "Create an account",
-    "Start the guided onboarding for your role.",
+    "Two minutes to set up. Guided onboarding for your role afterwards.",
     "CTA-CREATE-ACCOUNT"
   ),
-  cta("sign-in", "Sign in", "Return to your coordinated care surface.", "CTA-SIGN-IN"),
+  cta(
+    "sign-in",
+    "Sign in",
+    "Continue where you left off.",
+    "CTA-SIGN-IN"
+  ),
   cta(
     "contact",
     "Contact us",
-    "Reach the team that matches your question.",
+    "Reach a named person on our team.",
     "CTA-CONTACT"
   ),
-  cta("faq", "Read the FAQ", "See common questions and honest answers.", "CTA-FAQ"),
+  cta(
+    "faq",
+    "See the FAQ",
+    "Straight answers to the things we get asked most.",
+    "CTA-FAQ"
+  ),
   cta(
     "call-local-help",
     "Call your local emergency service",
@@ -37,38 +47,38 @@ export const marketingCtaEntries: ContentEntry[] = [
   cta(
     "contact-support",
     "Contact support",
-    "Reach the support team for issue-specific help.",
+    "Get help on something specific — a real person will pick it up.",
     "CTA-CONTACT-SUPPORT"
   ),
   cta("back", "Back", "Return to the previous page.", "CTA-BACK"),
   cta(
     "learn-more",
     "Learn more",
-    "See more detail about the surface described.",
+    "See the detail behind this section.",
     "CTA-LEARN-MORE"
   ),
   cta(
     "book-walkthrough",
     "Book a walkthrough",
-    "See a tour tailored to your role.",
+    "A tour tailored to how you'll actually use the platform. No card required.",
     "CTA-BOOK-WALKTHROUGH"
   ),
   cta(
     "get-started",
     "Get started",
-    "Start the guided flow for your role.",
+    "Begin the guided flow for your role.",
     "CTA-GET-STARTED"
   ),
   cta(
     "view-pricing",
     "See pricing",
-    "See draft pricing for the pilot.",
+    "Draft pricing for the pilot — subject to finance approval.",
     "CTA-VIEW-PRICING"
   ),
   cta(
     "download-app",
-    "Download the app",
-    "Open the store listing for the mobile app.",
+    "Get the mobile app",
+    "Open the store listing for iOS or Android.",
     "CTA-DOWNLOAD-APP"
   )
 ];

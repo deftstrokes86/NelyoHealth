@@ -13,40 +13,44 @@ const e = (slug: string, title: string, body: string): ContentEntry => ({
 });
 
 export const marketingContactEntries: ContentEntry[] = [
-  e("hero.eyebrow", "Contact", "How to reach us."),
+  e(
+    "hero.eyebrow",
+    "Contact",
+    "Get to the right team on the first try."
+  ),
   e(
     "hero.headline",
-    "Reach the team that fits your question.",
-    "Choose the channel that matches what you need."
+    "Talk to a person — the person who can actually help.",
+    "Pick the channel that matches your role and we'll route you correctly the first time."
   ),
   e(
     "hero.body",
     "Contact overview",
-    "Whether you're a patient, a family sponsor, a provider, or an organisation partner — start with the channel that matches your role."
+    "This page isn't for emergencies. For those, call your local emergency service. For everything else — patients, family sponsors, clinician partners, organisation partners, press — pick the channel below and we'll route you to a person who understands the context."
   ),
   e(
     "route.patients",
-    "For patients and families",
-    "Reach support through the in-app help centre once you have an account."
+    "Patients and families",
+    "Once you have an account, in-app help routes you to the support team who can see your context. Faster than restating it here."
   ),
   e(
     "route.partners",
-    "For provider and organisation partners",
-    "Use the partner enquiry form to start onboarding conversations."
+    "Clinician and organisation partners",
+    "Use the partner enquiry form for pharmacy, laboratory, clinic, employer, HMO, or hospital onboarding conversations. A named person on our operations team will reply."
   ),
   e(
     "route.press",
-    "For press and community enquiries",
-    "Use the general contact form. Please include the outlet or community you represent."
+    "Press and community",
+    "Use the general contact form. Please tell us the outlet or community you represent so we can route you to the right voice."
   ),
   e(
     "note.emergency",
-    "This channel is not for emergencies.",
-    "For emergencies, call your local emergency service. This platform is not a substitute for emergency care."
+    "This channel is not for emergencies",
+    "In an emergency, call your local emergency service directly. NelyoHealth does not dispatch emergency response."
   ),
   e(
     "cta.headline",
-    "Send us a message.",
-    "Use the contact form to reach the right team."
+    "Send us a message",
+    "The contact form routes to the right team based on what you pick above."
   )
 ];

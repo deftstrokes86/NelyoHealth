@@ -14,31 +14,35 @@ const e = (slug: string, title: string, body: string): ContentEntry => ({
 });
 
 export const marketingSegmentHmosEntries: ContentEntry[] = [
-  e("hero.eyebrow", "For HMOs", "Care coordination across your covered population."),
+  e(
+    "hero.eyebrow",
+    "For HMOs",
+    "Population-level coordination with clinicians in the loop."
+  ),
   e(
     "hero.headline",
-    "Coordinate covered care with clinicians in the loop.",
-    "Approvals stay with clinicians. Reporting stays operational."
+    "Coordinate covered care without overriding the clinician.",
+    "Authorisations respect clinical judgment. Emergency care is never gated."
   ),
   e(
     "hero.body",
     "HMO overview",
-    "The HMO surface coordinates authorisations and utilisation reporting. Clinical decisions remain with clinicians in every workflow."
+    "The HMO surface coordinates authorisations, utilisation reporting, and member journeys. Clinical decisions stay with the clinician on every path. Plan boundaries never block emergency care — that's a locked invariant, not a policy toggle."
   ),
   e(
     "scope.caveat",
     "Scope caveat",
-    "The HMO surface is designed but not yet implemented in the pilot. Interest and onboarding are being scoped ahead of enablement."
+    "The HMO surface is designed but not yet implemented in the pilot. We're scoping interest and onboarding conversations ahead of enablement — get in touch if you'd like to be on the early-access shortlist."
   ),
   e(
     "story.a.headline",
-    "Authorisations don't override clinicians.",
-    "The platform routes; clinicians decide."
+    "The plan doesn't override the clinician.",
+    "Authorisation flows respect clinical judgment, and emergency care always surfaces."
   ),
   e(
     "story.a.body",
     "Authorisations don't override clinicians",
-    "Authorisation workflows respect clinical judgment. Plan boundaries never block emergency care."
+    "Authorisation logic runs alongside clinical decision-making — it doesn't replace it. Coverage boundaries are transparent to both sides, and when the plan says no, the clinician still sees the medically-necessary path so the conversation with the member is honest."
   ),
   e(
     "cta.headline",
