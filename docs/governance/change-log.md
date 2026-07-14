@@ -970,3 +970,25 @@ For all future phase updates:
 - Updated governance state tracking:
   - `docs/governance/phase-5-requirements-traceability.md`
   - `docs/STATUS.md`
+
+## 2026-07-14 - P05-MKT-004 PILOT marketing pages
+
+- Delivered `P05-MKT-004`. Retired the batch1 mega-component and shipped 19 purpose-built page components sourcing all copy through the P05-MKT-003 registry.
+- Layout chrome: `apps/patient-web/app/layout.tsx` now wraps every route in `ContentProvider(marketingContentEntries)` + `EmergencyRibbon` + `SiteHeader` + `SiteFooter`. Nav items and footer link groups read from the `marketing-microcopy.nav.*` and `marketing-microcopy.footer.link.*` sub-families.
+- PILOT pages (15) new under `apps/patient-web/app/`: `page.tsx` (home), `how-it-works`, `patients`, `family-plans`, `diaspora`, `doctors`, `pharmacies`, `laboratories`, `trust-and-safety`, `privacy-overview`, `accessibility`, `faq`, `contact`, `legal-and-regulatory-notices`, `emergency`. Each composes P05-MKT-002 marketing components with IDs from the P05-MKT-003 registry. No inline strings.
+- Auth chrome (4): `sign-in`, `create-account`, `forgot-password` (rewrite), `reset-password` (rewrite). Chrome + microcopy scaffold only — no auth backend call.
+- SEO: every page exports `generateMetadata` returning Next.js metadata sourced from `marketing-seo.<page-slug>.title/description/og-image-id`. Helper at `apps/patient-web/src/lib/seo.ts` reads the compiled `marketingContentById` map. `NEXT_PUBLIC_SITE_ORIGIN` seeds the canonical URL.
+- Redirects: `apps/patient-web/next.config.mjs` emits 13 301 redirects preserving external links — `/for-diaspora → /diaspora`, `/for-doctors → /doctors`, `/for-care-partners → /family-plans`, `/for-pharmacies → /pharmacies`, `/for-labs → /laboratories`, `/for-employers → /employers`, `/for-hmos → /hmos`, `/for-hospitals → /hospitals-and-referrals`, `/trust-safety → /trust-and-safety`, `/login → /sign-in`, `/register → /create-account`, `/help → /contact`, `/patient → /patients`.
+- Deletions: `apps/patient-web/app/{about,account,adolescent,book-demo,for-care-partners,for-diaspora,for-doctors,for-employers,for-hmos,for-hospitals,for-labs,for-pharmacies,guardian,help,login,onboarding,patient,pricing,register,trust-safety}` route folders removed. `apps/patient-web/src/components/screens/{batch1,batch2}-production-page.tsx` and `apps/patient-web/src/screens/{batch1,batch2}-route-catalog.ts` deleted; empty `components/screens`, `components/marketing`, and `src/screens` directories cleaned up. `apps/patient-web` now depends on `@nelyohealth/content-registry` (workspace).
+- Content registry extension inside MKT-004 scope: added 21 `marketing-microcopy.nav.*` + `marketing-microcopy.footer.link.*` entries so nav labels and footer links resolve through the registry. Total marketing entries: 319.
+- Tests:
+  - `tests/unit/marketing-inline-string-boundary.spec.ts` scans every `apps/patient-web/app/**/page.tsx` and `layout.tsx` and asserts no inline JSX text content (allowing punctuation-only arrows). Also verifies every planned 301 redirect exists in `next.config.mjs` and that redirects do not loop.
+  - `playwright.p05-mkt-004.config.ts` (6 projects: desktop / tablet / mobile / desktop-a11y / mobile-a11y / reduced-motion) with specs at `tests/e2e/p05-mkt-004-pilot-pages.spec.ts` and `tests/accessibility/p05-mkt-004-pilot-pages.a11y.spec.ts`. E2E asserts every route renders the chrome, expected metadata title, no horizontal overflow, emergency ribbon as first tab stop, redirect 301 semantics from every renamed path, and home-page LCP < 2500ms / CLS < 0.1. Accessibility spec runs axe-core across every PILOT + auth route.
+- Traceability:
+  - `P05-MKT-REQ-004` → `COMPLETED-P05-MKT-004 (2026-07-14; 15 PILOT + 4 auth pages, batch1 retired, 301 redirects wired)`.
+  - `P05-MKT-EG-001`, `P05-MKT-EG-002`, `P05-MKT-EG-004`, `P05-MKT-EG-005` → `COMPLETED-P05-MKT-004 (2026-07-14)`.
+  - `P05-MKT-EG-003` → `COMPLETED-P05-MKT-003 (2026-07-13; 319 entries clean)`.
+- Validation evidence: `node ./node_modules/vitest/vitest.mjs run --pool=threads packages/content-registry tests/unit/marketing-inline-string-boundary.spec.ts` — 5 test files, 64 tests passed; `pnpm --filter @nelyohealth/content-registry build` clean; `node packages/content-registry/scripts/validate.mjs` reports 3 preview + 319 marketing entries validated.
+- Updated governance state tracking:
+  - `docs/governance/phase-5-requirements-traceability.md`
+  - `docs/STATUS.md`

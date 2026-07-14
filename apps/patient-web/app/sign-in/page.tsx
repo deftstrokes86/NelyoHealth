@@ -1,33 +1,33 @@
 import { CTASection, HeroBlock, LegalNoticeStrip } from "@nelyohealth/ui-foundation";
 import { marketingMetadata } from "../../src/lib/seo";
 
-export const metadata = marketingMetadata("reset-password", "/reset-password");
+export const metadata = marketingMetadata("signin", "/sign-in");
 
-export default function ResetPasswordPage() {
+export default function SignInPage() {
   return (
     <>
       <HeroBlock
         variant="universal"
         eyebrowId="marketing-microcopy.brand.name"
-        headlineId="auth-reset-password.hero.headline"
-        bodyId="auth-reset-password.hero.body"
+        headlineId="auth-signin.hero.headline"
+        bodyId="auth-signin.hero.body"
         primaryCtaLabelId="marketing-cta.sign-in"
-        primaryCtaHref="/sign-in"
-        secondaryCtaLabelId="marketing-cta.contact-support"
-        secondaryCtaHref="/contact"
+        primaryCtaHref="#sign-in"
+        secondaryCtaLabelId="marketing-cta.create-account"
+        secondaryCtaHref="/create-account"
         illustrationId="neutral-placeholder"
       />
       <LegalNoticeStrip
-        noticeId="auth-reset-password.note.sessions"
+        noticeId="auth-signin.note.privacy"
         approvalStatus="approved"
       />
       <CTASection
-        headlineId="auth-reset-password.note.support"
-        bodyId="auth-reset-password.note.support"
+        headlineId="auth-signin.note.recovery"
+        bodyId="auth-signin.note.recovery"
         primaryCtaLabelId="marketing-cta.contact-support"
         primaryCtaHref="/contact"
         secondaryCtaLabelId="marketing-cta.back"
-        secondaryCtaHref="/sign-in"
+        secondaryCtaHref="/"
       />
     </>
   );

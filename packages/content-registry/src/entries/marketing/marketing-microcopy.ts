@@ -62,5 +62,68 @@ export const marketingMicrocopyEntries: ContentEntry[] = [
     "back",
     "Back",
     "Generic label for a back-navigation control."
-  )
+  ),
+  e("nav.home", "Home", "SiteHeader nav label for the home page."),
+  e(
+    "nav.how-it-works",
+    "How it works",
+    "SiteHeader nav label for the how-it-works page."
+  ),
+  e("nav.patients", "For patients", "SiteHeader nav label for the patients segment page."),
+  e(
+    "nav.doctors",
+    "For doctors",
+    "SiteHeader nav label for the doctors segment page."
+  ),
+  e(
+    "nav.pharmacies",
+    "For pharmacies",
+    "SiteHeader nav label for the pharmacies segment page."
+  ),
+  e(
+    "nav.laboratories",
+    "For laboratories",
+    "SiteHeader nav label for the laboratories segment page."
+  ),
+  e(
+    "nav.trust-and-safety",
+    "Trust and safety",
+    "SiteHeader nav label for the trust-and-safety page."
+  ),
+  e("nav.emergency", "Emergency", "SiteHeader nav label for the emergency page."),
+  e(
+    "footer.link.home",
+    "Home",
+    "SiteFooter link label for the home page."
+  ),
+  e(
+    "footer.link.how-it-works",
+    "How it works",
+    "SiteFooter link label for the how-it-works page."
+  ),
+  e("footer.link.patients", "Patients", "SiteFooter link label."),
+  e("footer.link.family-plans", "Family plans", "SiteFooter link label."),
+  e("footer.link.diaspora", "Diaspora", "SiteFooter link label."),
+  e("footer.link.doctors", "Doctors", "SiteFooter link label."),
+  e("footer.link.pharmacies", "Pharmacies", "SiteFooter link label."),
+  e("footer.link.laboratories", "Laboratories", "SiteFooter link label."),
+  e(
+    "footer.link.trust-and-safety",
+    "Trust and safety",
+    "SiteFooter link label."
+  ),
+  e(
+    "footer.link.privacy-overview",
+    "Privacy overview",
+    "SiteFooter link label."
+  ),
+  e("footer.link.accessibility", "Accessibility", "SiteFooter link label."),
+  e("footer.link.faq", "FAQ", "SiteFooter link label."),
+  e("footer.link.contact", "Contact", "SiteFooter link label."),
+  e(
+    "footer.link.legal",
+    "Legal notices",
+    "SiteFooter link label."
+  ),
+  e("footer.link.emergency", "Emergency", "SiteFooter link label.")
 ];
