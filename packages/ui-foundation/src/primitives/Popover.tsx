@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 import { useCallback, useId, useRef, useState } from "react";
 import { useDismissable } from "../hooks/useDismissable.js";

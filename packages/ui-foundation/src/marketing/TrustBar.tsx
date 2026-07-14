@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 import { useContent } from "../hooks/useContent.js";
 

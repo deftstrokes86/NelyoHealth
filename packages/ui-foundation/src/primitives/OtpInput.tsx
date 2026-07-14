@@ -1,3 +1,5 @@
+"use client";
+
 import type { ClipboardEvent, KeyboardEvent, ChangeEvent } from "react";
 import { useCallback, useMemo, useRef } from "react";
 

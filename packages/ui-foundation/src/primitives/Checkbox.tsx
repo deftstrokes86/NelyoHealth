@@ -1,3 +1,5 @@
+"use client";
+
 import type { InputHTMLAttributes, ReactNode, Ref } from "react";
 import { forwardRef, useCallback } from "react";
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { useContent } from "../hooks/useContent.js";
 
 export interface ProofStripItem {

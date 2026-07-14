@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useEffect, useState } from "react";
 import { Drawer } from "../primitives/Drawer.js";
 import { useContent } from "../hooks/useContent.js";

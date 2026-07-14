@@ -1,3 +1,5 @@
+"use client";
+
 import { Accordion } from "../primitives/Accordion.js";
 import { useContent } from "../hooks/useContent.js";
 

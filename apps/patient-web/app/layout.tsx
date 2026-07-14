@@ -146,7 +146,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           />
           <main id="main">{children}</main>
           <SiteFooter
-            brandId="marketing-microcopy.brand.description"
+            brandId="marketing-microcopy.footer.description"
             brandHref="/"
             legalNoticeId="marketing-microcopy.footer.legal"
             groups={footerGroups}

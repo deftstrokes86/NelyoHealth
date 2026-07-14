@@ -1,3 +1,5 @@
+"use client";
+
 import type { InputHTMLAttributes, KeyboardEvent } from "react";
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, createElement, useContext } from "react";
 import type { ReactNode } from "react";
 
@@ -62,7 +64,7 @@ export const PreviewContentProvider = ({
 }: {
   entries: ContentProviderProps["entries"];
   children: ReactNode;
-}) => createElement(ContentProvider, { entries, mode: "preview" }, children);
+}) => createElement(ContentProvider, { entries, mode: "preview", children });
 
 const missingEntryError = (id: string) =>
   new Error(

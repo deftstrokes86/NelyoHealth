@@ -1,0 +1,78 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ui-preview",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["ui:preview"],
+      "port": 4273
+    },
+    {
+      "name": "patient-web",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--filter",
+        "@nelyohealth/patient-web",
+        "exec",
+        "next",
+        "dev",
+        "--hostname",
+        "127.0.0.1",
+        "--port",
+        "4311"
+      ],
+      "port": 4311,
+      "env": {
+        "NEXT_PUBLIC_ENABLE_GALLERY": "1"
+      }
+    },
+    {
+      "name": "provider-web",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--filter",
+        "@nelyohealth/provider-web",
+        "exec",
+        "next",
+        "dev",
+        "--hostname",
+        "127.0.0.1",
+        "--port",
+        "4312"
+      ],
+      "port": 4312
+    },
+    {
+      "name": "organization-web",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--filter",
+        "@nelyohealth/organization-web",
+        "exec",
+        "next",
+        "dev",
+        "--hostname",
+        "127.0.0.1",
+        "--port",
+        "4313"
+      ],
+      "port": 4313
+    },
+    {
+      "name": "admin-web",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--filter",
+        "@nelyohealth/admin-web",
+        "exec",
+        "next",
+        "dev",
+        "--hostname",
+        "127.0.0.1",
+        "--port",
+        "4314"
+      ],
+      "port": 4314
+    }
+  ]
+}

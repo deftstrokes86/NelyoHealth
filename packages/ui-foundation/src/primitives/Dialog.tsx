@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 import { MotionPresence } from "../motion/MotionPresence.js";
 export interface DialogProps {
