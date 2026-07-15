@@ -54,8 +54,8 @@
   --nh-color-text-muted: #4D6661;
   --nh-color-action: #0D5E57;
   --nh-color-danger: #7A1F17;
-  --nh-typography-family-display: Fraunces, Georgia, serif;
-  --nh-typography-family-body: Atkinson Hyperlegible, Verdana, sans-serif;
+  --nh-typography-family-display: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Arial, sans-serif;
+  --nh-typography-family-body: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Arial, sans-serif;
   --nh-typography-family-mono: IBM Plex Mono, SFMono-Regular, Consolas, monospace;
   --nh-typography-size-xs: 0.75rem;
   --nh-typography-size-sm: 0.875rem;

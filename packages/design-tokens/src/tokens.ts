@@ -91,13 +91,13 @@ export const tokens = {
   },
   typography: {
     "family-display": d(
-      "Fraunces, Georgia, serif",
-      "Expressive display stack; local fallback only",
+      "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Arial, sans-serif",
+      "Display stack — native OS UI font. Unified with body per user directive (2026-07-15) superseding DEC-P05-MKT-002 Fraunces choice.",
       "semantic"
     ),
     "family-body": d(
-      "Atkinson Hyperlegible, Verdana, sans-serif",
-      "Readable body stack; local fallback only",
+      "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Arial, sans-serif",
+      "Body stack — native OS UI font. Unified with display per user directive (2026-07-15) superseding DEC-P05-MKT-002 Atkinson Hyperlegible choice.",
       "semantic"
     ),
     "family-mono": d(
