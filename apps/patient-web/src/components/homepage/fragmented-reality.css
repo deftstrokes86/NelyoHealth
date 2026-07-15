@@ -1,0 +1,279 @@
+.nh-reality {
+  position: relative;
+  background: #FAFAF8;
+  padding: clamp(72px, 12vw, 140px) 0;
+  color: var(--nh-color-text);
+  overflow: hidden;
+}
+
+[data-theme="dark"] .nh-reality {
+  background: var(--nh-color-surface);
+}
+
+.nh-reality__inner {
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .nh-reality__inner {
+    padding-inline: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nh-reality__inner {
+    padding-inline: 3.5rem;
+  }
+}
+
+.nh-reality__header {
+  max-width: 720px;
+  margin-inline: auto;
+  text-align: center;
+  margin-bottom: clamp(3.5rem, 6vw, 5.5rem);
+}
+
+.nh-reality__eyebrow {
+  margin: 0 0 1.25rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--nh-color-text-muted);
+}
+
+.nh-reality__headline {
+  margin: 0 0 1.5rem;
+  font-family: var(--nh-typography-family-display);
+  font-size: clamp(2rem, 4vw + 0.5rem, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  color: var(--nh-color-text);
+  text-wrap: balance;
+}
+
+.nh-reality__body {
+  margin: 0 auto;
+  max-width: 620px;
+  font-size: clamp(1rem, 0.6vw + 0.9rem, 1.125rem);
+  line-height: 1.65;
+  color: var(--nh-color-text-muted);
+}
+
+.nh-reality__cards {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .nh-reality__cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nh-reality__cards {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .nh-reality__cards {
+    grid-auto-flow: column;
+    grid-auto-columns: 82vw;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 0.5rem 1.5rem 2rem;
+    margin-inline: -1.5rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  .nh-reality__card-slot {
+    scroll-snap-align: start;
+  }
+}
+
+.nh-reality__card-slot {
+  display: flex;
+  height: 100%;
+}
+
+.nh-reality-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  padding: 2rem;
+  background: #FFFFFF;
+  border: 1px solid rgba(18, 41, 39, 0.06);
+  border-radius: 18px;
+  box-shadow:
+    0 1px 2px rgba(18, 41, 39, 0.04),
+    0 12px 24px rgba(18, 41, 39, 0.05);
+  color: var(--nh-color-text);
+  transition:
+    transform 260ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 260ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 260ms ease;
+}
+
+[data-theme="dark"] .nh-reality-card {
+  background: var(--nh-color-surface-raised);
+  border-color: var(--nh-color-border);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.28),
+    0 12px 24px rgba(0, 0, 0, 0.32);
+}
+
+.nh-reality-card:hover,
+.nh-reality-card:focus-within {
+  transform: translateY(-8px);
+  border-color: rgba(13, 71, 75, 0.14);
+  box-shadow:
+    0 2px 4px rgba(18, 41, 39, 0.06),
+    0 26px 44px rgba(18, 41, 39, 0.10);
+}
+
+.nh-reality-card__glyph-wrap {
+  height: 64px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: var(--nh-color-brand-700);
+}
+
+.nh-reality-card__glyph {
+  width: auto;
+  height: 100%;
+  max-width: 128px;
+  overflow: visible;
+}
+
+.nh-reality-card__title {
+  margin: 0;
+  font-family: var(--nh-typography-family-display);
+  font-size: 1.25rem;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  font-weight: 600;
+  color: var(--nh-color-text);
+  text-wrap: balance;
+}
+
+.nh-reality-card__body {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--nh-color-text-muted);
+}
+
+.nh-reality-card__glyph-figure,
+.nh-reality-card__glyph-records,
+.nh-reality-card__glyph-loop,
+.nh-reality-card__glyph-bubbles,
+.nh-reality-card__glyph-broken,
+.nh-reality-card__glyph-nodes,
+.nh-reality-card__glyph-paper,
+.nh-reality-card__glyph-bridge,
+.nh-reality-card__glyph-pathway,
+.nh-reality-card__glyph-flow {
+  transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1), opacity 320ms ease;
+  transform-origin: center;
+}
+
+.nh-reality-card:hover .nh-reality-card__glyph-figure,
+.nh-reality-card:focus-within .nh-reality-card__glyph-figure {
+  transform: translateX(-1px);
+}
+
+.nh-reality-card:hover .nh-reality-card__glyph-flow,
+.nh-reality-card:focus-within .nh-reality-card__glyph-flow {
+  transform: translateX(2px);
+  opacity: 0.9;
+}
+
+.nh-reality-card:hover .nh-reality-card__glyph-records,
+.nh-reality-card:focus-within .nh-reality-card__glyph-records {
+  transform: translateX(2px);
+}
+
+.nh-reality-card:hover .nh-reality-card__glyph-loop,
+.nh-reality-card:focus-within .nh-reality-card__glyph-loop {
+  transform: rotate(6deg);
+}
+
+.nh-reality-card:hover .nh-reality-card__glyph-nodes,
+.nh-reality-card:focus-within .nh-reality-card__glyph-nodes {
+  transform: scale(1.03);
+}
+
+.nh-reality-card:hover .nh-reality-card__glyph-paper,
+.nh-reality-card:focus-within .nh-reality-card__glyph-paper {
+  opacity: 0.35;
+}
+
+.nh-reality-card:hover .nh-reality-card__glyph-pathway,
+.nh-reality-card:focus-within .nh-reality-card__glyph-pathway {
+  transform: translateX(2px);
+}
+
+.nh-reality__transition {
+  margin: clamp(4rem, 8vw, 6rem) auto 0;
+  max-width: 760px;
+  padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3vw, 2.5rem);
+  text-align: center;
+  border-top: 1px solid rgba(18, 41, 39, 0.08);
+}
+
+[data-theme="dark"] .nh-reality__transition {
+  border-top-color: var(--nh-color-border);
+}
+
+.nh-reality__transition-headline {
+  margin: 0 0 1rem;
+  font-family: var(--nh-typography-family-display);
+  font-size: clamp(1.375rem, 1.8vw + 0.75rem, 1.875rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  color: var(--nh-color-text);
+  text-wrap: balance;
+}
+
+.nh-reality__transition-body {
+  margin: 0 auto;
+  max-width: 560px;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--nh-color-text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nh-reality-card,
+  .nh-reality-card__glyph-figure,
+  .nh-reality-card__glyph-records,
+  .nh-reality-card__glyph-loop,
+  .nh-reality-card__glyph-bubbles,
+  .nh-reality-card__glyph-broken,
+  .nh-reality-card__glyph-nodes,
+  .nh-reality-card__glyph-paper,
+  .nh-reality-card__glyph-bridge,
+  .nh-reality-card__glyph-pathway,
+  .nh-reality-card__glyph-flow {
+    transition: none !important;
+  }
+  .nh-reality-card:hover,
+  .nh-reality-card:focus-within {
+    transform: none;
+    box-shadow:
+      0 1px 2px rgba(18, 41, 39, 0.04),
+      0 12px 24px rgba(18, 41, 39, 0.05);
+  }
+}

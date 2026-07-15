@@ -10,6 +10,7 @@ import {
 } from "@nelyohealth/ui-foundation";
 import { BadgeCheck, Network, ShieldCheck } from "lucide-react";
 import { EcosystemNetwork } from "../src/components/homepage/EcosystemNetwork";
+import { FragmentedRealitySection } from "../src/components/homepage/FragmentedRealitySection";
 import { marketingMetadata } from "../src/lib/seo";
 
 export const metadata = marketingMetadata("home", "/");
@@ -32,6 +33,7 @@ export default function HomePage() {
         secondaryCtaHref="/sign-in"
         illustrationId="hero-connected-care-ecosystem"
       />
+      <FragmentedRealitySection />
       <EcosystemNetwork />
       <TrustBar
         items={[

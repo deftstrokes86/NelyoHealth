@@ -213,5 +213,70 @@ export const marketingHomeEntries: ContentEntry[] = [
     "ecosystem.node.records.body",
     "The record itself",
     "Signed clinical records use versioned amendments — never silent overwrites. Every access is logged. Every consent decision is visible and reversible from the patient's account."
+  ),
+  e(
+    "fragmented.eyebrow",
+    "The Reality",
+    "Section 2 eyebrow — sets a documentary, honest tone before the emotional recognition."
+  ),
+  e(
+    "fragmented.headline",
+    "Healthcare isn't broken. It's disconnected.",
+    "The core reframing. Not a criticism of clinicians or hospitals — a naming of the system-level problem."
+  ),
+  e(
+    "fragmented.body",
+    "You visit one hospital. Your test happens somewhere else. Your prescription is filled by another provider.",
+    "You visit one hospital. Your test happens somewhere else. Your prescription is filled by another provider. Between them, your records stay behind — so you carry the summary in your head, the folder in your bag, and repeat your story again. Every appointment often starts from zero. The people caring for you rarely have the full picture, and the parts of your care rarely see each other. None of this is anyone's fault. It's what happens when the pieces of care don't talk."
+  ),
+  e(
+    "fragmented.card.record.title",
+    "You become the medical record.",
+    "First card. Names the specific weight of holding your own history in your head."
+  ),
+  e(
+    "fragmented.card.record.body",
+    "You become the medical record.",
+    "After every appointment you're expected to remember medications, diagnoses, laboratory results and previous treatments — because the next provider rarely has the full picture. The record ends up in your head, or in a folder in your bag."
+  ),
+  e(
+    "fragmented.card.repeat.title",
+    "Every visit starts from the beginning.",
+    "Second card. Names the fatigue of re-telling."
+  ),
+  e(
+    "fragmented.card.repeat.body",
+    "Every visit starts from the beginning.",
+    "The same questions. The same explanations. The same medical history you already gave last visit. Instead of continuing your care, each appointment often feels like starting over — one more time, from the beginning, with someone new."
+  ),
+  e(
+    "fragmented.card.disconnect.title",
+    "Care continues — but the information doesn't.",
+    "Third card. Names the drop between the actors."
+  ),
+  e(
+    "fragmented.card.disconnect.body",
+    "Care continues but the information doesn't.",
+    "Your doctor recommends tests. The laboratory performs them. The pharmacy dispenses medication. Your family helps at home. Each part does its job well — but none of them naturally stay connected. The pieces move forward while the picture stays in fragments."
+  ),
+  e(
+    "fragmented.card.memory.title",
+    "Healthcare shouldn't depend on memory.",
+    "Fourth card. Names the alternative — care that doesn't leak into WhatsApp threads."
+  ),
+  e(
+    "fragmented.card.memory.body",
+    "Healthcare shouldn't depend on memory.",
+    "Missed follow-ups. Forgotten prescriptions. Lost reports. Reminders that live inside WhatsApp threads and paper envelopes. Healthcare should move forward with you — not depend on how carefully you remembered to write it down, or where you last put it."
+  ),
+  e(
+    "fragmented.transition.headline",
+    "Healthcare works best when everyone works together.",
+    "Transition headline. Sets up Section 3 without naming the platform."
+  ),
+  e(
+    "fragmented.transition.body",
+    "The challenge isn't finding doctors, hospitals, laboratories, or pharmacies.",
+    "The challenge isn't finding doctors, hospitals, laboratories, or pharmacies. The challenge is helping them work together around one patient."
   )
 ];
