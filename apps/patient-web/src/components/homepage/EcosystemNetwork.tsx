@@ -13,7 +13,7 @@ const RoleCard = ({ spec }: RoleCardProps) => {
   const detail = useContent(`${spec.contentPrefix}.body`);
   const Icon = spec.icon;
   return (
-    <article className="nh-ecosystem__card">
+    <a className="nh-ecosystem__card" href={spec.href}>
       <header className="nh-ecosystem__card-head">
         <span className="nh-ecosystem__card-icon" aria-hidden>
           <Icon size={22} strokeWidth={1.9} />
@@ -25,7 +25,7 @@ const RoleCard = ({ spec }: RoleCardProps) => {
       </header>
       <p className="nh-ecosystem__card-lead">{title.body}</p>
       <p className="nh-ecosystem__card-body">{detail.body}</p>
-    </article>
+    </a>
   );
 };
 

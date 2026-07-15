@@ -23,6 +23,7 @@ import { marketingSegmentHmosEntries } from "./marketing-segment-hmos.js";
 import { marketingSegmentHomeCareEntries } from "./marketing-segment-home-care.js";
 import { marketingSegmentHospitalsEntries } from "./marketing-segment-hospitals.js";
 import { marketingSegmentLaboratoriesEntries } from "./marketing-segment-laboratories.js";
+import { marketingSegmentMedicalRecordsEntries } from "./marketing-segment-medical-records.js";
 import { marketingSegmentPatientsEntries } from "./marketing-segment-patients.js";
 import { marketingSegmentPharmaciesEntries } from "./marketing-segment-pharmacies.js";
 import { marketingTrustAndSafetyEntries } from "./marketing-trust-and-safety.js";
@@ -39,6 +40,7 @@ export const marketingContentEntries: ContentEntry[] = [
   ...marketingSegmentHmosEntries,
   ...marketingSegmentHospitalsEntries,
   ...marketingSegmentHomeCareEntries,
+  ...marketingSegmentMedicalRecordsEntries,
   ...marketingTrustAndSafetyEntries,
   ...marketingPrivacyOverviewEntries,
   ...marketingAccessibilityEntries,

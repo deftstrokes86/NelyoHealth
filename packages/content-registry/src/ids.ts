@@ -25,6 +25,7 @@ export const contentFamilies = [
   "marketing-segment-hmos",
   "marketing-segment-hospitals",
   "marketing-segment-home-care",
+  "marketing-segment-medical-records",
   "marketing-trust-and-safety",
   "marketing-privacy-overview",
   "marketing-accessibility",

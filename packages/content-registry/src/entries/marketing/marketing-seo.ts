@@ -151,6 +151,12 @@ export const marketingSeoEntries: ContentEntry[] = [
     "family-diaspora-narrative"
   ),
   ...seo(
+    "for-medical-records",
+    "For medical records — NelyoHealth (early access).",
+    "One authoritative chart, versioned amendments, and access every patient can audit.",
+    "trust-privacy"
+  ),
+  ...seo(
     "signin",
     "Sign in — NelyoHealth.",
     "Continue where you left off on the connected care record.",
