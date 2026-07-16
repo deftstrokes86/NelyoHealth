@@ -165,6 +165,7 @@ describe("marketing components (content resolution)", () => {
       wrap(
         <SiteFooter
           brandId="footer.brand"
+          brandDescriptionId="footer.brand"
           legalNoticeId="footer.legal"
           groups={[
             {

@@ -25,28 +25,13 @@ export const marketingMicrocopyEntries: ContentEntry[] = [
   ),
   e(
     "footer.legal",
-    "© NelyoHealth. Draft site — production launch not yet approved.",
-    "Interim footer legal line. Effective wording replaces this after Content Owner approval."
+    "Legal notice",
+    "© NelyoHealth. Draft site — production launch not yet approved. Effective wording replaces this after Content Owner approval."
   ),
   e(
     "footer.description",
-    "Care coordination that respects clinicians, patients, and payers — with the boundaries between them enforced in code.",
-    "One-line brand descriptor for the footer."
-  ),
-  e(
-    "footer.group.platform",
-    "Platform",
-    "Footer link group heading for platform-oriented links."
-  ),
-  e(
-    "footer.group.company",
-    "Company",
-    "Footer link group heading for company-oriented links."
-  ),
-  e(
-    "footer.group.trust",
-    "Trust and safety",
-    "Footer link group heading for trust, privacy, and legal links."
+    "Brand descriptor",
+    "Care coordination that respects clinicians, patients, and payers — with the boundaries between them enforced in code."
   ),
   e(
     "loading",

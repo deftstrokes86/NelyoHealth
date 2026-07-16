@@ -179,5 +179,107 @@ export const marketingSeoEntries: ContentEntry[] = [
     "Set a new password — NelyoHealth.",
     "Set a new password. Existing sessions will end for safety.",
     "neutral-placeholder"
+  ),
+  ...seo(
+    "pricing",
+    "Pricing — NelyoHealth.",
+    "There's no fixed price for healthcare. See how costs work on NelyoHealth.",
+    "neutral-placeholder"
+  ),
+  ...seo(
+    "book-consultation",
+    "Book a consultation — NelyoHealth.",
+    "Booking starts with your account. See how to book a consultation on NelyoHealth.",
+    "neutral-placeholder"
+  ),
+  ...seo(
+    "mission",
+    "Our mission — NelyoHealth.",
+    "Healthcare shouldn't depend on memory, luck, or who you know. Here's why NelyoHealth exists.",
+    "neutral-placeholder"
+  ),
+  ...seo(
+    "partners",
+    "Partner with us — NelyoHealth.",
+    "NelyoHealth partners with hospitals, laboratories, pharmacies, HMOs, and employers to connect care around the patient.",
+    "hero-organization-partnership"
+  ),
+  ...seo(
+    "help-centre",
+    "Help centre — NelyoHealth.",
+    "Find what you need, or ask us directly.",
+    "neutral-placeholder"
+  ),
+  ...seo(
+    "status",
+    "System status — NelyoHealth.",
+    "The current operating status of NelyoHealth.",
+    "neutral-placeholder"
+  ),
+  ...seo(
+    "cookie-policy",
+    "Cookie policy — NelyoHealth.",
+    "We only use cookies that keep this site running.",
+    "neutral-placeholder"
+  ),
+  ...seo(
+    "consent-policy",
+    "Consent — NelyoHealth.",
+    "You decide who sees your health information.",
+    "trust-privacy"
+  ),
+  ...seo(
+    "data-protection",
+    "Data protection — NelyoHealth.",
+    "Your records are encrypted, protected, and never sold.",
+    "trust-privacy"
+  ),
+  ...seo(
+    "about",
+    "About NelyoHealth (coming soon).",
+    "A fuller story about NelyoHealth, coming soon.",
+    "neutral-placeholder"
+  ),
+  ...seo(
+    "careers",
+    "Careers — NelyoHealth (coming soon).",
+    "NelyoHealth isn't hiring publicly yet. Open roles will be listed here first.",
+    "neutral-placeholder"
+  ),
+  ...seo(
+    "newsroom",
+    "Newsroom — NelyoHealth (coming soon).",
+    "Company news and announcements, coming soon.",
+    "neutral-placeholder"
+  ),
+  ...seo(
+    "blog",
+    "Blog — NelyoHealth (coming soon).",
+    "Practical, honest writing about healthcare coordination, coming soon.",
+    "neutral-placeholder"
+  ),
+  ...seo(
+    "investors",
+    "Investor relations — NelyoHealth (coming soon).",
+    "Investor information isn't published yet.",
+    "neutral-placeholder"
+  ),
+  ...seo(
+    "health-library",
+    "Health library — NelyoHealth (coming soon).",
+    "A library of clear, practical health information, on its way.",
+    "neutral-placeholder"
+  ),
+  ...seo(
+    "developer-api",
+    "Developer API — NelyoHealth (coming soon).",
+    "Public API access isn't open yet.",
+    "neutral-placeholder"
+  ),
+  ...seo(
+    "community-guidelines",
+    "Community guidelines — NelyoHealth.",
+    "NelyoHealth doesn't currently have public community or forum features.",
+    "neutral-placeholder"
   )
 ];

@@ -902,5 +902,495 @@ export const marketingHomeEntries: ContentEntry[] = [
     "family-abroad.cta.secondary",
     "Learn how family care works",
     "Section 7 secondary CTA — routes to the diaspora segment page."
+  ),
+  e(
+    "trust-safety.eyebrow",
+    "Trust & Safety",
+    "Section 8 eyebrow."
+  ),
+  e(
+    "trust-safety.headline",
+    "Healthcare begins with trust.",
+    "Chosen over \"Every decision we make starts with protecting yours\" — plainer and pairs with the section's closing line, \"Trust isn't a feature. It's the foundation.\""
+  ),
+  e(
+    "trust-safety.body",
+    "When people trust us with their healthcare, they're trusting us with some of the most personal information they'll ever share.",
+    "When people trust us with their healthcare, they're trusting us with some of the most personal information they'll ever share. That's why every part of NelyoHealth — from verified healthcare professionals to secure medical records and patient-controlled consent — is designed to protect that trust."
+  ),
+  e(
+    "trust-safety.card1.headline",
+    "Your information stays private.",
+    "Card 1 of 6. Icon: ShieldCheck."
+  ),
+  e(
+    "trust-safety.card1.body",
+    "Your information stays private.",
+    "Your medical information belongs to you. Only the healthcare professionals involved in your care can access it, and only with the permissions required to provide treatment."
+  ),
+  e(
+    "trust-safety.card1.expanded",
+    "Patient-controlled access and role-based permissions.",
+    "Access follows your care team, not the other way round. A pharmacist sees what's needed to fill a prescription. A laboratory sees what's needed to run a test. Nobody sees more than their role requires, and every access is logged against your record."
+  ),
+  e(
+    "trust-safety.card2.headline",
+    "Your consent comes first.",
+    "Card 2 of 6. Icon: UserCheck."
+  ),
+  e(
+    "trust-safety.card2.body",
+    "Your consent comes first.",
+    "You decide who can view your medical information, including family members, caregivers, and healthcare providers."
+  ),
+  e(
+    "trust-safety.card2.expanded",
+    "Consent, granted and withdrawn on your terms.",
+    "Consent isn't a one-time checkbox. You can grant a family member access to your appointment status today and withdraw it tomorrow, directly from your account. Nothing is shared beyond what you've explicitly approved."
+  ),
+  e(
+    "trust-safety.card3.headline",
+    "Verified healthcare professionals.",
+    "Card 3 of 6. Icon: BadgeCheck."
+  ),
+  e(
+    "trust-safety.card3.body",
+    "Verified healthcare professionals.",
+    "Every clinician on NelyoHealth goes through credential verification before joining the platform."
+  ),
+  e(
+    "trust-safety.card3.expanded",
+    "Licence checks, identity checks, and ongoing standards.",
+    "Before a clinician can practise on NelyoHealth, we verify their licence, confirm their identity, and check they're in good standing. That verification doesn't stop at onboarding — it continues for as long as they practise on the platform."
+  ),
+  e(
+    "trust-safety.card4.headline",
+    "Secure by design.",
+    "Card 4 of 6. Icon: LockKeyhole."
+  ),
+  e(
+    "trust-safety.card4.body",
+    "Secure by design.",
+    "Medical records are encrypted, protected, and securely stored using modern security practices."
+  ),
+  e(
+    "trust-safety.card4.expanded",
+    "Encrypted in transit and at rest.",
+    "Your records are encrypted both while they're being sent and while they're stored — so the same protection applies whether a doctor is reviewing your chart or your data is simply sitting safely in our systems."
+  ),
+  e(
+    "trust-safety.card5.headline",
+    "Clinical governance.",
+    "Card 5 of 6. Icon: HeartHandshake."
+  ),
+  e(
+    "trust-safety.card5.body",
+    "Clinical governance.",
+    "Clinical policies, professional oversight, and quality assurance help ensure healthcare is delivered responsibly across the platform."
+  ),
+  e(
+    "trust-safety.card5.expanded",
+    "A governance framework behind every consultation.",
+    "A clinical governance framework sits behind every consultation — covering how clinicians are onboarded, how quality is monitored, and how concerns are raised and resolved. It's the structure that keeps care accountable."
+  ),
+  e(
+    "trust-safety.card6.headline",
+    "Built for Nigeria.",
+    "Card 6 of 6. Icon: Shield."
+  ),
+  e(
+    "trust-safety.card6.body",
+    "Built for Nigeria.",
+    "NelyoHealth is designed with Nigerian healthcare regulations and the Nigeria Data Protection Act (NDPA) in mind, while following internationally recognised security best practices."
+  ),
+  e(
+    "trust-safety.card6.expanded",
+    "Local expectations, internationally recognised practices.",
+    "We've built our privacy and data-handling practices around what Nigerian patients actually expect — informed consent, local data handling, and control that stays with you — alongside security practices recognised internationally."
+  ),
+  e(
+    "trust-safety.governance.headline",
+    "Technology supports care. Healthcare professionals lead it.",
+    "Clinical governance panel headline — soft teal panel below the trust grid."
+  ),
+  e(
+    "trust-safety.governance.body",
+    "Every diagnosis, prescription, and treatment decision is made by qualified healthcare professionals.",
+    "Every diagnosis, prescription, and treatment decision is made by qualified healthcare professionals. Technology helps organise information and improve coordination, but it never replaces professional medical judgement."
+  ),
+  e(
+    "trust-safety.governance.principle1",
+    "Qualified clinicians make medical decisions.",
+    "Governance principle 1 of 3."
+  ),
+  e(
+    "trust-safety.governance.principle2",
+    "Clinical oversight is built into the platform.",
+    "Governance principle 2 of 3."
+  ),
+  e(
+    "trust-safety.governance.principle3",
+    "Patients remain at the centre of every decision.",
+    "Governance principle 3 of 3."
+  ),
+  e(
+    "trust-safety.privacy.headline",
+    "Your health information belongs to you.",
+    "Privacy promise centered statement headline."
+  ),
+  e(
+    "trust-safety.privacy.body",
+    "You decide who can access your records.",
+    "You decide who can access your records. You control whether family members receive updates. You can review and manage your permissions whenever you choose."
+  ),
+  e(
+    "trust-safety.metric1.value",
+    "100%",
+    "Trust metric 1 of 4 — value."
+  ),
+  e(
+    "trust-safety.metric1.label",
+    "Licensed clinicians verified before joining",
+    "Trust metric 1 of 4 — label."
+  ),
+  e(
+    "trust-safety.metric2.value",
+    "100%",
+    "Trust metric 2 of 4 — value."
+  ),
+  e(
+    "trust-safety.metric2.label",
+    "Patient-controlled consent",
+    "Trust metric 2 of 4 — label."
+  ),
+  e(
+    "trust-safety.metric3.value",
+    "24/7",
+    "Trust metric 3 of 4 — value."
+  ),
+  e(
+    "trust-safety.metric3.label",
+    "Security monitoring",
+    "Trust metric 3 of 4 — label."
+  ),
+  e(
+    "trust-safety.metric4.value",
+    "End-to-end",
+    "Trust metric 4 of 4 — value."
+  ),
+  e(
+    "trust-safety.metric4.label",
+    "Encrypted communication",
+    "Trust metric 4 of 4 — label."
+  ),
+  e(
+    "trust-safety.final.headline",
+    "Trust isn't a feature. It's the foundation.",
+    "Final trust statement headline — closes the homepage narrative."
+  ),
+  e(
+    "trust-safety.final.line1",
+    "Every consultation.",
+    "Final statement, line 1 of 6."
+  ),
+  e(
+    "trust-safety.final.line2",
+    "Every prescription.",
+    "Final statement, line 2 of 6."
+  ),
+  e(
+    "trust-safety.final.line3",
+    "Every laboratory result.",
+    "Final statement, line 3 of 6."
+  ),
+  e(
+    "trust-safety.final.line4",
+    "Every conversation.",
+    "Final statement, line 4 of 6."
+  ),
+  e(
+    "trust-safety.final.line5",
+    "Every piece of information.",
+    "Final statement, line 5 of 6."
+  ),
+  e(
+    "trust-safety.final.line6",
+    "Protected with the same care we expect for our own families.",
+    "Final statement, line 6 of 6 — the closing turn."
+  ),
+  e(
+    "trust-safety.cta.primary",
+    "Learn more about how we protect your healthcare",
+    "Section 8 primary CTA — routes to the trust and safety page."
+  ),
+  e(
+    "trust-safety.cta.secondary",
+    "Read our Privacy Policy",
+    "Section 8 secondary CTA — routes to the privacy overview page."
+  ),
+  e(
+    "faq-conversation.eyebrow",
+    "Questions",
+    "Homepage FAQ section eyebrow (design brief calls this \"Section 11\"; placed directly after Trust & Safety per instruction)."
+  ),
+  e(
+    "faq-conversation.headline",
+    "Honest answers before you get started.",
+    "Homepage FAQ section headline."
+  ),
+  e(
+    "faq-conversation.body",
+    "Choosing a healthcare platform is an important decision.",
+    "Choosing a healthcare platform is an important decision. These are some of the questions people ask us most before creating an account."
+  ),
+  e(
+    "faq-conversation.q1.question",
+    "Is NelyoHealth only for online consultations?",
+    "Question 1 of 12."
+  ),
+  e(
+    "faq-conversation.q1.answer",
+    "No.",
+    "No. NelyoHealth supports much more than virtual consultations. Depending on your needs, your care journey may include in-person appointments, laboratory tests, prescriptions, pharmacy services, and follow-up care. Our goal is to help every part of your healthcare work together — not simply provide video calls."
+  ),
+  e(
+    "faq-conversation.q2.question",
+    "Can I use NelyoHealth if I already have a doctor?",
+    "Question 2 of 12."
+  ),
+  e(
+    "faq-conversation.q2.answer",
+    "Absolutely.",
+    "Absolutely. NelyoHealth is designed to complement your existing healthcare relationships. If your doctor is part of the platform, staying connected becomes even easier. If not, you can still use many of the platform's features and continue receiving care from your preferred healthcare providers where appropriate."
+  ),
+  e(
+    "faq-conversation.q3.question",
+    "Can I book appointments for my parents or family members?",
+    "Question 3 of 12."
+  ),
+  e(
+    "faq-conversation.q3.answer",
+    "Yes.",
+    "Yes. Many people use NelyoHealth to help coordinate care for elderly parents, children, or loved ones. With the patient's permission, family members and caregivers can help book appointments, follow treatment plans, and stay informed throughout the care journey."
+  ),
+  e(
+    "faq-conversation.q4.question",
+    "Will my medical information remain private?",
+    "Question 4 of 12."
+  ),
+  e(
+    "faq-conversation.q4.answer",
+    "Yes.",
+    "Yes. Your health information belongs to you. Only authorised healthcare professionals involved in your care can access your records, and only when appropriate. You decide whether family members or caregivers receive updates, and you can manage those permissions at any time."
+  ),
+  e(
+    "faq-conversation.q5.question",
+    "Can I receive prescriptions through NelyoHealth?",
+    "Question 5 of 12."
+  ),
+  e(
+    "faq-conversation.q5.answer",
+    "Yes, where clinically appropriate.",
+    "Yes, where clinically appropriate. Licensed healthcare professionals can issue digital prescriptions during your consultation. Participating pharmacies on the platform can securely receive and fulfil those prescriptions in accordance with applicable regulations."
+  ),
+  e(
+    "faq-conversation.q6.question",
+    "What if I need laboratory tests?",
+    "Question 6 of 12."
+  ),
+  e(
+    "faq-conversation.q6.answer",
+    "If your clinician recommends laboratory tests, participating laboratories can receive your request digitally.",
+    "If your clinician recommends laboratory tests, participating laboratories on the platform can receive your request digitally. Once available, your results become part of your health record, making follow-up consultations easier and reducing unnecessary paperwork."
+  ),
+  e(
+    "faq-conversation.q7.question",
+    "Can Nigerians living abroad use NelyoHealth for their families?",
+    "Question 7 of 12."
+  ),
+  e(
+    "faq-conversation.q7.answer",
+    "Yes.",
+    "Yes. Nigerians living abroad can help coordinate healthcare for loved ones in Nigeria. With the patient's consent, family members can stay informed about appointments, treatment progress, and ongoing care while respecting privacy at every step."
+  ),
+  e(
+    "faq-conversation.q8.question",
+    "Can my employer provide NelyoHealth as a staff benefit?",
+    "Question 8 of 12."
+  ),
+  e(
+    "faq-conversation.q8.answer",
+    "Yes.",
+    "Yes. Employers can offer NelyoHealth as part of their employee wellbeing programme, giving staff easier access to consultations, coordinated healthcare services, and ongoing support."
+  ),
+  e(
+    "faq-conversation.q9.question",
+    "Can I use my HMO?",
+    "Question 9 of 12."
+  ),
+  e(
+    "faq-conversation.q9.answer",
+    "Where supported, eligible HMOs can integrate with NelyoHealth.",
+    "Where supported, eligible HMOs can integrate with NelyoHealth to help make accessing covered healthcare services easier. Coverage depends on your healthcare plan and participating HMO partners."
+  ),
+  e(
+    "faq-conversation.q10.question",
+    "Does NelyoHealth replace hospitals or my family doctor?",
+    "Question 10 of 12."
+  ),
+  e(
+    "faq-conversation.q10.answer",
+    "No.",
+    "No. NelyoHealth is not a replacement for hospitals, clinics, or your regular healthcare providers. It is designed to connect everyone involved in your care so your healthcare experience becomes more coordinated and less stressful."
+  ),
+  e(
+    "faq-conversation.q11.question",
+    "What happens during an emergency?",
+    "Question 11 of 12."
+  ),
+  e(
+    "faq-conversation.q11.answer",
+    "NelyoHealth is not an emergency response service.",
+    "NelyoHealth is not an emergency response service. If you or someone else is experiencing a medical emergency, contact your local emergency services or go to the nearest emergency department immediately. When appropriate, NelyoHealth can support follow-up care after the emergency has been treated."
+  ),
+  e(
+    "faq-conversation.q12.question",
+    "How much does NelyoHealth cost?",
+    "Question 12 of 12."
+  ),
+  e(
+    "faq-conversation.q12.answer",
+    "Creating an account is free.",
+    "Creating an account is free. The cost of consultations, laboratory services, medications, and other healthcare services depends on the provider and the care you receive. You'll always be able to see any applicable fees before confirming a paid service."
+  ),
+  e(
+    "faq-conversation.panel.headline",
+    "Didn't find the answer you were looking for?",
+    "Bottom panel headline — soft teal panel closing the FAQ section."
+  ),
+  e(
+    "faq-conversation.panel.body",
+    "Bottom panel body",
+    "Our support team is here to help you understand how NelyoHealth works and find the right care for your needs."
+  ),
+  e(
+    "faq-conversation.panel.cta.primary",
+    "Contact Support",
+    "Bottom panel primary button — routes to the contact page."
+  ),
+  e(
+    "faq-conversation.panel.cta.secondary",
+    "Browse Help Centre",
+    "Bottom panel secondary button — routes to the existing FAQ page, the closest equivalent to a help centre."
+  ),
+  e(
+    "final-cta.eyebrow",
+    "Your next step",
+    "Section 12 eyebrow — the homepage's final section, before the footer."
+  ),
+  e(
+    "final-cta.headline",
+    "Healthcare works better when everyone stays connected.",
+    "Chosen over \"A better healthcare experience begins with one decision\" — closes the loop on the connection theme running through the whole homepage, without introducing decision pressure."
+  ),
+  e(
+    "final-cta.body",
+    "Whether you're looking for care, supporting someone you love, growing your medical practice, or improving healthcare access for your organisation, NelyoHealth is designed to bring the right people together around one shared goal.",
+    "Whether you're looking for care, supporting someone you love, growing your medical practice, or improving healthcare access for your organisation, NelyoHealth is designed to bring the right people together around one shared goal: better healthcare. Whenever you're ready, we're here."
+  ),
+  e(
+    "final-cta.card1.headline",
+    "Find care that stays connected.",
+    "Card 1 of 4. Audience: Patients. Icon: HeartPulse."
+  ),
+  e(
+    "final-cta.card1.body",
+    "Find care that stays connected.",
+    "Book a consultation, manage your health record, and keep every step of your care together."
+  ),
+  e(
+    "final-cta.card1.cta",
+    "Create Patient Account",
+    "Card 1 primary button — routes to account creation."
+  ),
+  e(
+    "final-cta.card2.headline",
+    "Join a connected care network.",
+    "Card 2 of 4. Audience: Healthcare Professionals. Icon: Stethoscope."
+  ),
+  e(
+    "final-cta.card2.body",
+    "Join a connected care network.",
+    "Support more patients while spending less time coordinating information."
+  ),
+  e(
+    "final-cta.card2.cta",
+    "Join as a Doctor",
+    "Card 2 primary button — routes to the partner contact form."
+  ),
+  e(
+    "final-cta.card2.secondary",
+    "Learn about clinician onboarding",
+    "Card 2 secondary link — routes to the doctors segment page."
+  ),
+  e(
+    "final-cta.card3.headline",
+    "Build better healthcare together.",
+    "Card 3 of 4. Audience: Healthcare Organisations. Icon: Building2."
+  ),
+  e(
+    "final-cta.card3.body",
+    "Build better healthcare together.",
+    "Partner with NelyoHealth to connect hospitals, laboratories, pharmacies, HMOs, and healthcare services."
+  ),
+  e(
+    "final-cta.card3.cta",
+    "Become a Partner",
+    "Card 3 primary button — routes to the partner contact form."
+  ),
+  e(
+    "final-cta.card4.headline",
+    "Stay close to the people who matter most.",
+    "Card 4 of 4. Audience: Diaspora Families. Icon: Globe."
+  ),
+  e(
+    "final-cta.card4.body",
+    "Stay close to the people who matter most.",
+    "Support your loved ones' healthcare in Nigeria, wherever you are in the world."
+  ),
+  e(
+    "final-cta.card4.cta",
+    "Support Family in Nigeria",
+    "Card 4 primary button — routes to account creation."
+  ),
+  e(
+    "final-cta.reassurance.headline",
+    "Need more time? That's perfectly okay.",
+    "Secondary reassurance panel headline."
+  ),
+  e(
+    "final-cta.reassurance.body",
+    "Healthcare decisions are important.",
+    "Healthcare decisions are important. Take your time. Explore the platform, read our privacy commitments, or speak with our team before deciding. We're here whenever you need us."
+  ),
+  e(
+    "final-cta.reassurance.cta.primary",
+    "Learn More",
+    "Reassurance panel primary button — routes to the how-it-works page."
+  ),
+  e(
+    "final-cta.reassurance.cta.secondary",
+    "Contact Our Team",
+    "Reassurance panel secondary button — routes to the contact page."
+  ),
+  e(
+    "final-cta.statement.headline",
+    "Healthcare is personal. The way we experience it should be too.",
+    "Final brand statement headline — the homepage's closing thought."
+  ),
+  e(
+    "final-cta.statement.body",
+    "NelyoHealth exists to make healthcare feel more connected, more transparent, and more human.",
+    "NelyoHealth exists to make healthcare feel more connected, more transparent, and more human — for patients, families, healthcare professionals, and organisations across Nigeria."
   )
 ];

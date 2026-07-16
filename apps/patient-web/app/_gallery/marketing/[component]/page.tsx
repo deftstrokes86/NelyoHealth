@@ -61,6 +61,7 @@ const galleryComponents = {
     render: () => (
       <SiteFooter
         brandId="marketing.gallery.footer.brand"
+        brandDescriptionId="marketing.gallery.footer.brand"
         brandHref="/"
         legalNoticeId="marketing.gallery.footer.legal"
         groups={[

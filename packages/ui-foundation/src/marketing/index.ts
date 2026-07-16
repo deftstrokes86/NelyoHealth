@@ -6,6 +6,16 @@ export { FAQAccordion } from "./FAQAccordion.js";
 export type { FAQAccordionProps, FAQItem } from "./FAQAccordion.js";
 export { HeroBlock } from "./HeroBlock.js";
 export type { HeroBlockProps, HeroBlockVariant } from "./HeroBlock.js";
+export { HelpWidget } from "./HelpWidget.js";
+export type {
+  HelpWidgetProps,
+  HelpWidgetCard,
+  HelpWidgetSearchItem,
+  HelpWidgetEmergency,
+  HelpWidgetContact,
+  HelpWidgetContactPhone,
+  HelpWidgetContactWhatsapp
+} from "./HelpWidget.js";
 export { IllustrationSlot } from "./IllustrationSlot.js";
 export type {
   IllustrationSlotProps,
@@ -33,7 +43,13 @@ export { SiteFooter } from "./SiteFooter.js";
 export type {
   SiteFooterProps,
   SiteFooterGroup,
-  SiteFooterLink
+  SiteFooterLink,
+  SiteFooterSocialPlatform,
+  SiteFooterSocialLink,
+  SiteFooterSupportBar,
+  SiteFooterNewsletter,
+  SiteFooterContact,
+  SiteFooterBottom
 } from "./SiteFooter.js";
 export { SiteHeader } from "./SiteHeader.js";
 export type {

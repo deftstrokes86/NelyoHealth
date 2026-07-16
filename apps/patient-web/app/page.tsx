@@ -3,8 +3,11 @@ import { AiHumanCareSection } from "../src/components/homepage/AiHumanCareSectio
 import { CareJourneySection } from "../src/components/homepage/CareJourneySection";
 import { EcosystemNetwork } from "../src/components/homepage/EcosystemNetwork";
 import { FamilyAbroadSection } from "../src/components/homepage/FamilyAbroadSection";
+import { FaqConversationSection } from "../src/components/homepage/FaqConversationSection";
+import { FinalCtaSection } from "../src/components/homepage/FinalCtaSection";
 import { FragmentedRealitySection } from "../src/components/homepage/FragmentedRealitySection";
 import { SolutionsSection } from "../src/components/homepage/SolutionsSection";
+import { TrustSafetySection } from "../src/components/homepage/TrustSafetySection";
 import { marketingMetadata } from "../src/lib/seo";
 
 export const metadata = marketingMetadata("home", "/");
@@ -29,6 +32,9 @@ export default function HomePage() {
       <AiHumanCareSection />
       <SolutionsSection />
       <FamilyAbroadSection />
+      <TrustSafetySection />
+      <FaqConversationSection />
+      <FinalCtaSection />
     </>
   );
 }
