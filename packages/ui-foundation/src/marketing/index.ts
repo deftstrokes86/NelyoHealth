@@ -1,3 +1,5 @@
+export { CommandPalette } from "./CommandPalette.js";
+export type { CommandPaletteProps, CommandPaletteItem } from "./CommandPalette.js";
 export { CTASection } from "./CTASection.js";
 export type { CTASectionProps } from "./CTASection.js";
 export { EmergencyRibbon } from "./EmergencyRibbon.js";
@@ -54,7 +56,13 @@ export type {
 export { SiteHeader } from "./SiteHeader.js";
 export type {
   SiteHeaderProps,
-  SiteHeaderNavItem
+  SiteHeaderMenu,
+  SiteHeaderMenuItem,
+  SiteHeaderMenuGroup,
+  SiteHeaderMenuBanner,
+  SiteHeaderMenuFeatured,
+  SiteHeaderMobileGroupLabels,
+  SiteHeaderSearchConfig
 } from "./SiteHeader.js";
 export { StorySection } from "./StorySection.js";
 export type { StorySectionProps } from "./StorySection.js";

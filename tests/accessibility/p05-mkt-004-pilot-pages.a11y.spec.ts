@@ -5,7 +5,7 @@ const routes = [
   "/",
   "/how-it-works",
   "/patients",
-  "/family-plans",
+  "/family-health",
   "/diaspora",
   "/doctors",
   "/pharmacies",

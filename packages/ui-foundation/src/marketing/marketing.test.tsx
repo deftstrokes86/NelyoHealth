@@ -34,6 +34,18 @@ const entries: MarketingContent[] = [
   { id: "emergency.action", title: "See emergency guidance" },
   { id: "nav.home", title: "Home" },
   { id: "nav.patients", title: "For patients" },
+  { id: "nav.patients.body", title: "Book consults and track records." },
+  { id: "nav.trigger.platform", title: "Platform" },
+  { id: "nav.mobile.platform", title: "Platform" },
+  { id: "nav.mobile.serve", title: "Who We Serve" },
+  { id: "nav.mobile.resources", title: "Resources" },
+  { id: "nav.mobile.company", title: "Company" },
+  { id: "nav.search.trigger", title: "Search" },
+  { id: "nav.search.placeholder", title: "Search pages, guides, and FAQs..." },
+  { id: "nav.search.empty", title: "Nothing matched that search." },
+  { id: "nav.search.hint", title: "Search the site" },
+  { id: "nav.search.group.pages", title: "Pages" },
+  { id: "nav.search.group.faq", title: "Frequently asked questions" },
   {
     id: "hero.eyebrow",
     title: "For everyone"
@@ -137,15 +149,36 @@ describe("marketing components (content resolution)", () => {
     expect(html).toContain('href="/trust-safety"');
   });
 
-  it("SiteHeader renders nav items via content IDs", () => {
+  it("SiteHeader renders mega menu triggers and CTAs via content IDs", () => {
+    const emptyMenu = { triggerLabelId: "nav.trigger.platform", items: [] };
     const html = renderToStaticMarkup(
       wrap(
         <SiteHeader
           brandId="brand"
-          navItems={[
-            { id: "nav.home", href: "/", segment: "general" },
-            { id: "nav.patients", href: "/patient", segment: "patient" }
-          ]}
+          platformMenu={{
+            triggerLabelId: "nav.trigger.platform",
+            items: [
+              { id: "nav.patients", bodyId: "nav.patients.body", icon: <span />, href: "/patient" }
+            ]
+          }}
+          serveMenu={emptyMenu}
+          resourcesMenu={emptyMenu}
+          companyMenu={emptyMenu}
+          mobileGroupLabels={{
+            platformId: "nav.mobile.platform",
+            serveId: "nav.mobile.serve",
+            resourcesId: "nav.mobile.resources",
+            companyId: "nav.mobile.company"
+          }}
+          search={{
+            triggerLabelId: "nav.search.trigger",
+            placeholderId: "nav.search.placeholder",
+            emptyId: "nav.search.empty",
+            dialogLabelId: "nav.search.hint",
+            pagesGroupLabelId: "nav.search.group.pages",
+            faqGroupLabelId: "nav.search.group.faq",
+            items: []
+          }}
           primaryCtaLabelId="cta.primary"
           primaryCtaHref="/register"
           secondaryCtaLabelId="cta.secondary"
@@ -154,8 +187,7 @@ describe("marketing components (content resolution)", () => {
       )
     );
     expect(html).toContain("NelyoHealth");
-    expect(html).toContain("Home");
-    expect(html).toContain("For patients");
+    expect(html).toContain("Platform");
     expect(html).toContain("Get started");
     expect(html).toContain("Sign in");
   });

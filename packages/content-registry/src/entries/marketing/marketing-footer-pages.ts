@@ -405,5 +405,30 @@ export const marketingFooterPagesEntries: ContentEntry[] = [
     "community-guidelines.cta",
     "Contact us",
     "Community guidelines page CTA — routes to contact."
+  ),
+  e(
+    "leadership.eyebrow",
+    "Leadership",
+    "Nav link: Leadership."
+  ),
+  e(
+    "leadership.headline",
+    "Team profiles, coming soon.",
+    "Leadership page headline."
+  ),
+  e(
+    "leadership.body",
+    "We're still preparing individual leadership profiles for this page.",
+    "We're still preparing individual leadership profiles for this page. In the meantime, our mission page explains what we're building and why."
+  ),
+  e(
+    "leadership.caveat",
+    "Scope caveat",
+    "This page is still in progress. Check back soon, or get in touch if you'd like to know more before then."
+  ),
+  e(
+    "leadership.cta",
+    "Read our mission",
+    "Leadership page CTA — routes to the mission page."
   )
 ];

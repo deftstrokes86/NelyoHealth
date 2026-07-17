@@ -91,7 +91,7 @@ export const marketingMicrocopyEntries: ContentEntry[] = [
     "SiteFooter link label for the how-it-works page."
   ),
   e("footer.link.patients", "Patients", "SiteFooter link label."),
-  e("footer.link.family-plans", "Family plans", "SiteFooter link label."),
+  e("footer.link.family-plans", "Family Health", "SiteFooter link label."),
   e("footer.link.diaspora", "Diaspora", "SiteFooter link label."),
   e("footer.link.doctors", "Doctors", "SiteFooter link label."),
   e("footer.link.pharmacies", "Pharmacies", "SiteFooter link label."),

@@ -30,6 +30,6 @@ export const orbitNodes: EcosystemNodeSpec[] = [
   { id: "emergency", contentPrefix: "marketing-home.ecosystem.node.emergency", icon: Siren, href: "/emergency" },
   { id: "hmo", contentPrefix: "marketing-home.ecosystem.node.hmo", icon: ShieldPlus, href: "/hmos" },
   { id: "employer", contentPrefix: "marketing-home.ecosystem.node.employer", icon: BriefcaseBusiness, href: "/employers" },
-  { id: "family", contentPrefix: "marketing-home.ecosystem.node.family", icon: Users, href: "/family-plans" },
+  { id: "family", contentPrefix: "marketing-home.ecosystem.node.family", icon: Users, href: "/family-health" },
   { id: "caregiver", contentPrefix: "marketing-home.ecosystem.node.caregiver", icon: HeartHandshake, href: "/home-care" }
 ];

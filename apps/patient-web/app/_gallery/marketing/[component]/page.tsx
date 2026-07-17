@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { Building2, Stethoscope, UserRound } from "lucide-react";
 import {
   CTASection,
   EmergencyRibbon,
@@ -21,6 +22,8 @@ import {
 } from "@nelyohealth/ui-foundation";
 import { galleryContent } from "../gallery-content";
 
+const galleryIcon = { size: 20, strokeWidth: 1.9, "aria-hidden": true } as const;
+
 const GALLERY_ENABLED = process.env.NEXT_PUBLIC_ENABLE_GALLERY === "1";
 
 const galleryComponents = {
@@ -30,25 +33,75 @@ const galleryComponents = {
       <SiteHeader
         brandId="marketing.gallery.brand.name"
         brandHref="/"
-        activeSegment="general"
-        navItems={[
-          { id: "marketing.gallery.nav.home", href: "/", segment: "general" },
-          {
-            id: "marketing.gallery.nav.patients",
-            href: "/patient",
-            segment: "patient"
-          },
-          {
-            id: "marketing.gallery.nav.providers",
-            href: "/for-doctors",
-            segment: "provider"
-          },
-          {
-            id: "marketing.gallery.nav.organizations",
-            href: "/for-employers",
-            segment: "organization"
-          }
-        ]}
+        platformMenu={{
+          triggerLabelId: "marketing.gallery.nav.trigger.platform",
+          columns: 2,
+          items: [
+            {
+              id: "marketing.gallery.nav.patients",
+              bodyId: "marketing.gallery.nav.patients.body",
+              icon: <UserRound {...galleryIcon} />,
+              href: "/patient"
+            }
+          ]
+        }}
+        serveMenu={{
+          triggerLabelId: "marketing.gallery.nav.trigger.serve",
+          columns: 2,
+          items: [
+            {
+              id: "marketing.gallery.nav.providers",
+              bodyId: "marketing.gallery.nav.providers.body",
+              icon: <Stethoscope {...galleryIcon} />,
+              href: "/for-doctors"
+            },
+            {
+              id: "marketing.gallery.nav.organizations",
+              bodyId: "marketing.gallery.nav.organizations.body",
+              icon: <Building2 {...galleryIcon} />,
+              href: "/for-employers"
+            }
+          ]
+        }}
+        resourcesMenu={{
+          triggerLabelId: "marketing.gallery.nav.trigger.resources",
+          columns: 2,
+          items: [
+            {
+              id: "marketing.gallery.nav.resources",
+              bodyId: "marketing.gallery.nav.resources.body",
+              icon: <UserRound {...galleryIcon} />,
+              href: "/help"
+            }
+          ]
+        }}
+        companyMenu={{
+          triggerLabelId: "marketing.gallery.nav.trigger.company",
+          columns: 2,
+          items: [
+            {
+              id: "marketing.gallery.nav.organizations",
+              bodyId: "marketing.gallery.nav.organizations.body",
+              icon: <Building2 {...galleryIcon} />,
+              href: "/about"
+            }
+          ]
+        }}
+        mobileGroupLabels={{
+          platformId: "marketing.gallery.mobile.groups.platform",
+          serveId: "marketing.gallery.mobile.groups.serve",
+          resourcesId: "marketing.gallery.mobile.groups.resources",
+          companyId: "marketing.gallery.mobile.groups.company"
+        }}
+        search={{
+          triggerLabelId: "marketing.gallery.search.trigger",
+          placeholderId: "marketing.gallery.search.placeholder",
+          emptyId: "marketing.gallery.search.empty",
+          dialogLabelId: "marketing.gallery.search.hint",
+          pagesGroupLabelId: "marketing.gallery.search.group.pages",
+          faqGroupLabelId: "marketing.gallery.search.group.faq",
+          items: []
+        }}
         primaryCtaLabelId="marketing.gallery.cta.primary"
         primaryCtaHref="/register"
         secondaryCtaLabelId="marketing.gallery.cta.secondary"

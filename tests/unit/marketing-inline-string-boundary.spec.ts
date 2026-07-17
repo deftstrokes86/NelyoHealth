@@ -69,7 +69,8 @@ describe("marketing redirects boundary", () => {
   const expectedRedirects: Array<[string, string]> = [
     ["/for-diaspora", "/diaspora"],
     ["/for-doctors", "/doctors"],
-    ["/for-care-partners", "/family-plans"],
+    ["/for-care-partners", "/family-health"],
+    ["/family-plans", "/family-health"],
     ["/for-pharmacies", "/pharmacies"],
     ["/for-labs", "/laboratories"],
     ["/for-employers", "/employers"],

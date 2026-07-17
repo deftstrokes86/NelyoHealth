@@ -1,0 +1,988 @@
+/* ============================================================
+   Family Health — flagship page styles
+   Scoped under .nh-fh. Warm-editorial, alternating surfaces.
+   ============================================================ */
+
+.nh-fh {
+  --fh-max: 1280px;
+  --fh-radius: 24px;
+  --fh-radius-sm: 16px;
+  --fh-section-y: clamp(72px, 11vw, 132px);
+  --fh-warm: #fafaf8;
+  color: var(--nh-color-text);
+}
+
+[data-theme="dark"] .nh-fh {
+  --fh-warm: var(--nh-color-surface-muted);
+}
+
+.nh-fh a:focus-visible,
+.nh-fh button:focus-visible {
+  outline: 3px solid var(--nh-color-focus-ring);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ---------- Shared inner container ---------- */
+.nh-fh-hero__inner,
+.nh-fh-journey__inner,
+.nh-fh-circle__inner,
+.nh-fh-perms__inner,
+.nh-fh-house__inner,
+.nh-fh-diaspora__inner,
+.nh-fh-why__inner,
+.nh-fh-privacy__inner,
+.nh-fh-testimonials__inner,
+.nh-fh-faq__inner,
+.nh-fh-final__inner {
+  max-width: var(--fh-max);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+@media (min-width: 768px) {
+  .nh-fh-hero__inner,
+  .nh-fh-journey__inner,
+  .nh-fh-circle__inner,
+  .nh-fh-perms__inner,
+  .nh-fh-house__inner,
+  .nh-fh-diaspora__inner,
+  .nh-fh-why__inner,
+  .nh-fh-privacy__inner,
+  .nh-fh-testimonials__inner,
+  .nh-fh-faq__inner,
+  .nh-fh-final__inner {
+    padding-inline: 2.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .nh-fh-hero__inner,
+  .nh-fh-journey__inner,
+  .nh-fh-circle__inner,
+  .nh-fh-perms__inner,
+  .nh-fh-house__inner,
+  .nh-fh-diaspora__inner,
+  .nh-fh-why__inner,
+  .nh-fh-privacy__inner,
+  .nh-fh-testimonials__inner,
+  .nh-fh-faq__inner,
+  .nh-fh-final__inner {
+    padding-inline: 3.5rem;
+  }
+}
+
+/* ---------- Shared section header ---------- */
+.nh-fh-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+.nh-fh-header--center {
+  align-items: center;
+  text-align: center;
+  max-width: 46rem;
+  margin-inline: auto;
+}
+.nh-fh-eyebrow {
+  margin: 0;
+  font-size: var(--nh-typography-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nh-color-action);
+}
+.nh-fh-heading {
+  margin: 0;
+  font-family: var(--nh-typography-family-display);
+  font-size: clamp(1.85rem, 4vw, 2.85rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--nh-color-text);
+}
+.nh-fh-lead {
+  margin: 0;
+  font-size: clamp(1.02rem, 1.6vw, 1.2rem);
+  line-height: 1.6;
+  color: var(--nh-color-text-muted);
+}
+
+/* ---------- Shared buttons ---------- */
+.nh-fh-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--nh-radius-pill);
+  font-weight: 600;
+  font-size: var(--nh-typography-size-md);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease,
+    border-color 0.15s ease, color 0.15s ease;
+}
+.nh-fh-btn--primary {
+  background: var(--nh-color-action);
+  color: var(--nh-color-paper-000);
+  border: 1px solid var(--nh-color-action);
+}
+.nh-fh-btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--nh-shadow-md);
+}
+.nh-fh-btn--ghost {
+  background: transparent;
+  color: var(--nh-color-text);
+  border: 1px solid var(--nh-color-border);
+}
+.nh-fh-btn--ghost:hover {
+  border-color: var(--nh-color-action);
+  color: var(--nh-color-action);
+}
+.nh-fh-btn--ghost-invert {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--nh-color-paper-000);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+.nh-fh-btn--ghost-invert:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================================
+   Hero
+   ============================================================ */
+.nh-fh-hero {
+  background:
+    radial-gradient(120% 120% at 100% 0%, rgba(215, 242, 237, 0.5) 0%, rgba(250, 250, 248, 0) 55%),
+    linear-gradient(180deg, var(--fh-warm), var(--fh-warm));
+  padding: clamp(48px, 8vw, 96px) 0 var(--fh-section-y);
+}
+.nh-fh-hero__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  align-items: center;
+}
+@media (min-width: 900px) {
+  .nh-fh-hero__inner {
+    flex-direction: row;
+    align-items: center;
+    gap: 3.5rem;
+  }
+  .nh-fh-hero__copy {
+    flex: 1 1 50%;
+  }
+  .nh-fh-hero__visual {
+    flex: 1 1 50%;
+  }
+}
+.nh-fh-hero__eyebrow {
+  margin: 0 0 1rem;
+  font-size: var(--nh-typography-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nh-color-action);
+}
+.nh-fh-hero__headline {
+  margin: 0;
+  font-family: var(--nh-typography-family-display);
+  font-size: clamp(2.3rem, 5.4vw, 3.9rem);
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+}
+.nh-fh-hero__body {
+  margin: 1.4rem 0 0;
+  max-width: 34rem;
+  font-size: clamp(1.05rem, 1.7vw, 1.28rem);
+  line-height: 1.6;
+  color: var(--nh-color-text-muted);
+}
+.nh-fh-hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 2rem;
+}
+.nh-fh-hero__visual {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.nh-fh-hero__illustration {
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  border-radius: 28px;
+  filter: drop-shadow(0 30px 60px rgba(18, 41, 39, 0.14));
+  animation: nh-fh-float 7s ease-in-out infinite;
+}
+@keyframes nh-fh-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+/* ============================================================
+   Section 2 — Choose your journey
+   ============================================================ */
+.nh-fh-journey {
+  background: var(--nh-color-paper-000);
+  padding: var(--fh-section-y) 0;
+}
+.nh-fh-journey__grid {
+  display: grid;
+  gap: 1.5rem;
+}
+@media (min-width: 860px) {
+  .nh-fh-journey__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+.nh-fh-journey__card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  padding: clamp(1.6rem, 3vw, 2.4rem);
+  border-radius: var(--fh-radius);
+  border: 1px solid var(--nh-color-border);
+  background: var(--fh-warm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.nh-fh-journey__card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--nh-shadow-lg);
+}
+.nh-fh-journey__card--diaspora {
+  background: linear-gradient(180deg, rgba(215, 242, 237, 0.5), rgba(215, 242, 237, 0.14));
+}
+.nh-fh-journey__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: var(--nh-color-teal-100);
+  color: var(--nh-color-teal-900);
+}
+.nh-fh-journey__headline {
+  margin: 0;
+  font-family: var(--nh-typography-family-display);
+  font-size: clamp(1.4rem, 2.6vw, 1.85rem);
+  line-height: 1.15;
+}
+.nh-fh-journey__body {
+  margin: 0;
+  color: var(--nh-color-text-muted);
+  line-height: 1.55;
+}
+.nh-fh-journey__points {
+  list-style: none;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.nh-fh-journey__point {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 500;
+}
+.nh-fh-journey__point-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--nh-color-teal-100);
+  color: var(--nh-color-teal-900);
+}
+.nh-fh-journey__cta {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  font-weight: 600;
+  color: var(--nh-color-action);
+  text-decoration: none;
+}
+.nh-fh-journey__cta:hover {
+  text-decoration: underline;
+}
+
+/* ============================================================
+   Section 3 — Care Circle
+   ============================================================ */
+.nh-fh-circle {
+  background: var(--nh-color-paper-050);
+  padding: var(--fh-section-y) 0;
+}
+.nh-fh-circle__hint {
+  margin: -1.5rem auto clamp(1.5rem, 4vw, 2.5rem);
+  text-align: center;
+  font-size: var(--nh-typography-size-sm);
+  color: var(--nh-color-text-muted);
+}
+.nh-fh-circle__layout {
+  display: grid;
+  gap: 2.5rem;
+  align-items: center;
+}
+@media (min-width: 900px) {
+  .nh-fh-circle__layout {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: 3.5rem;
+  }
+}
+.nh-fh-circle__stage {
+  position: relative;
+  width: min(100%, 452px);
+  aspect-ratio: 1 / 1;
+  margin-inline: auto;
+}
+.nh-fh-circle__lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.nh-fh-circle__line {
+  stroke: var(--nh-color-grid-200);
+  stroke-width: 0.5;
+  stroke-dasharray: 1.5 1.5;
+  transition: stroke 0.2s ease, stroke-width 0.2s ease;
+}
+.nh-fh-circle__line--active {
+  stroke: var(--nh-color-action);
+  stroke-width: 1;
+  stroke-dasharray: none;
+}
+.nh-fh-circle__center,
+.nh-fh-circle__node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+}
+.nh-fh-circle__center {
+  left: 50%;
+  top: 50%;
+  width: 104px;
+  height: 104px;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--nh-color-action);
+  color: var(--nh-color-paper-000);
+  box-shadow: var(--nh-shadow-lg);
+  transition: transform 0.18s ease;
+}
+.nh-fh-circle__center:hover,
+.nh-fh-circle__center--active {
+  transform: translate(-50%, -50%) scale(1.05);
+}
+.nh-fh-circle__center-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.nh-fh-circle__node {
+  width: 76px;
+}
+.nh-fh-circle__node-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--nh-color-paper-000);
+  border: 1px solid var(--nh-color-border);
+  color: var(--nh-color-teal-900);
+  box-shadow: var(--nh-shadow-xs);
+  transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease,
+    color 0.15s ease;
+}
+.nh-fh-circle__node-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.15;
+  text-align: center;
+  color: var(--nh-color-text-muted);
+  max-width: 82px;
+}
+.nh-fh-circle__node:hover .nh-fh-circle__node-icon,
+.nh-fh-circle__node--active .nh-fh-circle__node-icon {
+  transform: scale(1.1);
+  border-color: var(--nh-color-action);
+  background: var(--nh-color-action);
+  color: var(--nh-color-paper-000);
+}
+.nh-fh-circle__node--active .nh-fh-circle__node-label {
+  color: var(--nh-color-text);
+}
+.nh-fh-circle__panel {
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border-radius: var(--fh-radius);
+  background: var(--nh-color-paper-000);
+  border: 1px solid var(--nh-color-border);
+  box-shadow: var(--nh-shadow-sm);
+  min-height: 220px;
+}
+.nh-fh-circle__panel-role {
+  margin: 0 0 1rem;
+  font-family: var(--nh-typography-family-display);
+  font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+}
+.nh-fh-circle__panel-default {
+  margin: 0;
+  color: var(--nh-color-text-muted);
+  line-height: 1.6;
+}
+.nh-fh-circle__panel-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.nh-fh-circle__panel-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.nh-fh-circle__panel-row dt {
+  font-size: var(--nh-typography-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--nh-color-action);
+}
+.nh-fh-circle__panel-row dd {
+  margin: 0;
+  color: var(--nh-color-text);
+  line-height: 1.5;
+}
+
+/* ============================================================
+   Section 4 — Permissions
+   ============================================================ */
+.nh-fh-perms {
+  background: var(--nh-color-paper-000);
+  padding: var(--fh-section-y) 0;
+}
+.nh-fh-perms__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: repeat(2, 1fr);
+}
+@media (min-width: 720px) {
+  .nh-fh-perms__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.nh-fh-perms__chip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.95rem 1.05rem;
+  border-radius: var(--fh-radius-sm);
+  background: var(--fh-warm);
+  border: 1px solid var(--nh-color-border);
+  font-weight: 500;
+  line-height: 1.25;
+}
+.nh-fh-perms__chip-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: var(--nh-color-teal-100);
+  color: var(--nh-color-teal-900);
+}
+.nh-fh-perms__footnote {
+  margin: clamp(2rem, 4vw, 3rem) auto 0;
+  max-width: 44rem;
+  text-align: center;
+  color: var(--nh-color-text-muted);
+  line-height: 1.6;
+}
+
+/* ============================================================
+   Section 5 — Household dashboard
+   ============================================================ */
+.nh-fh-house {
+  background: var(--nh-color-paper-050);
+  padding: var(--fh-section-y) 0;
+}
+.nh-fh-house__dashboard {
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border-radius: var(--fh-radius);
+  background: var(--nh-color-paper-000);
+  border: 1px solid var(--nh-color-border);
+  box-shadow: var(--nh-shadow-md);
+}
+.nh-fh-house__dashboard-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--nh-color-border);
+}
+.nh-fh-house__dashboard-title {
+  margin: 0;
+  font-family: var(--nh-typography-family-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.nh-fh-house__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.nh-fh-house__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--nh-radius-pill);
+  background: var(--fh-warm);
+  border: 1px solid var(--nh-color-border);
+  font-size: var(--nh-typography-size-sm);
+  color: var(--nh-color-text-muted);
+}
+.nh-fh-house__members {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+  .nh-fh-house__members {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.nh-fh-house__member {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1rem;
+  border-radius: var(--fh-radius-sm);
+  background: var(--fh-warm);
+  border: 1px solid var(--nh-color-border);
+}
+.nh-fh-house__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  font-weight: 700;
+  background: var(--nh-color-teal-100);
+  color: var(--nh-color-teal-900);
+}
+.nh-fh-house__member--child .nh-fh-house__avatar {
+  background: #fdeccb;
+  color: #7e5d26;
+}
+.nh-fh-house__member--elder .nh-fh-house__avatar {
+  background: var(--nh-color-coral-200);
+  color: var(--nh-color-coral-700);
+}
+.nh-fh-house__member-name {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-weight: 700;
+}
+.nh-fh-house__member-role {
+  font-size: var(--nh-typography-size-sm);
+  font-weight: 500;
+  color: var(--nh-color-text-muted);
+}
+.nh-fh-house__member-status {
+  margin: 0.2rem 0 0;
+  font-size: var(--nh-typography-size-sm);
+  color: var(--nh-color-text-muted);
+}
+.nh-fh-house__caption {
+  margin: 1.5rem 0 0;
+  font-weight: 600;
+  text-align: center;
+  color: var(--nh-color-text);
+}
+.nh-fh-house__disclaimer {
+  margin: 1.25rem 0 0;
+  text-align: center;
+  font-size: var(--nh-typography-size-sm);
+  color: var(--nh-color-text-muted);
+}
+
+/* ============================================================
+   Section 6 — Diaspora timeline
+   ============================================================ */
+.nh-fh-diaspora {
+  background: var(--nh-color-paper-000);
+  padding: var(--fh-section-y) 0;
+}
+.nh-fh-diaspora__timeline {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 40rem;
+  position: relative;
+}
+.nh-fh-diaspora__timeline::before {
+  content: "";
+  position: absolute;
+  left: 17px;
+  top: 12px;
+  bottom: 12px;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    var(--nh-color-teal-100),
+    var(--nh-color-action),
+    var(--nh-color-teal-100)
+  );
+}
+.nh-fh-diaspora__step {
+  position: relative;
+  display: flex;
+  gap: 1.1rem;
+  padding: 0.5rem 0 1.4rem;
+}
+.nh-fh-diaspora__step-marker {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--nh-color-action);
+  color: var(--nh-color-paper-000);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.nh-fh-diaspora__step-title {
+  margin: 0.35rem 0 0.15rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+.nh-fh-diaspora__step-body {
+  margin: 0;
+  color: var(--nh-color-text-muted);
+  line-height: 1.5;
+}
+.nh-fh-diaspora__values {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+}
+.nh-fh-diaspora__pill {
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--nh-radius-pill);
+  background: var(--nh-color-teal-100);
+  color: var(--nh-color-teal-900);
+  font-weight: 600;
+}
+
+/* ============================================================
+   Section 7 — Why families
+   ============================================================ */
+.nh-fh-why {
+  background: var(--nh-color-paper-050);
+  padding: var(--fh-section-y) 0;
+}
+.nh-fh-why__grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 620px) {
+  .nh-fh-why__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 960px) {
+  .nh-fh-why__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.nh-fh-why__card {
+  height: 100%;
+  padding: 1.5rem;
+  border-radius: var(--fh-radius);
+  background: var(--nh-color-paper-000);
+  border: 1px solid var(--nh-color-border);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.nh-fh-why__card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--nh-shadow-md);
+}
+.nh-fh-why__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--nh-color-teal-100);
+  color: var(--nh-color-teal-900);
+  margin-bottom: 1rem;
+}
+.nh-fh-why__title {
+  margin: 0 0 0.4rem;
+  font-size: 1.12rem;
+  font-weight: 700;
+}
+.nh-fh-why__body {
+  margin: 0;
+  color: var(--nh-color-text-muted);
+  line-height: 1.5;
+}
+
+/* ============================================================
+   Section 8 — Privacy & consent
+   ============================================================ */
+.nh-fh-privacy {
+  background: var(--nh-color-paper-000);
+  padding: var(--fh-section-y) 0;
+}
+.nh-fh-privacy__grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 720px) {
+  .nh-fh-privacy__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.nh-fh-privacy__point {
+  display: flex;
+  gap: 1rem;
+  padding: 1.4rem;
+  border-radius: var(--fh-radius);
+  background: var(--fh-warm);
+  border: 1px solid var(--nh-color-border);
+}
+.nh-fh-privacy__point-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: var(--nh-color-teal-100);
+  color: var(--nh-color-teal-900);
+}
+.nh-fh-privacy__point-title {
+  margin: 0.15rem 0 0.35rem;
+  font-size: 1.08rem;
+  font-weight: 700;
+}
+.nh-fh-privacy__point-body {
+  margin: 0;
+  color: var(--nh-color-text-muted);
+  line-height: 1.5;
+}
+.nh-fh-privacy__badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+.nh-fh-privacy__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--nh-radius-pill);
+  background: var(--nh-color-paper-000);
+  border: 1px solid var(--nh-color-border);
+  font-weight: 600;
+  font-size: var(--nh-typography-size-sm);
+  color: var(--nh-color-teal-900);
+}
+.nh-fh-privacy__badge svg {
+  color: var(--nh-color-action);
+}
+
+/* ============================================================
+   Section 9 — Testimonials
+   ============================================================ */
+.nh-fh-testimonials {
+  background: var(--nh-color-paper-050);
+  padding: var(--fh-section-y) 0;
+}
+.nh-fh-testimonials__grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 760px) {
+  .nh-fh-testimonials__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.nh-fh-testimonial {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  padding: 1.75rem;
+  border-radius: var(--fh-radius);
+  background: var(--nh-color-paper-000);
+  border: 1px solid var(--nh-color-border);
+}
+.nh-fh-testimonial__mark {
+  display: inline-flex;
+  color: var(--nh-color-teal-500);
+}
+.nh-fh-testimonial__quote {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.55;
+  color: var(--nh-color-text);
+}
+.nh-fh-testimonial__cite {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+.nh-fh-testimonial__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  font-weight: 700;
+  background: var(--nh-color-teal-100);
+  color: var(--nh-color-teal-900);
+}
+.nh-fh-testimonial__name {
+  display: block;
+  font-weight: 700;
+}
+.nh-fh-testimonial__role {
+  display: block;
+  font-size: var(--nh-typography-size-sm);
+  color: var(--nh-color-text-muted);
+}
+.nh-fh-testimonials__caveat {
+  margin: clamp(1.75rem, 4vw, 2.5rem) auto 0;
+  max-width: 40rem;
+  text-align: center;
+  font-size: var(--nh-typography-size-sm);
+  color: var(--nh-color-text-muted);
+}
+
+/* ============================================================
+   Section 10 — FAQ
+   ============================================================ */
+.nh-fh-faq {
+  background: var(--nh-color-paper-000);
+  padding: var(--fh-section-y) 0;
+}
+.nh-fh-faq__head {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+.nh-fh-faq .nh-faq-accordion {
+  max-width: 46rem;
+  margin-inline: auto;
+}
+
+/* ============================================================
+   Final CTA
+   ============================================================ */
+.nh-fh-final {
+  background: var(--nh-color-paper-050);
+  padding: 0 0 var(--fh-section-y);
+}
+.nh-fh-final__card {
+  max-width: var(--fh-max);
+  padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.5rem, 5vw, 3.5rem);
+  border-radius: clamp(24px, 4vw, 36px);
+  text-align: center;
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(22, 137, 127, 0.55) 0%, rgba(8, 61, 61, 0) 55%),
+    linear-gradient(160deg, #0a4a45, #073b37);
+  color: var(--nh-color-paper-000);
+}
+.nh-fh-final__headline {
+  margin: 0 auto;
+  max-width: 22ch;
+  font-family: var(--nh-typography-family-display);
+  font-size: clamp(1.9rem, 4.4vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.nh-fh-final__body {
+  margin: 1.25rem auto 0;
+  max-width: 42rem;
+  font-size: clamp(1.02rem, 1.6vw, 1.2rem);
+  line-height: 1.6;
+  color: rgba(255, 253, 248, 0.82);
+}
+.nh-fh-final__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.85rem;
+  margin-top: 2rem;
+}
+
+/* ============================================================
+   Reduced motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .nh-fh-hero__illustration {
+    animation: none;
+  }
+  .nh-fh-journey__card,
+  .nh-fh-why__card,
+  .nh-fh-circle__center,
+  .nh-fh-circle__node-icon,
+  .nh-fh-circle__line,
+  .nh-fh-btn {
+    transition: none;
+  }
+}

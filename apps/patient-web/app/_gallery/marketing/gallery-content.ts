@@ -24,12 +24,88 @@ export const galleryContent: MarketingContent[] = [
     title: "For patients"
   },
   {
+    id: "marketing.gallery.nav.patients.body",
+    title: "Book consults and track records."
+  },
+  {
     id: "marketing.gallery.nav.providers",
     title: "For providers"
   },
   {
+    id: "marketing.gallery.nav.providers.body",
+    title: "One patient view, fewer hand-offs."
+  },
+  {
     id: "marketing.gallery.nav.organizations",
     title: "For organizations"
+  },
+  {
+    id: "marketing.gallery.nav.organizations.body",
+    title: "Coordinate covered care at population scale."
+  },
+  {
+    id: "marketing.gallery.nav.resources",
+    title: "Resources"
+  },
+  {
+    id: "marketing.gallery.nav.resources.body",
+    title: "Guides, FAQs, and help articles."
+  },
+  {
+    id: "marketing.gallery.nav.trigger.platform",
+    title: "Platform"
+  },
+  {
+    id: "marketing.gallery.nav.trigger.serve",
+    title: "Who We Serve"
+  },
+  {
+    id: "marketing.gallery.nav.trigger.resources",
+    title: "Resources"
+  },
+  {
+    id: "marketing.gallery.nav.trigger.company",
+    title: "Company"
+  },
+  {
+    id: "marketing.gallery.search.trigger",
+    title: "Search"
+  },
+  {
+    id: "marketing.gallery.search.placeholder",
+    title: "Search pages, guides, and FAQs..."
+  },
+  {
+    id: "marketing.gallery.search.empty",
+    title: "Nothing matched that search."
+  },
+  {
+    id: "marketing.gallery.search.hint",
+    title: "Search the site"
+  },
+  {
+    id: "marketing.gallery.search.group.pages",
+    title: "Pages"
+  },
+  {
+    id: "marketing.gallery.search.group.faq",
+    title: "Frequently asked questions"
+  },
+  {
+    id: "marketing.gallery.mobile.groups.platform",
+    title: "Platform"
+  },
+  {
+    id: "marketing.gallery.mobile.groups.serve",
+    title: "Who We Serve"
+  },
+  {
+    id: "marketing.gallery.mobile.groups.resources",
+    title: "Resources"
+  },
+  {
+    id: "marketing.gallery.mobile.groups.company",
+    title: "Company"
   },
   {
     id: "marketing.gallery.cta.primary",

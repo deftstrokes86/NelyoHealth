@@ -41,6 +41,8 @@ export const contentFamilies = [
   "marketing-footer-pages",
   "marketing-footer",
   "marketing-help-widget",
+  "marketing-nav",
+  "marketing-family-health",
   "auth-signin",
   "auth-create-account",
   "auth-forgot-password",

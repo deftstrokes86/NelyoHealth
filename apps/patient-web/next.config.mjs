@@ -6,7 +6,8 @@ const nextConfig = {
     return [
       { source: "/for-diaspora", destination: "/diaspora", permanent: true },
       { source: "/for-doctors", destination: "/doctors", permanent: true },
-      { source: "/for-care-partners", destination: "/family-plans", permanent: true },
+      { source: "/for-care-partners", destination: "/family-health", permanent: true },
+      { source: "/family-plans", destination: "/family-health", permanent: true },
       { source: "/for-pharmacies", destination: "/pharmacies", permanent: true },
       { source: "/for-labs", destination: "/laboratories", permanent: true },
       { source: "/for-employers", destination: "/employers", permanent: true },

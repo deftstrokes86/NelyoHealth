@@ -21,6 +21,13 @@ import {
   MessageCircle,
   ShieldAlert
 } from "lucide-react";
+import {
+  companyMenu,
+  navSearchItems,
+  platformMenu,
+  resourcesMenu,
+  serveMenu
+} from "../src/lib/nav-config";
 
 export const metadata: Metadata = {
   title: "NelyoHealth — Coordinated care that follows the patient.",
@@ -28,33 +35,22 @@ export const metadata: Metadata = {
     "Coordinated care from intake to follow-up on one secure surface. For patients, families, providers, and organisations in Nigeria and the diaspora."
 };
 
-const primaryNav = [
-  {
-    id: "marketing-microcopy.nav.home",
-    href: "/",
-    segment: "general" as const
-  },
-  {
-    id: "marketing-microcopy.nav.how-it-works",
-    href: "/how-it-works",
-    segment: "general" as const
-  },
-  {
-    id: "marketing-microcopy.nav.patients",
-    href: "/patients",
-    segment: "patient" as const
-  },
-  {
-    id: "marketing-microcopy.nav.doctors",
-    href: "/doctors",
-    segment: "provider" as const
-  },
-  {
-    id: "marketing-microcopy.nav.trust-and-safety",
-    href: "/trust-and-safety",
-    segment: "general" as const
-  }
-];
+const headerMobileGroupLabels = {
+  platformId: "marketing-nav.mobile.groups.platform",
+  serveId: "marketing-nav.mobile.groups.serve",
+  resourcesId: "marketing-nav.mobile.groups.resources",
+  companyId: "marketing-nav.mobile.groups.company"
+};
+
+const headerSearch = {
+  triggerLabelId: "marketing-nav.search.trigger-label",
+  placeholderId: "marketing-nav.search.placeholder",
+  emptyId: "marketing-nav.search.empty",
+  dialogLabelId: "marketing-nav.search.hint",
+  pagesGroupLabelId: "marketing-nav.search.group.pages",
+  faqGroupLabelId: "marketing-nav.search.group.faq",
+  items: navSearchItems
+};
 
 const footerGroups = [
   {
@@ -62,7 +58,7 @@ const footerGroups = [
     links: [
       { id: "marketing-microcopy.footer.link.how-it-works", href: "/how-it-works" },
       { id: "marketing-microcopy.footer.link.patients", href: "/patients" },
-      { id: "marketing-microcopy.footer.link.family-plans", href: "/family-plans" },
+      { id: "marketing-microcopy.footer.link.family-plans", href: "/family-health" },
       { id: "marketing-microcopy.footer.link.diaspora", href: "/diaspora" },
       { id: "marketing-microcopy.footer.link.doctors", href: "/doctors" },
       { id: "marketing-microcopy.footer.link.pharmacies", href: "/pharmacies" },
@@ -289,7 +285,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <SiteHeader
             brandId="marketing-microcopy.brand.name"
             brandHref="/"
-            navItems={primaryNav}
+            platformMenu={platformMenu}
+            serveMenu={serveMenu}
+            resourcesMenu={resourcesMenu}
+            companyMenu={companyMenu}
+            mobileGroupLabels={headerMobileGroupLabels}
+            search={headerSearch}
             primaryCtaLabelId="marketing-cta.create-account"
             primaryCtaHref="/create-account"
             secondaryCtaLabelId="marketing-cta.sign-in"

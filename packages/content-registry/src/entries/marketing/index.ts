@@ -13,6 +13,8 @@ import { marketingFaqEntries } from "./marketing-faq.js";
 import { marketingFooterEntries } from "./marketing-footer.js";
 import { marketingFooterPagesEntries } from "./marketing-footer-pages.js";
 import { marketingHelpWidgetEntries } from "./marketing-help-widget.js";
+import { marketingNavEntries } from "./marketing-nav.js";
+import { marketingFamilyHealthEntries } from "./marketing-family-health.js";
 import { marketingHomeEntries } from "./marketing-home.js";
 import { marketingHowItWorksEntries } from "./marketing-how-it-works.js";
 import { marketingLegalEntries } from "./marketing-legal.js";
@@ -59,6 +61,8 @@ export const marketingContentEntries: ContentEntry[] = [
   ...marketingFooterPagesEntries,
   ...marketingFooterEntries,
   ...marketingHelpWidgetEntries,
+  ...marketingNavEntries,
+  ...marketingFamilyHealthEntries,
   ...authSigninEntries,
   ...authCreateAccountEntries,
   ...authForgotPasswordEntries,

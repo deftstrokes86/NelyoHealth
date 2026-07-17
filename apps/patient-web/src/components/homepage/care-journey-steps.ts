@@ -93,7 +93,7 @@ export const careJourneySteps: CareJourneyStepSpec[] = [
   {
     id: "family",
     contentPrefix: "marketing-home.journey.step7",
-    ctaHref: "/family-plans",
+    ctaHref: "/family-health",
     icons: [
       { icon: CheckCircle2, label: "Consent" },
       { icon: Bell, label: "Caregiver update" }

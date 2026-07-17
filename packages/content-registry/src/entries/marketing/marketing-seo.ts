@@ -67,6 +67,12 @@ export const marketingSeoEntries: ContentEntry[] = [
     "hero-family-diaspora-bridge"
   ),
   ...seo(
+    "family-health",
+    "Family Health — coordinate care together | NelyoHealth.",
+    "Coordinate healthcare for your whole family — under one roof or across continents. Care Circles, role-based permissions, and one secure record.",
+    "hero-family-diaspora-bridge"
+  ),
+  ...seo(
     "for-doctors",
     "For doctors and clinics — NelyoHealth.",
     "One patient view, one workflow, fewer hand-offs to the void. Clinical decisions stay with you.",
@@ -280,6 +286,12 @@ export const marketingSeoEntries: ContentEntry[] = [
     "community-guidelines",
     "Community guidelines — NelyoHealth.",
     "NelyoHealth doesn't currently have public community or forum features.",
+    "neutral-placeholder"
+  ),
+  ...seo(
+    "leadership",
+    "Leadership — NelyoHealth (coming soon).",
+    "Individual leadership profiles are still in progress.",
     "neutral-placeholder"
   )
 ];

@@ -4,7 +4,7 @@ const pilotRoutes: Array<{ path: string; titleFragment: string }> = [
   { path: "/", titleFragment: "NelyoHealth" },
   { path: "/how-it-works", titleFragment: "How NelyoHealth works" },
   { path: "/patients", titleFragment: "For patients" },
-  { path: "/family-plans", titleFragment: "families" },
+  { path: "/family-health", titleFragment: "Family Health" },
   { path: "/diaspora", titleFragment: "families" },
   { path: "/doctors", titleFragment: "doctors" },
   { path: "/pharmacies", titleFragment: "pharmacies" },
@@ -66,7 +66,8 @@ test.describe("P05-MKT-004 PILOT pages render with shared chrome", () => {
     const pairs: Array<[string, string]> = [
       ["/for-diaspora", "/diaspora"],
       ["/for-doctors", "/doctors"],
-      ["/for-care-partners", "/family-plans"],
+      ["/for-care-partners", "/family-health"],
+      ["/family-plans", "/family-health"],
       ["/for-pharmacies", "/pharmacies"],
       ["/for-labs", "/laboratories"],
       ["/trust-safety", "/trust-and-safety"],
