@@ -39,7 +39,8 @@ const apiOnlyModules = new Set([
   "prescription-advanced",
   "referral-prescription-handlers",
   "referral-prescription-routes",
-  "tracing-context"
+  "tracing-context",
+  "identity-session-service"
 ]);
 const apiModules = getContractModules(apiDir).filter(
   (moduleName) => !apiOnlyModules.has(moduleName)

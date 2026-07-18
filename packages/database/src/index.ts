@@ -131,3 +131,21 @@ export {
   localDatabaseConfigFromEnv,
   type DatabaseClientConfig
 } from "./client.js";
+
+export {
+  elevateSession,
+  createSession,
+  getDeviceById,
+  getSessionById,
+  listActiveSessionsForAccount,
+  listAuthenticationEventsForAccount,
+  recordAuthenticationEvent,
+  registerDevice,
+  revokeSessionsForAccount,
+  setDeviceTrusted,
+  type AuthenticationEventMethod,
+  type AuthenticationEventResult,
+  type SessionAuthLevel
+} from "./session-repository.js";
+
+export { PgOutboxStore, PgTransactionAdapter } from "./pg-outbox.js";

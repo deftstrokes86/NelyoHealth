@@ -90,6 +90,10 @@ export interface Session {
   activeTenantId?: TenantId;
   trustedDeviceId?: IdentityId;
   status: "active" | "expired" | "revoked";
+  /** Step-up state: "primary" after first factor, "elevated" after MFA (additive M1.2). */
+  authLevel?: "primary" | "elevated";
+  /** Session expiry instant (additive M1.2; sessions are time-bounded). */
+  expiresAtIso?: string;
 }
 
 export interface Device {
@@ -142,5 +146,4 @@ export const phase3IdentityTenancyModel = {
   ]
 } as const;
 
-export type Phase3IdentityTenancyEntityName =
-  (typeof phase3IdentityTenancyModel.entities)[number];
+export type Phase3IdentityTenancyEntityName = (typeof phase3IdentityTenancyModel.entities)[number];
