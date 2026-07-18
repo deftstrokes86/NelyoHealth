@@ -1,0 +1,70 @@
+# Application-layer overlay for the local stack (roadmap M0.1 Runtime Baseline).
+# Runs the API and worker as long-lived containers on the existing infra network.
+#
+# Usage:
+#   docker compose -f infra/local/compose.yaml -f infra/local/compose.app.yaml up -d --build --wait
+#
+# The base infra file (compose.yaml) remains usable on its own for
+# infra-only workflows (tools/local-infra).
+
+name: nelyohealth-local
+
+services:
+  api:
+    build:
+      context: ../..
+      dockerfile: apps/api/Dockerfile
+    environment:
+      HOST: 0.0.0.0
+      PORT: "4000"
+      # In-network infra endpoints (service DNS, container ports).
+      NELYO_LOCAL_POSTGRES_HOST: postgres-postgis
+      NELYO_LOCAL_POSTGRES_PORT: "5432"
+      NELYO_LOCAL_VALKEY_HOST: valkey
+      NELYO_LOCAL_VALKEY_PORT: "6379"
+    ports:
+      - "127.0.0.1:${NELYO_LOCAL_API_PORT:-54000}:4000"
+    depends_on:
+      postgres-postgis:
+        condition: service_healthy
+      valkey:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://127.0.0.1:4000/api/health >/dev/null || exit 1"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+    networks:
+      - local
+
+  worker:
+    build:
+      context: ../..
+      dockerfile: apps/worker/Dockerfile
+    environment:
+      WORKER_HEALTH_HOST: 0.0.0.0
+      WORKER_HEALTH_PORT: "4100"
+      NELYO_LOCAL_VALKEY_HOST: valkey
+      NELYO_LOCAL_VALKEY_PORT: "6379"
+    ports:
+      - "127.0.0.1:${NELYO_LOCAL_WORKER_PORT:-54100}:4100"
+    depends_on:
+      valkey:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://127.0.0.1:4100/health >/dev/null || exit 1"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 15s
+    networks:
+      - local
