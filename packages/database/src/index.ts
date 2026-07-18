@@ -104,3 +104,30 @@ export {
   type TransactionalOutboxPort,
   type TransactionWorkContext
 } from "./transaction-outbox.js";
+
+export {
+  DuplicateIdentityError,
+  addContactPoint,
+  addExternalIdentity,
+  createPerson,
+  createUserAccount,
+  findExternalIdentity,
+  findUserAccountByLoginEmail,
+  findUserAccountByLoginPhone,
+  getPersonById,
+  getUserAccountById,
+  listContactPoints,
+  markContactPointVerified,
+  setPrimaryContactPoint,
+  updateUserAccountStatus,
+  type ContactPointKind,
+  type ExternalIdentityProvider,
+  type UserAccountStatus
+} from "./identity-repository.js";
+
+export {
+  createDatabaseClient,
+  createDatabasePool,
+  localDatabaseConfigFromEnv,
+  type DatabaseClientConfig
+} from "./client.js";
