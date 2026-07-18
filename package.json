@@ -51,6 +51,9 @@
     "browser:cli:close": "playwright-cli -s=nelyohealth-smoke close",
     "browser:cli:cleanup": "playwright-cli -s=nelyohealth-smoke close && playwright-cli -s=nelyohealth-smoke delete-data",
     "build": "pnpm topology:build && pnpm tokens:build && pnpm --filter @nelyohealth/content-registry build && pnpm --filter @nelyohealth/ui-foundation build && pnpm --filter @nelyohealth/design-foundation-preview build",
+    "gates:authz": "node tools/checks/authorization-endpoint-coverage-gate.mjs",
+    "gates:outbox": "node tools/checks/outbox-usage-gate.mjs",
+    "gates:verify": "pnpm gates:authz && pnpm gates:outbox",
     "secret:scan": "node tools/checks/basic-secret-scan.mjs",
     "verify": "pnpm repository:verify",
     "tokens:build": "pnpm --filter @nelyohealth/design-tokens build",
@@ -79,7 +82,7 @@
     "release:version": "changeset version",
     "release:check": "node tools/checks/release-readiness.mjs",
     "release:inventory": "node tools/reports/dependency-inventory.mjs",
-    "repository:verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:contract && pnpm test:integration && pnpm infra:verify && pnpm test:browser && pnpm test:a11y && pnpm test:visual && pnpm build && pnpm secret:scan && pnpm community:verify && pnpm actions:verify && pnpm deps:verify && pnpm changeset:status && pnpm release:check"
+    "repository:verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:contract && pnpm gates:verify && pnpm test:integration && pnpm infra:verify && pnpm test:browser && pnpm test:a11y && pnpm test:visual && pnpm build && pnpm secret:scan && pnpm community:verify && pnpm actions:verify && pnpm deps:verify && pnpm changeset:status && pnpm release:check"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.12.1",
