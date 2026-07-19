@@ -46,7 +46,8 @@ export const contentFamilies = [
   "auth-signin",
   "auth-create-account",
   "auth-forgot-password",
-  "auth-reset-password"
+  "auth-reset-password",
+  "account"
 ] as const;
 export type ContentFamily = (typeof contentFamilies)[number];
 export type ContentId = string;

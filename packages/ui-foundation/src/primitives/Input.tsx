@@ -7,11 +7,24 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   variant?: InputVariant;
   leading?: ReactNode;
   trailing?: ReactNode;
+  /** Set false when `leading` contains an interactive control (default true: decorative). */
+  leadingAriaHidden?: boolean;
+  /** Set false when `trailing` contains an interactive control (default true: decorative). */
+  trailingAriaHidden?: boolean;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
-    { variant = "default", leading, trailing, className = "", disabled, ...props },
+    {
+      variant = "default",
+      leading,
+      trailing,
+      leadingAriaHidden = true,
+      trailingAriaHidden = true,
+      className = "",
+      disabled,
+      ...props
+    },
     ref
   ) => (
     <span
@@ -25,7 +38,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       data-variant={variant}
     >
       {leading ? (
-        <span className="nh-input__leading" aria-hidden="true">
+        <span className="nh-input__leading" aria-hidden={leadingAriaHidden || undefined}>
           {leading}
         </span>
       ) : null}
@@ -37,7 +50,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {...props}
       />
       {trailing ? (
-        <span className="nh-input__trailing" aria-hidden="true">
+        <span className="nh-input__trailing" aria-hidden={trailingAriaHidden || undefined}>
           {trailing}
         </span>
       ) : null}

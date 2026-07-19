@@ -41,7 +41,9 @@ const activeWebApplicationAllowedExtraDependencies = new Set([
   "clsx",
   "framer-motion",
   "lucide-react",
-  "tailwind-merge"
+  "tailwind-merge",
+  // Client-side validation schemas for the sign-in/sign-up forms.
+  "zod"
 ]);
 
 const boundarySharedPackages = [

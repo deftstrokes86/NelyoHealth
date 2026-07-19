@@ -1,4 +1,5 @@
 import type { ContentEntry } from "../../schema.js";
+import { accountEntries } from "./account.js";
 import { authCreateAccountEntries } from "./auth-create-account.js";
 import { authForgotPasswordEntries } from "./auth-forgot-password.js";
 import { authResetPasswordEntries } from "./auth-reset-password.js";
@@ -66,7 +67,8 @@ export const marketingContentEntries: ContentEntry[] = [
   ...authSigninEntries,
   ...authCreateAccountEntries,
   ...authForgotPasswordEntries,
-  ...authResetPasswordEntries
+  ...authResetPasswordEntries,
+  ...accountEntries
 ];
 
 export const marketingContentById = new Map(
