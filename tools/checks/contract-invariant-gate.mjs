@@ -40,7 +40,8 @@ const apiOnlyModules = new Set([
   "referral-prescription-handlers",
   "referral-prescription-routes",
   "tracing-context",
-  "identity-session-service"
+  "identity-session-service",
+  "acting-context-resolver"
 ]);
 // --- Governed contract-mirror exemptions ---------------------------------
 // Temporary, documented exceptions to the api/api-client mirror requirement.
