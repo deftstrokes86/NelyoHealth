@@ -1,0 +1,89 @@
+{
+  "description": "Temporary, governed exemptions from the api/api-client contract-mirror requirement. Every entry must name its planned removal milestone; the gate fails on missing fields and on stale entries (module mirrored or gone). This is visible debt, not hidden debt: the gate prints this table on every run.",
+  "exemptions": [
+    {
+      "module": "authentication",
+      "reason": "Draft authentication contracts predate their HTTP surface; typed client mirror becomes real when auth routes land under the universal guard.",
+      "dateIntroduced": "2026-07-18",
+      "expectedRemovalMilestone": "M2.3",
+      "owner": "Lead Platform Engineer"
+    },
+    {
+      "module": "authentication-handlers",
+      "reason": "Decision logic for the auth routes arriving with the universal guard.",
+      "dateIntroduced": "2026-07-18",
+      "expectedRemovalMilestone": "M2.3",
+      "owner": "Lead Platform Engineer"
+    },
+    {
+      "module": "authorization-policy",
+      "reason": "PDP contracts gain their client mirror when the authorization surface is exposed with the universal guard.",
+      "dateIntroduced": "2026-07-18",
+      "expectedRemovalMilestone": "M2.3",
+      "owner": "Lead Platform Engineer"
+    },
+    {
+      "module": "authorization-policy-handlers",
+      "reason": "PDP evaluation handlers for the M2.3 authorization surface.",
+      "dateIntroduced": "2026-07-18",
+      "expectedRemovalMilestone": "M2.3",
+      "owner": "Lead Platform Engineer"
+    },
+    {
+      "module": "tenancy",
+      "reason": "Tenancy access contracts surface with the ActingContext resolver and workspace-switch endpoints.",
+      "dateIntroduced": "2026-07-18",
+      "expectedRemovalMilestone": "M2.3",
+      "owner": "Lead Platform Engineer"
+    },
+    {
+      "module": "tenancy-handlers",
+      "reason": "Tenancy evaluation handlers for the M2.2/M2.3 context surface.",
+      "dateIntroduced": "2026-07-18",
+      "expectedRemovalMilestone": "M2.3",
+      "owner": "Lead Platform Engineer"
+    },
+    {
+      "module": "audit-event-workflows",
+      "reason": "Audit workflows are unified onto the outbox dispatcher before any client surface exists.",
+      "dateIntroduced": "2026-07-18",
+      "expectedRemovalMilestone": "M3.2",
+      "owner": "Lead Platform Engineer"
+    },
+    {
+      "module": "granular-consent",
+      "reason": "Consent contracts gain routes and a typed client with consent persistence.",
+      "dateIntroduced": "2026-07-18",
+      "expectedRemovalMilestone": "M4.1",
+      "owner": "Lead Platform Engineer"
+    },
+    {
+      "module": "granular-consent-workflows",
+      "reason": "Consent workflow handlers for the M4.1 consent surface.",
+      "dateIntroduced": "2026-07-18",
+      "expectedRemovalMilestone": "M4.1",
+      "owner": "Lead Platform Engineer"
+    },
+    {
+      "module": "relationship-model",
+      "reason": "Relationship contracts gain their surface with relationship persistence.",
+      "dateIntroduced": "2026-07-18",
+      "expectedRemovalMilestone": "M4.2",
+      "owner": "Lead Platform Engineer"
+    },
+    {
+      "module": "relationship-workflows",
+      "reason": "Relationship workflow handlers for the M4.2 surface.",
+      "dateIntroduced": "2026-07-18",
+      "expectedRemovalMilestone": "M4.2",
+      "owner": "Lead Platform Engineer"
+    },
+    {
+      "module": "break-glass-workflows",
+      "reason": "Break-glass workflows gain their surface with the persisted break-glass flow.",
+      "dateIntroduced": "2026-07-18",
+      "expectedRemovalMilestone": "M4.3",
+      "owner": "Lead Platform Engineer"
+    }
+  ]
+}
