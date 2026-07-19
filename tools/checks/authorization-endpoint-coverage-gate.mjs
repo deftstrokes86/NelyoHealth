@@ -39,6 +39,8 @@ const enforce = process.argv.includes("--enforce");
  *    documents/objects); real document access will be a protected business
  *    route.
  *  - GET /api/health (hono): legacy liveness.
+ *  - auth sessions/registrations: necessarily pre-authentication — creating
+ *    a session or account cannot itself require an existing session.
  */
 const SANCTIONED_PUBLIC_ROUTES = new Set([
   "GET /api/health",
@@ -48,7 +50,9 @@ const SANCTIONED_PUBLIC_ROUTES = new Set([
   "POST /api/storage/signed-url/upload",
   "POST /api/storage/signed-url/download",
   "DELETE /api/storage/synthetic-objects",
-  "GET /api/health (hono)"
+  "GET /api/health (hono)",
+  "POST /api/auth/sessions",
+  "POST /api/auth/registrations"
 ]);
 
 /** Markers indicating a (Hono) route references the authorization policy directly. */

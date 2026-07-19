@@ -41,6 +41,9 @@ const apiOnlyModules = new Set([
   "referral-prescription-routes",
   "tracing-context",
   "identity-session-service",
+  "identity-password-login-service",
+  "identity-registration-service",
+  "password-hashing",
   "acting-context-resolver",
   // Server-side Policy Decision Point (clinical RBAC/ABAC/ReBAC). Evaluated
   // in the API only; never mirrored to clients. Reclassified from a contract
@@ -48,6 +51,9 @@ const apiOnlyModules = new Set([
   "authorization-policy",
   "authorization-policy-handlers"
 ]);
+// Note: apps/api/src/nest/** is not scanned by this gate at all (getContractModules
+// reads apps/api/src non-recursively) — the new auth controllers/module living
+// under nest/auth/ need no allowlist entry here.
 // --- Governed contract-mirror exemptions ---------------------------------
 // Temporary, documented exceptions to the api/api-client mirror requirement.
 // This does NOT weaken the gate: unexempted drift still fails, every

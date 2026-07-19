@@ -170,3 +170,10 @@ export {
 } from "./session-repository.js";
 
 export { PgOutboxStore, PgTransactionAdapter } from "./pg-outbox.js";
+
+export {
+  countRecentAuthenticationFailures,
+  createPasswordCredential,
+  getPasswordCredentialByUserAccountId,
+  type PasswordCredential
+} from "./password-credential-repository.js";

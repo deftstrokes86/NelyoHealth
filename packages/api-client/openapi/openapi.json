@@ -16,6 +16,36 @@
         ]
       }
     },
+    "/api/auth/sessions": {
+      "post": {
+        "operationId": "AuthSessionsController_createSession",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Session envelope"
+          }
+        },
+        "summary": "Create a session (password sign-in)",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/auth/registrations": {
+      "post": {
+        "operationId": "AuthRegistrationsController_createRegistration",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Registration envelope"
+          }
+        },
+        "summary": "Register a new account (email + password)",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
     "/api/health": {
       "get": {
         "operationId": "SystemController_getHealth",
