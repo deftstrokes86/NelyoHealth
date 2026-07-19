@@ -107,6 +107,7 @@ export {
 
 export {
   DuplicateIdentityError,
+  addAddress,
   addContactPoint,
   addExternalIdentity,
   createPerson,
@@ -116,14 +117,34 @@ export {
   findUserAccountByLoginPhone,
   getPersonById,
   getUserAccountById,
+  listAddressesForPerson,
   listContactPoints,
   markContactPointVerified,
+  setPrimaryAddress,
   setPrimaryContactPoint,
   updateUserAccountStatus,
   type ContactPointKind,
   type ExternalIdentityProvider,
   type UserAccountStatus
 } from "./identity-repository.js";
+
+export {
+  assignRole,
+  createFacility,
+  createInvitation,
+  createMembership,
+  createOrganization,
+  getInvitationById,
+  getMembershipById,
+  getOrganizationById,
+  listFacilitiesForOrganization,
+  listMembershipsForPerson,
+  listRoleAssignmentsForMembership,
+  updateInvitationStatus,
+  updateMembershipStatus,
+  updateOrganizationStatus,
+  updateRoleAssignmentStatus
+} from "./tenancy-repository.js";
 
 export {
   createDatabaseClient,

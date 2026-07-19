@@ -1,5 +1,11 @@
 import type { ClientBase } from "pg";
-import type { ContactPoint, ExternalIdentity, Person, UserAccount } from "@nelyohealth/domain";
+import type {
+  Address,
+  ContactPoint,
+  ExternalIdentity,
+  Person,
+  UserAccount
+} from "@nelyohealth/domain";
 
 /**
  * Identity & Access repository (roadmap M1.1).
@@ -40,6 +46,17 @@ interface PersonRow {
   display_name: string;
   date_of_birth: string | Date | null;
   primary_contact_point_id: string | null;
+  primary_address_id: string | null;
+}
+
+interface AddressRow {
+  id: string;
+  person_id: string;
+  line1: string;
+  city: string;
+  state: string;
+  country_code: string;
+  postal_code: string | null;
 }
 
 interface ContactPointRow {
@@ -76,7 +93,20 @@ function mapPerson(row: PersonRow): Person {
     id: row.id,
     displayName: row.display_name,
     dateOfBirthIso: toIsoDate(row.date_of_birth),
-    primaryContactPointId: row.primary_contact_point_id ?? undefined
+    primaryContactPointId: row.primary_contact_point_id ?? undefined,
+    primaryAddressId: row.primary_address_id ?? undefined
+  };
+}
+
+function mapAddress(row: AddressRow): Address {
+  return {
+    id: row.id,
+    personId: row.person_id,
+    line1: row.line1,
+    city: row.city,
+    state: row.state,
+    countryCode: row.country_code,
+    postalCode: row.postal_code ?? undefined
   };
 }
 
@@ -118,7 +148,7 @@ export async function createPerson(
   const result = await client.query<PersonRow>(
     `INSERT INTO nelyo_identity.person (display_name, date_of_birth)
      VALUES ($1, $2)
-     RETURNING id, display_name, date_of_birth::text AS date_of_birth, primary_contact_point_id`,
+     RETURNING id, display_name, date_of_birth::text AS date_of_birth, primary_contact_point_id, primary_address_id`,
     [input.displayName, input.dateOfBirthIso ?? null]
   );
   return mapPerson(result.rows[0]);
@@ -126,7 +156,7 @@ export async function createPerson(
 
 export async function getPersonById(client: ClientBase, personId: string): Promise<Person | null> {
   const result = await client.query<PersonRow>(
-    `SELECT id, display_name, date_of_birth::text AS date_of_birth, primary_contact_point_id
+    `SELECT id, display_name, date_of_birth::text AS date_of_birth, primary_contact_point_id, primary_address_id
      FROM nelyo_identity.person WHERE id = $1`,
     [personId]
   );
@@ -192,7 +222,7 @@ export async function setPrimaryContactPoint(
     `UPDATE nelyo_identity.person
      SET primary_contact_point_id = $2, updated_at = NOW()
      WHERE id = $1
-     RETURNING id, display_name, date_of_birth::text AS date_of_birth, primary_contact_point_id`,
+     RETURNING id, display_name, date_of_birth::text AS date_of_birth, primary_contact_point_id, primary_address_id`,
     [personId, contactPointId]
   );
   return result.rows[0] ? mapPerson(result.rows[0]) : null;
@@ -315,4 +345,62 @@ export async function findExternalIdentity(
     [provider, externalSubject]
   );
   return result.rows[0] ? mapExternalIdentity(result.rows[0]) : null;
+}
+
+// ---------- Address (person-scoped; roadmap M2.1) ----------
+
+export async function addAddress(
+  client: ClientBase,
+  input: {
+    personId: string;
+    line1: string;
+    city: string;
+    state: string;
+    countryCode: string;
+    postalCode?: string;
+  }
+): Promise<Address> {
+  const result = await client.query<AddressRow>(
+    `INSERT INTO nelyo_identity.address (person_id, line1, city, state, country_code, postal_code)
+     VALUES ($1, $2, $3, $4, $5, $6)
+     RETURNING id, person_id, line1, city, state, country_code, postal_code`,
+    [
+      input.personId,
+      input.line1,
+      input.city,
+      input.state,
+      input.countryCode,
+      input.postalCode ?? null
+    ]
+  );
+  return mapAddress(result.rows[0]);
+}
+
+export async function listAddressesForPerson(
+  client: ClientBase,
+  personId: string
+): Promise<Address[]> {
+  const result = await client.query<AddressRow>(
+    `SELECT id, person_id, line1, city, state, country_code, postal_code
+     FROM nelyo_identity.address
+     WHERE person_id = $1
+     ORDER BY created_at ASC`,
+    [personId]
+  );
+  return result.rows.map(mapAddress);
+}
+
+export async function setPrimaryAddress(
+  client: ClientBase,
+  personId: string,
+  addressId: string
+): Promise<Person | null> {
+  const result = await client.query<PersonRow>(
+    `UPDATE nelyo_identity.person
+     SET primary_address_id = $2, updated_at = NOW()
+     WHERE id = $1
+     RETURNING id, display_name, date_of_birth::text AS date_of_birth, primary_contact_point_id, primary_address_id`,
+    [personId, addressId]
+  );
+  return result.rows[0] ? mapPerson(result.rows[0]) : null;
 }
