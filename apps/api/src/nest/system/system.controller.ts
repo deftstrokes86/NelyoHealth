@@ -3,6 +3,7 @@ import type { Request } from "express";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import type { ApiEnvelope } from "../api-envelope.js";
 import { createMeta } from "../api-envelope.js";
+import { Public } from "../authorization/authorization-metadata.js";
 import { ReadinessService } from "./readiness.service.js";
 
 interface HealthData {
@@ -21,6 +22,7 @@ export class SystemController {
   constructor(private readonly readinessService: ReadinessService) {}
 
   @Get("health")
+  @Public()
   @ApiOperation({ summary: "API liveness health endpoint" })
   @ApiOkResponse({ description: "Health envelope" })
   getHealth(
@@ -43,6 +45,7 @@ export class SystemController {
   }
 
   @Get("ready")
+  @Public()
   @ApiOperation({ summary: "API dependency readiness endpoint" })
   @ApiOkResponse({ description: "Readiness envelope" })
   async getReady(
@@ -62,6 +65,7 @@ export class SystemController {
   }
 
   @Post("idempotency/probe")
+  @Public()
   @ApiOperation({ summary: "Unsafe-method idempotency probe endpoint" })
   @ApiOkResponse({ description: "Probe acceptance envelope" })
   probeIdempotency(

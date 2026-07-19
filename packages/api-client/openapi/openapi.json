@@ -1,6 +1,21 @@
 {
   "openapi": "3.0.0",
   "paths": {
+    "/api/session/context": {
+      "get": {
+        "operationId": "SessionContextController_getContext",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Acting-context envelope"
+          }
+        },
+        "summary": "Resolved acting-context for the authenticated session",
+        "tags": [
+          "session"
+        ]
+      }
+    },
     "/api/health": {
       "get": {
         "operationId": "SystemController_getHealth",
@@ -11,7 +26,9 @@
           }
         },
         "summary": "API liveness health endpoint",
-        "tags": ["system"]
+        "tags": [
+          "system"
+        ]
       }
     },
     "/api/ready": {
@@ -24,7 +41,9 @@
           }
         },
         "summary": "API dependency readiness endpoint",
-        "tags": ["system"]
+        "tags": [
+          "system"
+        ]
       }
     },
     "/api/idempotency/probe": {
@@ -37,7 +56,9 @@
           }
         },
         "summary": "Unsafe-method idempotency probe endpoint",
-        "tags": ["system"]
+        "tags": [
+          "system"
+        ]
       }
     },
     "/api/storage/signed-url/upload": {
@@ -50,7 +71,9 @@
           }
         },
         "summary": "Issue synthetic signed upload URL",
-        "tags": ["storage"]
+        "tags": [
+          "storage"
+        ]
       }
     },
     "/api/storage/signed-url/download": {
@@ -63,7 +86,9 @@
           }
         },
         "summary": "Issue synthetic signed download URL",
-        "tags": ["storage"]
+        "tags": [
+          "storage"
+        ]
       }
     },
     "/api/storage/synthetic-objects": {
@@ -76,7 +101,9 @@
           }
         },
         "summary": "Cleanup synthetic object-storage keys",
-        "tags": ["storage"]
+        "tags": [
+          "storage"
+        ]
       }
     },
     "/api/observability/probe": {
@@ -89,7 +116,9 @@
           }
         },
         "summary": "Run synthetic API-to-worker observability correlation probe",
-        "tags": ["observability"]
+        "tags": [
+          "observability"
+        ]
       }
     }
   },

@@ -51,7 +51,7 @@
     "browser:cli:close": "playwright-cli -s=nelyohealth-smoke close",
     "browser:cli:cleanup": "playwright-cli -s=nelyohealth-smoke close && playwright-cli -s=nelyohealth-smoke delete-data",
     "build": "pnpm topology:build && pnpm tokens:build && pnpm --filter @nelyohealth/content-registry build && pnpm --filter @nelyohealth/ui-foundation build && pnpm --filter @nelyohealth/design-foundation-preview build",
-    "gates:authz": "node tools/checks/authorization-endpoint-coverage-gate.mjs",
+    "gates:authz": "node tools/checks/authorization-endpoint-coverage-gate.mjs --enforce",
     "gates:outbox": "node tools/checks/outbox-usage-gate.mjs",
     "gates:verify": "pnpm gates:authz && pnpm gates:outbox",
     "secret:scan": "node tools/checks/basic-secret-scan.mjs",

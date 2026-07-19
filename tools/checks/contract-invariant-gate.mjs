@@ -41,7 +41,12 @@ const apiOnlyModules = new Set([
   "referral-prescription-routes",
   "tracing-context",
   "identity-session-service",
-  "acting-context-resolver"
+  "acting-context-resolver",
+  // Server-side Policy Decision Point (clinical RBAC/ABAC/ReBAC). Evaluated
+  // in the API only; never mirrored to clients. Reclassified from a contract
+  // exemption to api-only at M2.3 (authorization is server-side infrastructure).
+  "authorization-policy",
+  "authorization-policy-handlers"
 ]);
 // --- Governed contract-mirror exemptions ---------------------------------
 // Temporary, documented exceptions to the api/api-client mirror requirement.

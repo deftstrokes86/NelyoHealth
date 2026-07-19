@@ -1,5 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from "@nestjs/common";
 import { ApiExceptionFilter } from "./api-exception.filter.js";
+import { AuthorizationModule } from "./authorization/authorization.module.js";
 import { IdempotencyMiddleware } from "./idempotency.middleware.js";
 import { ObservabilityModule } from "./observability/observability.module.js";
 import { RequestContextMiddleware } from "./request-context.middleware.js";
@@ -7,7 +8,7 @@ import { StorageModule } from "./storage/storage.module.js";
 import { SystemModule } from "./system/system.module.js";
 
 @Module({
-  imports: [SystemModule, StorageModule, ObservabilityModule],
+  imports: [AuthorizationModule, SystemModule, StorageModule, ObservabilityModule],
   providers: [ApiExceptionFilter, RequestContextMiddleware, IdempotencyMiddleware]
 })
 export class AppModule implements NestModule {

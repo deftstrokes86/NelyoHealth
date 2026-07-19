@@ -1,20 +1,22 @@
 #!/usr/bin/env node
 /**
- * Construction gate: authorization endpoint coverage (roadmap M0.3).
+ * Construction gate: authorization endpoint coverage (roadmap M0.3, blocking at M2.3).
  *
- * Inventories every HTTP route exposed by apps/api (NestJS decorators and
- * Hono registrations) and reports which routes lack involvement of the
- * central authorization policy (authorization-policy.ts — the platform PDP).
+ * As of M2.3 the NestJS runtime enforces authorization through a single
+ * mandatory PEP guard (AuthorizationGuard) registered globally via APP_GUARD.
+ * The model is default-deny: every route is protected unless it is explicitly
+ * declared @Public(). This gate verifies that posture:
+ *
+ *   1. the global PEP guard is registered (otherwise nothing is enforced);
+ *   2. every NestJS route is either protected-by-the-guard or an explicitly
+ *      sanctioned @Public() route (the declarative public allowlist);
+ *   3. legacy Hono routes (apps/api/src/server.ts), which are not under the
+ *      Nest guard, still reference the authorization policy directly.
  *
  * Modes:
- *   default    — ADVISORY: prints the coverage report, always exits 0.
- *   --enforce  — BLOCKING: exits 1 when any non-allowlisted route is
- *                uncovered. CI flips to this mode at roadmap M2.3
- *                (universal authorization guard).
- *
- * Coverage heuristic (deliberately simple and reviewable): a route is
- * "covered" when its defining module, or a module it imports directly,
- * references the authorization policy entrypoints.
+ *   default    — ADVISORY: prints the report, always exits 0.
+ *   --enforce  — BLOCKING: exits 1 on any uncovered/undeclared route or if the
+ *                global guard is missing. CI runs this mode from M2.3 onward.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -23,14 +25,33 @@ const root = process.cwd();
 const apiSrc = path.join(root, "apps", "api", "src");
 const enforce = process.argv.includes("--enforce");
 
-/** Routes that are intentionally public (liveness/readiness only). */
-const PUBLIC_ROUTE_ALLOWLIST = new Set([
+/**
+ * Sanctioned public routes — the explicit, reviewable public-endpoint
+ * allowlist. A route may be @Public() only if it appears here; a @Public()
+ * route absent from this set fails the gate (accidental exposure), and a
+ * sanctioned route that is not actually @Public() is reported as drift.
+ *
+ * Rationale per route:
+ *  - health/ready: liveness/readiness, no principal.
+ *  - idempotency/observability probe: synthetic operational plumbing; no
+ *    principal-scoped resource access.
+ *  - storage synthetic endpoints: synthetic-only scaffolding (synthetic
+ *    documents/objects); real document access will be a protected business
+ *    route.
+ *  - GET /api/health (hono): legacy liveness.
+ */
+const SANCTIONED_PUBLIC_ROUTES = new Set([
   "GET /api/health",
   "GET /api/ready",
+  "POST /api/idempotency/probe",
+  "POST /api/observability/probe",
+  "POST /api/storage/signed-url/upload",
+  "POST /api/storage/signed-url/download",
+  "DELETE /api/storage/synthetic-objects",
   "GET /api/health (hono)"
 ]);
 
-/** Markers indicating the central PDP is involved. */
+/** Markers indicating a (Hono) route references the authorization policy directly. */
 const AUTHORIZATION_MARKERS = [
   "evaluateAuthorizationPolicyDecision",
   'from "./authorization-policy.js"',
@@ -59,6 +80,15 @@ function walk(dir) {
 const files = walk(apiSrc);
 const sourceByFile = new Map(files.map((file) => [file, fs.readFileSync(file, "utf8")]));
 
+// 1. Confirm the global PEP guard is actually registered as a provider
+// (a real `provide: APP_GUARD, useClass: AuthorizationGuard` binding — not a
+// mere import of those symbols, which would be trivially satisfiable).
+const GUARD_REGISTRATION_PATTERN =
+  /provide:\s*APP_GUARD[\s\S]{0,160}useClass:\s*AuthorizationGuard/;
+const guardRegistered = [...sourceByFile.values()].some((source) =>
+  GUARD_REGISTRATION_PATTERN.test(source)
+);
+
 function directImports(file) {
   const source = sourceByFile.get(file) ?? "";
   const imports = [];
@@ -69,7 +99,7 @@ function directImports(file) {
   return imports;
 }
 
-function isAuthorizationInvolved(file) {
+function honoReferencesPolicy(file) {
   const candidates = [file, ...directImports(file)];
   return candidates.some((candidate) => {
     const source = sourceByFile.get(candidate) ?? "";
@@ -77,9 +107,17 @@ function isAuthorizationInvolved(file) {
   });
 }
 
+/** True when a @Public() decorator sits in the decorator stack of this route. */
+function isPublicRoute(source, decoratorIndex) {
+  const windowStart = Math.max(0, decoratorIndex - 220);
+  const bodyIndex = source.indexOf("{", decoratorIndex);
+  const windowEnd = bodyIndex === -1 ? decoratorIndex + 220 : bodyIndex;
+  return source.slice(windowStart, windowEnd).includes("@Public(");
+}
+
 const routes = [];
 
-// 1. NestJS controller routes.
+// NestJS controller routes.
 for (const file of files) {
   const source = sourceByFile.get(file);
   const controllerMatch = source.match(/@Controller\(\s*"([^"]*)"\s*\)/);
@@ -89,50 +127,96 @@ for (const file of files) {
     const method = match[1].toUpperCase();
     const subPath = match[2] ?? "";
     const fullPath = `/${[basePath, subPath].filter(Boolean).join("/")}`;
+    const route = `${method} ${fullPath}`;
+    const isPublic = isPublicRoute(source, match.index ?? 0);
     routes.push({
-      route: `${method} ${fullPath}`,
+      route,
       file: path.relative(root, file),
-      covered: isAuthorizationInvolved(file)
+      runtime: "nest",
+      isPublic,
+      covered: isPublic || guardRegistered
     });
   }
 }
 
-// 2. Hono routes (first argument must be a string path).
+// Legacy Hono routes (not under the Nest guard).
 for (const file of files) {
   const source = sourceByFile.get(file);
   for (const match of source.matchAll(/\bapp\.(get|post|put|patch|delete)\(\s*"([^"]+)"/g)) {
     const method = match[1].toUpperCase();
-    const routeKey = `${method} ${match[2]}`;
+    let route = `${method} ${match[2]}`;
+    if (route === "GET /api/health") route = "GET /api/health (hono)";
+    const isPublic = SANCTIONED_PUBLIC_ROUTES.has(route);
     routes.push({
-      route: routeKey === "GET /api/health" ? `${routeKey} (hono)` : routeKey,
+      route,
       file: path.relative(root, file),
-      covered: isAuthorizationInvolved(file)
+      runtime: "hono",
+      isPublic,
+      covered: isPublic || honoReferencesPolicy(file)
     });
   }
 }
 
 routes.sort((a, b) => a.route.localeCompare(b.route));
 
-const uncovered = routes.filter(
-  (entry) => !entry.covered && !PUBLIC_ROUTE_ALLOWLIST.has(entry.route)
-);
-const covered = routes.filter((entry) => entry.covered);
-const publicRoutes = routes.filter((entry) => PUBLIC_ROUTE_ALLOWLIST.has(entry.route));
+const failures = [];
+
+if (!guardRegistered) {
+  failures.push(
+    "Global PEP guard not found: no module registers AuthorizationGuard via APP_GUARD — authorization is not enforced."
+  );
+}
+
+// A @Public route must be sanctioned; a protected route must be covered.
+const undeclaredPublic = [];
+const uncovered = [];
+for (const entry of routes) {
+  if (entry.isPublic && !SANCTIONED_PUBLIC_ROUTES.has(entry.route)) {
+    undeclaredPublic.push(entry);
+  }
+  if (!entry.covered) {
+    uncovered.push(entry);
+  }
+}
+
+// Drift: a sanctioned public route that is no longer actually public (Nest only).
+const staleSanctioned = [...SANCTIONED_PUBLIC_ROUTES].filter((route) => {
+  const match = routes.find((entry) => entry.route === route);
+  return match && match.runtime === "nest" && !match.isPublic;
+});
+
+if (undeclaredPublic.length > 0) {
+  failures.push(
+    `Undeclared public route(s): ${undeclaredPublic
+      .map((entry) => entry.route)
+      .join(
+        ", "
+      )} — a @Public() route must be added to SANCTIONED_PUBLIC_ROUTES with justification.`
+  );
+}
+if (uncovered.length > 0) {
+  failures.push(
+    `Uncovered route(s): ${uncovered.map((entry) => entry.route).join(", ")} — not protected by the guard and not sanctioned public.`
+  );
+}
+if (staleSanctioned.length > 0) {
+  failures.push(
+    `Stale public allowlist entr(ies): ${staleSanctioned.join(", ")} — sanctioned public but no longer marked @Public(); remove from the allowlist.`
+  );
+}
+
+const publicRoutes = routes.filter((entry) => entry.isPublic);
+const protectedRoutes = routes.filter((entry) => !entry.isPublic);
 
 console.log(`Authorization endpoint-coverage gate (${enforce ? "ENFORCING" : "ADVISORY"})`);
+console.log(`Global PEP guard registered: ${guardRegistered ? "yes" : "NO"}`);
 console.log(`Routes discovered: ${routes.length}`);
 console.log(
-  `  covered by authorization policy: ${covered.length}` +
-    ` | public allowlist: ${publicRoutes.length}` +
-    ` | UNCOVERED: ${uncovered.length}`
+  `  protected (guard/policy): ${protectedRoutes.length} | public: ${publicRoutes.length}`
 );
 for (const entry of routes) {
-  const status = entry.covered
-    ? "covered "
-    : PUBLIC_ROUTE_ALLOWLIST.has(entry.route)
-      ? "public  "
-      : "UNCOVERED";
-  console.log(`  [${status}] ${entry.route}  (${entry.file})`);
+  const status = entry.isPublic ? "public   " : entry.covered ? "protected" : "UNCOVERED";
+  console.log(`  [${status}] ${entry.route}  (${entry.runtime}: ${entry.file})`);
 }
 
 if (routes.length === 0) {
@@ -140,14 +224,15 @@ if (routes.length === 0) {
   process.exit(1);
 }
 
-if (enforce && uncovered.length > 0) {
-  console.error(`\nFAIL: ${uncovered.length} route(s) lack authorization-policy involvement.`);
-  process.exit(1);
-}
-
-if (!enforce && uncovered.length > 0) {
+if (failures.length > 0) {
+  console.error("");
+  for (const failure of failures) console.error(`FAIL: ${failure}`);
+  if (enforce) {
+    process.exit(1);
+  }
+  console.log("\nAdvisory only — this gate is blocking under --enforce.");
+} else {
   console.log(
-    `\nAdvisory: ${uncovered.length} route(s) currently lack authorization-policy involvement.` +
-      " This gate becomes blocking at roadmap M2.3."
+    "\nAuthorization coverage OK: PEP guard enforced; every route protected or sanctioned public."
   );
 }

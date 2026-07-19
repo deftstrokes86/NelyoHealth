@@ -3,6 +3,7 @@ import type { Request } from "express";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import type { ApiEnvelope } from "../api-envelope.js";
 import { createMeta } from "../api-envelope.js";
+import { Public } from "../authorization/authorization-metadata.js";
 import { StorageService } from "./storage.service.js";
 
 interface SignedUrlRequestBody {
@@ -21,6 +22,7 @@ export class StorageController {
   constructor(private readonly storageService: StorageService) {}
 
   @Post("signed-url/upload")
+  @Public()
   @ApiOperation({ summary: "Issue synthetic signed upload URL" })
   @ApiOkResponse({ description: "Signed upload URL envelope" })
   async issueUploadUrl(
@@ -41,6 +43,7 @@ export class StorageController {
   }
 
   @Post("signed-url/download")
+  @Public()
   @ApiOperation({ summary: "Issue synthetic signed download URL" })
   @ApiOkResponse({ description: "Signed download URL envelope" })
   async issueDownloadUrl(
@@ -61,6 +64,7 @@ export class StorageController {
   }
 
   @Delete("synthetic-objects")
+  @Public()
   @ApiOperation({ summary: "Cleanup synthetic object-storage keys" })
   @ApiOkResponse({ description: "Synthetic cleanup envelope" })
   async cleanupSyntheticObjects(

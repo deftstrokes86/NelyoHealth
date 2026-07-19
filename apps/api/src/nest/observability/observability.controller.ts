@@ -3,6 +3,7 @@ import type { Request } from "express";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import type { ApiEnvelope } from "../api-envelope.js";
 import { createMeta } from "../api-envelope.js";
+import { Public } from "../authorization/authorization-metadata.js";
 import { ObservabilityService } from "./observability.service.js";
 
 interface ObservabilityProbeBody {
@@ -17,6 +18,7 @@ export class ObservabilityController {
   constructor(private readonly observabilityService: ObservabilityService) {}
 
   @Post("probe")
+  @Public()
   @ApiOperation({ summary: "Run synthetic API-to-worker observability correlation probe" })
   @ApiOkResponse({ description: "Observability probe envelope" })
   async runProbe(

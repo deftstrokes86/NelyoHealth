@@ -54,7 +54,7 @@ jobs:
       - name: Contract drift and invariant tests
         run: pnpm test:contract
 
-      - name: Construction gates (advisory until M2.3/M3.3)
+      - name: Construction gates (authz enforcing since M2.3; outbox advisory until M3.3)
         run: pnpm gates:verify
 
       - name: Integration tests

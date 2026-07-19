@@ -3,44 +3,30 @@
   "exemptions": [
     {
       "module": "authentication",
-      "reason": "Draft authentication contracts predate their HTTP surface; typed client mirror becomes real when auth routes land under the universal guard.",
+      "reason": "Authentication contracts gain their typed client mirror when the web shells implement client-facing login/registration flows. M2.3 built server-side authorization infrastructure only (no client auth surface).",
       "dateIntroduced": "2026-07-18",
-      "expectedRemovalMilestone": "M2.3",
+      "expectedRemovalMilestone": "M7.1",
       "owner": "Lead Platform Engineer"
     },
     {
       "module": "authentication-handlers",
-      "reason": "Decision logic for the auth routes arriving with the universal guard.",
+      "reason": "Decision logic for the client-facing auth flows landing with the web shells (M7.1).",
       "dateIntroduced": "2026-07-18",
-      "expectedRemovalMilestone": "M2.3",
-      "owner": "Lead Platform Engineer"
-    },
-    {
-      "module": "authorization-policy",
-      "reason": "PDP contracts gain their client mirror when the authorization surface is exposed with the universal guard.",
-      "dateIntroduced": "2026-07-18",
-      "expectedRemovalMilestone": "M2.3",
-      "owner": "Lead Platform Engineer"
-    },
-    {
-      "module": "authorization-policy-handlers",
-      "reason": "PDP evaluation handlers for the M2.3 authorization surface.",
-      "dateIntroduced": "2026-07-18",
-      "expectedRemovalMilestone": "M2.3",
+      "expectedRemovalMilestone": "M7.1",
       "owner": "Lead Platform Engineer"
     },
     {
       "module": "tenancy",
-      "reason": "Tenancy access contracts surface with the ActingContext resolver and workspace-switch endpoints.",
+      "reason": "Tenancy access contracts gain their client mirror when the web shells implement workspace display/switch. M2.2/M2.3 consume tenancy server-side (ActingContext resolver + session-context endpoint); no client tenancy surface yet.",
       "dateIntroduced": "2026-07-18",
-      "expectedRemovalMilestone": "M2.3",
+      "expectedRemovalMilestone": "M7.1",
       "owner": "Lead Platform Engineer"
     },
     {
       "module": "tenancy-handlers",
-      "reason": "Tenancy evaluation handlers for the M2.2/M2.3 context surface.",
+      "reason": "Tenancy evaluation handlers for the client-facing workspace flows landing with the web shells (M7.1).",
       "dateIntroduced": "2026-07-18",
-      "expectedRemovalMilestone": "M2.3",
+      "expectedRemovalMilestone": "M7.1",
       "owner": "Lead Platform Engineer"
     },
     {
