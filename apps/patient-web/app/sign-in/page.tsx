@@ -2,16 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Building2,
-  Fingerprint,
-  Chrome,
-  LifeBuoy,
-  Lock,
-  Mail,
-  ShieldCheck,
-  UsersRound
-} from "lucide-react";
+import { Building2, Fingerprint, Chrome, LifeBuoy, Lock, Mail } from "lucide-react";
 import { Button, Checkbox, useContent } from "@nelyohealth/ui-foundation";
 import { AuthCard } from "../../src/components/auth/AuthCard";
 import { AuthFooter } from "../../src/components/auth/AuthFooter";
@@ -20,7 +11,6 @@ import { AuthLayout } from "../../src/components/auth/AuthLayout";
 import { PasswordInput } from "../../src/components/auth/PasswordInput";
 import { SecurityBadge } from "../../src/components/auth/SecurityBadge";
 import { SocialAuthButton } from "../../src/components/auth/SocialAuthButton";
-import { TrustFeature } from "../../src/components/auth/TrustFeature";
 import { signInSchema } from "../../src/lib/auth-schemas";
 
 type SubmitState = "idle" | "submitting" | "success";
@@ -107,14 +97,16 @@ export default function SignInPage() {
 
   return (
     <AuthLayout
-      eyebrow={brand.title}
-      headline={hero.title}
-      body={hero.body}
-      trustFeatures={
+      image={{
+        src: "/assets/sign-in-hero.png",
+        alt: `${brand.title} — ${hero.title}`,
+        width: 608,
+        height: 1404
+      }}
+      srOnlyDescription={
         <>
-          <TrustFeature icon={ShieldCheck} title={trustControl.title} body={trustControl.body} />
-          <TrustFeature icon={UsersRound} title={trustRoleAware.title} body={trustRoleAware.body} />
-          <TrustFeature icon={Lock} title={trustSecure.title} body={trustSecure.body} />
+          {hero.body} {trustControl.title} {trustControl.body} {trustRoleAware.title}{" "}
+          {trustRoleAware.body} {trustSecure.title} {trustSecure.body}
         </>
       }
     >

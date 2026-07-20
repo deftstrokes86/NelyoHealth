@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { CircleCheck, Layers, Mail, ShieldCheck, User, Wrench } from "lucide-react";
+import { CircleCheck, Mail, ShieldCheck, User } from "lucide-react";
 import { Button, Checkbox, Link, useContent } from "@nelyohealth/ui-foundation";
 import { AuthCard } from "../../src/components/auth/AuthCard";
 import { AuthFooter } from "../../src/components/auth/AuthFooter";
@@ -9,7 +9,6 @@ import { AuthInput } from "../../src/components/auth/AuthInput";
 import { AuthLayout } from "../../src/components/auth/AuthLayout";
 import { PasswordInput } from "../../src/components/auth/PasswordInput";
 import { SecurityBadge } from "../../src/components/auth/SecurityBadge";
-import { TrustFeature } from "../../src/components/auth/TrustFeature";
 import { signUpSchema } from "../../src/lib/auth-schemas";
 
 type SubmitState = "idle" | "submitting" | "success";
@@ -104,22 +103,22 @@ export default function CreateAccountPage() {
 
   const isSubmitting = state === "submitting" || state === "success";
 
-  const trustFeatures = (
+  const heroImage = {
+    src: "/assets/create-account-hero.png",
+    alt: `${brand.title} — ${hero.title}`,
+    width: 597,
+    height: 1402
+  };
+  const srOnlyDescription = (
     <>
-      <TrustFeature icon={Layers} title={trustEssentials.title} body={trustEssentials.body} />
-      <TrustFeature icon={ShieldCheck} title={trustControl.title} body={trustControl.body} />
-      <TrustFeature icon={Wrench} title={trustEveryRole.title} body={trustEveryRole.body} />
+      {hero.body} {trustEssentials.title} {trustEssentials.body} {trustControl.title}{" "}
+      {trustControl.body} {trustEveryRole.title} {trustEveryRole.body}
     </>
   );
 
   if (state === "success") {
     return (
-      <AuthLayout
-        eyebrow={brand.title}
-        headline={hero.title}
-        body={hero.body}
-        trustFeatures={trustFeatures}
-      >
+      <AuthLayout image={heroImage} srOnlyDescription={srOnlyDescription}>
         <AuthCard title={successCheckEmail.title} subtitle={successCheckEmail.body}>
           <div className="flex flex-col items-center gap-4 py-6 text-center">
             <span className="flex h-14 w-14 items-center justify-center rounded-full bg-ds-brand-50 text-ds-brand-600">
@@ -138,12 +137,7 @@ export default function CreateAccountPage() {
   }
 
   return (
-    <AuthLayout
-      eyebrow={brand.title}
-      headline={hero.title}
-      body={hero.body}
-      trustFeatures={trustFeatures}
-    >
+    <AuthLayout image={heroImage} srOnlyDescription={srOnlyDescription}>
       <AuthCard title={card.title} subtitle={card.body}>
         <form className="flex flex-col gap-5" onSubmit={handleSubmit} noValidate>
           <AuthInput
