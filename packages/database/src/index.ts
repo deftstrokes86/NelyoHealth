@@ -172,6 +172,21 @@ export {
 export { PgOutboxStore, PgTransactionAdapter } from "./pg-outbox.js";
 
 export {
+  assertSafeAuditEvent,
+  runTransactionalCommand,
+  SyntheticInMemoryAuditSink,
+  type AuditEventRecord,
+  type AuditSink,
+  type CommandActor,
+  type CommandAuditOutcome,
+  type CommandDescriptor,
+  type TransactionalCommandContext,
+  type TransactionalCommandResult
+} from "./transactional-command.js";
+
+export { PgAuditSink, listAuditEventsForAggregate, readAuditEventById } from "./pg-audit.js";
+
+export {
   countRecentAuthenticationFailures,
   createPasswordCredential,
   getPasswordCredentialByUserAccountId,

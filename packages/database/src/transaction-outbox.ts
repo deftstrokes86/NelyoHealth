@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { FORBIDDEN_EVENT_PAYLOAD_KEY_FRAGMENTS } from "@nelyohealth/domain";
 
 export interface DomainEventSafeContext {
   requestId: string;
@@ -276,20 +277,11 @@ function assertSafeDomainEvent<TPayload extends Record<string, unknown>>(
     throw new Error("Outbox domain event requires correlationId and idempotencyKey.");
   }
 
-  const forbiddenFragments = [
-    "phi",
-    "clinical",
-    "secret",
-    "password",
-    "token",
-    "paymentcard",
-    "providernpi",
-    "provideraddress"
-  ] as const;
-
+  // Converged onto the domain's single source of truth (M3.x retrofit) so the
+  // outbox and the M3.1 audit path enforce the same references-not-bodies rule.
   for (const payloadKey of Object.keys(event.payload)) {
     const normalizedKey = payloadKey.toLowerCase();
-    for (const fragment of forbiddenFragments) {
+    for (const fragment of FORBIDDEN_EVENT_PAYLOAD_KEY_FRAGMENTS) {
       if (normalizedKey.includes(fragment)) {
         throw new Error(
           `Outbox payload key '${payloadKey}' violates synthetic-safety constraints.`
