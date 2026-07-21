@@ -32,8 +32,8 @@
     "@nelyohealth/domain": "workspace:*"
   },
   "devDependencies": {
-    "@nestjs/testing": "11.1.27",
-    "@types/express": "5.0.3",
+    "@nestjs/testing": "11.1.28",
+    "@types/express": "5.0.6",
     "@types/pg": "8.20.0"
   }
 }
