@@ -96,6 +96,7 @@ export {
   SyntheticInMemoryOutboxStore,
   SyntheticTransactionAdapter,
   type DispatchStatus,
+  type DomainEventConsumer,
   type DomainEventEnvelope,
   type DomainEventPublisher,
   type DomainEventSafeContext,
@@ -184,7 +185,15 @@ export {
   type TransactionalCommandResult
 } from "./transactional-command.js";
 
-export { PgAuditSink, listAuditEventsForAggregate, readAuditEventById } from "./pg-audit.js";
+export {
+  PgAuditSink,
+  createAuditTrailConsumer,
+  listAuditEventsForAggregate,
+  listAuditTrailByCorrelation,
+  readAuditEventById,
+  type AuditEventSource,
+  type PersistedAuditEvent
+} from "./pg-audit.js";
 
 export {
   countRecentAuthenticationFailures,

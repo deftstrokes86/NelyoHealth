@@ -46,6 +46,18 @@ export interface DomainEventPublisher<TPayload extends Record<string, unknown>> 
   publish(event: OutboxEventRecord<TPayload>): Promise<void>;
 }
 
+/**
+ * A named subscriber the dispatcher fans a dispatched domain event out to
+ * (audit, notifications, projections, analytics — roadmap M3.2). Consumers
+ * must be idempotent keyed by eventId: under at-least-once redelivery, an
+ * event is re-offered to ALL consumers, so a consumer that already applied it
+ * must no-op.
+ */
+export interface DomainEventConsumer<TPayload extends Record<string, unknown>> {
+  readonly name: string;
+  consume(event: OutboxEventRecord<TPayload>): Promise<void>;
+}
+
 export class ExternalCallPolicy {
   private transactionDepth = 0;
 
@@ -109,20 +121,31 @@ export async function runTransactionalWorkWithOutbox<
   }
 }
 
+/**
+ * Dispatch pending outbox events, fanning each out to every registered
+ * consumer (roadmap M3.2). An event is marked dispatched only when ALL
+ * consumers accept it; if any consumer throws, the whole event is retried
+ * (and re-offered to every consumer — hence the idempotency requirement) up
+ * to maxAttempts, then dead-lettered. Backward compatible: a single
+ * `publisher` is accepted and treated as one consumer, so existing callers
+ * are unchanged.
+ */
 export async function dispatchPendingOutboxEvents<
   TClient,
   TPayload extends Record<string, unknown>
 >(input: {
   outbox: TransactionalOutboxPort<TClient, TPayload>;
-  publisher: DomainEventPublisher<TPayload>;
   externalCallPolicy: ExternalCallPolicy;
   maxAttempts: number;
   batchSize?: number;
+  publisher?: DomainEventPublisher<TPayload>;
+  consumers?: Array<DomainEventConsumer<TPayload>>;
 }): Promise<{
   dispatched: number;
   retried: number;
   deadLettered: number;
 }> {
+  const consumers = resolveConsumers(input.consumers, input.publisher);
   const batchSize = input.batchSize ?? 50;
   const pendingEvents = await input.outbox.listPending(batchSize);
 
@@ -131,10 +154,11 @@ export async function dispatchPendingOutboxEvents<
   let deadLettered = 0;
 
   for (const event of pendingEvents) {
-    input.externalCallPolicy.assertOutsideTransaction("outbox-publisher.publish");
-
     try {
-      await input.publisher.publish(event);
+      for (const consumer of consumers) {
+        input.externalCallPolicy.assertOutsideTransaction(`outbox-consumer.${consumer.name}`);
+        await consumer.consume(event);
+      }
       await input.outbox.markDispatched(event.eventId, new Date().toISOString());
       dispatched += 1;
     } catch (error) {
@@ -155,6 +179,19 @@ export async function dispatchPendingOutboxEvents<
     retried,
     deadLettered
   };
+}
+
+function resolveConsumers<TPayload extends Record<string, unknown>>(
+  consumers: Array<DomainEventConsumer<TPayload>> | undefined,
+  publisher: DomainEventPublisher<TPayload> | undefined
+): Array<DomainEventConsumer<TPayload>> {
+  if (consumers && consumers.length > 0) {
+    return consumers;
+  }
+  if (publisher) {
+    return [{ name: "publisher", consume: (event) => publisher.publish(event) }];
+  }
+  throw new Error("dispatchPendingOutboxEvents requires a publisher or at least one consumer.");
 }
 
 export function createDomainEventEnvelope<TPayload extends Record<string, unknown>>(
