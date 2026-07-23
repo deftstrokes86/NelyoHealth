@@ -37,20 +37,6 @@
       "owner": "Lead Platform Engineer"
     },
     {
-      "module": "relationship-model",
-      "reason": "Relationship contracts gain their surface with relationship persistence.",
-      "dateIntroduced": "2026-07-18",
-      "expectedRemovalMilestone": "M4.2",
-      "owner": "Lead Platform Engineer"
-    },
-    {
-      "module": "relationship-workflows",
-      "reason": "Relationship workflow handlers for the M4.2 surface.",
-      "dateIntroduced": "2026-07-18",
-      "expectedRemovalMilestone": "M4.2",
-      "owner": "Lead Platform Engineer"
-    },
-    {
       "module": "break-glass-workflows",
       "reason": "Break-glass workflows gain their surface with the persisted break-glass flow.",
       "dateIntroduced": "2026-07-18",

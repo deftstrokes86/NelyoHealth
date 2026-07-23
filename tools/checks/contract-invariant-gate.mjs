@@ -59,7 +59,17 @@ const apiOnlyModules = new Set([
   // at which point a real api-client mirror is introduced.
   "granular-consent",
   "granular-consent-workflows",
-  "consent-service"
+  "consent-service",
+  // Relationship persistence + relationship-gated authorization (roadmap M4.2).
+  // The relationship domain types, the versioned workflow logic, and the
+  // establish/verify/revoke command + ReBAC-integration service are server-side:
+  // the relationship dimension is DERIVED on the authorization path, never
+  // shipped as a client contract. Reclassified from contract exemptions to
+  // api-only at M4.2. A client-facing relationship DTO surface lands with the
+  // relationship-management UI (later milestone).
+  "relationship-model",
+  "relationship-workflows",
+  "relationship-service"
 ]);
 // Note: apps/api/src/nest/** is not scanned by this gate at all (getContractModules
 // reads apps/api/src non-recursively) — the new auth controllers/module living

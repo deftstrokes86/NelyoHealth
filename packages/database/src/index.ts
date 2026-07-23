@@ -214,3 +214,15 @@ export {
   type PersistedConsentRecord,
   type PersistedConsentVersion
 } from "./consent-repository.js";
+
+export {
+  insertRelationship,
+  listRelationshipsForActorPatient,
+  loadRelationship,
+  loadRelationshipForSubject,
+  markRelationshipRevoked,
+  reactivateRelationship,
+  setRelationshipVerificationMethod,
+  type PersistedRelationship,
+  type RelationshipStoredStatus
+} from "./relationship-repository.js";
