@@ -226,3 +226,16 @@ export {
   type PersistedRelationship,
   type RelationshipStoredStatus
 } from "./relationship-repository.js";
+
+export {
+  activateBreakGlassAccess,
+  insertBreakGlassAccess,
+  listBreakGlassForPatient,
+  loadActiveBreakGlassForSubject,
+  loadBreakGlassAccess,
+  markBreakGlassExpired,
+  recordBreakGlassReview,
+  type BreakGlassReviewOutcome,
+  type BreakGlassStatus,
+  type PersistedBreakGlassAccess
+} from "./break-glass-repository.js";

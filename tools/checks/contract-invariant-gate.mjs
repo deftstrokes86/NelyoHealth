@@ -69,7 +69,16 @@ const apiOnlyModules = new Set([
   // relationship-management UI (later milestone).
   "relationship-model",
   "relationship-workflows",
-  "relationship-service"
+  "relationship-service",
+  // Break-glass persistence + break-glass-gated authorization (roadmap M4.3).
+  // The emergency-access workflow logic and the request/activate/review command +
+  // override-integration service are server-side: the break-glass override is
+  // DERIVED on the authorization path from a persisted grant, never shipped as a
+  // client contract, and the justification never leaves the server in a payload.
+  // Reclassified from a contract exemption to api-only at M4.3. A client-facing
+  // break-glass surface (request/review UI) lands with the emergency-access UI.
+  "break-glass-workflows",
+  "break-glass-service"
 ]);
 // Note: apps/api/src/nest/** is not scanned by this gate at all (getContractModules
 // reads apps/api/src non-recursively) — the new auth controllers/module living

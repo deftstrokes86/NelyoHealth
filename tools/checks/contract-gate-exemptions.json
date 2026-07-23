@@ -35,13 +35,6 @@
       "dateIntroduced": "2026-07-18",
       "expectedRemovalMilestone": "M3.2",
       "owner": "Lead Platform Engineer"
-    },
-    {
-      "module": "break-glass-workflows",
-      "reason": "Break-glass workflows gain their surface with the persisted break-glass flow.",
-      "dateIntroduced": "2026-07-18",
-      "expectedRemovalMilestone": "M4.3",
-      "owner": "Lead Platform Engineer"
     }
   ]
 }
