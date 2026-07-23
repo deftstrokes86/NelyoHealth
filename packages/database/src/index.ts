@@ -201,3 +201,16 @@ export {
   getPasswordCredentialByUserAccountId,
   type PasswordCredential
 } from "./password-credential-repository.js";
+
+export {
+  insertConsentRecord,
+  insertConsentVersion,
+  loadConsentRecord,
+  loadConsentRecordByPatientOrg,
+  markConsentVersionRevoked,
+  markConsentVersionSuperseded,
+  setConsentRecordCurrentVersion,
+  type ConsentVersionStatus,
+  type PersistedConsentRecord,
+  type PersistedConsentVersion
+} from "./consent-repository.js";

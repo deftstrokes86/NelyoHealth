@@ -49,7 +49,17 @@ const apiOnlyModules = new Set([
   // in the API only; never mirrored to clients. Reclassified from a contract
   // exemption to api-only at M2.3 (authorization is server-side infrastructure).
   "authorization-policy",
-  "authorization-policy-handlers"
+  "authorization-policy-handlers",
+  // Consent persistence + consent-gated authorization (roadmap M4.1). The
+  // consent domain types, the versioned workflow logic, and the grant/withdraw
+  // command + PDP-integration service are all server-side: consent status is
+  // DERIVED on the authorization path, never shipped as a client contract.
+  // Reclassified from contract exemptions to api-only at M4.1. A client-facing
+  // consent DTO surface lands with the consent-management UI (later milestone),
+  // at which point a real api-client mirror is introduced.
+  "granular-consent",
+  "granular-consent-workflows",
+  "consent-service"
 ]);
 // Note: apps/api/src/nest/** is not scanned by this gate at all (getContractModules
 // reads apps/api/src non-recursively) — the new auth controllers/module living
