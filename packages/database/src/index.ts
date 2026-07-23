@@ -239,3 +239,18 @@ export {
   type BreakGlassStatus,
   type PersistedBreakGlassAccess
 } from "./break-glass-repository.js";
+
+export {
+  findPatientIdByIdentifier,
+  insertPatientIdentifier,
+  insertPatientProfile,
+  loadPatientProfile,
+  loadPatientProfileByPersonOrg,
+  updatePatientProfileDemographics,
+  type PatientBiologicalSex,
+  type PatientContactPoint,
+  type PatientEmergencyContact,
+  type PatientIdentifier,
+  type PatientProfileStatus,
+  type PersistedPatientProfile
+} from "./patient-profile-repository.js";

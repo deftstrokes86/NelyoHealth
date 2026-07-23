@@ -32,6 +32,45 @@ const policyRules: AuthorizationPolicyRule[] = [
     action: "update-consent",
     purposes: ["consent-management"]
   },
+  // Patient-profile resource (roadmap M5.1). Access is still gated by the full
+  // pipeline: an RBAC match here only opens the door for the consent / ReBAC /
+  // break-glass dimensions to decide.
+  {
+    actorRole: "patient",
+    resource: "patient-profile",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "patient",
+    resource: "patient-profile",
+    action: "update-profile",
+    purposes: ["care-delivery"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "patient-profile",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
+  {
+    actorRole: "caregiver",
+    resource: "patient-profile",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "patient-profile",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "patient-profile",
+    action: "update-profile",
+    purposes: ["care-delivery"]
+  },
   {
     actorRole: "guardian",
     resource: "clinical-record-summary",

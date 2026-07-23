@@ -78,7 +78,13 @@ const apiOnlyModules = new Set([
   // Reclassified from a contract exemption to api-only at M4.3. A client-facing
   // break-glass surface (request/review UI) lands with the emergency-access UI.
   "break-glass-workflows",
-  "break-glass-service"
+  "break-glass-service",
+  // Patient-profile resource (roadmap M5.1). The create/update commands and the
+  // full-pipeline (consent + ReBAC + break-glass) access-governance logic are
+  // server-side; profile demographics/contacts/identifiers never leave the server
+  // in a payload. A client-facing patient-profile DTO surface lands with the
+  // patient-profile UI, at which point a real api-client mirror is introduced.
+  "patient-profile-service"
 ]);
 // Note: apps/api/src/nest/** is not scanned by this gate at all (getContractModules
 // reads apps/api/src non-recursively) — the new auth controllers/module living
