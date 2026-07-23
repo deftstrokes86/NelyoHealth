@@ -254,3 +254,18 @@ export {
   type PatientProfileStatus,
   type PersistedPatientProfile
 } from "./patient-profile-repository.js";
+
+export {
+  insertAppointment,
+  insertAvailabilitySlot,
+  listAppointmentsForPatient,
+  loadAppointment,
+  loadAvailabilitySlot,
+  setAppointmentSchedule,
+  setAppointmentStatus,
+  transitionSlotStatusIf,
+  type AppointmentStatus,
+  type PersistedAppointment,
+  type PersistedAvailabilitySlot,
+  type SlotStatus
+} from "./appointment-repository.js";

@@ -71,6 +71,44 @@ const policyRules: AuthorizationPolicyRule[] = [
     action: "update-profile",
     purposes: ["care-delivery"]
   },
+  // Appointment resource (roadmap M5.2). Read and book flow through the full
+  // pipeline; an RBAC match only opens the door for consent / ReBAC / break-glass.
+  {
+    actorRole: "patient",
+    resource: "appointment",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "patient",
+    resource: "appointment",
+    action: "book",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "appointment",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "appointment",
+    action: "book",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "caregiver",
+    resource: "appointment",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "appointment",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
   {
     actorRole: "guardian",
     resource: "clinical-record-summary",

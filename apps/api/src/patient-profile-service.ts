@@ -9,11 +9,8 @@ import {
   findPatientIdByIdentifier,
   insertPatientIdentifier,
   insertPatientProfile,
-  loadActiveBreakGlassForSubject,
-  loadConsentRecordByPatientOrg,
   loadPatientProfile,
   loadPatientProfileByPersonOrg,
-  loadRelationshipForSubject,
   runTransactionalCommand,
   updatePatientProfileDemographics,
   type AuditSink,
@@ -23,24 +20,23 @@ import {
   type PatientEmergencyContact,
   type PatientIdentifier,
   type PatientProfileStatus,
-  type PersistedBreakGlassAccess,
-  type PersistedConsentRecord,
-  type PersistedPatientProfile,
-  type PersistedRelationship
+  type PersistedPatientProfile
 } from "@nelyohealth/database";
 import type { ConsentDomain } from "./granular-consent.js";
-import { derivePersistedConsentStatus, mapPersistedConsentToDraft } from "./consent-service.js";
-import { mapPersistedRelationshipToDraft } from "./relationship-service.js";
-import { deriveBreakGlassOverride } from "./break-glass-service.js";
-import { evaluateAuthorizationPolicyDecision } from "./authorization-policy-handlers.js";
+import {
+  composeResourceAccessDecision,
+  resolveAndDecideResourceAccess,
+  type ResolvedAuthorizationInputs
+} from "./resource-authorization.js";
 import type {
   AuthorizationActorRole,
   AuthorizationPolicyDecisionDraft,
   AuthorizationPolicyDecisionDraftInput,
   EmergencyStatus,
-  RelationshipType,
   SessionStatus
 } from "./authorization-policy.js";
+
+export type { ResolvedAuthorizationInputs } from "./resource-authorization.js";
 
 /**
  * Patient-profile service (roadmap M5.1 — Core Resource Platform: Patient Profiles).
@@ -331,63 +327,19 @@ export interface PatientProfileAccessRequest {
   evaluatedAt: string;
 }
 
-export interface ResolvedAuthorizationInputs {
-  consent: PersistedConsentRecord | null;
-  relationship: PersistedRelationship | null;
-  breakGlass: PersistedBreakGlassAccess | null;
-}
-
 /**
  * Compose the three persisted access-control dimensions into a single Policy
- * Decision Point evaluation for a patient-profile access. Pure: takes the
- * already-loaded records so the composition is unit-testable without a database.
+ * Decision Point evaluation for a patient-profile access. Pure: delegates to the
+ * shared resource-authorization composition with the patient-profile resource.
  */
 export function decidePatientProfileAccessFrom(
   request: PatientProfileAccessRequest,
   resolved: ResolvedAuthorizationInputs
 ): AuthorizationPolicyDecisionDraft {
-  const consent = resolved.consent ? mapPersistedConsentToDraft(resolved.consent) : undefined;
-  const consentStatus = resolved.consent
-    ? derivePersistedConsentStatus(resolved.consent)
-    : "revoked";
-  const relationship = resolved.relationship
-    ? mapPersistedRelationshipToDraft(resolved.relationship)
-    : undefined;
-  const relationshipType: RelationshipType = resolved.relationship
-    ? (resolved.relationship.relationshipType as RelationshipType)
-    : "none";
-  const relationshipStatus = resolved.relationship ? resolved.relationship.status : "none";
-  const override = deriveBreakGlassOverride(resolved.breakGlass, Date.parse(request.evaluatedAt));
-
-  return evaluateAuthorizationPolicyDecision({
-    decisionRequestId: request.decisionRequestId,
-    actorId: request.actorId,
-    actorRole: request.actorRole,
-    actorType: request.actorType,
-    organizationId: request.organizationId,
-    patientId: request.patientId,
-    relationshipType,
-    relationship,
-    relationshipStatus,
-    requestedConsentDomains: request.requestedConsentDomains,
-    consent,
-    consentStatus,
-    requestedResource: "patient-profile",
-    requestedAction: request.requestedAction,
-    purpose: request.purpose,
-    sessionStatus: request.sessionStatus,
-    activeEncounter: request.activeEncounter,
-    emergencyStatus: request.emergencyStatus,
-    sameTenant: request.sameTenant,
-    sponsorPaymentOnly: false,
-    requiresRelationship: request.requiresRelationship,
-    breakGlassRequested: override.breakGlassRequested,
-    breakGlassReason: override.breakGlassReason,
-    breakGlassWindowMinutes: override.breakGlassWindowMinutes,
-    impersonationAttempt: false,
-    auditEventEditAttempt: false,
-    evaluatedAt: request.evaluatedAt
-  });
+  return composeResourceAccessDecision(
+    { ...request, requestedResource: "patient-profile" },
+    resolved
+  );
 }
 
 /** Load the three persisted dimensions for a decision subject and decide. */
@@ -395,29 +347,10 @@ export async function decidePatientProfileAccess(
   deps: Pick<PatientProfileServiceDeps, "pool">,
   request: PatientProfileAccessRequest
 ): Promise<AuthorizationPolicyDecisionDraft> {
-  const [consent, relationship, breakGlass] = await Promise.all([
-    withClient(deps.pool, (client) =>
-      loadConsentRecordByPatientOrg(client, request.patientId, request.organizationId)
-    ),
-    request.requiresRelationship
-      ? withClient(deps.pool, (client) =>
-          loadRelationshipForSubject(client, {
-            actorRef: request.actorId,
-            patientRef: request.patientId,
-            organizationRef: request.organizationId,
-            relationshipType: request.relationshipType
-          })
-        )
-      : Promise.resolve(null),
-    withClient(deps.pool, (client) =>
-      loadActiveBreakGlassForSubject(client, {
-        actorRef: request.actorId,
-        patientRef: request.patientId,
-        organizationRef: request.organizationId
-      })
-    )
-  ]);
-  return decidePatientProfileAccessFrom(request, { consent, relationship, breakGlass });
+  return resolveAndDecideResourceAccess(deps.pool, {
+    ...request,
+    requestedResource: "patient-profile"
+  });
 }
 
 export type ReadPatientProfileOutcome =

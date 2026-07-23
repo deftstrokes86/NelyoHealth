@@ -84,7 +84,14 @@ const apiOnlyModules = new Set([
   // server-side; profile demographics/contacts/identifiers never leave the server
   // in a payload. A client-facing patient-profile DTO surface lands with the
   // patient-profile UI, at which point a real api-client mirror is introduced.
-  "patient-profile-service"
+  "patient-profile-service",
+  // Core Resource Platform shared authorization + appointment resource (M5.2).
+  // resource-authorization composes the M4 dimensions for every resource;
+  // appointment-service holds the lifecycle commands + decide-before-load/write
+  // governance. Both are server-side; client DTO surfaces land with the resource
+  // UIs. Reclassified api-only at M5.2.
+  "resource-authorization",
+  "appointment-service"
 ]);
 // Note: apps/api/src/nest/** is not scanned by this gate at all (getContractModules
 // reads apps/api/src non-recursively) — the new auth controllers/module living
