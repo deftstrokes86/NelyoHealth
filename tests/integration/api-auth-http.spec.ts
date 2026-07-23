@@ -29,6 +29,13 @@ describe.skipIf(!shouldRun)("auth HTTP endpoints (POST /api/auth/sessions, /regi
   afterAll(async () => {
     if (app) await app.close();
     await client.query(
+      `DELETE FROM nelyo_foundation.audit_event
+       WHERE aggregate_id IN (
+         SELECT id::text FROM nelyo_identity.user_account WHERE login_email LIKE $1
+       )`,
+      [`${run}%`]
+    );
+    await client.query(
       `DELETE FROM nelyo_identity.password_credential pc USING nelyo_identity.user_account ua
        WHERE pc.user_account_id = ua.id AND ua.login_email LIKE $1`,
       [`${run}%`]
@@ -90,10 +97,25 @@ describe.skipIf(!shouldRun)("auth HTTP endpoints (POST /api/auth/sessions, /regi
     expect(body.data).toEqual({ accepted: true });
 
     const account = await client.query(
-      `SELECT status FROM nelyo_identity.user_account WHERE login_email = $1`,
+      `SELECT id, status FROM nelyo_identity.user_account WHERE login_email = $1`,
       [email]
     );
     expect(account.rows[0]?.status).toBe("pending");
+
+    // Retrofit (M3.3): registration now runs as a transactional command, so a
+    // command audit intent was written atomically, keyed on the new account id.
+    const audit = await client.query(
+      `SELECT command_name, action, outcome, actor_account_ref, source
+       FROM nelyo_foundation.audit_event WHERE aggregate_id = $1`,
+      [account.rows[0].id]
+    );
+    expect(audit.rows[0]).toMatchObject({
+      command_name: "identity.registrations.create",
+      action: "register",
+      outcome: "committed",
+      actor_account_ref: "public:registration",
+      source: "command"
+    });
   });
 
   it("rejects a weak password with a specific, safe validation error", async () => {

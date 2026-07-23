@@ -305,6 +305,12 @@ describe("executeAccountSessionRevocation", () => {
     const outcome = await executeAccountSessionRevocation(createFakePorts(state), {
       userAccountId: "account-1",
       reasonCode: "account-recovery",
+      actor: {
+        accountRef: "account-1",
+        personaKind: "personal",
+        actorRole: "patient",
+        tenantRef: null
+      },
       safeContext: {
         requestId: "req-1",
         correlationId: "corr-1",

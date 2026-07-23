@@ -2,6 +2,7 @@ import type { Pool } from "pg";
 import type { AuthenticationEvent, Session, UserAccount } from "@nelyohealth/domain";
 import {
   ExternalCallPolicy,
+  PgAuditSink,
   PgOutboxStore,
   PgTransactionAdapter,
   createDomainEventEnvelope,
@@ -11,8 +12,9 @@ import {
   findUserAccountByLoginPhone,
   recordAuthenticationEvent,
   revokeSessionsForAccount,
-  runTransactionalWorkWithOutbox,
-  setDeviceTrusted
+  runTransactionalCommand,
+  setDeviceTrusted,
+  type CommandActor
 } from "@nelyohealth/database";
 import type { AuthenticationDecisionDraft } from "./authentication.js";
 import {
@@ -55,6 +57,7 @@ export interface IdentitySessionPorts {
   revokeSessionsWithOutboxEvent(input: {
     userAccountId: string;
     reasonCode: string;
+    actor: CommandActor;
     safeContext: {
       requestId: string;
       correlationId: string;
@@ -67,6 +70,7 @@ export interface IdentitySessionPorts {
 export function createPgIdentitySessionPorts(pool: Pool): IdentitySessionPorts {
   const transaction = new PgTransactionAdapter(pool);
   const outbox = new PgOutboxStore<Record<string, unknown>>(pool);
+  const auditSink = new PgAuditSink();
   const externalCallPolicy = new ExternalCallPolicy();
 
   return {
@@ -118,11 +122,19 @@ export function createPgIdentitySessionPorts(pool: Pool): IdentitySessionPorts {
           client.release();
         }
       }),
-    revokeSessionsWithOutboxEvent: async ({ userAccountId, reasonCode, safeContext }) => {
-      const revoked = await runTransactionalWorkWithOutbox({
+    revokeSessionsWithOutboxEvent: async ({ userAccountId, reasonCode, actor, safeContext }) => {
+      const { result: revoked } = await runTransactionalCommand({
         transaction,
         outbox,
+        auditSink,
         externalCallPolicy,
+        command: {
+          name: "identity.sessions.revoke",
+          aggregateId: userAccountId,
+          action: "revoke",
+          actor,
+          safeContext
+        },
         work: async (ctx) => {
           const sessions = await revokeSessionsForAccount(ctx.client, userAccountId);
           await ctx.enqueueDomainEvent(
@@ -137,7 +149,17 @@ export function createPgIdentitySessionPorts(pool: Pool): IdentitySessionPorts {
               }
             })
           );
-          return sessions;
+          return {
+            result: sessions,
+            audit: {
+              outcome: "committed",
+              safeDetails: {
+                accountRef: userAccountId,
+                reasonCode,
+                revokedSessionCount: sessions.length
+              }
+            }
+          };
         }
       });
       return { revokedSessionIds: revoked.map((session) => session.id) };
@@ -293,6 +315,8 @@ export async function executeSessionStepUp(
 export interface RevokeAccountSessionsInput {
   userAccountId: string;
   reasonCode: string;
+  /** Who initiated the revocation — attributed in the command audit intent. */
+  actor: CommandActor;
   safeContext: {
     requestId: string;
     correlationId: string;
@@ -302,9 +326,9 @@ export interface RevokeAccountSessionsInput {
 }
 
 /**
- * Revoke every active session for an account. Runs inside the transactional
- * outbox: SessionsRevoked (EVT-005: accountRef + reasonCode, never tokens)
- * exists iff the revocation committed.
+ * Revoke every active session for an account. Runs as a transactional command:
+ * the session state change, SessionsRevoked (EVT-005: accountRef + reasonCode,
+ * never tokens), and the audit intent all commit together or not at all.
  */
 export async function executeAccountSessionRevocation(
   ports: IdentitySessionPorts,

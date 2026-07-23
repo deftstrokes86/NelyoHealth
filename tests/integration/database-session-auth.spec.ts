@@ -43,6 +43,9 @@ describe.skipIf(!shouldRun)("session & auth wiring integration (nelyo_identity)"
   });
 
   afterAll(async () => {
+    await client.query(`DELETE FROM nelyo_foundation.audit_event WHERE aggregate_id = $1`, [
+      accountId
+    ]);
     await client.query(
       `DELETE FROM nelyo_foundation.transactional_outbox WHERE aggregate_id = $1`,
       [accountId]
@@ -130,6 +133,12 @@ describe.skipIf(!shouldRun)("session & auth wiring integration (nelyo_identity)"
     const { revokedSessionIds } = await executeAccountSessionRevocation(ports, {
       userAccountId: accountId,
       reasonCode: "account-recovery",
+      actor: {
+        accountRef: accountId,
+        personaKind: "personal",
+        actorRole: "patient",
+        tenantRef: null
+      },
       safeContext: {
         requestId: `req-${run}`,
         correlationId: `corr-${run}`,
@@ -138,6 +147,18 @@ describe.skipIf(!shouldRun)("session & auth wiring integration (nelyo_identity)"
       }
     });
     expect(revokedSessionIds.length).toBe(before.length);
+
+    // Retrofit (M3.3): the revocation now writes a command audit intent atomically.
+    const auditRows = await client.query(
+      `SELECT command_name, action, outcome FROM nelyo_foundation.audit_event
+       WHERE aggregate_id = $1 AND source = 'command' AND command_name = 'identity.sessions.revoke'`,
+      [accountId]
+    );
+    expect(auditRows.rows[0]).toMatchObject({
+      command_name: "identity.sessions.revoke",
+      action: "revoke",
+      outcome: "committed"
+    });
 
     const after = await listActiveSessionsForAccount(client, accountId);
     expect(after).toHaveLength(0);

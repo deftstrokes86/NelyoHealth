@@ -233,6 +233,9 @@ export async function setPrimaryContactPoint(
 export async function createUserAccount(
   client: ClientBase,
   input: {
+    /** Optional client-supplied id; omitted → gen_random_uuid(). Lets a caller
+     * know the account id before insert (e.g. as a command aggregate id). */
+    id?: string;
     personId: string;
     loginEmail?: string;
     loginPhoneE164?: string;
@@ -241,10 +244,11 @@ export async function createUserAccount(
 ): Promise<UserAccount> {
   try {
     const result = await client.query<UserAccountRow>(
-      `INSERT INTO nelyo_identity.user_account (person_id, login_email, login_phone_e164, status)
-       VALUES ($1, $2, $3, $4)
+      `INSERT INTO nelyo_identity.user_account (id, person_id, login_email, login_phone_e164, status)
+       VALUES (COALESCE($1, gen_random_uuid()), $2, $3, $4, $5)
        RETURNING id, person_id, login_email, login_phone_e164, status`,
       [
+        input.id ?? null,
         input.personId,
         input.loginEmail ?? null,
         input.loginPhoneE164 ?? null,

@@ -15,5 +15,8 @@
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "start": "node lib/main.js"
+  },
+  "dependencies": {
+    "@nelyohealth/database": "workspace:*"
   }
 }

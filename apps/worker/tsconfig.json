@@ -3,6 +3,11 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "lib",
+    "baseUrl": "../..",
+    "paths": {
+      "@nelyohealth/database": ["packages/database/lib/index.d.ts"],
+      "@nelyohealth/domain": ["packages/domain/lib/index.d.ts"]
+    },
     "noEmit": false,
     "declaration": true,
     "declarationMap": true,

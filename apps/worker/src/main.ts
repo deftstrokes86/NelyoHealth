@@ -1,5 +1,13 @@
 import http from "node:http";
+import {
+  createAuditTrailConsumer,
+  createDatabasePool,
+  dispatchPendingOutboxEvents,
+  ExternalCallPolicy,
+  PgOutboxStore
+} from "@nelyohealth/database";
 import { InMemoryWorkerQueue } from "./in-memory-queue.js";
+import { createOutboxDispatchRunner } from "./outbox-dispatch.js";
 import { WorkerQueueRuntime } from "./worker-runtime.js";
 
 /**
@@ -17,10 +25,10 @@ const startedAt = new Date().toISOString();
 const healthHost = process.env.WORKER_HEALTH_HOST ?? "127.0.0.1";
 const healthPort = Number(process.env.WORKER_HEALTH_PORT ?? 4100);
 const heartbeatMs = Number(process.env.WORKER_HEARTBEAT_MS ?? 30_000);
+const dispatchIntervalMs = Number(process.env.WORKER_OUTBOX_DISPATCH_MS ?? 2_000);
+const dispatchMaxAttempts = Number(process.env.WORKER_OUTBOX_MAX_ATTEMPTS ?? 5);
 
-const runtime = new WorkerQueueRuntime<Record<string, unknown>>(
-  new InMemoryWorkerQueue()
-);
+const runtime = new WorkerQueueRuntime<Record<string, unknown>>(new InMemoryWorkerQueue());
 
 function log(message: string, extra: Record<string, unknown> = {}): void {
   console.log(
@@ -32,6 +40,23 @@ function log(message: string, extra: Record<string, unknown> = {}): void {
     })
   );
 }
+
+// Outbox dispatch loop (M3.3): drain pending domain events to the fan-out
+// consumers (the unified-audit subscriber for now). The pool connects lazily,
+// so this is inert until there are events to dispatch and a database to reach.
+const dispatchPool = createDatabasePool();
+const outboxStore = new PgOutboxStore<Record<string, unknown>>(dispatchPool);
+const externalCallPolicy = new ExternalCallPolicy();
+const outboxDispatchRunner = createOutboxDispatchRunner({
+  runDispatch: () =>
+    dispatchPendingOutboxEvents({
+      outbox: outboxStore,
+      externalCallPolicy,
+      maxAttempts: dispatchMaxAttempts,
+      consumers: [createAuditTrailConsumer(dispatchPool)]
+    }),
+  log
+});
 
 const server = http.createServer((req, res) => {
   if (req.method === "GET" && (req.url === "/health" || req.url === "/")) {
@@ -71,12 +96,20 @@ const heartbeat = setInterval(() => {
   });
 }, heartbeatMs);
 
+const dispatchTimer = setInterval(() => {
+  void outboxDispatchRunner.tick();
+}, dispatchIntervalMs);
+
 let shuttingDown = false;
 function shutdown(signal: string): void {
   if (shuttingDown) return;
   shuttingDown = true;
   log("shutdown-initiated", { signal });
   clearInterval(heartbeat);
+  clearInterval(dispatchTimer);
+  void dispatchPool.end().catch(() => {
+    /* best-effort: pool may never have connected */
+  });
   server.close(() => {
     log("shutdown-complete", { signal });
     process.exit(0);
@@ -89,5 +122,5 @@ process.on("SIGTERM", () => shutdown("SIGTERM"));
 process.on("SIGINT", () => shutdown("SIGINT"));
 
 server.listen(healthPort, healthHost, () => {
-  log("worker-started", { healthHost, healthPort, heartbeatMs });
+  log("worker-started", { healthHost, healthPort, heartbeatMs, dispatchIntervalMs });
 });

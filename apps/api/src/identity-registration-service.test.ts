@@ -18,6 +18,7 @@ describe("registerAccount — input validation (no DB touched)", () => {
     pool: {} as never,
     transaction: {} as never,
     outbox: {} as never,
+    auditSink: {} as never,
     externalCallPolicy: {} as never
   };
 

@@ -10,7 +10,7 @@
  *
  * Modes:
  *   default    — ADVISORY: prints findings, always exits 0.
- *   --enforce  — BLOCKING: exits 1 on violations. CI flips to this mode at
+ *   --enforce  — BLOCKING: exits 1 on violations. CI runs this mode from
  *                roadmap M3.3 (handler retrofit complete).
  *
  * Exemptions (by design, reviewable below): the database package itself

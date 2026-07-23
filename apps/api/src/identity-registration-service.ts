@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import type { Pool, PoolClient } from "pg";
 import {
   addContactPoint,
@@ -7,11 +8,21 @@ import {
   createDomainEventEnvelope,
   ExternalCallPolicy,
   findUserAccountByLoginEmail,
+  PgAuditSink,
   PgOutboxStore,
   PgTransactionAdapter,
-  runTransactionalWorkWithOutbox
+  runTransactionalCommand,
+  type AuditSink
 } from "@nelyohealth/database";
 import { hashPassword } from "./password-hashing.js";
+
+/** Registration is unauthenticated (public self-registration) — the audit actor. */
+const PUBLIC_REGISTRATION_ACTOR = {
+  accountRef: "public:registration",
+  personaKind: "personal",
+  actorRole: "anonymous",
+  tenantRef: null
+} as const;
 
 /**
  * Account registration (patient-web sign-up).
@@ -57,10 +68,12 @@ export interface RegistrationPorts {
 export function createPgRegistrationPorts(pool: Pool): RegistrationPorts {
   const transaction = new PgTransactionAdapter(pool);
   const outbox = new PgOutboxStore<Record<string, unknown>>(pool);
+  const auditSink = new PgAuditSink();
   const externalCallPolicy = new ExternalCallPolicy();
 
   return {
-    register: (input) => registerAccount({ pool, transaction, outbox, externalCallPolicy }, input)
+    register: (input) =>
+      registerAccount({ pool, transaction, outbox, auditSink, externalCallPolicy }, input)
   };
 }
 
@@ -68,6 +81,7 @@ interface RegisterAccountDeps {
   pool: Pool;
   transaction: PgTransactionAdapter;
   outbox: PgOutboxStore<Record<string, unknown>>;
+  auditSink: AuditSink<PoolClient>;
   externalCallPolicy: ExternalCallPolicy;
 }
 
@@ -95,11 +109,22 @@ export async function registerAccount(
   }
 
   const passwordHash = await hashPassword(input.password);
+  // Pre-generate the account id so it is the aggregate for both the command
+  // audit intent and the AccountRegistered event.
+  const accountId = randomUUID();
 
-  await runTransactionalWorkWithOutbox({
+  await runTransactionalCommand({
     transaction: deps.transaction,
     outbox: deps.outbox,
+    auditSink: deps.auditSink,
     externalCallPolicy: deps.externalCallPolicy,
+    command: {
+      name: "identity.registrations.create",
+      aggregateId: accountId,
+      action: "register",
+      actor: PUBLIC_REGISTRATION_ACTOR,
+      safeContext: input.safeContext
+    },
     work: async (ctx) => {
       const person = await createPerson(ctx.client, { displayName: fullName });
       await addContactPoint(ctx.client, {
@@ -109,6 +134,7 @@ export async function registerAccount(
         verified: false
       });
       const account = await createUserAccount(ctx.client, {
+        id: accountId,
         personId: person.id,
         loginEmail: input.loginEmail,
         status: "pending"
@@ -126,7 +152,13 @@ export async function registerAccount(
           payload: { accountRef: account.id, personRef: person.id }
         })
       );
-      return account;
+      return {
+        result: account,
+        audit: {
+          outcome: "committed",
+          safeDetails: { accountRef: account.id, personRef: person.id }
+        }
+      };
     }
   });
 
