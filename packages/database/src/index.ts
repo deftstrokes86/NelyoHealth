@@ -269,3 +269,18 @@ export {
   type PersistedAvailabilitySlot,
   type SlotStatus
 } from "./appointment-repository.js";
+
+export {
+  insertConsultation,
+  insertConsultationParticipant,
+  listConsultationsForPatient,
+  loadConsultation,
+  markConsultationCancelled,
+  markConsultationCompleted,
+  markConsultationStarted,
+  type ConsultationModality,
+  type ConsultationParticipant,
+  type ConsultationParticipantRole,
+  type ConsultationStatus,
+  type PersistedConsultation
+} from "./consultation-repository.js";

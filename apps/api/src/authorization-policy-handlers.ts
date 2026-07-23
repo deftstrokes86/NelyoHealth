@@ -109,6 +109,38 @@ const policyRules: AuthorizationPolicyRule[] = [
     action: "read",
     purposes: ["care-delivery", "care-coordination", "emergency-care"]
   },
+  // Consultation resource (roadmap M5.3). Read and conduct flow through the full
+  // pipeline; an RBAC match only opens the door for consent / ReBAC / break-glass.
+  {
+    actorRole: "patient",
+    resource: "consultation",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "consultation",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
+  {
+    actorRole: "caregiver",
+    resource: "consultation",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "consultation",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "consultation",
+    action: "conduct",
+    purposes: ["care-delivery", "emergency-care"]
+  },
   {
     actorRole: "guardian",
     resource: "clinical-record-summary",

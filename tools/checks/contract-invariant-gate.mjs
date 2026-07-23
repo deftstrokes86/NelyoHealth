@@ -91,7 +91,11 @@ const apiOnlyModules = new Set([
   // governance. Both are server-side; client DTO surfaces land with the resource
   // UIs. Reclassified api-only at M5.2.
   "resource-authorization",
-  "appointment-service"
+  "appointment-service",
+  // Consultation resource (roadmap M5.3). Lifecycle commands + decide-before-
+  // load/write governance; clinical notes never leave the server in a payload.
+  // Reclassified api-only at M5.3.
+  "consultation-service"
 ]);
 // Note: apps/api/src/nest/** is not scanned by this gate at all (getContractModules
 // reads apps/api/src non-recursively) — the new auth controllers/module living
