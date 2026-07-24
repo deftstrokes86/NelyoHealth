@@ -205,7 +205,12 @@ export interface DispensePrescriptionInput {
 }
 
 export type DispensePrescriptionOutcome =
-  | { status: "dispensed"; dispenseId: string; refillsRemaining: number; prescriptionStatus: string }
+  | {
+      status: "dispensed";
+      dispenseId: string;
+      refillsRemaining: number;
+      prescriptionStatus: string;
+    }
   | { status: "not-found" }
   | { status: "not-dispensable" };
 

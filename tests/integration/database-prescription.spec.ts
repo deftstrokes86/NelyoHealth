@@ -1,7 +1,15 @@
 import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { createDatabaseClient, createDatabasePool, loadPrescription } from "../../packages/database/src/index.js";
-import { createPgConsentServiceDeps, grantConsent, withdrawConsent } from "../../apps/api/src/consent-service.js";
+import {
+  createDatabaseClient,
+  createDatabasePool,
+  loadPrescription
+} from "../../packages/database/src/index.js";
+import {
+  createPgConsentServiceDeps,
+  grantConsent,
+  withdrawConsent
+} from "../../apps/api/src/consent-service.js";
 import {
   cancelPrescription,
   createPgPrescriptionServiceDeps,
@@ -51,11 +59,21 @@ describe.skipIf(!shouldRun)("prescription persistence + lifecycle + access", () 
   }
 
   function patientActor(patientRef: string) {
-    return { accountRef: patientRef, personaKind: "personal", actorRole: "patient", tenantRef: null } as const;
+    return {
+      accountRef: patientRef,
+      personaKind: "personal",
+      actorRole: "patient",
+      tenantRef: null
+    } as const;
   }
 
   function clinicianActor(clinicianRef: string) {
-    return { accountRef: clinicianRef, personaKind: "staff", actorRole: "clinician", tenantRef: null } as const;
+    return {
+      accountRef: clinicianRef,
+      personaKind: "staff",
+      actorRole: "clinician",
+      tenantRef: null
+    } as const;
   }
 
   function clinicianAccess(
@@ -228,7 +246,11 @@ describe.skipIf(!shouldRun)("prescription persistence + lifecycle + access", () 
       actor: pharmacyActor,
       safeContext: safeContext("disp-1")
     });
-    expect(first).toMatchObject({ status: "dispensed", refillsRemaining: 1, prescriptionStatus: "active" });
+    expect(first).toMatchObject({
+      status: "dispensed",
+      refillsRemaining: 1,
+      prescriptionStatus: "active"
+    });
 
     const second = await dispensePrescription(rx, {
       prescriptionId,
@@ -236,7 +258,11 @@ describe.skipIf(!shouldRun)("prescription persistence + lifecycle + access", () 
       actor: pharmacyActor,
       safeContext: safeContext("disp-2")
     });
-    expect(second).toMatchObject({ status: "dispensed", refillsRemaining: 0, prescriptionStatus: "completed" });
+    expect(second).toMatchObject({
+      status: "dispensed",
+      refillsRemaining: 0,
+      prescriptionStatus: "completed"
+    });
 
     // Exhausted -> refused.
     const third = await dispensePrescription(rx, {
