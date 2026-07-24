@@ -256,6 +256,52 @@ const policyRules: AuthorizationPolicyRule[] = [
     action: "send",
     purposes: ["care-delivery", "care-coordination", "emergency-care"]
   },
+  // Document resource (roadmap M5.8). Read + upload for the care circle. Uploading
+  // is a non-encounter write (a patient may upload an insurance card between
+  // visits), so it uses the 'upload' action, which does not trigger the encounter
+  // constraint. An authorized read is what grants access to the storage pointer.
+  {
+    actorRole: "patient",
+    resource: "document",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "patient",
+    resource: "document",
+    action: "upload",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "document",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "document",
+    action: "upload",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "caregiver",
+    resource: "document",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "document",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "document",
+    action: "upload",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
   {
     actorRole: "guardian",
     resource: "clinical-record-summary",

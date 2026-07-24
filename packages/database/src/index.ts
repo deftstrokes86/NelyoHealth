@@ -338,3 +338,13 @@ export {
   type PersistedMessage,
   type PersistedMessageThread
 } from "./messaging-repository.js";
+
+export {
+  insertDocument,
+  listDocumentsForPatient,
+  loadDocument,
+  setDocumentStatus,
+  type DocumentStatus,
+  type DocumentType,
+  type PersistedDocument
+} from "./document-repository.js";

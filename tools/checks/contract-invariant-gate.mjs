@@ -111,7 +111,11 @@ const apiOnlyModules = new Set([
   // Secure messaging resource (roadmap M5.7). start-thread/post (decide-before-
   // write, non-encounter send) / mark-read / close + decide-before-load read;
   // thread subject and message bodies never leave the server in a payload. Api-only.
-  "messaging-service"
+  "messaging-service",
+  // Document resource (roadmap M5.8). register (decide-before-write, non-encounter
+  // upload) / archive + decide-before-load read (which gates the storage pointer);
+  // title and storage key never leave the server in a payload. Api-only.
+  "document-service"
 ]);
 // Note: apps/api/src/nest/** is not scanned by this gate at all (getContractModules
 // reads apps/api/src non-recursively) — the new auth controllers/module living
