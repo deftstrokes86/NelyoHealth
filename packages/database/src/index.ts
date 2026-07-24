@@ -359,3 +359,20 @@ export {
   type CareCircleMembershipStatus,
   type PersistedCareCircleMember
 } from "./care-circle-repository.js";
+
+export {
+  buildReferenceOnlyDeliveryMessage,
+  createNotificationOrchestrationConsumer,
+  insertQueuedNotification,
+  listNotificationsForRecipient,
+  listPendingNotificationDeliveries,
+  loadNotification,
+  markNotificationFailed,
+  markNotificationRead,
+  markNotificationSent,
+  retryPendingNotifications,
+  type NotificationChannel,
+  type NotificationDeliveryPort,
+  type NotificationStatus,
+  type PersistedNotification
+} from "./notification-repository.js";

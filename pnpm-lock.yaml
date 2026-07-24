@@ -256,6 +256,9 @@ importers:
       '@nelyohealth/database':
         specifier: workspace:*
         version: link:../../packages/database
+      '@nelyohealth/platform-adapters':
+        specifier: workspace:*
+        version: link:../../packages/platform-adapters
 
   packages/api-client:
     dependencies:

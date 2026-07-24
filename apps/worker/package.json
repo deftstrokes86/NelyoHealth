@@ -17,6 +17,7 @@
     "start": "node lib/main.js"
   },
   "dependencies": {
-    "@nelyohealth/database": "workspace:*"
+    "@nelyohealth/database": "workspace:*",
+    "@nelyohealth/platform-adapters": "workspace:*"
   }
 }

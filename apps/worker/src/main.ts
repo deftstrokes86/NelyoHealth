@@ -3,10 +3,13 @@ import {
   createAuditTrailConsumer,
   createCareCircleProjectionConsumer,
   createDatabasePool,
+  createNotificationOrchestrationConsumer,
   dispatchPendingOutboxEvents,
   ExternalCallPolicy,
-  PgOutboxStore
+  PgOutboxStore,
+  type NotificationDeliveryPort
 } from "@nelyohealth/database";
+import { FakeCommunicationsAdapter } from "@nelyohealth/platform-adapters";
 import { InMemoryWorkerQueue } from "./in-memory-queue.js";
 import { createOutboxDispatchRunner } from "./outbox-dispatch.js";
 import { WorkerQueueRuntime } from "./worker-runtime.js";
@@ -43,12 +46,25 @@ function log(message: string, extra: Record<string, unknown> = {}): void {
 }
 
 // Outbox dispatch loop (M3.3): drain pending domain events to the fan-out
-// consumers — the unified-audit subscriber (M3.2) and the Care Circle read-model
-// projection (M6.1). The pool connects lazily, so this is inert until there are
-// events to dispatch and a database to reach.
+// consumers — the unified-audit subscriber (M3.2), the Care Circle read-model
+// projection (M6.1), and notification orchestration (M6.2). The pool connects
+// lazily, so this is inert until there are events to dispatch and a database to
+// reach.
 const dispatchPool = createDatabasePool();
 const outboxStore = new PgOutboxStore<Record<string, unknown>>(dispatchPool);
 const externalCallPolicy = new ExternalCallPolicy();
+
+// Notification delivery (M6.2): bridge the platform communications port to the
+// dependency-inverted NotificationDeliveryPort the consumer expects. The fake
+// adapter is the local/dev default; a real gateway adapter is injected here at
+// deployment. Sends happen outside any transaction (ExternalCallPolicy).
+const communications = new FakeCommunicationsAdapter();
+const notificationDelivery: NotificationDeliveryPort = {
+  deliver: async (message) => {
+    const receipt = await communications.dispatch(message);
+    return { messageRef: receipt.messageId, accepted: receipt.accepted };
+  }
+};
 const outboxDispatchRunner = createOutboxDispatchRunner({
   runDispatch: () =>
     dispatchPendingOutboxEvents({
@@ -57,7 +73,8 @@ const outboxDispatchRunner = createOutboxDispatchRunner({
       maxAttempts: dispatchMaxAttempts,
       consumers: [
         createAuditTrailConsumer(dispatchPool),
-        createCareCircleProjectionConsumer(dispatchPool)
+        createCareCircleProjectionConsumer(dispatchPool),
+        createNotificationOrchestrationConsumer(dispatchPool, notificationDelivery)
       ]
     }),
   log

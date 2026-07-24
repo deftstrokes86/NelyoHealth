@@ -119,7 +119,10 @@ const apiOnlyModules = new Set([
   // Care Circle read model service (roadmap M6.1). Server-side reads over the
   // derived care-circle projection, gated by the composed pipeline; a client DTO
   // surface lands with the family/guardian UI. Api-only.
-  "care-circle-service"
+  "care-circle-service",
+  // Notification read service (roadmap M6.2). Server-side self-scoped inbox reads
+  // over the minimized (reference-only) notification store. Api-only.
+  "notification-service"
 ]);
 // Note: apps/api/src/nest/** is not scanned by this gate at all (getContractModules
 // reads apps/api/src non-recursively) — the new auth controllers/module living
