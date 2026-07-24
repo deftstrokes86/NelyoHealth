@@ -115,7 +115,11 @@ const apiOnlyModules = new Set([
   // Document resource (roadmap M5.8). register (decide-before-write, non-encounter
   // upload) / archive + decide-before-load read (which gates the storage pointer);
   // title and storage key never leave the server in a payload. Api-only.
-  "document-service"
+  "document-service",
+  // Care Circle read model service (roadmap M6.1). Server-side reads over the
+  // derived care-circle projection, gated by the composed pipeline; a client DTO
+  // surface lands with the family/guardian UI. Api-only.
+  "care-circle-service"
 ]);
 // Note: apps/api/src/nest/** is not scanned by this gate at all (getContractModules
 // reads apps/api/src non-recursively) — the new auth controllers/module living

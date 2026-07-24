@@ -348,3 +348,13 @@ export {
   type DocumentType,
   type PersistedDocument
 } from "./document-repository.js";
+
+export {
+  createCareCircleProjectionConsumer,
+  deleteCareCircleMember,
+  listCareCircleForPatient,
+  listWardsForActor,
+  upsertCareCircleMember,
+  type CareCircleMembershipStatus,
+  type PersistedCareCircleMember
+} from "./care-circle-repository.js";

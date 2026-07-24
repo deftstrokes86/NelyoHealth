@@ -302,6 +302,33 @@ const policyRules: AuthorizationPolicyRule[] = [
     action: "upload",
     purposes: ["care-delivery", "care-coordination", "emergency-care"]
   },
+  // Care Circle read model (roadmap M6.1). Reading a patient's care circle reveals
+  // their relationship graph (SENSITIVE-PERSONAL-DATA), so it flows through the
+  // full pipeline. 'read' is a non-encounter action.
+  {
+    actorRole: "patient",
+    resource: "care-circle",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "care-circle",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
+  {
+    actorRole: "caregiver",
+    resource: "care-circle",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "care-circle",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
   {
     actorRole: "guardian",
     resource: "clinical-record-summary",

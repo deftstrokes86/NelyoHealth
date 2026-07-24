@@ -1,6 +1,7 @@
 import http from "node:http";
 import {
   createAuditTrailConsumer,
+  createCareCircleProjectionConsumer,
   createDatabasePool,
   dispatchPendingOutboxEvents,
   ExternalCallPolicy,
@@ -42,8 +43,9 @@ function log(message: string, extra: Record<string, unknown> = {}): void {
 }
 
 // Outbox dispatch loop (M3.3): drain pending domain events to the fan-out
-// consumers (the unified-audit subscriber for now). The pool connects lazily,
-// so this is inert until there are events to dispatch and a database to reach.
+// consumers — the unified-audit subscriber (M3.2) and the Care Circle read-model
+// projection (M6.1). The pool connects lazily, so this is inert until there are
+// events to dispatch and a database to reach.
 const dispatchPool = createDatabasePool();
 const outboxStore = new PgOutboxStore<Record<string, unknown>>(dispatchPool);
 const externalCallPolicy = new ExternalCallPolicy();
@@ -53,7 +55,10 @@ const outboxDispatchRunner = createOutboxDispatchRunner({
       outbox: outboxStore,
       externalCallPolicy,
       maxAttempts: dispatchMaxAttempts,
-      consumers: [createAuditTrailConsumer(dispatchPool)]
+      consumers: [
+        createAuditTrailConsumer(dispatchPool),
+        createCareCircleProjectionConsumer(dispatchPool)
+      ]
     }),
   log
 });
