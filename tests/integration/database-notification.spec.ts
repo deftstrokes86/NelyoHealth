@@ -4,8 +4,10 @@ import {
   createDatabaseClient,
   createDatabasePool,
   createNotificationOrchestrationConsumer,
+  deriveProviderIdempotencyKey,
   listNotificationsForRecipient,
   loadNotification,
+  purgeNotificationsOlderThan,
   retryPendingNotifications,
   type NotificationDeliveryPort,
   type OutboxEventRecord
@@ -21,11 +23,12 @@ const FORBIDDEN = ["phi", "clinical", "secret", "reason", "diagnosis", "body"];
 
 /**
  * M6.2 notification orchestration against live Postgres. Proves: a policy-matched
- * domain event produces a reference-only external message (NO PHI) recorded 'sent';
- * a delivery failure is recorded 'failed'; both emit NotificationSent /
- * NotificationFailed audit events through the outbox; delivery is at-most-once
- * (idempotent); the retry sweep re-attempts failed records; and the inbox is
- * self-scoped.
+ * domain event produces a reference-only external message (NO PHI) recorded 'sent',
+ * carrying a STABLE provider idempotency key (review item 1); a delivery failure
+ * backs off then retries via the sweep, and dead-letters at max attempts (item 2);
+ * NotificationSent / NotificationFailed / NotificationDeadLettered flow through the
+ * outbox; delivery is at-most-once ROWS (idempotent); terminal records are purged
+ * past retention (item 3); and the inbox is self-scoped.
  */
 describe.skipIf(!shouldRun)("notification orchestration + delivery + inbox", () => {
   const client = createDatabaseClient();
@@ -41,6 +44,7 @@ describe.skipIf(!shouldRun)("notification orchestration + delivery + inbox", () 
     recipient: string;
     templateId: string;
     templateVariables: Record<string, string>;
+    idempotencyKey: string;
   }
   function capturingDelivery(mode: "ok" | "fail"): {
     port: NotificationDeliveryPort;
@@ -55,7 +59,8 @@ describe.skipIf(!shouldRun)("notification orchestration + delivery + inbox", () 
             channel: message.channel,
             recipient: message.recipient,
             templateId: message.templateId,
-            templateVariables: message.templateVariables
+            templateVariables: message.templateVariables,
+            idempotencyKey: message.safeContext.idempotencyKey
           });
           if (mode === "fail") {
             throw new Error("gateway unavailable");
@@ -106,6 +111,14 @@ describe.skipIf(!shouldRun)("notification orchestration + delivery + inbox", () 
     return { patientRef, organizationRef, appointmentRef: randomUUID() };
   }
 
+  const futureNow = (secs: number) => new Date(Date.now() + secs * 1000).toISOString();
+  const sweepContext = (tag: string) => ({
+    requestId: `req-${run}-${tag}`,
+    correlationId: `corr-${run}-${tag}`,
+    idempotencyKey: `idem-${run}-${tag}`,
+    operationTag: "notification.delivery.sweep"
+  });
+
   beforeAll(async () => {
     await client.connect();
   });
@@ -130,12 +143,13 @@ describe.skipIf(!shouldRun)("notification orchestration + delivery + inbox", () 
     await pool.end();
   });
 
-  it("orchestrates a reference-only notification and records it sent + emits NotificationSent", async () => {
+  it("orchestrates a reference-only notification, records it sent, emits NotificationSent, and carries a stable provider key", async () => {
     const { patientRef, organizationRef, appointmentRef } = newSubjects();
     const { port, sent } = capturingDelivery("ok");
     const consumer = createNotificationOrchestrationConsumer(pool, port);
+    const event = bookedEvent(patientRef, organizationRef, appointmentRef, "sent");
 
-    await consumer.consume(bookedEvent(patientRef, organizationRef, appointmentRef, "sent"));
+    await consumer.consume(event);
 
     const inbox = await listNotificationsForRecipient(client, { recipientActorRef: patientRef });
     expect(inbox).toHaveLength(1);
@@ -157,21 +171,29 @@ describe.skipIf(!shouldRun)("notification orchestration + delivery + inbox", () 
       "organizationRef",
       "targetRef"
     ]);
-    const serialized = JSON.stringify(sent[0]).toLowerCase();
+    const serialized = JSON.stringify(sent[0]?.templateVariables).toLowerCase();
     for (const fragment of FORBIDDEN) {
       expect(serialized).not.toContain(fragment);
     }
 
-    // A NotificationSent audit event was emitted through the outbox.
+    // Item 1: the gateway receives the stable tuple-derived idempotency key.
+    expect(sent[0]?.idempotencyKey).toBe(
+      deriveProviderIdempotencyKey({
+        eventRef: event.eventId,
+        recipientActorRef: patientRef,
+        channel: "email"
+      })
+    );
+
     const emitted = await client.query(
       `SELECT event_type FROM nelyo_foundation.transactional_outbox
-        WHERE aggregate_id = $1 AND event_type IN ('NotificationSent', 'NotificationFailed')`,
+        WHERE aggregate_id = $1 AND event_type LIKE 'Notification%'`,
       [inbox[0]?.notificationId]
     );
     expect(emitted.rows[0]).toMatchObject({ event_type: "NotificationSent" });
   });
 
-  it("records a failure and emits NotificationFailed when delivery throws", async () => {
+  it("records a failure with backoff + emits NotificationFailed when delivery throws", async () => {
     const { patientRef, organizationRef, appointmentRef } = newSubjects();
     const { port } = capturingDelivery("fail");
     const consumer = createNotificationOrchestrationConsumer(pool, port);
@@ -180,13 +202,78 @@ describe.skipIf(!shouldRun)("notification orchestration + delivery + inbox", () 
 
     const inbox = await listNotificationsForRecipient(client, { recipientActorRef: patientRef });
     expect(inbox[0]).toMatchObject({ status: "failed", failureReasonCode: "delivery-error" });
+    expect(inbox[0]?.attemptCount).toBe(1);
+    expect(inbox[0]?.nextAttemptAt).toBeTruthy(); // backoff scheduled
 
     const emitted = await client.query(
       `SELECT event_type FROM nelyo_foundation.transactional_outbox
-        WHERE aggregate_id = $1 AND event_type IN ('NotificationSent', 'NotificationFailed')`,
+        WHERE aggregate_id = $1 AND event_type LIKE 'Notification%'`,
       [inbox[0]?.notificationId]
     );
     expect(emitted.rows[0]).toMatchObject({ event_type: "NotificationFailed" });
+  });
+
+  it("does not retry a failed send before its backoff has elapsed", async () => {
+    const { patientRef, organizationRef, appointmentRef } = newSubjects();
+    await createNotificationOrchestrationConsumer(pool, capturingDelivery("fail").port).consume(
+      bookedEvent(patientRef, organizationRef, appointmentRef, "backoff")
+    );
+    const failed = await listNotificationsForRecipient(client, { recipientActorRef: patientRef });
+    const notificationId = failed[0]?.notificationId ?? "";
+
+    // Sweep NOW (backoff ~30s in the future) → the record is not due → untouched.
+    const ok = capturingDelivery("ok");
+    await retryPendingNotifications(pool, ok.port, {
+      limit: 500,
+      safeContext: sweepContext("backoff"),
+      now: new Date().toISOString()
+    });
+
+    expect(ok.sent).toHaveLength(0);
+    const after = await loadNotification(client, notificationId);
+    expect(after?.status).toBe("failed");
+    expect(after?.attemptCount).toBe(1);
+  });
+
+  it("retries a failed notification once its backoff has elapsed", async () => {
+    const { patientRef, organizationRef, appointmentRef } = newSubjects();
+    await createNotificationOrchestrationConsumer(pool, capturingDelivery("fail").port).consume(
+      bookedEvent(patientRef, organizationRef, appointmentRef, "retry")
+    );
+    const failed = await listNotificationsForRecipient(client, { recipientActorRef: patientRef });
+    expect(failed[0]?.status).toBe("failed");
+    const notificationId = failed[0]?.notificationId ?? "";
+
+    // Sweep with a clock past the backoff window → the record is due → re-sent.
+    const ok = capturingDelivery("ok");
+    await retryPendingNotifications(pool, ok.port, {
+      limit: 500,
+      safeContext: sweepContext("retry"),
+      now: futureNow(120)
+    });
+
+    expect((await loadNotification(client, notificationId))?.status).toBe("sent");
+  });
+
+  it("dead-letters a send after max attempts and emits NotificationDeadLettered", async () => {
+    const { patientRef, organizationRef, appointmentRef } = newSubjects();
+    // maxAttempts: 1 → the very first failure is terminal.
+    const consumer = createNotificationOrchestrationConsumer(pool, capturingDelivery("fail").port, {
+      maxAttempts: 1,
+      backoffBaseSeconds: 1
+    });
+    await consumer.consume(bookedEvent(patientRef, organizationRef, appointmentRef, "deadletter"));
+
+    const inbox = await listNotificationsForRecipient(client, { recipientActorRef: patientRef });
+    expect(inbox[0]).toMatchObject({ status: "dead-lettered", attemptCount: 1 });
+    expect(inbox[0]?.nextAttemptAt).toBeUndefined(); // terminal: never retried again
+
+    const emitted = await client.query(
+      `SELECT event_type FROM nelyo_foundation.transactional_outbox
+        WHERE aggregate_id = $1 AND event_type LIKE 'Notification%'`,
+      [inbox[0]?.notificationId]
+    );
+    expect(emitted.rows[0]).toMatchObject({ event_type: "NotificationDeadLettered" });
   });
 
   it("is idempotent — redelivery of the same event does not double-notify", async () => {
@@ -203,28 +290,33 @@ describe.skipIf(!shouldRun)("notification orchestration + delivery + inbox", () 
     expect(sent).toHaveLength(1); // delivered exactly once
   });
 
-  it("retries a failed notification via the recovery sweep", async () => {
+  it("purges terminal records past retention but keeps in-flight ones", async () => {
     const { patientRef, organizationRef, appointmentRef } = newSubjects();
-    const failing = capturingDelivery("fail");
-    await createNotificationOrchestrationConsumer(pool, failing.port).consume(
-      bookedEvent(patientRef, organizationRef, appointmentRef, "retry")
+    // One sent (terminal) + one failed (in-flight), both aged past retention.
+    await createNotificationOrchestrationConsumer(pool, capturingDelivery("ok").port).consume(
+      bookedEvent(patientRef, organizationRef, appointmentRef, "purge-sent")
     );
-    const failed = await listNotificationsForRecipient(client, { recipientActorRef: patientRef });
-    expect(failed[0]?.status).toBe("failed");
-    const notificationId = failed[0]?.notificationId ?? "";
+    await createNotificationOrchestrationConsumer(pool, capturingDelivery("fail").port).consume(
+      bookedEvent(patientRef, organizationRef, randomUUID(), "purge-failed")
+    );
 
-    const ok = capturingDelivery("ok");
-    await retryPendingNotifications(pool, ok.port, {
-      limit: 500,
-      safeContext: {
-        requestId: `req-${run}-retry`,
-        correlationId: `corr-${run}-retry`,
-        idempotencyKey: `idem-${run}-retry`,
-        operationTag: "notification.retry"
-      }
+    const before = await listNotificationsForRecipient(client, { recipientActorRef: patientRef });
+    expect(before).toHaveLength(2);
+    // Backdate both well past the retention window.
+    await client.query(
+      `UPDATE nelyo_notification.notification
+          SET created_at = NOW() - INTERVAL '200 days' WHERE recipient_actor_ref = $1`,
+      [patientRef]
+    );
+
+    const { purged } = await purgeNotificationsOlderThan(client, { olderThanDays: 90 });
+    expect(purged).toBeGreaterThanOrEqual(1);
+
+    const remaining = await listNotificationsForRecipient(client, {
+      recipientActorRef: patientRef
     });
-
-    expect((await loadNotification(client, notificationId))?.status).toBe("sent");
+    expect(remaining).toHaveLength(1);
+    expect(remaining[0]?.status).toBe("failed"); // in-flight record survives purge
   });
 
   it("exposes a self-scoped inbox: list + mark-read, refused for others", async () => {

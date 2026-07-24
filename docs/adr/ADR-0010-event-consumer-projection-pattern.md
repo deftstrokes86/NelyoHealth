@@ -96,6 +96,28 @@ hours**; "never hours" is enforced by dead-letter alerting + rebuild (below), no
   stale or dead-lettered rows. It is the operator/scheduled recovery path — never invoked on the read
   path.
 
+### External-send delivery semantics (M6.2 notifications, review clarification)
+
+A consumer that performs an EXTERNAL side effect (M6.2 delivers a message via the communications port)
+has a stronger obligation than a pure projection, and the guarantee must be stated precisely:
+
+- The store's `UNIQUE(event_ref, recipient_actor_ref, channel)` + insert-if-absent gives **at-most-once
+  rows**, NOT at-most-once **sends**. A crash after the external send succeeds but before the outcome
+  write commits leaves the record re-sendable — the recovery sweep would send again.
+- That window is closed **at the gateway**, not in our transaction: every delivery (initial and every
+  retry) carries a **stable provider idempotency key derived from `(event_ref, recipient, channel)`**
+  (`deriveProviderIdempotencyKey`), identical across re-sends, so a compliant gateway dedups. Where the
+  gateway does not honor idempotency keys the guarantee degrades to **at-least-once**, bounded to at most
+  one duplicate per backoff window — an explicit adapter contract, not a silent gap.
+- **Bounded recovery, not infinite retry.** A failed send backs off exponentially (`next_attempt_at`)
+  and, at `maxAttempts`, moves to a terminal **`dead-lettered`** state, emitting a
+  `NotificationDeadLettered` audit event as the alert signal — it is never retried again. The sweep
+  (`retryPendingNotifications`) is scheduled by the worker (`WORKER_NOTIFICATION_RETRY_MS`), so failed
+  sends neither die silently nor loop forever.
+- **Retention.** Terminal records (sent / dead-lettered) are purged after a retention window
+  (`WORKER_NOTIFICATION_RETENTION_DAYS`, default 90d) by the worker's purge job; in-flight records are
+  never purged. The store holds no PHI, so this is hygiene + a bound on history, not PHI minimization.
+
 ## Rebuild contract (mandatory for every projection built with this pattern)
 
 A projection built with load-current-state MUST provide a batch **rebuild** that re-derives it from the

@@ -1,4 +1,5 @@
 import http from "node:http";
+import { randomUUID } from "node:crypto";
 import {
   createAuditTrailConsumer,
   createCareCircleProjectionConsumer,
@@ -7,6 +8,8 @@ import {
   dispatchPendingOutboxEvents,
   ExternalCallPolicy,
   PgOutboxStore,
+  purgeNotificationsOlderThan,
+  retryPendingNotifications,
   type NotificationDeliveryPort
 } from "@nelyohealth/database";
 import { FakeCommunicationsAdapter } from "@nelyohealth/platform-adapters";
@@ -31,6 +34,14 @@ const healthPort = Number(process.env.WORKER_HEALTH_PORT ?? 4100);
 const heartbeatMs = Number(process.env.WORKER_HEARTBEAT_MS ?? 30_000);
 const dispatchIntervalMs = Number(process.env.WORKER_OUTBOX_DISPATCH_MS ?? 2_000);
 const dispatchMaxAttempts = Number(process.env.WORKER_OUTBOX_MAX_ATTEMPTS ?? 5);
+// Notification delivery recovery sweep (M6.2 review item 2): re-attempt failed
+// sends whose backoff has elapsed, and dead-letter records past max attempts.
+const notificationRetryMs = Number(process.env.WORKER_NOTIFICATION_RETRY_MS ?? 60_000);
+const notificationRetryLimit = Number(process.env.WORKER_NOTIFICATION_RETRY_LIMIT ?? 100);
+// Notification retention purge (M6.2 review item 3): drop terminal records past
+// the retention window; in-flight records are never purged.
+const notificationPurgeMs = Number(process.env.WORKER_NOTIFICATION_PURGE_MS ?? 86_400_000);
+const notificationRetentionDays = Number(process.env.WORKER_NOTIFICATION_RETENTION_DAYS ?? 90);
 
 const runtime = new WorkerQueueRuntime<Record<string, unknown>>(new InMemoryWorkerQueue());
 
@@ -80,6 +91,53 @@ const outboxDispatchRunner = createOutboxDispatchRunner({
   log
 });
 
+// Notification recovery sweep + retention purge (M6.2 review items 2-3). Both are
+// best-effort background maintenance: a throw is logged, never fatal. They run on
+// their own intervals, independent of the outbox dispatch loop.
+let notificationSweepRunning = false;
+async function runNotificationSweep(): Promise<void> {
+  if (notificationSweepRunning) return; // no overlap if a sweep runs long
+  notificationSweepRunning = true;
+  try {
+    const result = await retryPendingNotifications(dispatchPool, notificationDelivery, {
+      limit: notificationRetryLimit,
+      safeContext: {
+        requestId: randomUUID(),
+        correlationId: randomUUID(),
+        idempotencyKey: `notification-sweep:${randomUUID()}`,
+        operationTag: "notification.delivery.sweep"
+      }
+    });
+    if (result.attempted > 0) {
+      log("notification-sweep", { attempted: result.attempted });
+    }
+  } catch (error) {
+    log("notification-sweep-error", {
+      reason: error instanceof Error ? error.message : String(error)
+    });
+  } finally {
+    notificationSweepRunning = false;
+  }
+}
+
+async function runNotificationPurge(): Promise<void> {
+  const client = await dispatchPool.connect();
+  try {
+    const { purged } = await purgeNotificationsOlderThan(client, {
+      olderThanDays: notificationRetentionDays
+    });
+    if (purged > 0) {
+      log("notification-purge", { purged, retentionDays: notificationRetentionDays });
+    }
+  } catch (error) {
+    log("notification-purge-error", {
+      reason: error instanceof Error ? error.message : String(error)
+    });
+  } finally {
+    client.release();
+  }
+}
+
 const server = http.createServer((req, res) => {
   if (req.method === "GET" && (req.url === "/health" || req.url === "/")) {
     void runtime
@@ -122,6 +180,14 @@ const dispatchTimer = setInterval(() => {
   void outboxDispatchRunner.tick();
 }, dispatchIntervalMs);
 
+const notificationSweepTimer = setInterval(() => {
+  void runNotificationSweep();
+}, notificationRetryMs);
+
+const notificationPurgeTimer = setInterval(() => {
+  void runNotificationPurge();
+}, notificationPurgeMs);
+
 let shuttingDown = false;
 function shutdown(signal: string): void {
   if (shuttingDown) return;
@@ -129,6 +195,8 @@ function shutdown(signal: string): void {
   log("shutdown-initiated", { signal });
   clearInterval(heartbeat);
   clearInterval(dispatchTimer);
+  clearInterval(notificationSweepTimer);
+  clearInterval(notificationPurgeTimer);
   void dispatchPool.end().catch(() => {
     /* best-effort: pool may never have connected */
   });

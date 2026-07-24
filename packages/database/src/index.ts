@@ -361,18 +361,22 @@ export {
 } from "./care-circle-repository.js";
 
 export {
+  DEFAULT_NOTIFICATION_RETRY_POLICY,
   buildReferenceOnlyDeliveryMessage,
   createNotificationOrchestrationConsumer,
+  deriveProviderIdempotencyKey,
   insertQueuedNotification,
+  listDueNotificationDeliveries,
   listNotificationsForRecipient,
-  listPendingNotificationDeliveries,
   loadNotification,
-  markNotificationFailed,
   markNotificationRead,
   markNotificationSent,
+  purgeNotificationsOlderThan,
+  recordNotificationDeliveryFailure,
   retryPendingNotifications,
   type NotificationChannel,
   type NotificationDeliveryPort,
+  type NotificationRetryPolicy,
   type NotificationStatus,
   type PersistedNotification
 } from "./notification-repository.js";
