@@ -205,6 +205,57 @@ const policyRules: AuthorizationPolicyRule[] = [
     action: "write",
     purposes: ["care-delivery", "emergency-care"]
   },
+  // Secure messaging resource (roadmap M5.7). Read + send for the care circle.
+  // Sending is a non-encounter write (patients message providers between visits),
+  // so it uses the 'send' action, which does not trigger the encounter constraint.
+  {
+    actorRole: "patient",
+    resource: "message",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "patient",
+    resource: "message",
+    action: "send",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "message",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "message",
+    action: "send",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "caregiver",
+    resource: "message",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "caregiver",
+    resource: "message",
+    action: "send",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "message",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "message",
+    action: "send",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
   {
     actorRole: "guardian",
     resource: "clinical-record-summary",

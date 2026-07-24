@@ -107,7 +107,11 @@ const apiOnlyModules = new Set([
   // Laboratory resource (roadmap M5.6). Order (decide-before-write, encounter-
   // required) / record-result / cancel + decide-before-load read; test details and
   // result values never leave the server in a payload. Api-only.
-  "laboratory-service"
+  "laboratory-service",
+  // Secure messaging resource (roadmap M5.7). start-thread/post (decide-before-
+  // write, non-encounter send) / mark-read / close + decide-before-load read;
+  // thread subject and message bodies never leave the server in a payload. Api-only.
+  "messaging-service"
 ]);
 // Note: apps/api/src/nest/** is not scanned by this gate at all (getContractModules
 // reads apps/api/src non-recursively) — the new auth controllers/module living

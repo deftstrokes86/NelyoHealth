@@ -324,3 +324,17 @@ export {
   type LabResultObservation,
   type PersistedLabOrder
 } from "./laboratory-repository.js";
+
+export {
+  insertMessage,
+  insertMessageThread,
+  listThreadsForPatient,
+  loadMessage,
+  loadMessageThread,
+  markMessageRead,
+  setMessageThreadStatus,
+  touchMessageThread,
+  type MessageThreadStatus,
+  type PersistedMessage,
+  type PersistedMessageThread
+} from "./messaging-repository.js";
