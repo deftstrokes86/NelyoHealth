@@ -298,3 +298,16 @@ export {
   type PersistedMedicalRecord,
   type PersistedMedicalRecordEntry
 } from "./medical-record-repository.js";
+
+export {
+  claimPrescriptionFill,
+  insertPrescription,
+  insertPrescriptionDispense,
+  listPrescriptionsForPatient,
+  loadPrescription,
+  markPrescriptionCancelled,
+  type ControlledSchedule,
+  type PersistedPrescription,
+  type PrescriptionDispenseRecord,
+  type PrescriptionStatus
+} from "./prescription-repository.js";

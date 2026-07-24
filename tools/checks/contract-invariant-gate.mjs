@@ -99,7 +99,11 @@ const apiOnlyModules = new Set([
   // Medical record resource (roadmap M5.4). Append-only clinical entries + decide-
   // before-load/write governance (reusing the clinical-record-summary PDP
   // resource); clinical content never leaves the server in a payload. Api-only.
-  "medical-record-service"
+  "medical-record-service",
+  // Prescription resource (roadmap M5.5). Prescribe (decide-before-write, encounter-
+  // required) / dispense / cancel + decide-before-load read; medication details
+  // never leave the server in a payload. Api-only.
+  "prescription-service"
 ]);
 // Note: apps/api/src/nest/** is not scanned by this gate at all (getContractModules
 // reads apps/api/src non-recursively) — the new auth controllers/module living

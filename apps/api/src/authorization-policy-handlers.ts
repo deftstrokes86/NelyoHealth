@@ -141,6 +141,38 @@ const policyRules: AuthorizationPolicyRule[] = [
     action: "conduct",
     purposes: ["care-delivery", "emergency-care"]
   },
+  // Prescription resource (roadmap M5.5). Read for the care circle; prescribing is
+  // a clinical WRITE (encounter-required via ABAC) restricted to clinicians.
+  {
+    actorRole: "patient",
+    resource: "prescription",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "prescription",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
+  {
+    actorRole: "caregiver",
+    resource: "prescription",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "prescription",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "prescription",
+    action: "write",
+    purposes: ["care-delivery", "emergency-care"]
+  },
   {
     actorRole: "guardian",
     resource: "clinical-record-summary",
