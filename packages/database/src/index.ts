@@ -311,3 +311,16 @@ export {
   type PrescriptionDispenseRecord,
   type PrescriptionStatus
 } from "./prescription-repository.js";
+
+export {
+  insertLabOrder,
+  insertLabResultObservation,
+  listLabOrdersForPatient,
+  loadLabOrder,
+  setLabOrderStatus,
+  type LabInterpretation,
+  type LabOrderPriority,
+  type LabOrderStatus,
+  type LabResultObservation,
+  type PersistedLabOrder
+} from "./laboratory-repository.js";

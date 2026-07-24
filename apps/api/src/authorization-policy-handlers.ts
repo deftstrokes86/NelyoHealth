@@ -173,6 +173,38 @@ const policyRules: AuthorizationPolicyRule[] = [
     action: "write",
     purposes: ["care-delivery", "emergency-care"]
   },
+  // Laboratory resource (roadmap M5.6). Read for the care circle; ordering a lab
+  // is a clinical WRITE (encounter-required via ABAC) restricted to clinicians.
+  {
+    actorRole: "patient",
+    resource: "laboratory",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "laboratory",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
+  {
+    actorRole: "caregiver",
+    resource: "laboratory",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "laboratory",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "laboratory",
+    action: "write",
+    purposes: ["care-delivery", "emergency-care"]
+  },
   {
     actorRole: "guardian",
     resource: "clinical-record-summary",

@@ -103,7 +103,11 @@ const apiOnlyModules = new Set([
   // Prescription resource (roadmap M5.5). Prescribe (decide-before-write, encounter-
   // required) / dispense / cancel + decide-before-load read; medication details
   // never leave the server in a payload. Api-only.
-  "prescription-service"
+  "prescription-service",
+  // Laboratory resource (roadmap M5.6). Order (decide-before-write, encounter-
+  // required) / record-result / cancel + decide-before-load read; test details and
+  // result values never leave the server in a payload. Api-only.
+  "laboratory-service"
 ]);
 // Note: apps/api/src/nest/** is not scanned by this gate at all (getContractModules
 // reads apps/api/src non-recursively) — the new auth controllers/module living
