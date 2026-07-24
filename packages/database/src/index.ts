@@ -354,6 +354,7 @@ export {
   deleteCareCircleMember,
   listCareCircleForPatient,
   listWardsForActor,
+  rebuildCareCircleProjection,
   upsertCareCircleMember,
   type CareCircleMembershipStatus,
   type PersistedCareCircleMember

@@ -177,6 +177,52 @@ export async function listWardsForActor(
   return result.rows.map(mapMember);
 }
 
+// ---------- Rebuild (batch reconcile from the authoritative source) ----------
+
+/**
+ * Rebuild the Care Circle projection from the authoritative relationship table —
+ * the BATCH analog of the per-event consumer's `loadRelationship`. Because the
+ * projection mirrors current state (it is not an event-sourced fold), rebuilding
+ * from the source produces state identical to incremental projection.
+ *
+ * Non-destructive reconcile (safe to run any time, incl. to correct a stale or
+ * dead-lettered projection): upsert every relationship's membership, then drop
+ * any membership whose relationship no longer exists. This is the recovery path
+ * that bounds projection staleness to "never hours" when a consumer falls behind
+ * or dead-letters — invoked by an operator/scheduled job, never on the read path.
+ */
+export async function rebuildCareCircleProjection(
+  client: ClientBase | Pool
+): Promise<{ upserted: number; deleted: number }> {
+  const upserted = await client.query(
+    `INSERT INTO nelyo_care_circle.care_circle_member
+       (relationship_ref, patient_ref, actor_ref, organization_ref, relationship_type,
+        membership_status, verification_method, effective_date, expiry_date, permitted_actions,
+        last_event_id, projected_at, created_at, updated_at)
+     SELECT relationship_id, patient_ref, actor_ref, organization_ref, relationship_type,
+            status, verification_method, effective_date, expiry_date, permitted_actions,
+            NULL, NOW(), NOW(), NOW()
+       FROM nelyo_relationship.relationship
+     ON CONFLICT (relationship_ref) DO UPDATE SET
+        patient_ref = EXCLUDED.patient_ref,
+        actor_ref = EXCLUDED.actor_ref,
+        organization_ref = EXCLUDED.organization_ref,
+        relationship_type = EXCLUDED.relationship_type,
+        membership_status = EXCLUDED.membership_status,
+        verification_method = EXCLUDED.verification_method,
+        effective_date = EXCLUDED.effective_date,
+        expiry_date = EXCLUDED.expiry_date,
+        permitted_actions = EXCLUDED.permitted_actions,
+        projected_at = EXCLUDED.projected_at,
+        updated_at = EXCLUDED.projected_at`
+  );
+  const deleted = await client.query(
+    `DELETE FROM nelyo_care_circle.care_circle_member
+      WHERE relationship_ref NOT IN (SELECT relationship_id FROM nelyo_relationship.relationship)`
+  );
+  return { upserted: upserted.rowCount ?? 0, deleted: deleted.rowCount ?? 0 };
+}
+
 // ---------- Projection consumer (dispatcher subscriber) ----------
 
 const RELATIONSHIP_EVENT_TYPES = new Set([

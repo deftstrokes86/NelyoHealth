@@ -6,7 +6,8 @@ import {
   createDatabasePool,
   listCareCircleForPatient,
   listWardsForActor,
-  PgOutboxStore
+  PgOutboxStore,
+  rebuildCareCircleProjection
 } from "../../packages/database/src/index.js";
 import {
   createPgConsentServiceDeps,
@@ -295,5 +296,62 @@ describe.skipIf(!shouldRun)("care-circle read-model projection + access", () => 
     });
     expect(denied.status).toBe("denied");
     expect(denied).not.toHaveProperty("members");
+  });
+
+  it("rebuilds the projection from the authoritative source, correcting stale/missing rows", async () => {
+    const { guardianRef, patientRef, organizationRef } = newSubjects();
+    const activeRel = await establishGuardian(
+      guardianRef,
+      patientRef,
+      organizationRef,
+      "rb-active"
+    );
+    await project(activeRel, "RelationshipEstablished");
+
+    const revokedGuardianRef = randomUUID();
+    actorRefs.push(revokedGuardianRef);
+    const revokedRel = await establishGuardian(
+      revokedGuardianRef,
+      patientRef,
+      organizationRef,
+      "rb-revoked-estab"
+    );
+    await project(revokedRel, "RelationshipEstablished");
+    await revokeRelationship(relationshipDeps, {
+      relationshipId: revokedRel,
+      revocationReason: "guardianship-ended",
+      actor: staffActor,
+      safeContext: safeContext("rb-revoke")
+    });
+    await project(revokedRel, "RelationshipRevoked");
+
+    // Snapshot the correct, incrementally-projected state.
+    const before = await listCareCircleForPatient(client, { patientRef, organizationRef });
+    const incremental = new Map(
+      before.map((member) => [member.relationshipRef, member.membershipStatus])
+    );
+    expect(incremental.get(activeRel)).toBe("active");
+    expect(incremental.get(revokedRel)).toBe("revoked");
+
+    // Corrupt the projection: drop the active row, flip the revoked row to active.
+    await client.query(
+      `DELETE FROM nelyo_care_circle.care_circle_member WHERE relationship_ref = $1`,
+      [activeRel]
+    );
+    await client.query(
+      `UPDATE nelyo_care_circle.care_circle_member SET membership_status = 'active' WHERE relationship_ref = $1`,
+      [revokedRel]
+    );
+
+    // Rebuild self-heals to the authoritative source — identical to incremental state.
+    const stats = await rebuildCareCircleProjection(client);
+    expect(stats.upserted).toBeGreaterThanOrEqual(2);
+
+    const after = await listCareCircleForPatient(client, { patientRef, organizationRef });
+    const rebuilt = new Map(
+      after.map((member) => [member.relationshipRef, member.membershipStatus])
+    );
+    expect(rebuilt.get(activeRel)).toBe(incremental.get(activeRel)); // missing row restored
+    expect(rebuilt.get(revokedRel)).toBe(incremental.get(revokedRel)); // stale row corrected to 'revoked'
   });
 });
