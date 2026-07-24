@@ -284,3 +284,17 @@ export {
   type ConsultationStatus,
   type PersistedConsultation
 } from "./consultation-repository.js";
+
+export {
+  insertMedicalRecord,
+  insertMedicalRecordEntry,
+  loadMedicalRecord,
+  loadMedicalRecordByPatientOrg,
+  loadMedicalRecordEntry,
+  setMedicalRecordEntryStatus,
+  type MedicalRecordEntryStatus,
+  type MedicalRecordEntryType,
+  type MedicalRecordStatus,
+  type PersistedMedicalRecord,
+  type PersistedMedicalRecordEntry
+} from "./medical-record-repository.js";
