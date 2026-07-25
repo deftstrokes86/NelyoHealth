@@ -22,10 +22,10 @@ import {
 } from "@nelyohealth/database";
 import {
   composeResourceAccessDecision,
-  resolveAndDecideResourceAccess,
   type ResolvedAuthorizationInputs,
   type ResourceAccessRequest
 } from "./resource-authorization.js";
+import { resolveDecideAndAuditAccess } from "./access-audit.js";
 import type { AuthorizationPolicyDecisionDraft } from "./authorization-policy.js";
 
 /**
@@ -197,7 +197,7 @@ export async function bookAppointment(
   }
 
   // Decide before writing: the patient subject governs consent / ReBAC / break-glass.
-  const decision = await resolveAndDecideResourceAccess(deps.pool, {
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
     ...input.access,
     organizationId: slot.organizationRef,
     requestedResource: "appointment",
@@ -573,7 +573,7 @@ export async function readAppointment(
   deps: Pick<AppointmentServiceDeps, "pool">,
   input: { appointmentId: string; access: AppointmentAccessContext }
 ): Promise<ReadAppointmentOutcome> {
-  const decision = await resolveAndDecideResourceAccess(deps.pool, {
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
     ...input.access,
     requestedResource: "appointment",
     requestedAction: "read"

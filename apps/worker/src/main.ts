@@ -204,8 +204,10 @@ function shutdown(signal: string): void {
     log("shutdown-complete", { signal });
     process.exit(0);
   });
-  // Hard stop if close hangs (e.g. stuck keep-alive sockets).
-  setTimeout(() => process.exit(0), 5_000).unref();
+  // Hard stop if close hangs (e.g. stuck keep-alive sockets). Cast because the
+  // ambient lib resolves setTimeout to the DOM signature (returns number); the
+  // Node timer has .unref() to avoid holding the loop open.
+  (setTimeout(() => process.exit(0), 5_000) as unknown as { unref(): void }).unref();
 }
 
 process.on("SIGTERM", () => shutdown("SIGTERM"));

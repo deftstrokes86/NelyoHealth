@@ -33,6 +33,7 @@ import {
   resolveAndDecideResourceAccess,
   type ResolvedAuthorizationInputs
 } from "./resource-authorization.js";
+import { resolveDecideAndAuditAccess } from "./access-audit.js";
 import {
   evaluatePatientProfileCreateAuthorization,
   type PatientProfileCreateDecisionInput
@@ -599,7 +600,8 @@ export async function decidePatientProfileAccess(
   deps: Pick<PatientProfileServiceDeps, "pool">,
   request: PatientProfileAccessRequest
 ): Promise<AuthorizationPolicyDecisionDraft> {
-  return resolveAndDecideResourceAccess(deps.pool, {
+  // Read decides through the audited wrapper — a denied read is recorded (M6.3b).
+  return resolveDecideAndAuditAccess(deps.pool, {
     ...request,
     requestedResource: "patient-profile"
   });

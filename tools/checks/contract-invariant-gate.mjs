@@ -122,7 +122,11 @@ const apiOnlyModules = new Set([
   "care-circle-service",
   // Notification read service (roadmap M6.2). Server-side self-scoped inbox reads
   // over the minimized (reference-only) notification store. Api-only.
-  "notification-service"
+  "notification-service",
+  // Deny-audit substrate (roadmap M6.3b, Principle 11). The decide-and-audit
+  // wrapper + append-only denied-decision persistence used by every resource;
+  // pure server-side authorization infrastructure, never mirrored to clients.
+  "access-audit"
 ]);
 // Note: apps/api/src/nest/** is not scanned by this gate at all (getContractModules
 // reads apps/api/src non-recursively) — the new auth controllers/module living

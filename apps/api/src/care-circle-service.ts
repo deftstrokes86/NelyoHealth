@@ -6,10 +6,10 @@ import {
 } from "@nelyohealth/database";
 import {
   composeResourceAccessDecision,
-  resolveAndDecideResourceAccess,
   type ResolvedAuthorizationInputs,
   type ResourceAccessRequest
 } from "./resource-authorization.js";
+import { resolveDecideAndAuditAccess } from "./access-audit.js";
 import type { AuthorizationPolicyDecisionDraft } from "./authorization-policy.js";
 
 /**
@@ -74,7 +74,7 @@ export async function readPatientCareCircle(
   deps: CareCircleServiceDeps,
   input: { access: CareCircleAccessContext }
 ): Promise<ReadPatientCareCircleOutcome> {
-  const decision = await resolveAndDecideResourceAccess(deps.pool, {
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
     ...input.access,
     requestedResource: CARE_CIRCLE_RESOURCE,
     requestedAction: "read"

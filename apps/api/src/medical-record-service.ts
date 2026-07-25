@@ -20,10 +20,10 @@ import {
 } from "@nelyohealth/database";
 import {
   composeResourceAccessDecision,
-  resolveAndDecideResourceAccess,
   type ResolvedAuthorizationInputs,
   type ResourceAccessRequest
 } from "./resource-authorization.js";
+import { resolveDecideAndAuditAccess } from "./access-audit.js";
 import type { AuthorizationPolicyDecisionDraft } from "./authorization-policy.js";
 
 /**
@@ -189,7 +189,7 @@ export async function addMedicalRecordEntry(
 ): Promise<AddMedicalRecordEntryOutcome> {
   const nowIso = (input.now?.() ?? new Date()).toISOString();
 
-  const decision = await resolveAndDecideResourceAccess(deps.pool, {
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
     ...input.access,
     requestedResource: CLINICAL_RESOURCE,
     requestedAction: "write"
@@ -292,7 +292,7 @@ export async function amendMedicalRecordEntry(
 ): Promise<AmendMedicalRecordEntryOutcome> {
   const nowIso = (input.now?.() ?? new Date()).toISOString();
 
-  const decision = await resolveAndDecideResourceAccess(deps.pool, {
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
     ...input.access,
     requestedResource: CLINICAL_RESOURCE,
     requestedAction: "amend"
@@ -476,7 +476,7 @@ export async function readMedicalRecord(
   deps: Pick<MedicalRecordServiceDeps, "pool">,
   input: { access: MedicalRecordAccessContext }
 ): Promise<ReadMedicalRecordOutcome> {
-  const decision = await resolveAndDecideResourceAccess(deps.pool, {
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
     ...input.access,
     requestedResource: CLINICAL_RESOURCE,
     requestedAction: "read"

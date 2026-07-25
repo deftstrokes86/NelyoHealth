@@ -22,10 +22,10 @@ import {
 } from "@nelyohealth/database";
 import {
   composeResourceAccessDecision,
-  resolveAndDecideResourceAccess,
   type ResolvedAuthorizationInputs,
   type ResourceAccessRequest
 } from "./resource-authorization.js";
+import { resolveDecideAndAuditAccess } from "./access-audit.js";
 import type { AuthorizationPolicyDecisionDraft } from "./authorization-policy.js";
 
 /**
@@ -194,7 +194,7 @@ export async function startConsultation(
 ): Promise<StartConsultationOutcome> {
   const nowIso = (input.now?.() ?? new Date()).toISOString();
 
-  const decision = await resolveAndDecideResourceAccess(deps.pool, {
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
     ...input.access,
     requestedResource: "consultation",
     requestedAction: "conduct"
@@ -521,7 +521,7 @@ export async function readConsultation(
   deps: Pick<ConsultationServiceDeps, "pool">,
   input: { consultationId: string; access: ConsultationAccessContext }
 ): Promise<ReadConsultationOutcome> {
-  const decision = await resolveAndDecideResourceAccess(deps.pool, {
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
     ...input.access,
     requestedResource: "consultation",
     requestedAction: "read"

@@ -21,10 +21,10 @@ import {
 } from "@nelyohealth/database";
 import {
   composeResourceAccessDecision,
-  resolveAndDecideResourceAccess,
   type ResolvedAuthorizationInputs,
   type ResourceAccessRequest
 } from "./resource-authorization.js";
+import { resolveDecideAndAuditAccess } from "./access-audit.js";
 import type { AuthorizationPolicyDecisionDraft } from "./authorization-policy.js";
 
 /**
@@ -107,7 +107,7 @@ export async function startMessageThread(
 ): Promise<StartMessageThreadOutcome> {
   const nowIso = (input.now?.() ?? new Date()).toISOString();
 
-  const decision = await resolveAndDecideResourceAccess(deps.pool, {
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
     ...input.access,
     requestedResource: MESSAGE_RESOURCE,
     requestedAction: "send"
@@ -213,7 +213,7 @@ export async function postMessage(
 ): Promise<PostMessageOutcome> {
   const nowIso = (input.now?.() ?? new Date()).toISOString();
 
-  const decision = await resolveAndDecideResourceAccess(deps.pool, {
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
     ...input.access,
     requestedResource: MESSAGE_RESOURCE,
     requestedAction: "send"
@@ -446,7 +446,7 @@ export async function readMessageThread(
   deps: Pick<MessagingServiceDeps, "pool">,
   input: { threadId: string; access: MessageAccessContext }
 ): Promise<ReadMessageThreadOutcome> {
-  const decision = await resolveAndDecideResourceAccess(deps.pool, {
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
     ...input.access,
     requestedResource: MESSAGE_RESOURCE,
     requestedAction: "read"

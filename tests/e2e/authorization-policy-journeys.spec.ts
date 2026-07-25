@@ -7,10 +7,12 @@ import {
 } from "../helpers/browser-assertions.js";
 
 test.describe("authorization policy browser journeys", () => {
-  function createQuery(params: Record<string, string | number | boolean>): string {
+  function createQuery(params: Record<string, string | number | boolean | undefined>): string {
     const query = new URLSearchParams();
     for (const [key, value] of Object.entries(params)) {
-      query.set(key, String(value));
+      if (value !== undefined) {
+        query.set(key, String(value));
+      }
     }
 
     return query.toString();
