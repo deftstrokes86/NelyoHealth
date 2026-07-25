@@ -30,6 +30,18 @@ evaluator was for CREATE (ADR-0011). Four decision kinds apply.
    tenant + active session) and the **artifact's existence/state** (the state machine, below). It does
    **NOT re-evaluate patient consent** — the consent chain is INHERITED from the artifact.
 
+   **Consent-chain inheritance applies only where the artifact carries one.** A prescription and a lab
+   order are consent-bearing clinical artifacts, so their derived writes inherit that chain. A message
+   thread (authority = participation) and a document (authority = ownership) are **not** consent-bearing
+   — their derived writes are capability + artifact-state only. An inherited-consent check MUST NOT be
+   fabricated against an artifact that has no chain, nor silently skipped without this documentation.
+
+   **TOCTOU-safety is mandatory.** "Validate artifact state, then write" is a race — a prescription can
+   be cancelled between the `issued` check and the dispense commit. The state validation MUST be
+   **atomic with the write**: a conditional transition (`UPDATE … SET state = next WHERE id = $1 AND
+   state = expected`), with **zero affected rows → deny with a distinct `stale-artifact-state` reason
+   code** and no state change. Never check-then-act across separate statements.
+
 3. **Org-internal, no patient subject** (1 write: `openAvailabilitySlot`). No patient is involved
    (provider availability). Capability + workspace only (ADR-0011-style). Consent is not an input.
 

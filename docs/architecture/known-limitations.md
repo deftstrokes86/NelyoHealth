@@ -41,16 +41,16 @@ their denials are still unrecorded until M6.4 gates them.
 ## KL-002 — operational writes not gated by an authorization decision (M6.3b → M6.4)
 
 **Status:** Identified in M6.3b (item-2 audit; count corrected from 16 to **17** during the M6.4
-Phase-1 classification recount). **M6.4 in progress:** the **appointment** resource's 4 writes
-(`openAvailabilitySlot` org-internal; `reschedule`/`cancel`/`transition-status` patient-subject, the
-last with the ADR-0012 state-machine multi-path exclusion) are **now gated + tested** (reference
-implementation). **13 writes remain**, closing per ADR-0012 across the other 6 resources.
+Phase-1 classification recount). **M6.4 in progress.** Gated + tested so far (the two reference patterns):
+- **appointment** (4): `openAvailabilitySlot` org-internal; `reschedule`/`cancel`/`transition-status`
+  patient-subject, the last with the ADR-0012 state-machine multi-path exclusion.
+- **prescription** (2): `dispensePrescription`/`cancelPrescription` derived-authority — TOCTOU-safe
+  (conditional claim/cancel, stale-state audited) + the revocation-asymmetry both-halves test.
 
-**Remaining (13).** consultation `scheduleConsultation` / `addConsultationParticipant` /
-`completeConsultation` / `cancelConsultation`; medical-record `openMedicalRecord` /
-`voidMedicalRecordEntry`; prescription `dispensePrescription` / `cancelPrescription`; laboratory
-`recordLabResult` / `cancelLabOrder`; messaging `markMessageAsRead` / `closeMessageThread`; document
-`archiveDocument`.
+**11 writes remain**, closing per ADR-0012: consultation `scheduleConsultation` /
+`addConsultationParticipant` / `completeConsultation` / `cancelConsultation`; medical-record
+`openMedicalRecord` / `voidMedicalRecordEntry`; laboratory `recordLabResult` / `cancelLabOrder`;
+messaging `markMessageAsRead` / `closeMessageThread`; document `archiveDocument`.
 
 **Root cause.** M5 gated only each resource's *primary* write + reads; secondary lifecycle actions were
 shipped with audit attribution but without a decision.

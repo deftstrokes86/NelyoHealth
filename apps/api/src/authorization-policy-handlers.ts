@@ -275,6 +275,28 @@ const policyRules: AuthorizationPolicyRule[] = [
     action: "write",
     purposes: ["care-delivery", "emergency-care"]
   },
+  // Prescription DERIVED-AUTHORITY writes (roadmap M6.4, ADR-0012): dispense (a
+  // pharmacist/pharmacy-staff acting on the issued Rx) + cancel (the prescriber).
+  // Capability + workspace only; the Rx's consent chain is inherited, the state
+  // machine (conditional claim/cancel) is the stop mechanism.
+  {
+    actorRole: "clinician",
+    resource: "prescription",
+    action: "dispense",
+    purposes: ["care-delivery"]
+  },
+  {
+    actorRole: "organization-admin",
+    resource: "prescription",
+    action: "dispense",
+    purposes: ["tenant-administration"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "prescription",
+    action: "cancel",
+    purposes: ["care-delivery"]
+  },
   // Laboratory resource (roadmap M5.6). Read for the care circle; ordering a lab
   // is a clinical WRITE (encounter-required via ABAC) restricted to clinicians.
   {

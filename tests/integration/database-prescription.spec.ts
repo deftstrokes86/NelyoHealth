@@ -101,6 +101,20 @@ describe.skipIf(!shouldRun)("prescription persistence + lifecycle + access", () 
     };
   }
 
+  // Derived-authority capability context (M6.4): pharmacy staff dispensing an Rx.
+  function dispenseAccess(tag: string) {
+    return {
+      decisionRequestId: `dr-disp-${run}-${tag}`,
+      actorId: randomUUID(),
+      actorRole: "organization-admin" as const,
+      actorType: "admin" as const,
+      purpose: "tenant-administration",
+      sameTenant: true,
+      sessionStatus: "active" as const,
+      evaluatedAt: new Date().toISOString()
+    };
+  }
+
   async function grantBaselineConsent(patientRef: string, organizationRef: string, tag: string) {
     await grantConsent(consentDeps, {
       patientRef,
@@ -243,6 +257,7 @@ describe.skipIf(!shouldRun)("prescription persistence + lifecycle + access", () 
     const first = await dispensePrescription(rx, {
       prescriptionId,
       dispensedByRef: randomUUID(),
+      access: dispenseAccess("disp"),
       actor: pharmacyActor,
       safeContext: safeContext("disp-1")
     });
@@ -255,6 +270,7 @@ describe.skipIf(!shouldRun)("prescription persistence + lifecycle + access", () 
     const second = await dispensePrescription(rx, {
       prescriptionId,
       dispensedByRef: randomUUID(),
+      access: dispenseAccess("disp"),
       actor: pharmacyActor,
       safeContext: safeContext("disp-2")
     });
@@ -268,6 +284,7 @@ describe.skipIf(!shouldRun)("prescription persistence + lifecycle + access", () 
     const third = await dispensePrescription(rx, {
       prescriptionId,
       dispensedByRef: randomUUID(),
+      access: dispenseAccess("disp"),
       actor: pharmacyActor,
       safeContext: safeContext("disp-3")
     });
@@ -287,19 +304,63 @@ describe.skipIf(!shouldRun)("prescription persistence + lifecycle + access", () 
     const cancelled = await cancelPrescription(rx, {
       prescriptionId,
       cancellationReasonCode: "prescriber-error",
+      access: clinicianAccess(clinicianRef, patientRef, organizationRef),
       actor: clinicianActor(clinicianRef),
       safeContext: safeContext("cancel")
     });
     expect(cancelled.status).toBe("cancelled");
     expect((await loadPrescription(client, prescriptionId))?.status).toBe("cancelled");
 
+    // TOCTOU (ADR-0012): the cancel already landed; the conditional claim guard is
+    // atomic with the state check, so the dispense is refused + audited as a
+    // stale-artifact-state denial. Nothing is written.
+    const dispCtx = safeContext("cancel-disp");
     const dispense = await dispensePrescription(rx, {
       prescriptionId,
       dispensedByRef: randomUUID(),
+      access: dispenseAccess("disp"),
       actor: pharmacyActor,
-      safeContext: safeContext("cancel-disp")
+      safeContext: dispCtx
     });
     expect(dispense.status).toBe("not-dispensable");
+    const staleAudit = await client.query(
+      `SELECT outcome FROM nelyo_foundation.audit_event WHERE correlation_id = $1`,
+      [dispCtx.correlationId]
+    );
+    expect(staleAudit.rows[0]).toMatchObject({ outcome: "denied-stale-artifact-state" });
+  });
+
+  it("derived-authority: dispense-after-withdrawal succeeds, later read denies (ADR-0012 asymmetry)", async () => {
+    const { clinicianRef, patientRef, organizationRef } = newSubjects();
+    await grantBaselineConsent(patientRef, organizationRef, "asym-consent");
+    const issued = await prescribe(clinicianRef, patientRef, organizationRef, "asym-rx", 2);
+    const prescriptionId = issued.status === "issued" ? issued.prescriptionId : "";
+
+    // Consent withdrawn AFTER a valid issue.
+    await withdrawConsent(consentDeps, {
+      patientRef,
+      organizationRef,
+      revocationReason: "patient-request",
+      actor: patientActor(patientRef),
+      safeContext: safeContext("asym-withdraw")
+    });
+
+    // WRITE-TO-COMPLETE: the validly-issued Rx stays dispensable (no consent re-check).
+    const dispensed = await dispensePrescription(rx, {
+      prescriptionId,
+      dispensedByRef: randomUUID(),
+      access: dispenseAccess("asym"),
+      actor: pharmacyActor,
+      safeContext: safeContext("asym-disp")
+    });
+    expect(dispensed.status).toBe("dispensed");
+
+    // READ-THEREAFTER: the same Rx now flows through the consent pipeline and denies.
+    const read = await readPrescription(rx, {
+      prescriptionId,
+      access: clinicianAccess(clinicianRef, patientRef, organizationRef)
+    });
+    expect(read.status).toBe("denied");
   });
 
   it("governs a prescription read and propagates consent withdrawal", async () => {

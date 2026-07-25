@@ -23,7 +23,11 @@ import {
   type ResolvedAuthorizationInputs,
   type ResourceAccessRequest
 } from "./resource-authorization.js";
-import { resolveDecideAndAuditAccess } from "./access-audit.js";
+import {
+  decideCapabilityWorkspaceAndAudit,
+  resolveDecideAndAuditAccess,
+  type CapabilityWriteAccessContext
+} from "./access-audit.js";
 import type { AuthorizationPolicyDecisionDraft } from "./authorization-policy.js";
 
 /**
@@ -199,6 +203,7 @@ export interface DispensePrescriptionInput {
   prescriptionId: string;
   dispensedByRef: string;
   quantityDispensed?: string;
+  access: CapabilityWriteAccessContext;
   actor: CommandActor;
   safeContext: PrescriptionSafeContext;
   now?: () => Date;
@@ -211,13 +216,17 @@ export type DispensePrescriptionOutcome =
       refillsRemaining: number;
       prescriptionStatus: string;
     }
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft }
   | { status: "not-found" }
   | { status: "not-dispensable" };
 
 /**
- * Dispense one fill. The refill counter is decremented conflict-free (and the
- * prescription completed when it reaches zero); a cancelled / completed / expired
- * prescription or one with no fills left is refused. Emits PrescriptionDispensed.
+ * Dispense one fill. DERIVED-AUTHORITY (ADR-0012): the pharmacist's standing flows
+ * from the prescription, so we decide on capability + workspace (consent chain
+ * INHERITED, not re-evaluated — a validly-issued Rx stays dispensable even after
+ * consent withdrawal), then claim the fill via a CONDITIONAL update that is atomic
+ * with the state check (TOCTOU-safe): if the Rx was cancelled/completed in between,
+ * zero rows change and the dispense is refused + audited. Emits PrescriptionDispensed.
  */
 export async function dispensePrescription(
   deps: PrescriptionServiceDeps,
@@ -229,6 +238,17 @@ export async function dispensePrescription(
   );
   if (!existing) {
     return { status: "not-found" };
+  }
+
+  const decision = await decideCapabilityWorkspaceAndAudit(deps.pool, {
+    ...input.access,
+    subjectRef: existing.patientRef,
+    organizationId: existing.organizationRef,
+    requestedResource: "prescription",
+    requestedAction: "dispense"
+  });
+  if (decision.status !== "allowed") {
+    return { status: "denied", decision };
   }
   const dispenseId = randomUUID();
 
@@ -252,9 +272,18 @@ export async function dispensePrescription(
         updatedAt: nowIso
       });
       if (!claimed) {
+        // TOCTOU guard: the Rx changed state between decide and write (e.g. a
+        // concurrent cancel) — conditional claim affected zero rows. Refuse +
+        // audit as a stale-artifact-state denial; nothing was written.
         return {
           result: { status: "not-dispensable" as const },
-          audit: { outcome: "noop", safeDetails: { prescriptionRef: input.prescriptionId } }
+          audit: {
+            outcome: "denied-stale-artifact-state",
+            safeDetails: {
+              prescriptionRef: input.prescriptionId,
+              reasonCode: "stale-artifact-state"
+            }
+          }
         };
       }
       await insertPrescriptionDispense(ctx.client, {
@@ -306,6 +335,7 @@ export async function dispensePrescription(
 export interface CancelPrescriptionInput {
   prescriptionId: string;
   cancellationReasonCode: string;
+  access: CapabilityWriteAccessContext;
   actor: CommandActor;
   safeContext: PrescriptionSafeContext;
   now?: () => Date;
@@ -313,10 +343,13 @@ export interface CancelPrescriptionInput {
 
 export type CancelPrescriptionOutcome =
   | { status: "cancelled"; prescriptionId: string }
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft }
   | { status: "not-found" }
   | { status: "not-cancellable" };
 
-/** Cancel an active prescription. Emits PrescriptionCancelled. */
+/** Cancel an active prescription. DERIVED-AUTHORITY (ADR-0012): capability +
+ * workspace decision, then a CONDITIONAL cancel (atomic state guard). This is the
+ * artifact's own stop mechanism (never a consent check). Emits PrescriptionCancelled. */
 export async function cancelPrescription(
   deps: PrescriptionServiceDeps,
   input: CancelPrescriptionInput
@@ -327,6 +360,17 @@ export async function cancelPrescription(
   );
   if (!existing) {
     return { status: "not-found" };
+  }
+
+  const decision = await decideCapabilityWorkspaceAndAudit(deps.pool, {
+    ...input.access,
+    subjectRef: existing.patientRef,
+    organizationId: existing.organizationRef,
+    requestedResource: "prescription",
+    requestedAction: "cancel"
+  });
+  if (decision.status !== "allowed") {
+    return { status: "denied", decision };
   }
   if (existing.status !== "active") {
     return { status: "not-cancellable" };
