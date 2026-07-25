@@ -140,6 +140,71 @@ const policyRules: AuthorizationPolicyRule[] = [
     action: "read",
     purposes: ["care-delivery", "care-coordination"]
   },
+  // Appointment operational writes (roadmap M6.4, ADR-0012). reschedule / cancel /
+  // transition-status are PATIENT-SUBJECT (full pipeline). transition-status is
+  // additionally guarded by a state machine that EXCLUDES 'cancelled' (owned by the
+  // dedicated cancel command) per the multi-path gate-equivalence invariant.
+  {
+    actorRole: "patient",
+    resource: "appointment",
+    action: "reschedule",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "patient",
+    resource: "appointment",
+    action: "cancel",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "appointment",
+    action: "reschedule",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "appointment",
+    action: "cancel",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "appointment",
+    action: "reschedule",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "appointment",
+    action: "cancel",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "appointment",
+    action: "transition-status",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "organization-admin",
+    resource: "appointment",
+    action: "transition-status",
+    purposes: ["tenant-administration"]
+  },
+  // Availability slot is ORG-INTERNAL (no patient subject): capability + workspace.
+  {
+    actorRole: "clinician",
+    resource: "availability-slot",
+    action: "open-slot",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "organization-admin",
+    resource: "availability-slot",
+    action: "open-slot",
+    purposes: ["tenant-administration"]
+  },
   {
     actorRole: "clinician",
     resource: "appointment",
@@ -515,17 +580,20 @@ export function evaluateAuthorizationPolicyDecision(
 
 const PATIENT_PROFILE_CREATE_ACTION = "create-profile";
 
-export interface PatientProfileCreateDecisionInput {
+export interface CapabilityWorkspaceDecisionInput {
   decisionRequestId: string;
   actorId: string;
   actorRole: AuthorizationActorRole;
   actorType: AuthorizationPolicyDecisionDraftInput["actorType"];
   /**
-   * The identity being registered (person ref). Used only as the audit subject —
-   * the patient profile does not exist yet, so there is no patientId.
+   * Audit subject: the patient ref for a derived-authority write, the resource ref
+   * for an org-internal write, or the person ref for a create. Not a consent
+   * subject — consent is not an input to this decision kind.
    */
   subjectRef: string;
   organizationId: string;
+  requestedResource: string;
+  requestedAction: string;
   purpose: string;
   sameTenant: boolean;
   sessionStatus: SessionStatus;
@@ -533,20 +601,19 @@ export interface PatientProfileCreateDecisionInput {
 }
 
 /**
- * Authorize a patient-profile CREATE (roadmap M6.3, ADR-0011). CREATE is a DISTINCT
- * decision kind, not an exception carved into the consent-gated pipeline (which
- * would weaken default-deny for every resource). The subject does not exist yet, so
- * consent is definitionally not an input: this authorizes on CAPABILITY (an RBAC
- * create-profile rule) + WORKSPACE (same tenant + active session) + PURPOSE.
- * Default-deny holds — an unmapped capability denies. Identity-resolution (dedup)
- * and the atomic consent/relationship bootstrap are the create COMMAND's job, run
- * only AFTER this decision allows. Denials produce the same append-only audit
- * intent as any other decision.
+ * Capability + workspace decision (ADR-0011 create; generalized in ADR-0012 for
+ * org-internal + derived-authority operational writes). Authorizes on CAPABILITY
+ * (an RBAC rule for resource+action) + WORKSPACE (same tenant + active session) +
+ * PURPOSE. Consent / relationship are NOT inputs: used where there is no patient
+ * subject (org-internal), or where the consent chain is INHERITED from an existing
+ * authorized artifact (derived-authority) and the artifact's state machine — not a
+ * fresh consent check — is the stop mechanism. Default-deny holds (an unmapped
+ * capability denies). Same append-only audit intent as any decision.
  */
-export function evaluatePatientProfileCreateAuthorization(
-  input: PatientProfileCreateDecisionInput
+export function evaluateCapabilityWorkspaceAuthorization(
+  input: CapabilityWorkspaceDecisionInput
 ): AuthorizationPolicyDecisionDraft {
-  const capability = evaluateCreateCapabilityOutcome(input);
+  const capability = evaluateCapabilityOutcome(input);
   const status = capability.status;
   const reasonCode = capability.reasonCode;
 
@@ -559,8 +626,8 @@ export function evaluatePatientProfileCreateAuthorization(
     patientId: input.subjectRef,
     relationshipType: "none",
     requestedConsentDomains: [],
-    requestedResource: "patient-profile",
-    requestedAction: PATIENT_PROFILE_CREATE_ACTION,
+    requestedResource: input.requestedResource,
+    requestedAction: input.requestedAction,
     purpose: input.purpose,
     consentStatus: "revoked",
     relationshipStatus: "none",
@@ -582,8 +649,8 @@ export function evaluatePatientProfileCreateAuthorization(
     reasonCode,
     dimensionOutcomes: {
       rbac: capability,
-      // Consent + relationship are NOT decision inputs for CREATE — the subject
-      // does not exist yet; the command bootstraps them atomically.
+      // Consent + relationship are NOT decision inputs for this kind — no subject
+      // consent (org-internal) or an inherited artifact chain (derived-authority).
       abac: { status: "allowed", reasonCode: "allowed" },
       rebac: { status: "allowed", reasonCode: "allowed" }
     },
@@ -594,13 +661,13 @@ export function evaluatePatientProfileCreateAuthorization(
   };
 }
 
-function evaluateCreateCapabilityOutcome(
-  input: PatientProfileCreateDecisionInput
+function evaluateCapabilityOutcome(
+  input: CapabilityWorkspaceDecisionInput
 ): AuthorizationPolicyDimensionOutcome {
   const ruleQuery = {
     actorRole: input.actorRole,
-    requestedResource: "patient-profile",
-    requestedAction: PATIENT_PROFILE_CREATE_ACTION
+    requestedResource: input.requestedResource,
+    requestedAction: input.requestedAction
   } as AuthorizationPolicyDecisionDraftInput;
   const matchingRule = findPolicyRule(ruleQuery);
   if (!matchingRule) {
@@ -616,6 +683,36 @@ function evaluateCreateCapabilityOutcome(
     return { status: "denied", reasonCode: "abac-purpose-not-allowed" };
   }
   return { status: "allowed", reasonCode: "allowed" };
+}
+
+export interface PatientProfileCreateDecisionInput {
+  decisionRequestId: string;
+  actorId: string;
+  actorRole: AuthorizationActorRole;
+  actorType: AuthorizationPolicyDecisionDraftInput["actorType"];
+  /** The identity being registered (person ref) — the audit subject. */
+  subjectRef: string;
+  organizationId: string;
+  purpose: string;
+  sameTenant: boolean;
+  sessionStatus: SessionStatus;
+  evaluatedAt: string;
+}
+
+/**
+ * Authorize a patient-profile CREATE (roadmap M6.3, ADR-0011): a capability +
+ * workspace decision on the create-profile action. Thin wrapper over the
+ * generalized decision so the create path and the ADR-0012 operational writes
+ * share one implementation.
+ */
+export function evaluatePatientProfileCreateAuthorization(
+  input: PatientProfileCreateDecisionInput
+): AuthorizationPolicyDecisionDraft {
+  return evaluateCapabilityWorkspaceAuthorization({
+    ...input,
+    requestedResource: "patient-profile",
+    requestedAction: PATIENT_PROFILE_CREATE_ACTION
+  });
 }
 
 function createAuditIntent(args: {

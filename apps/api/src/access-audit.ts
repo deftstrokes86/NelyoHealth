@@ -5,7 +5,23 @@ import {
   resolveAndDecideResourceAccess,
   type ResourceAccessRequest
 } from "./resource-authorization.js";
+import {
+  evaluateCapabilityWorkspaceAuthorization,
+  type CapabilityWorkspaceDecisionInput
+} from "./authorization-policy-handlers.js";
 import type { AuthorizationPolicyDecisionDraft } from "./authorization-policy.js";
+
+/**
+ * The caller-supplied part of a capability + workspace decision (ADR-0012): the
+ * actor + workspace + purpose + clock. The resource/action are fixed by the
+ * command, and the audit subject (`subjectRef`) + organization are derived by it
+ * (from the loaded artifact for derived-authority, or the command input for
+ * org-internal).
+ */
+export type CapabilityWriteAccessContext = Omit<
+  CapabilityWorkspaceDecisionInput,
+  "subjectRef" | "requestedResource" | "requestedAction" | "organizationId"
+>;
 
 /**
  * Deny-audit (roadmap M6.3b, Principle 11 — every denied access attempt must be
@@ -32,6 +48,38 @@ export async function resolveDecideAndAuditAccess(
       outcome: decision.status,
       reasonCode: decision.reasonCode
     });
+  }
+  return decision;
+}
+
+/**
+ * Capability + workspace decide-and-audit (ADR-0012): the analog of
+ * `resolveDecideAndAuditAccess` for org-internal and derived-authority operational
+ * writes. Decides on capability + workspace (no consent), and persists a denied
+ * audit on any non-allow. The artifact state machine (derived-authority) is the
+ * caller's separate step.
+ */
+export async function decideCapabilityWorkspaceAndAudit(
+  pool: Pool,
+  input: CapabilityWorkspaceDecisionInput
+): Promise<AuthorizationPolicyDecisionDraft> {
+  const decision = evaluateCapabilityWorkspaceAuthorization(input);
+  if (decision.status !== "allowed") {
+    await recordDeniedAccessAudit(
+      pool,
+      {
+        actorId: input.actorId,
+        actorRole: input.actorRole,
+        actorType: input.actorType,
+        patientId: input.subjectRef,
+        requestedResource: input.requestedResource,
+        requestedAction: input.requestedAction,
+        purpose: input.purpose,
+        decisionRequestId: input.decisionRequestId,
+        evaluatedAt: input.evaluatedAt
+      },
+      { outcome: decision.status, reasonCode: decision.reasonCode }
+    );
   }
   return decision;
 }

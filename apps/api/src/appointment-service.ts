@@ -25,7 +25,11 @@ import {
   type ResolvedAuthorizationInputs,
   type ResourceAccessRequest
 } from "./resource-authorization.js";
-import { resolveDecideAndAuditAccess } from "./access-audit.js";
+import {
+  decideCapabilityWorkspaceAndAudit,
+  resolveDecideAndAuditAccess,
+  type CapabilityWriteAccessContext
+} from "./access-audit.js";
 import type { AuthorizationPolicyDecisionDraft } from "./authorization-policy.js";
 
 /**
@@ -52,6 +56,16 @@ import type { AuthorizationPolicyDecisionDraft } from "./authorization-policy.js
 export type AppointmentAccessContext = Omit<
   ResourceAccessRequest,
   "requestedResource" | "requestedAction"
+>;
+
+/**
+ * Patient-subject write context (M6.4): the subject patientId + organization are
+ * taken from the loaded appointment, so the caller supplies only the actor /
+ * workspace / purpose part.
+ */
+export type AppointmentWriteAccessContext = Omit<
+  AppointmentAccessContext,
+  "patientId" | "organizationId"
 >;
 
 export interface AppointmentSafeContext {
@@ -95,18 +109,35 @@ export interface OpenAvailabilitySlotInput {
   organizationRef: string;
   startAt: string;
   endAt: string;
+  access: CapabilityWriteAccessContext;
   actor: CommandActor;
   safeContext: AppointmentSafeContext;
   now?: () => Date;
 }
 
-/** Publish a bookable clinician window. Emits AppointmentSlotOpened. */
+export type OpenAvailabilitySlotOutcome =
+  | { status: "opened"; slotId: string }
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft };
+
+/** Publish a bookable clinician window. ORG-INTERNAL (no patient subject): a
+ * capability + workspace decision gates it. Emits AppointmentSlotOpened. */
 export async function openAvailabilitySlot(
   deps: AppointmentServiceDeps,
   input: OpenAvailabilitySlotInput
-): Promise<{ status: "opened"; slotId: string }> {
+): Promise<OpenAvailabilitySlotOutcome> {
   const nowIso = (input.now?.() ?? new Date()).toISOString();
   const slotId = randomUUID();
+
+  const decision = await decideCapabilityWorkspaceAndAudit(deps.pool, {
+    ...input.access,
+    subjectRef: input.clinicianRef,
+    organizationId: input.organizationRef,
+    requestedResource: "availability-slot",
+    requestedAction: "open-slot"
+  });
+  if (decision.status !== "allowed") {
+    return { status: "denied", decision };
+  }
 
   const { result } = await runTransactionalCommand({
     transaction: deps.transaction,
@@ -287,6 +318,7 @@ export async function bookAppointment(
 export interface RescheduleAppointmentInput {
   appointmentId: string;
   newSlotId: string;
+  access: AppointmentWriteAccessContext;
   actor: CommandActor;
   safeContext: AppointmentSafeContext;
   now?: () => Date;
@@ -294,11 +326,13 @@ export interface RescheduleAppointmentInput {
 
 export type RescheduleAppointmentOutcome =
   | { status: "rescheduled"; appointmentId: string }
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft }
   | { status: "not-found" }
   | { status: "slot-not-found" }
   | { status: "slot-unavailable" };
 
-/** Move an appointment to a new open slot, freeing the old one. Emits AppointmentRescheduled. */
+/** Move an appointment to a new open slot, freeing the old one. PATIENT-SUBJECT:
+ * decide (full pipeline) before writing. Emits AppointmentRescheduled. */
 export async function rescheduleAppointment(
   deps: AppointmentServiceDeps,
   input: RescheduleAppointmentInput
@@ -310,6 +344,18 @@ export async function rescheduleAppointment(
   if (!appointment) {
     return { status: "not-found" };
   }
+
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
+    ...input.access,
+    patientId: appointment.patientRef,
+    organizationId: appointment.organizationRef,
+    requestedResource: "appointment",
+    requestedAction: "reschedule"
+  });
+  if (decision.status !== "allowed") {
+    return { status: "denied", decision };
+  }
+
   const newSlot = await withClient(deps.pool, (client) =>
     loadAvailabilitySlot(client, input.newSlotId)
   );
@@ -392,6 +438,7 @@ export async function rescheduleAppointment(
 export interface CancelAppointmentInput {
   appointmentId: string;
   cancellationReasonCode: string;
+  access: AppointmentWriteAccessContext;
   actor: CommandActor;
   safeContext: AppointmentSafeContext;
   now?: () => Date;
@@ -399,10 +446,12 @@ export interface CancelAppointmentInput {
 
 export type CancelAppointmentOutcome =
   | { status: "cancelled"; appointmentId: string }
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft }
   | { status: "not-found" }
   | { status: "not-cancellable" };
 
-/** Cancel an appointment and free its slot. Emits AppointmentCancelled. */
+/** Cancel an appointment and free its slot. PATIENT-SUBJECT: decide (full
+ * pipeline) before writing. Emits AppointmentCancelled. */
 export async function cancelAppointment(
   deps: AppointmentServiceDeps,
   input: CancelAppointmentInput
@@ -413,6 +462,17 @@ export async function cancelAppointment(
   );
   if (!appointment) {
     return { status: "not-found" };
+  }
+
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
+    ...input.access,
+    patientId: appointment.patientRef,
+    organizationId: appointment.organizationRef,
+    requestedResource: "appointment",
+    requestedAction: "cancel"
+  });
+  if (decision.status !== "allowed") {
+    return { status: "denied", decision };
   }
   if (!ALLOWED_TRANSITIONS[appointment.status].includes("cancelled")) {
     return { status: "not-cancellable" };
@@ -479,6 +539,7 @@ export async function cancelAppointment(
 export interface TransitionAppointmentStatusInput {
   appointmentId: string;
   toStatus: AppointmentStatus;
+  access: AppointmentWriteAccessContext;
   actor: CommandActor;
   safeContext: AppointmentSafeContext;
   now?: () => Date;
@@ -486,8 +547,17 @@ export interface TransitionAppointmentStatusInput {
 
 export type TransitionAppointmentStatusOutcome =
   | { status: "transitioned"; appointmentId: string; toStatus: AppointmentStatus }
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft }
   | { status: "not-found" }
-  | { status: "invalid-transition"; fromStatus: AppointmentStatus };
+  | { status: "invalid-transition"; fromStatus: AppointmentStatus }
+  | { status: "state-owned-by-dedicated-command"; toStatus: AppointmentStatus };
+
+/**
+ * States reachable ONLY through their dedicated command (ADR-0012 multi-path
+ * gate-equivalence): 'cancelled' is owned by cancelAppointment, so the generic
+ * transition must not be a weaker path to it.
+ */
+const DEDICATED_COMMAND_STATES: readonly AppointmentStatus[] = ["cancelled"];
 
 /** Advance an appointment's status through the validated lifecycle. Emits AppointmentStatusChanged. */
 export async function transitionAppointmentStatus(
@@ -500,6 +570,22 @@ export async function transitionAppointmentStatus(
   );
   if (!appointment) {
     return { status: "not-found" };
+  }
+  // Multi-path gate-equivalence: the generic transition may not reach a state a
+  // dedicated command owns (e.g. 'cancelled' -> use cancelAppointment).
+  if (DEDICATED_COMMAND_STATES.includes(input.toStatus)) {
+    return { status: "state-owned-by-dedicated-command", toStatus: input.toStatus };
+  }
+
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
+    ...input.access,
+    patientId: appointment.patientRef,
+    organizationId: appointment.organizationRef,
+    requestedResource: "appointment",
+    requestedAction: "transition-status"
+  });
+  if (decision.status !== "allowed") {
+    return { status: "denied", decision };
   }
   if (!ALLOWED_TRANSITIONS[appointment.status].includes(input.toStatus)) {
     return { status: "invalid-transition", fromStatus: appointment.status };

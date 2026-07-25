@@ -38,16 +38,15 @@ their denials are still unrecorded until M6.4 gates them.
 
 ---
 
-## KL-002 — 17 operational writes are not gated by an authorization decision (through M6.3b)
+## KL-002 — operational writes not gated by an authorization decision (M6.3b → M6.4)
 
-**Status:** Identified in M6.3b (item-2 audit; the count was corrected from 16 to **17** during the
-M6.4 Phase-1 classification recount); scheduled for closure in **M6.4 (Operational Write
-Authorization)**.
+**Status:** Identified in M6.3b (item-2 audit; count corrected from 16 to **17** during the M6.4
+Phase-1 classification recount). **M6.4 in progress:** the **appointment** resource's 4 writes
+(`openAvailabilitySlot` org-internal; `reschedule`/`cancel`/`transition-status` patient-subject, the
+last with the ADR-0012 state-machine multi-path exclusion) are **now gated + tested** (reference
+implementation). **13 writes remain**, closing per ADR-0012 across the other 6 resources.
 
-**Scope.** Secondary / lifecycle write commands that run the transactional command with actor
-attribution but **no composed-pipeline (consent + ReBAC + break-glass) decision**:
-appointment `openAvailabilitySlot` / `rescheduleAppointment` / `cancelAppointment` /
-`transitionAppointmentStatus`; consultation `scheduleConsultation` / `addConsultationParticipant` /
+**Remaining (13).** consultation `scheduleConsultation` / `addConsultationParticipant` /
 `completeConsultation` / `cancelConsultation`; medical-record `openMedicalRecord` /
 `voidMedicalRecordEntry`; prescription `dispensePrescription` / `cancelPrescription`; laboratory
 `recordLabResult` / `cancelLabOrder`; messaging `markMessageAsRead` / `closeMessageThread`; document

@@ -112,10 +112,47 @@ describe.skipIf(!shouldRun)("appointment persistence + lifecycle + access", () =
       organizationRef,
       startAt: start,
       endAt: end,
+      access: orgCapabilityAccess(),
       actor: staffActor,
       safeContext: safeContext(tag)
     });
+    if (opened.status !== "opened") {
+      throw new Error(`openSlot denied: ${JSON.stringify(opened)}`);
+    }
     return opened.slotId;
+  }
+
+  // Org-internal / org-admin write context (M6.4): capability + workspace only.
+  function orgCapabilityAccess() {
+    return {
+      decisionRequestId: `dr-cap-${run}-${randomUUID()}`,
+      actorId: "org-admin-actor",
+      actorRole: "organization-admin" as const,
+      actorType: "admin" as const,
+      purpose: "tenant-administration",
+      sameTenant: true,
+      sessionStatus: "active" as const,
+      evaluatedAt: new Date().toISOString()
+    };
+  }
+
+  // Org-admin patient-subject write context (M6.4): no patientId/org (from artifact).
+  function orgWriteAccess() {
+    return {
+      decisionRequestId: `dr-w-${run}-${randomUUID()}`,
+      actorId: randomUUID(),
+      actorRole: "organization-admin" as const,
+      actorType: "admin" as const,
+      purpose: "tenant-administration",
+      requiresRelationship: false,
+      relationshipType: "none",
+      requestedConsentDomains: [],
+      sessionStatus: "active" as const,
+      sameTenant: true,
+      emergencyStatus: "none" as const,
+      activeEncounter: true,
+      evaluatedAt: new Date().toISOString()
+    };
   }
 
   function newSubjects() {
@@ -312,6 +349,7 @@ describe.skipIf(!shouldRun)("appointment persistence + lifecycle + access", () =
     const cancelled = await cancelAppointment(appt, {
       appointmentId,
       cancellationReasonCode: "patient-request",
+      access: bookingAccess(patientRef, organizationRef),
       actor: patientActor(patientRef),
       safeContext: safeContext("cancel")
     });
@@ -349,6 +387,7 @@ describe.skipIf(!shouldRun)("appointment persistence + lifecycle + access", () =
     const rescheduled = await rescheduleAppointment(appt, {
       appointmentId,
       newSlotId: slotB,
+      access: bookingAccess(patientRef, organizationRef),
       actor: patientActor(patientRef),
       safeContext: safeContext("resched")
     });
@@ -382,6 +421,7 @@ describe.skipIf(!shouldRun)("appointment persistence + lifecycle + access", () =
         await transitionAppointmentStatus(appt, {
           appointmentId,
           toStatus: "checked-in",
+          access: orgWriteAccess(),
           actor: staffActor,
           safeContext: safeContext("status-checkin")
         })
@@ -392,18 +432,88 @@ describe.skipIf(!shouldRun)("appointment persistence + lifecycle + access", () =
         await transitionAppointmentStatus(appt, {
           appointmentId,
           toStatus: "completed",
+          access: orgWriteAccess(),
           actor: staffActor,
           safeContext: safeContext("status-complete")
         })
       ).status
     ).toBe("transitioned");
-    // Completed is terminal: no further transitions.
-    const invalid = await transitionAppointmentStatus(appt, {
+    // Multi-path gate-equivalence (ADR-0012): 'cancelled' is owned by
+    // cancelAppointment and is UNREACHABLE via the generic transition.
+    const dedicated = await transitionAppointmentStatus(appt, {
       appointmentId,
       toStatus: "cancelled",
+      access: orgWriteAccess(),
+      actor: staffActor,
+      safeContext: safeContext("status-dedicated")
+    });
+    expect(dedicated.status).toBe("state-owned-by-dedicated-command");
+    // Completed is terminal: a non-dedicated invalid transition is rejected too.
+    const invalid = await transitionAppointmentStatus(appt, {
+      appointmentId,
+      toStatus: "no-show",
+      access: orgWriteAccess(),
       actor: staffActor,
       safeContext: safeContext("status-invalid")
     });
     expect(invalid.status).toBe("invalid-transition");
+  });
+
+  it("denies an unauthorized cancel, writing nothing and auditing the deny (M6.4)", async () => {
+    const { clinicianRef, patientRef, organizationRef } = newSubjects();
+    await grantBaselineConsent(patientRef, organizationRef, "deny-consent");
+    const slotId = await openSlot(
+      clinicianRef,
+      organizationRef,
+      "deny-slot",
+      "2026-08-07T09:00:00.000Z",
+      "2026-08-07T09:30:00.000Z"
+    );
+    const booked = await bookAppointment(appt, {
+      slotId,
+      appointmentType: "consultation",
+      access: bookingAccess(patientRef, organizationRef),
+      actor: patientActor(patientRef),
+      safeContext: safeContext("deny-book")
+    });
+    const appointmentId = booked.status === "booked" ? booked.appointmentId : "";
+
+    const decisionRequestId = `dr-deny-${run}-${randomUUID()}`;
+    const denied = await cancelAppointment(appt, {
+      appointmentId,
+      cancellationReasonCode: "patient-request",
+      access: {
+        decisionRequestId,
+        actorId: randomUUID(),
+        actorRole: "caregiver", // no cancel capability -> default-deny
+        actorType: "caregiver",
+        purpose: "care-delivery",
+        requiresRelationship: false,
+        relationshipType: "none",
+        requestedConsentDomains: [],
+        sessionStatus: "active",
+        sameTenant: true,
+        emergencyStatus: "none",
+        activeEncounter: true,
+        evaluatedAt: new Date().toISOString()
+      },
+      actor: patientActor(patientRef),
+      safeContext: safeContext("deny-cancel")
+    });
+    expect(denied.status).toBe("denied");
+    if (denied.status === "denied") {
+      expect(denied.decision.reasonCode).toBe("rbac-policy-unmapped-deny-default");
+    }
+    // Nothing was written...
+    expect((await loadAppointment(client, appointmentId))?.status).not.toBe("cancelled");
+    // ...and the deny was audited.
+    const audit = await client.query(
+      `SELECT outcome, action FROM nelyo_foundation.audit_event WHERE correlation_id = $1`,
+      [decisionRequestId]
+    );
+    expect(audit.rows[0]).toMatchObject({ outcome: "denied", action: "cancel" });
+    await client.query(`DELETE FROM nelyo_foundation.audit_event WHERE correlation_id = $1`, [
+      decisionRequestId
+    ]);
   });
 });
