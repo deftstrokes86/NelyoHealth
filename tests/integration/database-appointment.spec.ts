@@ -516,4 +516,69 @@ describe.skipIf(!shouldRun)("appointment persistence + lifecycle + access", () =
       decisionRequestId
     ]);
   });
+
+  it("authz precedes transition validity; validity rejections are audited (M6.4 reorder)", async () => {
+    const { clinicianRef, patientRef, organizationRef } = newSubjects();
+    await grantBaselineConsent(patientRef, organizationRef, "order-consent");
+    const slotId = await openSlot(
+      clinicianRef,
+      organizationRef,
+      "order-slot",
+      "2026-08-08T09:00:00.000Z",
+      "2026-08-08T09:30:00.000Z"
+    );
+    const booked = await bookAppointment(appt, {
+      slotId,
+      appointmentType: "consultation",
+      access: bookingAccess(patientRef, organizationRef),
+      actor: patientActor(patientRef),
+      safeContext: safeContext("order-book")
+    });
+    const appointmentId = booked.status === "booked" ? booked.appointmentId : "";
+
+    // (a) UNAUTHORIZED actor targeting the dedicated-owned 'cancelled' state gets a
+    //     uniform 'denied' — NOT 'state-owned' — so no state-machine shape leaks.
+    const unauth = await transitionAppointmentStatus(appt, {
+      appointmentId,
+      toStatus: "cancelled",
+      access: {
+        decisionRequestId: `dr-unauth-${run}-${randomUUID()}`,
+        actorId: randomUUID(),
+        actorRole: "caregiver", // no transition-status capability
+        actorType: "caregiver",
+        purpose: "care-delivery",
+        requiresRelationship: false,
+        relationshipType: "none",
+        requestedConsentDomains: [],
+        sessionStatus: "active",
+        sameTenant: true,
+        emergencyStatus: "none",
+        activeEncounter: true,
+        evaluatedAt: new Date().toISOString()
+      },
+      actor: staffActor,
+      safeContext: safeContext("order-unauth")
+    });
+    expect(unauth.status).toBe("denied");
+
+    // (b) AUTHORIZED actor targeting 'cancelled' -> state-owned rejection, audited
+    //     with an honest (non-"denied") category.
+    const authAccess = orgWriteAccess();
+    const owned = await transitionAppointmentStatus(appt, {
+      appointmentId,
+      toStatus: "cancelled",
+      access: authAccess,
+      actor: staffActor,
+      safeContext: safeContext("order-owned")
+    });
+    expect(owned.status).toBe("state-owned-by-dedicated-command");
+    const auditRow = await client.query(
+      `SELECT outcome FROM nelyo_foundation.audit_event WHERE correlation_id = $1`,
+      [authAccess.decisionRequestId]
+    );
+    expect(auditRow.rows[0]).toMatchObject({ outcome: "state-owned-by-dedicated-command" });
+    await client.query(`DELETE FROM nelyo_foundation.audit_event WHERE correlation_id = $1`, [
+      authAccess.decisionRequestId
+    ]);
+  });
 });

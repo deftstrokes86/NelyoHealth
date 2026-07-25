@@ -27,6 +27,7 @@ import {
 } from "./resource-authorization.js";
 import {
   decideCapabilityWorkspaceAndAudit,
+  recordDeniedAccessAudit,
   resolveDecideAndAuditAccess,
   type CapabilityWriteAccessContext
 } from "./access-audit.js";
@@ -571,12 +572,10 @@ export async function transitionAppointmentStatus(
   if (!appointment) {
     return { status: "not-found" };
   }
-  // Multi-path gate-equivalence: the generic transition may not reach a state a
-  // dedicated command owns (e.g. 'cancelled' -> use cancelAppointment).
-  if (DEDICATED_COMMAND_STATES.includes(input.toStatus)) {
-    return { status: "state-owned-by-dedicated-command", toStatus: input.toStatus };
-  }
 
+  // Authz FIRST (ADR-0012): an unauthorized actor gets a uniform 'denied'
+  // regardless of the requested toStatus, so transition-validity rejections below
+  // can never leak state-machine shape to actors with no standing.
   const decision = await resolveDecideAndAuditAccess(deps.pool, {
     ...input.access,
     patientId: appointment.patientRef,
@@ -587,7 +586,29 @@ export async function transitionAppointmentStatus(
   if (decision.status !== "allowed") {
     return { status: "denied", decision };
   }
+
+  // Post-authz validity: only authorized actors reach here. Each non-allow leaves
+  // an audit row with an HONEST category (not "denied" — these are validity
+  // rejections, not authorization denials).
+  const validityRequest = {
+    ...input.access,
+    patientId: appointment.patientRef,
+    requestedResource: "appointment",
+    requestedAction: "transition-status"
+  };
+  // Multi-path gate-equivalence: 'cancelled' is owned by cancelAppointment.
+  if (DEDICATED_COMMAND_STATES.includes(input.toStatus)) {
+    await recordDeniedAccessAudit(deps.pool, validityRequest, {
+      outcome: "state-owned-by-dedicated-command",
+      reasonCode: "state-owned-by-dedicated-command"
+    });
+    return { status: "state-owned-by-dedicated-command", toStatus: input.toStatus };
+  }
   if (!ALLOWED_TRANSITIONS[appointment.status].includes(input.toStatus)) {
+    await recordDeniedAccessAudit(deps.pool, validityRequest, {
+      outcome: "rejected-invalid-transition",
+      reasonCode: "invalid-state-transition"
+    });
     return { status: "invalid-transition", fromStatus: appointment.status };
   }
   const fromStatus = appointment.status;
