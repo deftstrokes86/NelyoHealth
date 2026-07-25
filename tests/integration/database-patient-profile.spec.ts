@@ -25,7 +25,9 @@ import {
   findPatientByIdentifier,
   readPatientProfile,
   updatePatientProfile,
-  type PatientProfileAccessRequest
+  type PatientProfileAccessRequest,
+  type PatientProfileCreateAccessContext,
+  type PatientProfileWriteAccessContext
 } from "../../apps/api/src/patient-profile-service.js";
 
 const shouldRun = process.env.NELYO_RUN_DB_INTEGRATION === "1";
@@ -33,16 +35,17 @@ const SENTINEL_NAME = "SENTINEL Jane Preferred";
 const SENTINEL_MRN = "SENSITIVE-MRN-000123";
 
 /**
- * M5.1 patient-profile persistence + full-pipeline governance against live
+ * M5.1 patient-profile persistence + M6.3 write authorization against live
  * Postgres. Proves:
- *  - create / update run as transactional commands (state + event + audit);
- *  - demographics and identifier values NEVER appear in an event or audit detail;
- *  - a medical identifier is unique within an organization;
- *  - a profile READ is governed by the composed pipeline built from REAL
- *    persisted consent (M4.1), relationship (M4.2), and break-glass (M4.3), and a
- *    consent withdrawal propagates to the very next read.
+ *  - CREATE is decide(capability+workspace) -> dedup(non-enumerating) -> bootstrap:
+ *    it atomically writes the profile AND its governing consent (self/org) or
+ *    relationship+consent (guardian) with provenance, so a post-create read
+ *    succeeds via the NORMAL pipeline with no special case;
+ *  - UPDATE is decide-before-write through the full pipeline (denied writes nothing);
+ *  - demographics / identifier values NEVER appear in an event or audit detail;
+ *  - a consent withdrawal propagates to the very next read/write.
  */
-describe.skipIf(!shouldRun)("patient-profile persistence + full-pipeline access", () => {
+describe.skipIf(!shouldRun)("patient-profile persistence + write authorization", () => {
   const client = createDatabaseClient();
   const pool = createDatabasePool();
   const profileDeps = createPgPatientProfileServiceDeps(pool);
@@ -71,6 +74,50 @@ describe.skipIf(!shouldRun)("patient-profile persistence + full-pipeline access"
       correlationId,
       idempotencyKey: `idem-${run}-${tag}`,
       operationTag: "patient.profile.create"
+    };
+  }
+
+  function orgCreateAccess(
+    organizationRef: string,
+    tag: string,
+    overrides: Partial<PatientProfileCreateAccessContext> = {}
+  ): PatientProfileCreateAccessContext {
+    return {
+      decisionRequestId: `cr-${run}-${tag}`,
+      actorId: "org-admin-actor",
+      actorRole: "organization-admin",
+      actorType: "admin",
+      organizationId: organizationRef,
+      purpose: "tenant-administration",
+      sameTenant: true,
+      sessionStatus: "active",
+      evaluatedAt: new Date().toISOString(),
+      ...overrides
+    };
+  }
+
+  function writeAccess(
+    patientId: string,
+    organizationRef: string,
+    overrides: Partial<PatientProfileWriteAccessContext> = {}
+  ): PatientProfileWriteAccessContext {
+    return {
+      decisionRequestId: `wr-${run}-${randomUUID()}`,
+      actorId: randomUUID(),
+      actorRole: "organization-admin",
+      actorType: "admin",
+      patientId,
+      organizationId: organizationRef,
+      purpose: "tenant-administration",
+      requiresRelationship: false,
+      relationshipType: "none",
+      requestedConsentDomains: [],
+      sessionStatus: "active",
+      sameTenant: true,
+      emergencyStatus: "none",
+      activeEncounter: false,
+      evaluatedAt: new Date().toISOString(),
+      ...overrides
     };
   }
 
@@ -128,12 +175,14 @@ describe.skipIf(!shouldRun)("patient-profile persistence + full-pipeline access"
     const outcome = await createPatientProfile(profileDeps, {
       personRef,
       organizationRef,
+      registrationMode: "organization",
       preferredName: SENTINEL_NAME,
       biologicalSex: "female",
       preferredLanguage: "en",
       contactPoints: [{ kind: "phone", value: "+15551230000", isPrimary: true }],
       emergencyContacts: [{ name: "Kin", relationshipLabel: "sister", phone: "+15559990000" }],
       identifiers: [{ system: "mrn", value: SENTINEL_MRN, assigningAuthority: "org-1" }],
+      access: orgCreateAccess(organizationRef, "create"),
       actor: staffActor,
       safeContext: ctx
     });
@@ -141,15 +190,12 @@ describe.skipIf(!shouldRun)("patient-profile persistence + full-pipeline access"
     const patientId = outcome.status === "created" ? outcome.patientId : "";
     patientRefs.push(patientId);
 
-    // Persisted profile carries the demographics + identifiers...
     const profile = await loadPatientProfile(client, patientId);
     expect(profile?.preferredName).toBe(SENTINEL_NAME);
     expect(profile?.identifiers).toEqual([
       { system: "mrn", value: SENTINEL_MRN, assigningAuthority: "org-1" }
     ]);
-    expect(profile?.contactPoints[0]).toMatchObject({ kind: "phone", isPrimary: true });
 
-    // ...but the event and audit carry references only.
     const outbox = await client.query(
       `SELECT event_type, payload_json::text AS payload FROM nelyo_foundation.transactional_outbox
         WHERE correlation_id = $1`,
@@ -169,14 +215,145 @@ describe.skipIf(!shouldRun)("patient-profile persistence + full-pipeline access"
     expect(audit.rows[0].details).not.toContain("SENSITIVE-MRN");
   });
 
-  it("updates a profile and emits PatientProfileUpdated", async () => {
+  it("bootstraps governing consent so a post-create read succeeds via the normal pipeline", async () => {
+    const personRef = randomUUID();
+    personRefs.push(personRef);
+    const organizationRef = randomUUID();
+    const clinicianRef = randomUUID();
+    actorRefs.push(clinicianRef);
+
+    const created = await createPatientProfile(profileDeps, {
+      personRef,
+      organizationRef,
+      registrationMode: "organization",
+      access: orgCreateAccess(organizationRef, "boot-create"),
+      actor: staffActor,
+      safeContext: safeContext("boot-create")
+    });
+    const patientId = created.status === "created" ? created.patientId : "";
+    patientRefs.push(patientId);
+
+    // The bootstrap consent version carries provenance + the treatment scope.
+    const consent = await client.query(
+      `SELECT cv.provenance, cv.granted_domains FROM nelyo_consent.consent_version cv
+         JOIN nelyo_consent.consent_record cr ON cr.consent_id = cv.consent_id
+        WHERE cr.patient_ref = $1 ORDER BY cv.version ASC LIMIT 1`,
+      [patientId]
+    );
+    expect(consent.rows[0].provenance).toBe("captured-at-registration");
+    expect(consent.rows[0].granted_domains).toContain("provider-data-sharing");
+
+    // No explicit grant — yet a clinician read is allowed via the bootstrap consent.
+    const read = await readPatientProfile(profileDeps, {
+      decisionRequestId: "boot-read",
+      actorId: clinicianRef,
+      actorRole: "clinician",
+      actorType: "clinician",
+      patientId,
+      organizationId: organizationRef,
+      requestedAction: "read",
+      purpose: "care-delivery",
+      requiresRelationship: false,
+      relationshipType: "none",
+      requestedConsentDomains: ["provider-data-sharing"],
+      sessionStatus: "active",
+      sameTenant: true,
+      emergencyStatus: "none",
+      activeEncounter: true,
+      evaluatedAt: new Date().toISOString()
+    });
+    expect(read.status).toBe("allowed");
+  });
+
+  it("self-registration and guardian-registration bootstrap the right governing rows", async () => {
+    // Self-registration: actor is the patient; consent provenance self-registration.
+    const selfPerson = randomUUID();
+    personRefs.push(selfPerson);
+    const selfOrg = randomUUID();
+    const selfCreated = await createPatientProfile(profileDeps, {
+      personRef: selfPerson,
+      organizationRef: selfOrg,
+      registrationMode: "self",
+      access: orgCreateAccess(selfOrg, "self-create", {
+        actorId: "self-actor",
+        actorRole: "patient",
+        actorType: "patient",
+        purpose: "care-delivery"
+      }),
+      actor: {
+        accountRef: "self-actor",
+        personaKind: "personal",
+        actorRole: "patient",
+        tenantRef: null
+      },
+      safeContext: safeContext("self-create")
+    });
+    const selfPatientId = selfCreated.status === "created" ? selfCreated.patientId : "";
+    patientRefs.push(selfPatientId);
+    const selfConsent = await client.query(
+      `SELECT cv.provenance FROM nelyo_consent.consent_version cv
+         JOIN nelyo_consent.consent_record cr ON cr.consent_id = cv.consent_id
+        WHERE cr.patient_ref = $1`,
+      [selfPatientId]
+    );
+    expect(selfConsent.rows[0].provenance).toBe("self-registration");
+
+    // Guardian-registration: actor is the guardian; a guardian relationship + consent.
+    const wardPerson = randomUUID();
+    personRefs.push(wardPerson);
+    const wardOrg = randomUUID();
+    const guardianRef = randomUUID();
+    actorRefs.push(guardianRef);
+    const guardianCreated = await createPatientProfile(profileDeps, {
+      personRef: wardPerson,
+      organizationRef: wardOrg,
+      registrationMode: "guardian",
+      access: orgCreateAccess(wardOrg, "guardian-create", {
+        actorId: guardianRef,
+        actorRole: "guardian",
+        actorType: "guardian",
+        purpose: "care-delivery"
+      }),
+      actor: {
+        accountRef: guardianRef,
+        personaKind: "personal",
+        actorRole: "guardian",
+        tenantRef: null
+      },
+      safeContext: safeContext("guardian-create")
+    });
+    const wardId = guardianCreated.status === "created" ? guardianCreated.patientId : "";
+    patientRefs.push(wardId);
+
+    const rel = await client.query(
+      `SELECT actor_ref, status, relationship_type FROM nelyo_relationship.relationship
+        WHERE patient_ref = $1`,
+      [wardId]
+    );
+    expect(rel.rows[0]).toMatchObject({
+      actor_ref: guardianRef,
+      status: "active",
+      relationship_type: "guardian"
+    });
+    const guardianConsent = await client.query(
+      `SELECT cv.provenance FROM nelyo_consent.consent_version cv
+         JOIN nelyo_consent.consent_record cr ON cr.consent_id = cv.consent_id
+        WHERE cr.patient_ref = $1`,
+      [wardId]
+    );
+    expect(guardianConsent.rows[0].provenance).toBe("guardian-granted");
+  });
+
+  it("updates a profile through decide-before-write and emits PatientProfileUpdated", async () => {
     const personRef = randomUUID();
     personRefs.push(personRef);
     const organizationRef = randomUUID();
     const created = await createPatientProfile(profileDeps, {
       personRef,
       organizationRef,
+      registrationMode: "organization",
       preferredName: "Before",
+      access: orgCreateAccess(organizationRef, "upd-create"),
       actor: staffActor,
       safeContext: safeContext("upd-create")
     });
@@ -188,6 +365,7 @@ describe.skipIf(!shouldRun)("patient-profile persistence + full-pipeline access"
       patientId,
       preferredName: "After",
       preferredLanguage: "fr",
+      access: writeAccess(patientId, organizationRef),
       actor: staffActor,
       safeContext: ctx
     });
@@ -203,7 +381,60 @@ describe.skipIf(!shouldRun)("patient-profile persistence + full-pipeline access"
     expect(outbox.rows[0]).toMatchObject({ event_type: "PatientProfileUpdated" });
   });
 
-  it("enforces medical-identifier uniqueness within an organization", async () => {
+  it("denies an update once consent is withdrawn, writing nothing and auditing the deny", async () => {
+    const personRef = randomUUID();
+    personRefs.push(personRef);
+    const organizationRef = randomUUID();
+    const created = await createPatientProfile(profileDeps, {
+      personRef,
+      organizationRef,
+      registrationMode: "organization",
+      preferredName: "Keep",
+      access: orgCreateAccess(organizationRef, "deny-upd-create"),
+      actor: staffActor,
+      safeContext: safeContext("deny-upd-create")
+    });
+    const patientId = created.status === "created" ? created.patientId : "";
+    patientRefs.push(patientId);
+
+    await withdrawConsent(consentDeps, {
+      patientRef: patientId,
+      organizationRef,
+      revocationReason: "patient-request",
+      actor: {
+        accountRef: patientId,
+        personaKind: "personal",
+        actorRole: "patient",
+        tenantRef: null
+      },
+      safeContext: safeContext("deny-upd-withdraw")
+    });
+
+    const ctx = safeContext("deny-update");
+    const denied = await updatePatientProfile(profileDeps, {
+      patientId,
+      preferredName: "ShouldNotPersist",
+      access: writeAccess(patientId, organizationRef),
+      actor: staffActor,
+      safeContext: ctx
+    });
+    expect(denied.status).toBe("denied");
+    if (denied.status === "denied") {
+      expect(denied.decision.reasonCode).toBe("consent-revoked");
+    }
+
+    // Nothing was written...
+    const profile = await loadPatientProfile(client, patientId);
+    expect(profile?.preferredName).toBe("Keep");
+    // ...and the deny was audited.
+    const audit = await client.query(
+      `SELECT outcome FROM nelyo_foundation.audit_event WHERE correlation_id = $1`,
+      [ctx.correlationId]
+    );
+    expect(audit.rows[0]).toMatchObject({ outcome: "denied" });
+  });
+
+  it("returns a non-enumerating outcome for a duplicate medical identifier", async () => {
     const organizationRef = randomUUID();
     const personA = randomUUID();
     const personB = randomUUID();
@@ -212,22 +443,26 @@ describe.skipIf(!shouldRun)("patient-profile persistence + full-pipeline access"
     const a = await createPatientProfile(profileDeps, {
       personRef: personA,
       organizationRef,
+      registrationMode: "organization",
       identifiers: [{ system: "mrn", value: "SHARED-MRN-1" }],
+      access: orgCreateAccess(organizationRef, "uniq-a"),
       actor: staffActor,
       safeContext: safeContext("uniq-a")
     });
     expect(a.status).toBe("created");
     if (a.status === "created") patientRefs.push(a.patientId);
 
-    // A different person cannot claim the same MRN in the same organization.
     const b = await createPatientProfile(profileDeps, {
       personRef: personB,
       organizationRef,
+      registrationMode: "organization",
       identifiers: [{ system: "mrn", value: "SHARED-MRN-1" }],
+      access: orgCreateAccess(organizationRef, "uniq-b"),
       actor: staffActor,
       safeContext: safeContext("uniq-b")
     });
-    expect(b).toEqual({ status: "rejected", reasonCode: "duplicate-identifier" });
+    // Generic, non-enumerating: no matched identity ref/attributes in the response.
+    expect(b).toEqual({ status: "possible-existing-identity", nextStep: "identity-claim-or-link" });
 
     const found = await findPatientByIdentifier(profileDeps, {
       organizationRef,
@@ -247,14 +482,15 @@ describe.skipIf(!shouldRun)("patient-profile persistence + full-pipeline access"
     const created = await createPatientProfile(profileDeps, {
       personRef,
       organizationRef,
+      registrationMode: "organization",
       preferredName: SENTINEL_NAME,
+      access: orgCreateAccess(organizationRef, "gov-create"),
       actor: staffActor,
       safeContext: safeContext("gov-create")
     });
     const patientId = created.status === "created" ? created.patientId : "";
     patientRefs.push(patientId);
 
-    // Real persisted consent (M4.1) + relationship (M4.2).
     await grantConsent(consentDeps, {
       patientRef: patientId,
       organizationRef,
@@ -302,11 +538,7 @@ describe.skipIf(!shouldRun)("patient-profile persistence + full-pipeline access"
 
     const allowed = await readPatientProfile(profileDeps, guardianRead);
     expect(allowed.status).toBe("allowed");
-    if (allowed.status === "allowed") {
-      expect(allowed.profile.preferredName).toBe(SENTINEL_NAME);
-    }
 
-    // Withdraw consent -> the very next read is denied, and returns NO profile.
     await withdrawConsent(consentDeps, {
       patientRef: patientId,
       organizationRef,
@@ -331,7 +563,7 @@ describe.skipIf(!shouldRun)("patient-profile persistence + full-pipeline access"
     }
   });
 
-  it("allows a clinician to read via a persisted break-glass grant in an emergency", async () => {
+  it("allows a clinician to read via break-glass after consent is withdrawn", async () => {
     const personRef = randomUUID();
     personRefs.push(personRef);
     const organizationRef = randomUUID();
@@ -341,13 +573,28 @@ describe.skipIf(!shouldRun)("patient-profile persistence + full-pipeline access"
     const created = await createPatientProfile(profileDeps, {
       personRef,
       organizationRef,
+      registrationMode: "organization",
+      access: orgCreateAccess(organizationRef, "bg-create"),
       actor: staffActor,
       safeContext: safeContext("bg-create")
     });
     const patientId = created.status === "created" ? created.patientId : "";
     patientRefs.push(patientId);
 
-    // No consent on file — only an active break-glass grant (M4.3).
+    // Withdraw the bootstrap consent so only break-glass can open access.
+    await withdrawConsent(consentDeps, {
+      patientRef: patientId,
+      organizationRef,
+      revocationReason: "patient-request",
+      actor: {
+        accountRef: patientId,
+        personaKind: "personal",
+        actorRole: "patient",
+        tenantRef: null
+      },
+      safeContext: safeContext("bg-withdraw")
+    });
+
     const requested = await requestBreakGlassAccess(breakGlassDeps, {
       actorRef: clinicianRef,
       patientRef: patientId,

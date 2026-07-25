@@ -5,14 +5,19 @@ import {
   PgAuditSink,
   PgOutboxStore,
   PgTransactionAdapter,
+  assertSafeAuditEvent,
   createDomainEventEnvelope,
   findPatientIdByIdentifier,
+  insertConsentRecord,
+  insertConsentVersion,
   insertPatientIdentifier,
   insertPatientProfile,
+  insertRelationship,
   loadPatientProfile,
   loadPatientProfileByPersonOrg,
   runTransactionalCommand,
   updatePatientProfileDemographics,
+  type AuditEventRecord,
   type AuditSink,
   type CommandActor,
   type PatientBiologicalSex,
@@ -28,6 +33,10 @@ import {
   resolveAndDecideResourceAccess,
   type ResolvedAuthorizationInputs
 } from "./resource-authorization.js";
+import {
+  evaluatePatientProfileCreateAuthorization,
+  type PatientProfileCreateDecisionInput
+} from "./authorization-policy-handlers.js";
 import type {
   AuthorizationActorRole,
   AuthorizationPolicyDecisionDraft,
@@ -39,26 +48,50 @@ import type {
 export type { ResolvedAuthorizationInputs } from "./resource-authorization.js";
 
 /**
- * Patient-profile service (roadmap M5.1 — Core Resource Platform: Patient Profiles).
+ * Patient-profile service (roadmap M5.1; write authorization hardened in M6.3).
  *
- * The authoritative Patient resource. Two responsibilities:
+ * The authoritative Patient resource. Three responsibilities:
  *
- *  1. Profile lifecycle commands. Create and update run as transactional
- *     commands: the profile state change, the canonical PatientProfileCreated /
- *     PatientProfileUpdated event, and the audit intent all commit together or
- *     not at all (M3 pattern). The identity master (name + DOB) is referenced by
- *     person_ref, never duplicated; demographics, contact values, and identifier
- *     values never leave the server in an event or audit detail.
+ *  1. CREATE (decide-before-write, distinct decision kind). Registering a profile
+ *     is authorized by CAPABILITY + WORKSPACE — NOT consent, because the subject
+ *     does not exist yet (evaluatePatientProfileCreateAuthorization). Order is
+ *     DECIDE -> DEDUP -> BOOTSTRAP: authorize first (no identity read on a denied
+ *     caller), then resolve identity (dedup, Principle 1) with a NON-enumerating
+ *     response, then create the profile AND atomically bootstrap the governing
+ *     consent (self / org) or relationship + consent (guardian) rows — so no
+ *     profile ever exists without governing consent/relationship. Everything after
+ *     the creating transaction flows through the normal pipeline unchanged.
  *
- *  2. Full-pipeline access governance. Every profile read composes ALL THREE
- *     M4 access-control dimensions — persisted consent (M4.1), the persisted
- *     relationship graph (M4.2), and persisted break-glass (M4.3) — into a single
- *     Policy Decision Point evaluation. Each dimension is read live, so a consent
- *     withdrawal, a relationship revocation, or a break-glass expiry propagates to
- *     the very next profile read. A denied decision never loads profile data.
+ *  2. UPDATE (decide-before-write, full pipeline). The patient exists, so update
+ *     composes ALL THREE M4 dimensions (consent + ReBAC + break-glass) exactly as
+ *     reads do — a denied decision mutates nothing. Break-glass cannot open a write
+ *     because no profile-write rule carries the emergency-care purpose.
+ *
+ *  3. READ (decide-before-load, full pipeline). Unchanged from M5.1.
+ *
+ * No demographics / contact / identifier value ever leaves the server in an event
+ * or audit detail; consent domains + provenance labels are non-clinical.
  */
 
 const DEFAULT_STATUS: PatientProfileStatus = "active";
+
+// Bootstrap consent scopes per registration mode. Named + minimal: the grant
+// covers the baseline a post-create read needs, no more; wider access requires an
+// explicit later consent capture.
+const SELF_REGISTRATION_CONSENT_DOMAINS: ConsentDomain[] = [
+  "telemedicine",
+  "provider-data-sharing"
+];
+const ORG_REGISTRATION_CONSENT_DOMAINS: ConsentDomain[] = ["provider-data-sharing"];
+const GUARDIAN_CONSENT_DOMAINS: ConsentDomain[] = ["provider-data-sharing", "family-participation"];
+
+const REGISTRATION_PROVENANCE: Record<RegistrationMode, string> = {
+  self: "self-registration",
+  organization: "captured-at-registration",
+  guardian: "guardian-granted"
+};
+
+export type RegistrationMode = "self" | "organization" | "guardian";
 
 export interface PatientProfileSafeContext {
   requestId: string;
@@ -85,11 +118,18 @@ export function createPgPatientProfileServiceDeps(pool: Pool): PatientProfileSer
   };
 }
 
-// ---------- Create ----------
+// ---------- Create (decide -> dedup -> bootstrap) ----------
+
+/** Capability + workspace context for a CREATE decision (no consent/relationship). */
+export type PatientProfileCreateAccessContext = Omit<
+  PatientProfileCreateDecisionInput,
+  "subjectRef"
+>;
 
 export interface CreatePatientProfileInput {
   personRef: string;
   organizationRef: string;
+  registrationMode: RegistrationMode;
   status?: PatientProfileStatus;
   preferredName?: string;
   biologicalSex?: PatientBiologicalSex;
@@ -98,6 +138,7 @@ export interface CreatePatientProfileInput {
   contactPoints?: PatientContactPoint[];
   emergencyContacts?: PatientEmergencyContact[];
   identifiers?: PatientIdentifier[];
+  access: PatientProfileCreateAccessContext;
   actor: CommandActor;
   safeContext: PatientProfileSafeContext;
   now?: () => Date;
@@ -105,13 +146,23 @@ export interface CreatePatientProfileInput {
 
 export type CreatePatientProfileOutcome =
   | { status: "created"; patientId: string }
-  | { status: "rejected"; reasonCode: "profile-exists" | "duplicate-identifier" };
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft }
+  // Non-enumerating dedup hit: NO matched identity ref/attributes in the response;
+  // the match detail is in the audit event only. Route the caller to claim/link.
+  | { status: "possible-existing-identity"; nextStep: "identity-claim-or-link" };
+
+/** Pure CREATE decision (capability + workspace); entry point for unit tests. */
+export function decidePatientProfileCreate(
+  access: PatientProfileCreateAccessContext,
+  subjectRef: string
+): AuthorizationPolicyDecisionDraft {
+  return evaluatePatientProfileCreateAuthorization({ ...access, subjectRef });
+}
 
 /**
- * Create the authoritative patient profile for a person within an organization.
- * A duplicate (person, org) profile or a medical identifier already owned by
- * another patient is rejected. Emits PatientProfileCreated (references only) iff
- * the create commits.
+ * Register the authoritative patient profile for a person within an organization.
+ * DECIDE (capability + workspace) -> DEDUP (identity resolution, non-enumerating)
+ * -> BOOTSTRAP (profile + governing consent/relationship, one transaction).
  */
 export async function createPatientProfile(
   deps: PatientProfileServiceDeps,
@@ -120,11 +171,38 @@ export async function createPatientProfile(
   const nowIso = (input.now?.() ?? new Date()).toISOString();
   const identifiers = input.identifiers ?? [];
 
+  // 1. DECIDE FIRST. Capability + workspace only; costs nothing and reads no
+  //    identity data, so an unauthorized caller is denied before any identity
+  //    lookup runs. Denials are audited like any other decision.
+  const decision = decidePatientProfileCreate(input.access, input.personRef);
+  if (decision.status !== "allowed") {
+    await recordCreateDecisionAudit(deps, {
+      actor: input.actor,
+      safeContext: input.safeContext,
+      aggregateId: input.personRef,
+      outcome: "denied",
+      safeDetails: { reasonCode: decision.reasonCode }
+    });
+    return { status: "denied", decision };
+  }
+
+  // 2. IDENTITY RESOLUTION (dedup), only for an authorized creator. On a probable
+  //    match, respond generically (no matched ref); the match detail is audited.
   const existing = await withClient(deps.pool, (client) =>
     loadPatientProfileByPersonOrg(client, input.personRef, input.organizationRef)
   );
   if (existing) {
-    return { status: "rejected", reasonCode: "profile-exists" };
+    await recordCreateDecisionAudit(deps, {
+      actor: input.actor,
+      safeContext: input.safeContext,
+      aggregateId: input.personRef,
+      outcome: "possible-existing-identity",
+      safeDetails: {
+        reasonCode: "possible-existing-identity",
+        matchedPatientRef: existing.patientId
+      }
+    });
+    return { status: "possible-existing-identity", nextStep: "identity-claim-or-link" };
   }
   for (const identifier of identifiers) {
     const owner = await withClient(deps.pool, (client) =>
@@ -135,10 +213,18 @@ export async function createPatientProfile(
       })
     );
     if (owner !== null) {
-      return { status: "rejected", reasonCode: "duplicate-identifier" };
+      await recordCreateDecisionAudit(deps, {
+        actor: input.actor,
+        safeContext: input.safeContext,
+        aggregateId: input.personRef,
+        outcome: "possible-existing-identity",
+        safeDetails: { reasonCode: "possible-existing-identity", matchedPatientRef: owner }
+      });
+      return { status: "possible-existing-identity", nextStep: "identity-claim-or-link" };
     }
   }
 
+  // 3. ATOMIC BOOTSTRAP: profile + governing consent/relationship + event + audit.
   const patientId = randomUUID();
   const status = input.status ?? DEFAULT_STATUS;
   const contactPoints = input.contactPoints ?? [];
@@ -152,7 +238,7 @@ export async function createPatientProfile(
     command: {
       name: "patient.profile.create",
       aggregateId: patientId,
-      action: "create",
+      action: "create-profile",
       actor: input.actor,
       safeContext: input.safeContext
     },
@@ -181,6 +267,13 @@ export async function createPatientProfile(
           createdAt: nowIso
         });
       }
+      const bootstrap = await bootstrapGoverningAccess(ctx.client, {
+        mode: input.registrationMode,
+        patientId,
+        organizationRef: input.organizationRef,
+        actorRef: input.access.actorId,
+        nowIso
+      });
       await ctx.enqueueDomainEvent(
         createDomainEventEnvelope({
           eventType: "PatientProfileCreated",
@@ -191,7 +284,12 @@ export async function createPatientProfile(
             personRef: input.personRef,
             organizationRef: input.organizationRef,
             status,
-            identifierCount: identifiers.length
+            identifierCount: identifiers.length,
+            registrationMode: input.registrationMode,
+            governingConsentRef: bootstrap.consentId,
+            ...(bootstrap.relationshipId
+              ? { guardianRelationshipRef: bootstrap.relationshipId }
+              : {})
           }
         })
       );
@@ -203,7 +301,9 @@ export async function createPatientProfile(
             patientProfileRef: patientId,
             personRef: input.personRef,
             organizationRef: input.organizationRef,
-            identifierCount: identifiers.length
+            identifierCount: identifiers.length,
+            registrationMode: input.registrationMode,
+            governingConsentRef: bootstrap.consentId
           }
         }
       };
@@ -213,7 +313,73 @@ export async function createPatientProfile(
   return result;
 }
 
-// ---------- Update ----------
+/**
+ * Bootstrap the governing access rows a new profile requires, in the create
+ * transaction. Every mode grants a governing consent (with provenance); the
+ * guardian mode additionally establishes the guardian relationship (ReBAC).
+ */
+async function bootstrapGoverningAccess(
+  client: PoolClient,
+  input: {
+    mode: RegistrationMode;
+    patientId: string;
+    organizationRef: string;
+    actorRef: string;
+    nowIso: string;
+  }
+): Promise<{ consentId: string; relationshipId?: string }> {
+  const domains =
+    input.mode === "self"
+      ? SELF_REGISTRATION_CONSENT_DOMAINS
+      : input.mode === "organization"
+        ? ORG_REGISTRATION_CONSENT_DOMAINS
+        : GUARDIAN_CONSENT_DOMAINS;
+
+  const consentId = randomUUID();
+  await insertConsentRecord(client, {
+    consentId,
+    patientRef: input.patientId,
+    organizationRef: input.organizationRef,
+    currentVersion: 1,
+    createdAt: input.nowIso,
+    updatedAt: input.nowIso
+  });
+  await insertConsentVersion(client, {
+    consentId,
+    version: 1,
+    status: "granted",
+    grantedDomains: domains,
+    effectiveDate: input.nowIso,
+    createdAt: input.nowIso,
+    createdByActorRef: input.actorRef,
+    provenance: REGISTRATION_PROVENANCE[input.mode]
+  });
+
+  let relationshipId: string | undefined;
+  if (input.mode === "guardian") {
+    relationshipId = randomUUID();
+    await insertRelationship(client, {
+      relationshipId,
+      actorRef: input.actorRef,
+      patientRef: input.patientId,
+      organizationRef: input.organizationRef,
+      relationshipType: "guardian",
+      status: "active",
+      verificationMethod: "organization-attestation",
+      effectiveDate: input.nowIso,
+      permittedActions: ["read", "update-profile", "book"],
+      createdAt: input.nowIso,
+      updatedAt: input.nowIso
+    });
+  }
+
+  return { consentId, relationshipId };
+}
+
+// ---------- Update (decide-before-write, full pipeline) ----------
+
+/** Full decision context for an UPDATE (the read context minus the action). */
+export type PatientProfileWriteAccessContext = Omit<PatientProfileAccessRequest, "requestedAction">;
 
 export interface UpdatePatientProfileInput {
   patientId: string;
@@ -224,6 +390,7 @@ export interface UpdatePatientProfileInput {
   preferredLanguage?: string;
   contactPoints?: PatientContactPoint[];
   emergencyContacts?: PatientEmergencyContact[];
+  access: PatientProfileWriteAccessContext;
   actor: CommandActor;
   safeContext: PatientProfileSafeContext;
   now?: () => Date;
@@ -231,18 +398,38 @@ export interface UpdatePatientProfileInput {
 
 export type UpdatePatientProfileOutcome =
   | { status: "updated"; patientId: string }
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft }
   | { status: "not-found" };
 
 /**
- * Update a patient profile's care-context demographics, contact points, and
- * emergency contacts. Emits PatientProfileUpdated (references only) iff it
- * commits.
+ * Update a patient profile through the full pipeline, deciding BEFORE any write.
+ * A denied decision mutates nothing (and is audited). Break-glass cannot open this
+ * write: no patient-profile update rule carries the emergency-care purpose, so the
+ * evaluator's emergency bypass never fires for a profile write.
  */
 export async function updatePatientProfile(
   deps: PatientProfileServiceDeps,
   input: UpdatePatientProfileInput
 ): Promise<UpdatePatientProfileOutcome> {
   const nowIso = (input.now?.() ?? new Date()).toISOString();
+
+  const decision = await resolveAndDecideResourceAccess(deps.pool, {
+    ...input.access,
+    requestedResource: "patient-profile",
+    requestedAction: "update-profile"
+  });
+  if (decision.status !== "allowed") {
+    await recordWriteDecisionAudit(deps, {
+      actor: input.actor,
+      safeContext: input.safeContext,
+      aggregateId: input.patientId,
+      action: "update-profile",
+      outcome: "denied",
+      safeDetails: { reasonCode: decision.reasonCode }
+    });
+    return { status: "denied", decision };
+  }
+
   const existing = await withClient(deps.pool, (client) =>
     loadPatientProfile(client, input.patientId)
   );
@@ -258,7 +445,7 @@ export async function updatePatientProfile(
     command: {
       name: "patient.profile.update",
       aggregateId: input.patientId,
-      action: "update",
+      action: "update-profile",
       actor: input.actor,
       safeContext: input.safeContext
     },
@@ -305,7 +492,72 @@ export async function updatePatientProfile(
   return result;
 }
 
-// ---------- Full-pipeline access governance ----------
+// ---------- Deny / dedup audit (decide-before-write leaves a trail) ----------
+
+async function recordCreateDecisionAudit(
+  deps: PatientProfileServiceDeps,
+  input: {
+    actor: CommandActor;
+    safeContext: PatientProfileSafeContext;
+    aggregateId: string;
+    outcome: string;
+    safeDetails: Record<string, unknown>;
+  }
+): Promise<void> {
+  await recordDecisionAudit(deps, {
+    ...input,
+    commandName: "patient.profile.create",
+    action: "create-profile"
+  });
+}
+
+async function recordWriteDecisionAudit(
+  deps: PatientProfileServiceDeps,
+  input: {
+    actor: CommandActor;
+    safeContext: PatientProfileSafeContext;
+    aggregateId: string;
+    action: string;
+    outcome: string;
+    safeDetails: Record<string, unknown>;
+  }
+): Promise<void> {
+  await recordDecisionAudit(deps, { ...input, commandName: "patient.profile.update" });
+}
+
+async function recordDecisionAudit(
+  deps: PatientProfileServiceDeps,
+  input: {
+    actor: CommandActor;
+    safeContext: PatientProfileSafeContext;
+    aggregateId: string;
+    commandName: string;
+    action: string;
+    outcome: string;
+    safeDetails: Record<string, unknown>;
+  }
+): Promise<void> {
+  const event: AuditEventRecord = {
+    auditId: randomUUID(),
+    commandName: input.commandName,
+    aggregateId: input.aggregateId,
+    action: input.action,
+    outcome: input.outcome,
+    actorAccountRef: input.actor.accountRef,
+    actorPersonaKind: input.actor.personaKind,
+    actorRole: input.actor.actorRole,
+    tenantRef: input.actor.tenantRef ?? null,
+    correlationId: input.safeContext.correlationId,
+    requestId: input.safeContext.requestId,
+    idempotencyKey: input.safeContext.idempotencyKey,
+    safeDetails: input.safeDetails,
+    occurredAt: new Date().toISOString()
+  };
+  assertSafeAuditEvent(event);
+  await withClient(deps.pool, (client) => deps.auditSink.record(client, event));
+}
+
+// ---------- Full-pipeline access governance (read) ----------
 
 export interface PatientProfileAccessRequest {
   decisionRequestId: string;

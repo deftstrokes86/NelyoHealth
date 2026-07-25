@@ -128,13 +128,16 @@ export async function insertConsentVersion(
     expiryDate?: string;
     createdAt: string;
     createdByActorRef: string;
+    /** How this version was captured (M6.3): e.g. self-registration,
+     * captured-at-registration, guardian-granted. NULL = patient-driven grant. */
+    provenance?: string;
   }
 ): Promise<void> {
   await client.query(
     `INSERT INTO nelyo_consent.consent_version
        (consent_id, version, status, granted_domains, effective_date, expiry_date,
-        created_at, created_by_actor_ref)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        created_at, created_by_actor_ref, provenance)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
     [
       input.consentId,
       input.version,
@@ -143,7 +146,8 @@ export async function insertConsentVersion(
       input.effectiveDate,
       input.expiryDate ?? null,
       input.createdAt,
-      input.createdByActorRef
+      input.createdByActorRef,
+      input.provenance ?? null
     ]
   );
 }

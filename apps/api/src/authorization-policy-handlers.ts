@@ -3,7 +3,8 @@ import {
   type AuthorizationPolicyDimensionOutcome,
   type AuditIntentDraft,
   type AuthorizationPolicyDecisionDraft,
-  type AuthorizationPolicyDecisionDraftInput
+  type AuthorizationPolicyDecisionDraftInput,
+  type SessionStatus
 } from "./authorization-policy.js";
 
 interface AuthorizationPolicyRule {
@@ -70,6 +71,42 @@ const policyRules: AuthorizationPolicyRule[] = [
     resource: "patient-profile",
     action: "update-profile",
     purposes: ["care-delivery"]
+  },
+  {
+    actorRole: "organization-admin",
+    resource: "patient-profile",
+    action: "update-profile",
+    purposes: ["tenant-administration"]
+  },
+  // Patient-profile CREATE capability (roadmap M6.3). CREATE is a DISTINCT decision
+  // kind (evaluatePatientProfileCreateAuthorization): the subject does not exist
+  // yet, so consent is NOT an input — these rules express the create CAPABILITY
+  // (who may register a profile in this workspace), and the create command then
+  // atomically bootstraps the governing consent/relationship rows. NONE carry the
+  // "emergency-care" purpose, so break-glass can never open a write path.
+  {
+    actorRole: "patient",
+    resource: "patient-profile",
+    action: "create-profile",
+    purposes: ["care-delivery"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "patient-profile",
+    action: "create-profile",
+    purposes: ["care-delivery"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "patient-profile",
+    action: "create-profile",
+    purposes: ["care-delivery"]
+  },
+  {
+    actorRole: "organization-admin",
+    resource: "patient-profile",
+    action: "create-profile",
+    purposes: ["tenant-administration"]
   },
   // Appointment resource (roadmap M5.2). Read and book flow through the full
   // pipeline; an RBAC match only opens the door for consent / ReBAC / break-glass.
@@ -474,6 +511,111 @@ export function evaluateAuthorizationPolicyDecision(
     auditIntent,
     evaluatedAt: input.evaluatedAt
   };
+}
+
+const PATIENT_PROFILE_CREATE_ACTION = "create-profile";
+
+export interface PatientProfileCreateDecisionInput {
+  decisionRequestId: string;
+  actorId: string;
+  actorRole: AuthorizationActorRole;
+  actorType: AuthorizationPolicyDecisionDraftInput["actorType"];
+  /**
+   * The identity being registered (person ref). Used only as the audit subject —
+   * the patient profile does not exist yet, so there is no patientId.
+   */
+  subjectRef: string;
+  organizationId: string;
+  purpose: string;
+  sameTenant: boolean;
+  sessionStatus: SessionStatus;
+  evaluatedAt: string;
+}
+
+/**
+ * Authorize a patient-profile CREATE (roadmap M6.3, ADR-0011). CREATE is a DISTINCT
+ * decision kind, not an exception carved into the consent-gated pipeline (which
+ * would weaken default-deny for every resource). The subject does not exist yet, so
+ * consent is definitionally not an input: this authorizes on CAPABILITY (an RBAC
+ * create-profile rule) + WORKSPACE (same tenant + active session) + PURPOSE.
+ * Default-deny holds — an unmapped capability denies. Identity-resolution (dedup)
+ * and the atomic consent/relationship bootstrap are the create COMMAND's job, run
+ * only AFTER this decision allows. Denials produce the same append-only audit
+ * intent as any other decision.
+ */
+export function evaluatePatientProfileCreateAuthorization(
+  input: PatientProfileCreateDecisionInput
+): AuthorizationPolicyDecisionDraft {
+  const capability = evaluateCreateCapabilityOutcome(input);
+  const status = capability.status;
+  const reasonCode = capability.reasonCode;
+
+  const auditInput: AuthorizationPolicyDecisionDraftInput = {
+    decisionRequestId: input.decisionRequestId,
+    actorId: input.actorId,
+    actorRole: input.actorRole,
+    actorType: input.actorType,
+    organizationId: input.organizationId,
+    patientId: input.subjectRef,
+    relationshipType: "none",
+    requestedConsentDomains: [],
+    requestedResource: "patient-profile",
+    requestedAction: PATIENT_PROFILE_CREATE_ACTION,
+    purpose: input.purpose,
+    consentStatus: "revoked",
+    relationshipStatus: "none",
+    sessionStatus: input.sessionStatus,
+    activeEncounter: false,
+    emergencyStatus: "none",
+    sameTenant: input.sameTenant,
+    sponsorPaymentOnly: false,
+    requiresRelationship: false,
+    breakGlassRequested: false,
+    impersonationAttempt: false,
+    auditEventEditAttempt: false,
+    evaluatedAt: input.evaluatedAt
+  };
+
+  return {
+    decisionRequestId: input.decisionRequestId,
+    status,
+    reasonCode,
+    dimensionOutcomes: {
+      rbac: capability,
+      // Consent + relationship are NOT decision inputs for CREATE — the subject
+      // does not exist yet; the command bootstraps them atomically.
+      abac: { status: "allowed", reasonCode: "allowed" },
+      rebac: { status: "allowed", reasonCode: "allowed" }
+    },
+    breakGlassActive: false,
+    nextSteps: getNextSteps(reasonCode),
+    auditIntent: createAuditIntent({ input: auditInput, status, reasonCode }),
+    evaluatedAt: input.evaluatedAt
+  };
+}
+
+function evaluateCreateCapabilityOutcome(
+  input: PatientProfileCreateDecisionInput
+): AuthorizationPolicyDimensionOutcome {
+  const ruleQuery = {
+    actorRole: input.actorRole,
+    requestedResource: "patient-profile",
+    requestedAction: PATIENT_PROFILE_CREATE_ACTION
+  } as AuthorizationPolicyDecisionDraftInput;
+  const matchingRule = findPolicyRule(ruleQuery);
+  if (!matchingRule) {
+    return { status: "denied", reasonCode: "rbac-policy-unmapped-deny-default" };
+  }
+  if (!input.sameTenant) {
+    return { status: "denied", reasonCode: "tenant-mismatch" };
+  }
+  if (input.sessionStatus !== "active") {
+    return { status: "denied", reasonCode: "stale-session" };
+  }
+  if (!matchingRule.purposes.includes(input.purpose)) {
+    return { status: "denied", reasonCode: "abac-purpose-not-allowed" };
+  }
+  return { status: "allowed", reasonCode: "allowed" };
 }
 
 function createAuditIntent(args: {
