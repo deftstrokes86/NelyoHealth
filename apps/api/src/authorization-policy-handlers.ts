@@ -329,6 +329,27 @@ const policyRules: AuthorizationPolicyRule[] = [
     action: "write",
     purposes: ["care-delivery", "emergency-care"]
   },
+  // Laboratory DERIVED-AUTHORITY writes (roadmap M6.4, ADR-0012): record-result
+  // (lab staff acting on the order) + cancel (the orderer). Capability + workspace;
+  // the order's consent chain is inherited; conditional transition is the guard.
+  {
+    actorRole: "clinician",
+    resource: "laboratory",
+    action: "record-result",
+    purposes: ["care-delivery"]
+  },
+  {
+    actorRole: "organization-admin",
+    resource: "laboratory",
+    action: "record-result",
+    purposes: ["tenant-administration"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "laboratory",
+    action: "cancel",
+    purposes: ["care-delivery"]
+  },
   // Secure messaging resource (roadmap M5.7). Read + send for the care circle.
   // Sending is a non-encounter write (patients message providers between visits),
   // so it uses the 'send' action, which does not trigger the encounter constraint.

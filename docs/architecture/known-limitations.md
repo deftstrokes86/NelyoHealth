@@ -46,11 +46,13 @@ Phase-1 classification recount). **M6.4 in progress.** Gated + tested so far (th
   patient-subject, the last with the ADR-0012 state-machine multi-path exclusion.
 - **prescription** (2): `dispensePrescription`/`cancelPrescription` derived-authority — TOCTOU-safe
   (conditional claim/cancel, stale-state audited) + the revocation-asymmetry both-halves test.
+- **laboratory** (2): `recordLabResult`/`cancelLabOrder` derived-authority — a conditional
+  `transitionLabOrderStatusIf` guard (TOCTOU) + stale-state audit + the both-halves asymmetry test.
 
-**11 writes remain**, closing per ADR-0012: consultation `scheduleConsultation` /
+**9 writes remain**, closing per ADR-0012: consultation `scheduleConsultation` /
 `addConsultationParticipant` / `completeConsultation` / `cancelConsultation`; medical-record
-`openMedicalRecord` / `voidMedicalRecordEntry`; laboratory `recordLabResult` / `cancelLabOrder`;
-messaging `markMessageAsRead` / `closeMessageThread`; document `archiveDocument`.
+`openMedicalRecord` / `voidMedicalRecordEntry`; messaging `markMessageAsRead` (self-scoped) /
+`closeMessageThread`; document `archiveDocument`.
 
 **Root cause.** M5 gated only each resource's *primary* write + reads; secondary lifecycle actions were
 shipped with audit attribution but without a decision.

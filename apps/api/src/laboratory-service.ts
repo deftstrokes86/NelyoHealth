@@ -10,7 +10,7 @@ import {
   insertLabResultObservation,
   loadLabOrder,
   runTransactionalCommand,
-  setLabOrderStatus,
+  transitionLabOrderStatusIf,
   type AuditSink,
   type CommandActor,
   type CommandAuditOutcome,
@@ -23,7 +23,11 @@ import {
   type ResolvedAuthorizationInputs,
   type ResourceAccessRequest
 } from "./resource-authorization.js";
-import { resolveDecideAndAuditAccess } from "./access-audit.js";
+import {
+  decideCapabilityWorkspaceAndAudit,
+  resolveDecideAndAuditAccess,
+  type CapabilityWriteAccessContext
+} from "./access-audit.js";
 import type { AuthorizationPolicyDecisionDraft } from "./authorization-policy.js";
 
 /**
@@ -191,6 +195,7 @@ export interface RecordLabResultInput {
   interpretation?: LabInterpretation;
   resultedByRef: string;
   resultedAt?: string;
+  access: CapabilityWriteAccessContext;
   actor: CommandActor;
   safeContext: LabSafeContext;
   now?: () => Date;
@@ -198,6 +203,7 @@ export interface RecordLabResultInput {
 
 export type RecordLabResultOutcome =
   | { status: "reported"; observationId: string }
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft }
   | { status: "not-found" }
   | { status: "not-resultable" };
 
@@ -215,8 +221,18 @@ export async function recordLabResult(
   if (!order) {
     return { status: "not-found" };
   }
-  if (order.status === "cancelled") {
-    return { status: "not-resultable" };
+
+  // DERIVED-AUTHORITY (ADR-0012): authority flows from the order (a consent-bearing
+  // artifact); capability + workspace decision, consent chain inherited. Authz FIRST.
+  const decision = await decideCapabilityWorkspaceAndAudit(deps.pool, {
+    ...input.access,
+    subjectRef: order.patientRef,
+    organizationId: order.organizationRef,
+    requestedResource: "laboratory",
+    requestedAction: "record-result"
+  });
+  if (decision.status !== "allowed") {
+    return { status: "denied", decision };
   }
   const observationId = randomUUID();
 
@@ -232,7 +248,27 @@ export async function recordLabResult(
       actor: input.actor,
       safeContext: input.safeContext
     },
-    work: async (ctx) => {
+    work: async (ctx): Promise<{ result: RecordLabResultOutcome; audit: CommandAuditOutcome }> => {
+      // TOCTOU-safe guard: atomically move ordered/collected -> resulted. A raced
+      // cancel (or a prior result) yields zero rows -> stale-artifact-state deny,
+      // and nothing is written.
+      // A panel reports several observations, so 'resulted' is an allowed source
+      // too (idempotent stay-at-resulted); only 'cancelled' is refused.
+      const advanced = await transitionLabOrderStatusIf(ctx.client, {
+        orderId: input.orderId,
+        expected: ["ordered", "collected", "resulted"],
+        next: "resulted",
+        updatedAt: nowIso
+      });
+      if (!advanced) {
+        return {
+          result: { status: "not-resultable" as const },
+          audit: {
+            outcome: "denied-stale-artifact-state",
+            safeDetails: { orderRef: input.orderId, reasonCode: "stale-artifact-state" }
+          }
+        };
+      }
       await insertLabResultObservation(ctx.client, {
         observationId,
         orderRef: input.orderId,
@@ -244,11 +280,6 @@ export async function recordLabResult(
         resultedByRef: input.resultedByRef,
         resultedAt: input.resultedAt ?? nowIso,
         createdAt: nowIso
-      });
-      await setLabOrderStatus(ctx.client, {
-        orderId: input.orderId,
-        status: "resulted",
-        updatedAt: nowIso
       });
       await ctx.enqueueDomainEvent(
         createDomainEventEnvelope({
@@ -285,6 +316,7 @@ export async function recordLabResult(
 export interface CancelLabOrderInput {
   orderId: string;
   cancellationReasonCode: string;
+  access: CapabilityWriteAccessContext;
   actor: CommandActor;
   safeContext: LabSafeContext;
   now?: () => Date;
@@ -292,10 +324,13 @@ export interface CancelLabOrderInput {
 
 export type CancelLabOrderOutcome =
   | { status: "cancelled"; orderId: string }
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft }
   | { status: "not-found" }
   | { status: "not-cancellable" };
 
-/** Cancel a lab order that has not yet resulted. Emits LabOrderCancelled. */
+/** Cancel a lab order that has not yet resulted. DERIVED-AUTHORITY (ADR-0012):
+ * capability + workspace decision (authz first), then a conditional cancel that is
+ * the artifact's own stop mechanism. Emits LabOrderCancelled. */
 export async function cancelLabOrder(
   deps: LaboratoryServiceDeps,
   input: CancelLabOrderInput
@@ -305,8 +340,16 @@ export async function cancelLabOrder(
   if (!order) {
     return { status: "not-found" };
   }
-  if (order.status !== "ordered" && order.status !== "collected") {
-    return { status: "not-cancellable" };
+
+  const decision = await decideCapabilityWorkspaceAndAudit(deps.pool, {
+    ...input.access,
+    subjectRef: order.patientRef,
+    organizationId: order.organizationRef,
+    requestedResource: "laboratory",
+    requestedAction: "cancel"
+  });
+  if (decision.status !== "allowed") {
+    return { status: "denied", decision };
   }
 
   const { result } = await runTransactionalCommand({
@@ -322,12 +365,24 @@ export async function cancelLabOrder(
       safeContext: input.safeContext
     },
     work: async (ctx): Promise<{ result: CancelLabOrderOutcome; audit: CommandAuditOutcome }> => {
-      await setLabOrderStatus(ctx.client, {
+      // TOCTOU-safe: cancel only if still ordered/collected. A raced result yields
+      // zero rows -> stale-artifact-state deny; nothing written.
+      const cancelled = await transitionLabOrderStatusIf(ctx.client, {
         orderId: input.orderId,
-        status: "cancelled",
+        expected: ["ordered", "collected"],
+        next: "cancelled",
         cancellationReasonCode: input.cancellationReasonCode,
         updatedAt: nowIso
       });
+      if (!cancelled) {
+        return {
+          result: { status: "not-cancellable" as const },
+          audit: {
+            outcome: "denied-stale-artifact-state",
+            safeDetails: { orderRef: input.orderId, reasonCode: "stale-artifact-state" }
+          }
+        };
+      }
       await ctx.enqueueDomainEvent(
         createDomainEventEnvelope({
           eventType: "LabOrderCancelled",

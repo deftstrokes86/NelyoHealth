@@ -318,6 +318,7 @@ export {
   listLabOrdersForPatient,
   loadLabOrder,
   setLabOrderStatus,
+  transitionLabOrderStatusIf,
   type LabInterpretation,
   type LabOrderPriority,
   type LabOrderStatus,

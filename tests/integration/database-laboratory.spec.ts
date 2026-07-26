@@ -243,6 +243,7 @@ describe.skipIf(!shouldRun)("laboratory persistence + lifecycle + access", () =>
       referenceRange: "12.0-16.0",
       interpretation: "critical",
       resultedByRef: randomUUID(),
+      access: clinicianAccess(clinicianRef, patientRef, organizationRef),
       actor: labActor,
       safeContext: ctx
     });
@@ -270,6 +271,7 @@ describe.skipIf(!shouldRun)("laboratory persistence + lifecycle + access", () =>
       analyteName: "Hematocrit",
       value: "28%",
       resultedByRef: randomUUID(),
+      access: clinicianAccess(clinicianRef, patientRef, organizationRef),
       actor: labActor,
       safeContext: safeContext("result-2")
     });
@@ -285,22 +287,65 @@ describe.skipIf(!shouldRun)("laboratory persistence + lifecycle + access", () =>
     const cancelled = await cancelLabOrder(lab, {
       orderId,
       cancellationReasonCode: "duplicate-order",
+      access: clinicianAccess(clinicianRef, patientRef, organizationRef),
       actor: clinicianActor(clinicianRef),
       safeContext: safeContext("cancel")
     });
     expect(cancelled.status).toBe("cancelled");
     expect((await loadLabOrder(client, orderId))?.status).toBe("cancelled");
 
-    // Cannot report results against a cancelled order.
+    // TOCTOU (ADR-0012): recording against the now-cancelled order fails the
+    // conditional guard -> not-resultable, audited as stale-artifact-state.
+    const staleCtx = safeContext("cancel-result");
     const result = await recordLabResult(lab, {
       orderId,
       analyteName: "Hemoglobin",
       value: "x",
       resultedByRef: randomUUID(),
+      access: clinicianAccess(clinicianRef, patientRef, organizationRef),
       actor: labActor,
-      safeContext: safeContext("cancel-result")
+      safeContext: staleCtx
     });
     expect(result.status).toBe("not-resultable");
+    const staleAudit = await client.query(
+      `SELECT outcome FROM nelyo_foundation.audit_event WHERE correlation_id = $1`,
+      [staleCtx.correlationId]
+    );
+    expect(staleAudit.rows[0]).toMatchObject({ outcome: "denied-stale-artifact-state" });
+  });
+
+  it("derived-authority: record-result after consent withdrawal succeeds, later read denies (asymmetry)", async () => {
+    const { clinicianRef, patientRef, organizationRef } = newSubjects();
+    await grantBaselineConsent(patientRef, organizationRef, "asym-consent");
+    const ordered = await order(clinicianRef, patientRef, organizationRef, "asym-order");
+    const orderId = ordered.status === "ordered" ? ordered.orderId : "";
+
+    await withdrawConsent(consentDeps, {
+      patientRef,
+      organizationRef,
+      revocationReason: "patient-request",
+      actor: patientActor(patientRef),
+      safeContext: safeContext("asym-withdraw")
+    });
+
+    // WRITE-TO-COMPLETE: the validly-ordered lab result is still recordable.
+    const reported = await recordLabResult(lab, {
+      orderId,
+      analyteName: "Hemoglobin",
+      value: "13.0",
+      resultedByRef: randomUUID(),
+      access: clinicianAccess(clinicianRef, patientRef, organizationRef),
+      actor: labActor,
+      safeContext: safeContext("asym-result")
+    });
+    expect(reported.status).toBe("reported");
+
+    // READ-THEREAFTER: the same order now flows through the consent pipeline and denies.
+    const read = await readLabOrder(lab, {
+      orderId,
+      access: clinicianAccess(clinicianRef, patientRef, organizationRef)
+    });
+    expect(read.status).toBe("denied");
   });
 
   it("governs a lab-order read and propagates consent withdrawal", async () => {

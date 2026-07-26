@@ -195,6 +195,37 @@ export async function setLabOrderStatus(
   );
 }
 
+/**
+ * Conditional lab-order transition (roadmap M6.4, ADR-0012 TOCTOU-safety): change
+ * status to `next` ONLY if the order is currently one of `expected`. Atomic with
+ * the state check, so a concurrent transition cannot slip in between. Returns true
+ * iff a row changed (false = stale artifact state).
+ */
+export async function transitionLabOrderStatusIf(
+  client: ClientBase,
+  input: {
+    orderId: string;
+    expected: LabOrderStatus[];
+    next: LabOrderStatus;
+    cancellationReasonCode?: string;
+    updatedAt: string;
+  }
+): Promise<boolean> {
+  const result = await client.query(
+    `UPDATE nelyo_laboratory.lab_order
+        SET status = $2, cancellation_reason_code = $3, updated_at = $4
+      WHERE order_id = $1 AND status = ANY($5::text[])`,
+    [
+      input.orderId,
+      input.next,
+      input.cancellationReasonCode ?? null,
+      input.updatedAt,
+      input.expected
+    ]
+  );
+  return (result.rowCount ?? 0) > 0;
+}
+
 // ---------- Reads ----------
 
 async function loadObservations(
