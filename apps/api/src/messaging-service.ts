@@ -24,7 +24,12 @@ import {
   type ResolvedAuthorizationInputs,
   type ResourceAccessRequest
 } from "./resource-authorization.js";
-import { resolveDecideAndAuditAccess } from "./access-audit.js";
+import {
+  decideCapabilityWorkspaceAndAudit,
+  recordCommandRejectionAudit,
+  resolveDecideAndAuditAccess,
+  type CapabilityWriteAccessContext
+} from "./access-audit.js";
 import type { AuthorizationPolicyDecisionDraft } from "./authorization-policy.js";
 
 /**
@@ -307,8 +312,32 @@ export async function markMessageAsRead(
   input: MarkMessageReadInput
 ): Promise<MarkMessageReadOutcome> {
   const nowIso = (input.now?.() ?? new Date()).toISOString();
+  // SELF-SCOPED (ADR-0012): the reader must be a principal of the message's thread.
+  // NON-ENUMERATING: a non-participant AND a nonexistent message id both get an
+  // identical not-found (existence not disclosed); both are audited.
+  const rejectNonRecipient = () =>
+    recordCommandRejectionAudit(deps.pool, {
+      actor: input.actor,
+      safeContext: input.safeContext,
+      aggregateId: input.messageId,
+      resource: "message",
+      action: "mark-read",
+      outcome: "denied-not-recipient",
+      reasonCode: "not-recipient-or-not-found"
+    });
+
   const message = await withClient(deps.pool, (client) => loadMessage(client, input.messageId));
   if (!message) {
+    await rejectNonRecipient();
+    return { status: "not-found" };
+  }
+  const thread = await withClient(deps.pool, (client) =>
+    loadMessageThread(client, message.threadRef)
+  );
+  const isPrincipal =
+    !!thread && (input.readByRef === thread.patientRef || input.readByRef === thread.startedByRef);
+  if (!isPrincipal) {
+    await rejectNonRecipient();
     return { status: "not-found" };
   }
 
@@ -365,6 +394,7 @@ export async function markMessageAsRead(
 
 export interface CloseMessageThreadInput {
   threadId: string;
+  access: CapabilityWriteAccessContext;
   actor: CommandActor;
   safeContext: MessageSafeContext;
   now?: () => Date;
@@ -372,9 +402,14 @@ export interface CloseMessageThreadInput {
 
 export type CloseMessageThreadOutcome =
   | { status: "closed"; threadId: string }
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft }
+  | { status: "not-participant" }
   | { status: "not-found" };
 
-/** Close a message thread. Emits MessageThreadClosed. */
+/** Close a message thread. DERIVED-AUTHORITY (ADR-0012) with NO consent chain (a
+ * thread is not a consent-bearing artifact): capability + workspace, then an
+ * artifact-relationship check (the actor must be a thread principal). Authz FIRST.
+ * Emits MessageThreadClosed. */
 export async function closeMessageThread(
   deps: MessagingServiceDeps,
   input: CloseMessageThreadInput
@@ -383,6 +418,30 @@ export async function closeMessageThread(
   const thread = await withClient(deps.pool, (client) => loadMessageThread(client, input.threadId));
   if (!thread) {
     return { status: "not-found" };
+  }
+
+  const decision = await decideCapabilityWorkspaceAndAudit(deps.pool, {
+    ...input.access,
+    subjectRef: thread.patientRef,
+    organizationId: thread.organizationRef,
+    requestedResource: "message",
+    requestedAction: "close-thread"
+  });
+  if (decision.status !== "allowed") {
+    return { status: "denied", decision };
+  }
+  // Artifact-relationship: only a thread principal may close it. Audited honestly.
+  if (input.access.actorId !== thread.patientRef && input.access.actorId !== thread.startedByRef) {
+    await recordCommandRejectionAudit(deps.pool, {
+      actor: input.actor,
+      safeContext: input.safeContext,
+      aggregateId: input.threadId,
+      resource: "message",
+      action: "close-thread",
+      outcome: "denied-not-participant",
+      reasonCode: "not-thread-participant"
+    });
+    return { status: "not-participant" };
   }
 
   const { result } = await runTransactionalCommand({

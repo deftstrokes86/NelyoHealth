@@ -212,7 +212,7 @@ describe.skipIf(!shouldRun)("messaging persistence + lifecycle + access", () => 
 
     const read = await markMessageAsRead(msg, {
       messageId,
-      readByRef: randomUUID(),
+      readByRef: patientRef,
       actor: patientActor(patientRef),
       safeContext: safeContext("flow-read")
     });
@@ -220,7 +220,7 @@ describe.skipIf(!shouldRun)("messaging persistence + lifecycle + access", () => 
     // Idempotent: a second mark-read is a no-op.
     const readAgain = await markMessageAsRead(msg, {
       messageId,
-      readByRef: randomUUID(),
+      readByRef: patientRef,
       actor: patientActor(patientRef),
       safeContext: safeContext("flow-read-2")
     });
@@ -228,6 +228,7 @@ describe.skipIf(!shouldRun)("messaging persistence + lifecycle + access", () => 
 
     const closed = await closeMessageThread(msg, {
       threadId,
+      access: patientAccess(patientRef, organizationRef),
       actor: patientActor(patientRef),
       safeContext: safeContext("flow-close")
     });
@@ -242,6 +243,76 @@ describe.skipIf(!shouldRun)("messaging persistence + lifecycle + access", () => 
       safeContext: safeContext("flow-post-closed")
     });
     expect(afterClose.status).toBe("thread-closed");
+  });
+
+  it("mark-read is self-scoped + non-enumerating: non-participant and unknown id both deny identically, audited", async () => {
+    const { patientRef, organizationRef } = newSubjects();
+    await grantBaselineConsent(patientRef, organizationRef, "ne-consent");
+    const started = await startThread(patientRef, organizationRef, "ne-start");
+    const threadId = started.status === "started" ? started.threadId : "";
+    const posted = await postMessage(msg, {
+      threadId,
+      body: "hi",
+      access: patientAccess(patientRef, organizationRef),
+      actor: patientActor(patientRef),
+      safeContext: safeContext("ne-post")
+    });
+    const messageId = posted.status === "posted" ? posted.messageId : "";
+
+    // (a) A non-participant with a VALID message id.
+    const nonPartCtx = safeContext("ne-nonparticipant");
+    const nonParticipant = await markMessageAsRead(msg, {
+      messageId,
+      readByRef: randomUUID(), // not a thread principal
+      actor: patientActor(randomUUID()),
+      safeContext: nonPartCtx
+    });
+    // (b) A nonexistent message id.
+    const unknownCtx = safeContext("ne-unknown");
+    const unknown = await markMessageAsRead(msg, {
+      messageId: randomUUID(),
+      readByRef: randomUUID(),
+      actor: patientActor(randomUUID()),
+      safeContext: unknownCtx
+    });
+
+    // Responses are indistinguishable...
+    expect(nonParticipant.status).toBe("not-found");
+    expect(unknown.status).toBe("not-found");
+    // ...and both are audited.
+    for (const ctx of [nonPartCtx, unknownCtx]) {
+      const audit = await client.query(
+        `SELECT outcome FROM nelyo_foundation.audit_event WHERE correlation_id = $1`,
+        [ctx.correlationId]
+      );
+      expect(audit.rows[0]).toMatchObject({ outcome: "denied-not-recipient" });
+    }
+  });
+
+  it("close-thread is refused for a capable non-participant (M6.4 derived-authority)", async () => {
+    const { patientRef, organizationRef } = newSubjects();
+    await grantBaselineConsent(patientRef, organizationRef, "np-consent");
+    const started = await startThread(patientRef, organizationRef, "np-start");
+    const threadId = started.status === "started" ? started.threadId : "";
+
+    // A clinician WITH close-thread capability but NOT a principal of this thread.
+    const outsider = await closeMessageThread(msg, {
+      threadId,
+      access: {
+        decisionRequestId: `dr-np-${randomUUID()}`,
+        actorId: randomUUID(), // not the thread's patient or starter
+        actorRole: "clinician",
+        actorType: "clinician",
+        purpose: "care-delivery",
+        sameTenant: true,
+        sessionStatus: "active",
+        evaluatedAt: new Date().toISOString()
+      },
+      actor: patientActor(randomUUID()),
+      safeContext: safeContext("np-close")
+    });
+    expect(outsider.status).toBe("not-participant");
+    expect((await loadMessageThread(client, threadId))?.status).toBe("open");
   });
 
   it("governs a thread read and propagates consent withdrawal", async () => {

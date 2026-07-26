@@ -48,11 +48,15 @@ Phase-1 classification recount). **M6.4 in progress.** Gated + tested so far (th
   (conditional claim/cancel, stale-state audited) + the revocation-asymmetry both-halves test.
 - **laboratory** (2): `recordLabResult`/`cancelLabOrder` derived-authority — a conditional
   `transitionLabOrderStatusIf` guard (TOCTOU) + stale-state audit + the both-halves asymmetry test.
+- **messaging** (2): `markMessageAsRead` self-scoped (thread-principal check, NON-ENUMERATING — a
+  non-participant and an unknown message id deny identically, both audited) + `closeMessageThread`
+  derived-authority with NO consent chain (capability + a thread-participant check).
 
-**9 writes remain**, closing per ADR-0012: consultation `scheduleConsultation` /
-`addConsultationParticipant` / `completeConsultation` / `cancelConsultation`; medical-record
-`openMedicalRecord` / `voidMedicalRecordEntry`; messaging `markMessageAsRead` (self-scoped) /
-`closeMessageThread`; document `archiveDocument`.
+**All four decision-kind machineries are now proven in code. 7 writes remain**, each a mechanical
+application of a proven pattern: consultation `scheduleConsultation` / `addConsultationParticipant` /
+`completeConsultation` / `cancelConsultation` + medical-record `openMedicalRecord` /
+`voidMedicalRecordEntry` (patient-subject, like appointment); document `archiveDocument`
+(derived-authority no-consent, like closeMessageThread).
 
 **Root cause.** M5 gated only each resource's *primary* write + reads; secondary lifecycle actions were
 shipped with audit attribution but without a decision.

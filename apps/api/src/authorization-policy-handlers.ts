@@ -401,6 +401,21 @@ const policyRules: AuthorizationPolicyRule[] = [
     action: "send",
     purposes: ["care-delivery", "care-coordination", "emergency-care"]
   },
+  // Message thread CLOSE (roadmap M6.4, ADR-0012): derived-authority with NO consent
+  // chain — capability here + an artifact-relationship (thread-principal) check in
+  // the command. A patient or clinician principal may close their thread.
+  {
+    actorRole: "patient",
+    resource: "message",
+    action: "close-thread",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "message",
+    action: "close-thread",
+    purposes: ["care-delivery", "care-coordination"]
+  },
   // Document resource (roadmap M5.8). Read + upload for the care circle. Uploading
   // is a non-encounter write (a patient may upload an insurance card between
   // visits), so it uses the 'upload' action, which does not trigger the encounter

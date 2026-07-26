@@ -1,6 +1,11 @@
 import { randomUUID } from "node:crypto";
 import type { Pool } from "pg";
-import { PgAuditSink, assertSafeAuditEvent, type AuditEventRecord } from "@nelyohealth/database";
+import {
+  PgAuditSink,
+  assertSafeAuditEvent,
+  type AuditEventRecord,
+  type CommandActor
+} from "@nelyohealth/database";
 import {
   resolveAndDecideResourceAccess,
   type ResourceAccessRequest
@@ -122,6 +127,50 @@ export async function recordDeniedAccessAudit(
       ...input.extraSafeDetails
     },
     occurredAt: request.evaluatedAt
+  };
+  assertSafeAuditEvent(event);
+  const sink = new PgAuditSink();
+  const client = await pool.connect();
+  try {
+    await sink.record(client, event);
+  } finally {
+    client.release();
+  }
+}
+
+/**
+ * Append-only audit for a non-allow on a command that carries a CommandActor +
+ * safeContext (self-scoped rejections, artifact-relationship denials) rather than
+ * a ResourceAccessRequest. The outcome category is honest (e.g. denied-not-recipient);
+ * the caller-facing response is separately non-enumerating where required.
+ */
+export async function recordCommandRejectionAudit(
+  pool: Pool,
+  input: {
+    actor: CommandActor;
+    safeContext: { requestId: string; correlationId: string; idempotencyKey: string };
+    aggregateId: string;
+    resource: string;
+    action: string;
+    outcome: string;
+    reasonCode: string;
+  }
+): Promise<void> {
+  const event: AuditEventRecord = {
+    auditId: randomUUID(),
+    commandName: `${input.resource}.${input.action}`,
+    aggregateId: input.aggregateId,
+    action: input.action,
+    outcome: input.outcome,
+    actorAccountRef: input.actor.accountRef,
+    actorPersonaKind: input.actor.personaKind,
+    actorRole: input.actor.actorRole,
+    tenantRef: input.actor.tenantRef ?? null,
+    correlationId: input.safeContext.correlationId,
+    requestId: input.safeContext.requestId,
+    idempotencyKey: input.safeContext.idempotencyKey,
+    safeDetails: { reasonCode: input.reasonCode, resource: input.resource },
+    occurredAt: new Date().toISOString()
   };
   assertSafeAuditEvent(event);
   const sink = new PgAuditSink();
