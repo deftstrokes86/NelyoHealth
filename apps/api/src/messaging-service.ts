@@ -267,6 +267,7 @@ export async function postMessage(
           safeContext: input.safeContext,
           payload: {
             threadRef: input.threadId,
+            patientRef: thread.patientRef,
             messageRef: messageId,
             senderRef: input.access.actorId,
             senderRole
@@ -279,6 +280,7 @@ export async function postMessage(
           outcome: "committed",
           safeDetails: {
             threadRef: input.threadId,
+            patientRef: thread.patientRef,
             messageRef: messageId,
             senderRef: input.access.actorId,
             senderRole

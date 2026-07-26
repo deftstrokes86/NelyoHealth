@@ -301,6 +301,7 @@ export async function dispensePrescription(
           safeContext: input.safeContext,
           payload: {
             prescriptionRef: input.prescriptionId,
+            patientRef: existing.patientRef,
             dispenseRef: dispenseId,
             dispensedByRef: input.dispensedByRef,
             refillsRemaining: claimed.refillsRemaining,
@@ -319,6 +320,7 @@ export async function dispensePrescription(
           outcome: "committed",
           safeDetails: {
             prescriptionRef: input.prescriptionId,
+            patientRef: existing.patientRef,
             dispenseRef: dispenseId,
             refillsRemaining: claimed.refillsRemaining
           }

@@ -363,6 +363,7 @@ export async function addConsultationParticipant(
           safeContext: input.safeContext,
           payload: {
             consultationRef: input.consultationId,
+            patientRef: consultation.patientRef,
             participantRef: input.participantRef,
             role: input.role
           }
@@ -374,6 +375,7 @@ export async function addConsultationParticipant(
           outcome: "committed",
           safeDetails: {
             consultationRef: input.consultationId,
+            patientRef: consultation.patientRef,
             participantRef: input.participantRef,
             role: input.role
           }

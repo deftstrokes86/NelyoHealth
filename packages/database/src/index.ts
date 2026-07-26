@@ -353,6 +353,19 @@ export {
 } from "./document-repository.js";
 
 export {
+  TIMELINE_DOMAINS,
+  TIMELINE_ENTRY_KINDS,
+  TIMELINE_POLICY,
+  TIMELINE_REBUILD_MAP,
+  createTimelineProjectionConsumer,
+  insertTimelineEntry,
+  listTimelineForPatient,
+  rebuildTimelineFromAudit,
+  type PersistedTimelineEntry,
+  type TimelineResourceDomain
+} from "./timeline-repository.js";
+
+export {
   createCareCircleProjectionConsumer,
   deleteCareCircleMember,
   listCareCircleForPatient,

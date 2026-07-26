@@ -413,6 +413,7 @@ export async function rescheduleAppointment(
           safeContext: input.safeContext,
           payload: {
             appointmentRef: input.appointmentId,
+            patientRef: appointment.patientRef,
             previousStart: appointment.scheduledStart,
             previousEnd: appointment.scheduledEnd,
             newStart: newSlot.startAt,
@@ -425,7 +426,11 @@ export async function rescheduleAppointment(
         result: { status: "rescheduled" as const, appointmentId: input.appointmentId },
         audit: {
           outcome: "committed",
-          safeDetails: { appointmentRef: input.appointmentId, newSlotRef: input.newSlotId }
+          safeDetails: {
+            appointmentRef: input.appointmentId,
+            patientRef: appointment.patientRef,
+            newSlotRef: input.newSlotId
+          }
         }
       };
     }
@@ -638,6 +643,7 @@ export async function transitionAppointmentStatus(
           safeContext: input.safeContext,
           payload: {
             appointmentRef: input.appointmentId,
+            patientRef: appointment.patientRef,
             fromStatus,
             toStatus: input.toStatus
           }
@@ -651,7 +657,12 @@ export async function transitionAppointmentStatus(
         },
         audit: {
           outcome: "committed",
-          safeDetails: { appointmentRef: input.appointmentId, fromStatus, toStatus: input.toStatus }
+          safeDetails: {
+            appointmentRef: input.appointmentId,
+            patientRef: appointment.patientRef,
+            fromStatus,
+            toStatus: input.toStatus
+          }
         }
       };
     }

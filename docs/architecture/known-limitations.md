@@ -60,3 +60,22 @@ applies. Retained here for the historical record; no longer an open limitation.
 
 **Root cause (historical).** M5 gated only each resource's *primary* write + reads; secondary lifecycle
 actions were shipped with audit attribution but without a decision. Fixed across M6.4.
+
+---
+
+## KL-003 — timeline entries for 9 event types are absent for pre-M6.5 history
+
+**Status:** Accepted, documented (M6.5, 2026-07-26). Dev/test-stage — no production data.
+
+**Scope.** The timeline (ADR-0013) rebuilds from the append-only `audit_event` trail and keys entries
+by `patientRef`. Nine included event types (AppointmentRescheduled, AppointmentStatusChanged,
+ConsultationParticipantAdded, PrescriptionDispensed, LabResultReported, MedicalRecordEntry
+Added/Amended/Voided, MessagePosted) did not carry `patientRef` in their payload or audit `safeDetails`
+until the M6.5 fix. Events/audit rows written **before** that fix cannot be keyed to a patient, so a
+timeline rebuild skips them — timeline entries of those 9 types for pre-fix history are **absent**.
+
+**Decision.** Accepted gap (option ii), not a one-time legacy aggregate-lookup backfill (option i):
+the platform is dev/test-stage with no production data, so completeness of pre-fix history has no
+value. From the fix commit forward, all 23 included types carry `patientRef` and project + rebuild
+completely. If this milestone's data mattered, option (i) — a legacy branch resolving `patientRef` by
+aggregate lookup for pre-fix audit rows — would restore full history.

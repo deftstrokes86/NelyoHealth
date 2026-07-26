@@ -555,6 +555,34 @@ const policyRules: AuthorizationPolicyRule[] = [
     action: "read",
     purposes: ["care-delivery", "care-coordination", "emergency-care"]
   },
+  // Timeline / activity stream (roadmap M6.5, ADR-0013). The 'read' here is the
+  // ACCESS decision (may this reader read the patient's timeline at all); per-entry
+  // visibility is then filtered per resource_domain at read time by each domain's
+  // OWN read decision. Non-encounter read.
+  {
+    actorRole: "patient",
+    resource: "timeline",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "timeline",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
+  {
+    actorRole: "caregiver",
+    resource: "timeline",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "timeline",
+    action: "read",
+    purposes: ["care-delivery", "care-coordination", "emergency-care"]
+  },
   {
     actorRole: "guardian",
     resource: "clinical-record-summary",

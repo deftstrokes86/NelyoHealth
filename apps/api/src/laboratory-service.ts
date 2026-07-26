@@ -288,6 +288,7 @@ export async function recordLabResult(
           safeContext: input.safeContext,
           payload: {
             orderRef: input.orderId,
+            patientRef: order.patientRef,
             observationRef: observationId,
             resultedByRef: input.resultedByRef,
             orderStatus: "resulted"
@@ -300,6 +301,7 @@ export async function recordLabResult(
           outcome: "committed",
           safeDetails: {
             orderRef: input.orderId,
+            patientRef: order.patientRef,
             observationRef: observationId,
             resultedByRef: input.resultedByRef
           }

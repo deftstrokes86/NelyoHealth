@@ -5,6 +5,7 @@ import {
   createCareCircleProjectionConsumer,
   createDatabasePool,
   createNotificationOrchestrationConsumer,
+  createTimelineProjectionConsumer,
   dispatchPendingOutboxEvents,
   ExternalCallPolicy,
   PgOutboxStore,
@@ -85,7 +86,8 @@ const outboxDispatchRunner = createOutboxDispatchRunner({
       consumers: [
         createAuditTrailConsumer(dispatchPool),
         createCareCircleProjectionConsumer(dispatchPool),
-        createNotificationOrchestrationConsumer(dispatchPool, notificationDelivery)
+        createNotificationOrchestrationConsumer(dispatchPool, notificationDelivery),
+        createTimelineProjectionConsumer(dispatchPool)
       ]
     }),
   log

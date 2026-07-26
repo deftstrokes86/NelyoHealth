@@ -126,7 +126,11 @@ const apiOnlyModules = new Set([
   // Deny-audit substrate (roadmap M6.3b, Principle 11). The decide-and-audit
   // wrapper + append-only denied-decision persistence used by every resource;
   // pure server-side authorization infrastructure, never mirrored to clients.
-  "access-audit"
+  "access-audit",
+  // Timeline read service (roadmap M6.5). Server-side per-patient timeline reads
+  // with read-time per-domain filtering; a client DTO surface lands with the
+  // timeline UI. Api-only.
+  "timeline-service"
 ]);
 // Note: apps/api/src/nest/** is not scanned by this gate at all (getContractModules
 // reads apps/api/src non-recursively) — the new auth controllers/module living

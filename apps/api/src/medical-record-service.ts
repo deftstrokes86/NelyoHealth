@@ -266,6 +266,7 @@ export async function addMedicalRecordEntry(
           safeContext: input.safeContext,
           payload: {
             recordRef: record.recordId,
+            patientRef: input.access.patientId,
             entryRef: entryId,
             entryType: input.entryType,
             authorRef: input.access.actorId
@@ -278,6 +279,7 @@ export async function addMedicalRecordEntry(
           outcome: "committed",
           safeDetails: {
             recordRef: record.recordId,
+            patientRef: input.access.patientId,
             entryRef: entryId,
             entryType: input.entryType,
             authorRef: input.access.actorId
@@ -381,6 +383,7 @@ export async function amendMedicalRecordEntry(
           safeContext: input.safeContext,
           payload: {
             recordRef: priorEntry.recordId,
+            patientRef: input.access.patientId,
             entryRef: newEntryId,
             supersedesEntryRef: priorEntry.entryId,
             entryType: priorEntry.entryType,
@@ -398,6 +401,7 @@ export async function amendMedicalRecordEntry(
           outcome: "committed",
           safeDetails: {
             recordRef: priorEntry.recordId,
+            patientRef: input.access.patientId,
             entryRef: newEntryId,
             supersedesEntryRef: priorEntry.entryId,
             entryType: priorEntry.entryType
@@ -513,6 +517,7 @@ export async function voidMedicalRecordEntry(
           safeContext: input.safeContext,
           payload: {
             recordRef: priorEntry.recordId,
+            patientRef: record.patientRef,
             entryRef: input.entryId,
             reasonCode: input.reasonCode
           }
@@ -524,6 +529,7 @@ export async function voidMedicalRecordEntry(
           outcome: "committed",
           safeDetails: {
             recordRef: priorEntry.recordId,
+            patientRef: record.patientRef,
             entryRef: input.entryId,
             reasonCode: input.reasonCode
           }
