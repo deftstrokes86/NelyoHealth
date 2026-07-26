@@ -243,6 +243,57 @@ const policyRules: AuthorizationPolicyRule[] = [
     action: "conduct",
     purposes: ["care-delivery", "emergency-care"]
   },
+  // Consultation PATIENT-SUBJECT operational writes (roadmap M6.4, ADR-0012):
+  // schedule / add-participant / complete / cancel flow through the full pipeline.
+  // (No generic transition command, so no multi-path exclusion needed.)
+  {
+    actorRole: "clinician",
+    resource: "consultation",
+    action: "schedule",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "consultation",
+    action: "add-participant",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "consultation",
+    action: "complete",
+    purposes: ["care-delivery"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "consultation",
+    action: "cancel",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "patient",
+    resource: "consultation",
+    action: "schedule",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "patient",
+    resource: "consultation",
+    action: "cancel",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "consultation",
+    action: "schedule",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "guardian",
+    resource: "consultation",
+    action: "cancel",
+    purposes: ["care-delivery", "care-coordination"]
+  },
   // Prescription resource (roadmap M5.5). Read for the care circle; prescribing is
   // a clinical WRITE (encounter-required via ABAC) restricted to clinicians.
   {
@@ -462,6 +513,21 @@ const policyRules: AuthorizationPolicyRule[] = [
     action: "upload",
     purposes: ["care-delivery", "care-coordination", "emergency-care"]
   },
+  // Document ARCHIVE (roadmap M6.4, ADR-0012): derived-authority with NO consent
+  // chain — capability here + an artifact-relationship (uploader/owner) check in
+  // the command. The uploader (patient or clinician) may archive their document.
+  {
+    actorRole: "patient",
+    resource: "document",
+    action: "archive",
+    purposes: ["care-delivery", "care-coordination"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "document",
+    action: "archive",
+    purposes: ["care-delivery", "care-coordination"]
+  },
   // Care Circle read model (roadmap M6.1). Reading a patient's care circle reveals
   // their relationship graph (SENSITIVE-PERSONAL-DATA), so it flows through the
   // full pipeline. 'read' is a non-encounter action.
@@ -529,6 +595,20 @@ const policyRules: AuthorizationPolicyRule[] = [
     actorRole: "clinician",
     resource: "clinical-record-summary",
     action: "amend",
+    purposes: ["care-delivery", "emergency-care"]
+  },
+  // Medical-record PATIENT-SUBJECT operational writes (roadmap M6.4, ADR-0012):
+  // open-record (bootstrap the record container) + void-entry (correction path).
+  {
+    actorRole: "clinician",
+    resource: "clinical-record-summary",
+    action: "open-record",
+    purposes: ["care-delivery"]
+  },
+  {
+    actorRole: "clinician",
+    resource: "clinical-record-summary",
+    action: "void-entry",
     purposes: ["care-delivery", "emergency-care"]
   },
   {

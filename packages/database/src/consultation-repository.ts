@@ -156,28 +156,38 @@ export async function markConsultationStarted(
   );
 }
 
+/**
+ * Complete an in-progress consultation. TOCTOU-safe (roadmap M6.4, ADR-0012): the
+ * `status = 'in-progress'` guard is atomic with the write; zero rows = stale state.
+ */
 export async function markConsultationCompleted(
   client: ClientBase,
   input: { consultationId: string; endedAt: string; clinicalNotes?: string; updatedAt: string }
-): Promise<void> {
-  await client.query(
+): Promise<boolean> {
+  const result = await client.query(
     `UPDATE nelyo_consultation.consultation
         SET status = 'completed', ended_at = $2, clinical_notes = $3, updated_at = $4
-      WHERE consultation_id = $1`,
+      WHERE consultation_id = $1 AND status = 'in-progress'`,
     [input.consultationId, input.endedAt, input.clinicalNotes ?? null, input.updatedAt]
   );
+  return (result.rowCount ?? 0) > 0;
 }
 
+/**
+ * Cancel a scheduled/in-progress consultation. TOCTOU-safe: the status guard is
+ * atomic with the write; zero rows = stale state (already completed/cancelled).
+ */
 export async function markConsultationCancelled(
   client: ClientBase,
   input: { consultationId: string; cancellationReasonCode: string; updatedAt: string }
-): Promise<void> {
-  await client.query(
+): Promise<boolean> {
+  const result = await client.query(
     `UPDATE nelyo_consultation.consultation
         SET status = 'cancelled', cancellation_reason_code = $2, updated_at = $3
-      WHERE consultation_id = $1`,
+      WHERE consultation_id = $1 AND status IN ('scheduled', 'in-progress')`,
     [input.consultationId, input.cancellationReasonCode, input.updatedAt]
   );
+  return (result.rowCount ?? 0) > 0;
 }
 
 export async function insertConsultationParticipant(

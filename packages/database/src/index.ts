@@ -292,6 +292,7 @@ export {
   loadMedicalRecordByPatientOrg,
   loadMedicalRecordEntry,
   setMedicalRecordEntryStatus,
+  transitionMedicalRecordEntryStatusIf,
   type MedicalRecordEntryStatus,
   type MedicalRecordEntryType,
   type MedicalRecordStatus,
@@ -345,6 +346,7 @@ export {
   listDocumentsForPatient,
   loadDocument,
   setDocumentStatus,
+  transitionDocumentStatusIf,
   type DocumentStatus,
   type DocumentType,
   type PersistedDocument

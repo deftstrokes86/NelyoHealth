@@ -38,29 +38,25 @@ their denials are still unrecorded until M6.4 gates them.
 
 ---
 
-## KL-002 — operational writes not gated by an authorization decision (M6.3b → M6.4)
+## KL-002 — operational writes not gated by an authorization decision (M6.3b → M6.4) — CLOSED
 
-**Status:** Identified in M6.3b (item-2 audit; count corrected from 16 to **17** during the M6.4
-Phase-1 classification recount). **M6.4 in progress.** Gated + tested so far (the two reference patterns):
-- **appointment** (4): `openAvailabilitySlot` org-internal; `reschedule`/`cancel`/`transition-status`
-  patient-subject, the last with the ADR-0012 state-machine multi-path exclusion.
-- **prescription** (2): `dispensePrescription`/`cancelPrescription` derived-authority — TOCTOU-safe
-  (conditional claim/cancel, stale-state audited) + the revocation-asymmetry both-halves test.
-- **laboratory** (2): `recordLabResult`/`cancelLabOrder` derived-authority — a conditional
-  `transitionLabOrderStatusIf` guard (TOCTOU) + stale-state audit + the both-halves asymmetry test.
-- **messaging** (2): `markMessageAsRead` self-scoped (thread-principal check, NON-ENUMERATING — a
-  non-participant and an unknown message id deny identically, both audited) + `closeMessageThread`
-  derived-authority with NO consent chain (capability + a thread-participant check).
+**Status: CLOSED in M6.4** (2026-07-26). All **17** operational writes (count corrected from 16 during
+the M6.4 Phase-1 classification recount) are now gated by a right-sized authorization decision per
+ADR-0012's four decision kinds — authz decided BEFORE artifact/transition validity, every non-allow
+audited with an honest category, and TOCTOU-safe conditional transitions wherever a state machine
+applies. Retained here for the historical record; no longer an open limitation.
 
-**All four decision-kind machineries are now proven in code. 7 writes remain**, each a mechanical
-application of a proven pattern: consultation `scheduleConsultation` / `addConsultationParticipant` /
-`completeConsultation` / `cancelConsultation` + medical-record `openMedicalRecord` /
-`voidMedicalRecordEntry` (patient-subject, like appointment); document `archiveDocument`
-(derived-authority no-consent, like closeMessageThread).
+**Final coverage (all 17):**
+- **appointment** (4): `openAvailabilitySlot` org-internal; `reschedule`/`cancel` patient-subject;
+  `transition-status` patient-subject + state machine with the multi-path exclusion of `cancelled`.
+- **prescription** (2) + **laboratory** (2): derived-authority (consent-bearing) — TOCTOU-safe
+  conditional transitions + the both-halves revocation asymmetry.
+- **messaging** (2): `markMessageAsRead` self-scoped (non-enumerating); `closeMessageThread`
+  derived-authority (no consent chain, participant check).
+- **consultation** (4): `schedule`/`add-participant`/`complete`/`cancel` patient-subject (state
+  machines on complete/cancel).
+- **medical-record** (2): `openMedicalRecord`/`voidMedicalRecordEntry` patient-subject.
+- **document** (1): `archiveDocument` derived-authority (no consent chain, ownership check).
 
-**Root cause.** M5 gated only each resource's *primary* write + reads; secondary lifecycle actions were
-shipped with audit attribution but without a decision.
-
-**Impact.** Reachable only server-side today (no HTTP surface for these yet). The exposure becomes live
-when these actions are routed. The M6.4 classification (patient-subject / derived-authority /
-org-internal / self-scoped) determines the correct decision per write.
+**Root cause (historical).** M5 gated only each resource's *primary* write + reads; secondary lifecycle
+actions were shipped with audit attribution but without a decision. Fixed across M6.4.

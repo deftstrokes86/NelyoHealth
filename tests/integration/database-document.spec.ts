@@ -192,6 +192,7 @@ describe.skipIf(!shouldRun)("document persistence + lifecycle + access", () => {
 
     const archived = await archiveDocument(docs, {
       documentId,
+      access: patientAccess(patientRef, organizationRef),
       actor: patientActor(patientRef),
       safeContext: safeContext("arch")
     });
@@ -200,10 +201,37 @@ describe.skipIf(!shouldRun)("document persistence + lifecycle + access", () => {
 
     const again = await archiveDocument(docs, {
       documentId,
+      access: patientAccess(patientRef, organizationRef),
       actor: patientActor(patientRef),
       safeContext: safeContext("arch-2")
     });
     expect(again.status).toBe("already-archived");
+  });
+
+  it("archive is refused for a capable non-owner (M6.4 derived-authority)", async () => {
+    const { patientRef, organizationRef } = newSubjects();
+    await grantBaselineConsent(patientRef, organizationRef, "notowner-consent");
+    const registered = await register(patientRef, organizationRef, "notowner-reg");
+    const documentId = registered.status === "registered" ? registered.documentId : "";
+
+    // A clinician WITH archive capability but NOT the document's uploader.
+    const outsider = await archiveDocument(docs, {
+      documentId,
+      access: {
+        decisionRequestId: `dr-notowner-${randomUUID()}`,
+        actorId: randomUUID(), // not the uploader
+        actorRole: "clinician",
+        actorType: "clinician",
+        purpose: "care-delivery",
+        sameTenant: true,
+        sessionStatus: "active",
+        evaluatedAt: new Date().toISOString()
+      },
+      actor: patientActor(randomUUID()),
+      safeContext: safeContext("notowner-arch")
+    });
+    expect(outsider.status).toBe("not-owner");
+    expect((await loadDocument(client, documentId))?.status).toBe("active");
   });
 
   it("governs a document read (gating the storage pointer) and propagates consent withdrawal", async () => {

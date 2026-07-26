@@ -13,8 +13,10 @@ import {
   loadMedicalRecordEntry,
   runTransactionalCommand,
   setMedicalRecordEntryStatus,
+  transitionMedicalRecordEntryStatusIf,
   type AuditSink,
   type CommandActor,
+  type CommandAuditOutcome,
   type MedicalRecordEntryType,
   type PersistedMedicalRecord
 } from "@nelyohealth/database";
@@ -55,6 +57,16 @@ export type MedicalRecordAccessContext = Omit<
   "requestedResource" | "requestedAction"
 >;
 
+/**
+ * Patient-subject write context (M6.4): patientId + organization are the record's
+ * (from the input for open, or the loaded record/entry for void), so the caller
+ * supplies only the actor / workspace / purpose part.
+ */
+export type MedicalRecordWriteAccessContext = Omit<
+  MedicalRecordAccessContext,
+  "patientId" | "organizationId"
+>;
+
 export interface MedicalRecordSafeContext {
   requestId: string;
   correlationId: string;
@@ -85,6 +97,7 @@ export function createPgMedicalRecordServiceDeps(pool: Pool): MedicalRecordServi
 export interface OpenMedicalRecordInput {
   patientRef: string;
   organizationRef: string;
+  access: MedicalRecordWriteAccessContext;
   actor: CommandActor;
   safeContext: MedicalRecordSafeContext;
   now?: () => Date;
@@ -92,14 +105,29 @@ export interface OpenMedicalRecordInput {
 
 export type OpenMedicalRecordOutcome =
   | { status: "opened"; recordId: string }
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft }
   | { status: "rejected"; reasonCode: "record-exists" };
 
-/** Open the clinical record for a patient within an organization. Emits MedicalRecordOpened. */
+/** Open the clinical record for a patient within an organization. PATIENT-SUBJECT:
+ * decide (full pipeline) FIRST, then the record-exists validity check. Emits
+ * MedicalRecordOpened. */
 export async function openMedicalRecord(
   deps: MedicalRecordServiceDeps,
   input: OpenMedicalRecordInput
 ): Promise<OpenMedicalRecordOutcome> {
   const nowIso = (input.now?.() ?? new Date()).toISOString();
+
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
+    ...input.access,
+    patientId: input.patientRef,
+    organizationId: input.organizationRef,
+    requestedResource: CLINICAL_RESOURCE,
+    requestedAction: "open-record"
+  });
+  if (decision.status !== "allowed") {
+    return { status: "denied", decision };
+  }
+
   const existing = await withClient(deps.pool, (client) =>
     loadMedicalRecordByPatientOrg(client, input.patientRef, input.organizationRef)
   );
@@ -387,6 +415,7 @@ export async function amendMedicalRecordEntry(
 export interface VoidMedicalRecordEntryInput {
   entryId: string;
   reasonCode: string;
+  access: MedicalRecordWriteAccessContext;
   actor: CommandActor;
   safeContext: MedicalRecordSafeContext;
   now?: () => Date;
@@ -394,9 +423,13 @@ export interface VoidMedicalRecordEntryInput {
 
 export type VoidMedicalRecordEntryOutcome =
   | { status: "voided"; entryId: string }
-  | { status: "not-found" };
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft }
+  | { status: "not-found" }
+  | { status: "not-voidable" };
 
-/** Mark an entry entered-in-error (its content is preserved). Emits MedicalRecordEntryVoided. */
+/** Mark an entry entered-in-error (its content is preserved). PATIENT-SUBJECT:
+ * decide (full pipeline) FIRST, then a TOCTOU-safe conditional void (active-only).
+ * Emits MedicalRecordEntryVoided. */
 export async function voidMedicalRecordEntry(
   deps: MedicalRecordServiceDeps,
   input: VoidMedicalRecordEntryInput
@@ -407,6 +440,23 @@ export async function voidMedicalRecordEntry(
   );
   if (!priorEntry) {
     return { status: "not-found" };
+  }
+  const record = await withClient(deps.pool, (client) =>
+    loadMedicalRecord(client, priorEntry.recordId)
+  );
+  if (!record) {
+    return { status: "not-found" };
+  }
+
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
+    ...input.access,
+    patientId: record.patientRef,
+    organizationId: record.organizationRef,
+    requestedResource: CLINICAL_RESOURCE,
+    requestedAction: "void-entry"
+  });
+  if (decision.status !== "allowed") {
+    return { status: "denied", decision };
   }
 
   const { result } = await runTransactionalCommand({
@@ -421,12 +471,26 @@ export async function voidMedicalRecordEntry(
       actor: input.actor,
       safeContext: input.safeContext
     },
-    work: async (ctx) => {
-      await setMedicalRecordEntryStatus(ctx.client, {
+    work: async (
+      ctx
+    ): Promise<{ result: VoidMedicalRecordEntryOutcome; audit: CommandAuditOutcome }> => {
+      // TOCTOU-safe: void only an 'active' entry; a raced amend/void yields zero
+      // rows -> stale-artifact-state deny, nothing written.
+      const voided = await transitionMedicalRecordEntryStatusIf(ctx.client, {
         entryId: input.entryId,
-        status: "entered-in-error",
+        expected: ["active"],
+        next: "entered-in-error",
         updatedAt: nowIso
       });
+      if (!voided) {
+        return {
+          result: { status: "not-voidable" },
+          audit: {
+            outcome: "denied-stale-artifact-state",
+            safeDetails: { entryRef: input.entryId, reasonCode: "stale-artifact-state" }
+          }
+        };
+      }
       await ctx.enqueueDomainEvent(
         createDomainEventEnvelope({
           eventType: "MedicalRecordEntryVoided",

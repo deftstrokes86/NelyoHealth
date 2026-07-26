@@ -110,6 +110,7 @@ describe.skipIf(!shouldRun)("consultation persistence + lifecycle + access", () 
     tag: string,
     chiefComplaint?: string
   ) {
+    await grantBaselineConsent(patientRef, organizationRef, `${tag}-sched-consent`);
     const scheduled = await scheduleConsultation(cons, {
       patientRef,
       clinicianRef,
@@ -117,9 +118,13 @@ describe.skipIf(!shouldRun)("consultation persistence + lifecycle + access", () 
       modality: "telemedicine",
       scheduledStart: "2026-08-10T09:00:00.000Z",
       chiefComplaint,
+      access: clinicianAccess(clinicianRef, patientRef, organizationRef),
       actor: staffActor,
       safeContext: safeContext(tag)
     });
+    if (scheduled.status !== "scheduled") {
+      throw new Error(`schedule denied: ${JSON.stringify(scheduled)}`);
+    }
     return scheduled.consultationId;
   }
 
@@ -169,6 +174,7 @@ describe.skipIf(!shouldRun)("consultation persistence + lifecycle + access", () 
 
   it("schedules a consultation, keeping the chief complaint out of events and audit", async () => {
     const { clinicianRef, patientRef, organizationRef } = newSubjects();
+    await grantBaselineConsent(patientRef, organizationRef, "sched-consent");
     const ctx = safeContext("sched");
     const scheduled = await scheduleConsultation(cons, {
       patientRef,
@@ -176,12 +182,14 @@ describe.skipIf(!shouldRun)("consultation persistence + lifecycle + access", () 
       organizationRef,
       modality: "telemedicine",
       chiefComplaint: SENTINEL_COMPLAINT,
+      access: clinicianAccess(clinicianRef, patientRef, organizationRef),
       actor: staffActor,
       safeContext: ctx
     });
     expect(scheduled.status).toBe("scheduled");
+    const consultationId = scheduled.status === "scheduled" ? scheduled.consultationId : "";
 
-    const consultation = await loadConsultation(client, scheduled.consultationId);
+    const consultation = await loadConsultation(client, consultationId);
     expect(consultation?.chiefComplaint).toBe(SENTINEL_COMPLAINT);
     expect(consultation?.status).toBe("scheduled");
 
@@ -203,7 +211,14 @@ describe.skipIf(!shouldRun)("consultation persistence + lifecycle + access", () 
     const { clinicianRef, patientRef, organizationRef } = newSubjects();
     const consultationId = await schedule(clinicianRef, patientRef, organizationRef, "start-sched");
 
-    // No consent yet -> denied, and the consultation stays scheduled.
+    // Withdraw the baseline consent -> start is denied, consultation stays scheduled.
+    await withdrawConsent(consentDeps, {
+      patientRef,
+      organizationRef,
+      revocationReason: "patient-request",
+      actor: patientActor(patientRef),
+      safeContext: safeContext("start-withdraw")
+    });
     const denied = await startConsultation(cons, {
       consultationId,
       access: clinicianAccess(clinicianRef, patientRef, organizationRef),
@@ -240,6 +255,7 @@ describe.skipIf(!shouldRun)("consultation persistence + lifecycle + access", () 
       consultationId,
       participantRef: interpreterRef,
       role: "interpreter",
+      access: clinicianAccess(clinicianRef, patientRef, organizationRef),
       actor: staffActor,
       safeContext: safeContext("flow-participant")
     });
@@ -249,6 +265,7 @@ describe.skipIf(!shouldRun)("consultation persistence + lifecycle + access", () 
     const completed = await completeConsultation(cons, {
       consultationId,
       clinicalNotes: SENTINEL_NOTES,
+      access: clinicianAccess(clinicianRef, patientRef, organizationRef),
       actor: staffActor,
       safeContext: ctx
     });
@@ -318,6 +335,7 @@ describe.skipIf(!shouldRun)("consultation persistence + lifecycle + access", () 
     const cancelled = await cancelConsultation(cons, {
       consultationId,
       cancellationReasonCode: "patient-request",
+      access: clinicianAccess(clinicianRef, patientRef, organizationRef),
       actor: staffActor,
       safeContext: safeContext("cancel")
     });
@@ -327,6 +345,7 @@ describe.skipIf(!shouldRun)("consultation persistence + lifecycle + access", () 
     // Cancelled is terminal: completing is an invalid transition.
     const invalid = await completeConsultation(cons, {
       consultationId,
+      access: clinicianAccess(clinicianRef, patientRef, organizationRef),
       actor: staffActor,
       safeContext: safeContext("cancel-invalid")
     });

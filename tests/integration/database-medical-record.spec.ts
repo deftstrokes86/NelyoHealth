@@ -105,12 +105,18 @@ describe.skipIf(!shouldRun)("medical-record persistence + append-only entries + 
   }
 
   async function openRecord(patientRef: string, organizationRef: string, tag: string) {
-    await openMedicalRecord(mr, {
+    // open-record is patient-subject (M6.4) -> the patient needs governing consent.
+    await grantBaselineConsent(patientRef, organizationRef, `${tag}-open-consent`);
+    const outcome = await openMedicalRecord(mr, {
       patientRef,
       organizationRef,
+      access: clinicianAccess(randomUUID(), patientRef, organizationRef, false),
       actor: staffActor,
       safeContext: safeContext(tag)
     });
+    if (outcome.status !== "opened") {
+      throw new Error(`openRecord failed: ${JSON.stringify(outcome)}`);
+    }
   }
 
   function newSubjects() {
@@ -201,6 +207,15 @@ describe.skipIf(!shouldRun)("medical-record persistence + append-only entries + 
   it("denies a clinical write without an active encounter, and without consent", async () => {
     const { clinicianRef, patientRef, organizationRef } = newSubjects();
     await openRecord(patientRef, organizationRef, "deny-open");
+    // openRecord granted baseline consent to open the record; withdraw it so the
+    // "no consent" write below is genuinely unconsented.
+    await withdrawConsent(consentDeps, {
+      patientRef,
+      organizationRef,
+      revocationReason: "patient-request",
+      actor: patientActor(patientRef),
+      safeContext: safeContext("deny-open-withdraw")
+    });
 
     // No consent -> denied.
     const noConsent = await addMedicalRecordEntry(mr, {
@@ -304,6 +319,7 @@ describe.skipIf(!shouldRun)("medical-record persistence + append-only entries + 
     const voided = await voidMedicalRecordEntry(mr, {
       entryId,
       reasonCode: "duplicate-entry",
+      access: clinicianAccess(clinicianRef, patientRef, organizationRef, false),
       actor: staffActor,
       safeContext: safeContext("void")
     });

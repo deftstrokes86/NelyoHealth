@@ -132,6 +132,23 @@ export async function setDocumentStatus(
   return (result.rowCount ?? 0) > 0;
 }
 
+/**
+ * Conditional document-status transition (roadmap M6.4, ADR-0012 TOCTOU-safety):
+ * change status to `next` only if currently one of `expected`, atomically.
+ * Returns true iff a row changed (false = stale document state).
+ */
+export async function transitionDocumentStatusIf(
+  client: ClientBase,
+  input: { documentId: string; expected: DocumentStatus[]; next: DocumentStatus; updatedAt: string }
+): Promise<boolean> {
+  const result = await client.query(
+    `UPDATE nelyo_document.document SET status = $2, updated_at = $3
+      WHERE document_id = $1 AND status = ANY($4::text[])`,
+    [input.documentId, input.next, input.updatedAt, input.expected]
+  );
+  return (result.rowCount ?? 0) > 0;
+}
+
 // ---------- Reads ----------
 
 export async function loadDocument(

@@ -18,6 +18,7 @@ import {
   type ConsultationStatus,
   type AuditSink,
   type CommandActor,
+  type CommandAuditOutcome,
   type PersistedConsultation
 } from "@nelyohealth/database";
 import {
@@ -50,6 +51,17 @@ import type { AuthorizationPolicyDecisionDraft } from "./authorization-policy.js
 export type ConsultationAccessContext = Omit<
   ResourceAccessRequest,
   "requestedResource" | "requestedAction"
+>;
+
+/**
+ * Patient-subject write context (M6.4): the subject patientId + organization are
+ * the consultation's (from the input for schedule, or the loaded encounter for
+ * add-participant / complete / cancel), so the caller supplies only the actor /
+ * workspace / purpose part.
+ */
+export type ConsultationWriteAccessContext = Omit<
+  ConsultationAccessContext,
+  "patientId" | "organizationId"
 >;
 
 export interface ConsultationSafeContext {
@@ -95,17 +107,36 @@ export interface ScheduleConsultationInput {
   scheduledStart?: string;
   /** Clinical; access-controlled; never travels in events or audit detail. */
   chiefComplaint?: string;
+  access: ConsultationWriteAccessContext;
   actor: CommandActor;
   safeContext: ConsultationSafeContext;
   now?: () => Date;
 }
 
+export type ScheduleConsultationOutcome =
+  | { status: "scheduled"; consultationId: string }
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft };
+
 /** Schedule a clinical encounter. Emits ConsultationScheduled. */
 export async function scheduleConsultation(
   deps: ConsultationServiceDeps,
   input: ScheduleConsultationInput
-): Promise<{ status: "scheduled"; consultationId: string }> {
+): Promise<ScheduleConsultationOutcome> {
   const nowIso = (input.now?.() ?? new Date()).toISOString();
+
+  // PATIENT-SUBJECT (ADR-0012): scheduling a clinical encounter for a patient;
+  // decide (full pipeline) before any write. The subject is the input patient.
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
+    ...input.access,
+    patientId: input.patientRef,
+    organizationId: input.organizationRef,
+    requestedResource: "consultation",
+    requestedAction: "schedule"
+  });
+  if (decision.status !== "allowed") {
+    return { status: "denied", decision };
+  }
+
   const consultationId = randomUUID();
 
   const { result } = await runTransactionalCommand({
@@ -269,6 +300,7 @@ export interface AddConsultationParticipantInput {
   participantRef: string;
   role: ConsultationParticipantRole;
   joinedAt?: string;
+  access: ConsultationWriteAccessContext;
   actor: CommandActor;
   safeContext: ConsultationSafeContext;
   now?: () => Date;
@@ -276,9 +308,11 @@ export interface AddConsultationParticipantInput {
 
 export type AddConsultationParticipantOutcome =
   | { status: "added"; consultationId: string }
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft }
   | { status: "not-found" };
 
-/** Add a participant to a consultation (telemedicine parties). Emits ConsultationParticipantAdded. */
+/** Add a participant to a consultation (telemedicine parties). PATIENT-SUBJECT:
+ * decide (full pipeline) before writing. Emits ConsultationParticipantAdded. */
 export async function addConsultationParticipant(
   deps: ConsultationServiceDeps,
   input: AddConsultationParticipantInput
@@ -289,6 +323,17 @@ export async function addConsultationParticipant(
   );
   if (!consultation) {
     return { status: "not-found" };
+  }
+
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
+    ...input.access,
+    patientId: consultation.patientRef,
+    organizationId: consultation.organizationRef,
+    requestedResource: "consultation",
+    requestedAction: "add-participant"
+  });
+  if (decision.status !== "allowed") {
+    return { status: "denied", decision };
   }
 
   const { result } = await runTransactionalCommand({
@@ -346,6 +391,7 @@ export interface CompleteConsultationInput {
   consultationId: string;
   /** Clinical; access-controlled; never travels in events or audit detail. */
   clinicalNotes?: string;
+  access: ConsultationWriteAccessContext;
   actor: CommandActor;
   safeContext: ConsultationSafeContext;
   now?: () => Date;
@@ -353,6 +399,7 @@ export interface CompleteConsultationInput {
 
 export type CompleteConsultationOutcome =
   | { status: "completed"; consultationId: string }
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft }
   | { status: "not-found" }
   | { status: "invalid-transition"; fromStatus: ConsultationStatus };
 
@@ -368,8 +415,18 @@ export async function completeConsultation(
   if (!consultation) {
     return { status: "not-found" };
   }
-  if (!ALLOWED_TRANSITIONS[consultation.status].includes("completed")) {
-    return { status: "invalid-transition", fromStatus: consultation.status };
+
+  // Authz FIRST (patient-subject); transition validity is the TOCTOU-safe
+  // conditional guard inside the command.
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
+    ...input.access,
+    patientId: consultation.patientRef,
+    organizationId: consultation.organizationRef,
+    requestedResource: "consultation",
+    requestedAction: "complete"
+  });
+  if (decision.status !== "allowed") {
+    return { status: "denied", decision };
   }
 
   const { result } = await runTransactionalCommand({
@@ -384,13 +441,27 @@ export async function completeConsultation(
       actor: input.actor,
       safeContext: input.safeContext
     },
-    work: async (ctx) => {
-      await markConsultationCompleted(ctx.client, {
+    work: async (
+      ctx
+    ): Promise<{ result: CompleteConsultationOutcome; audit: CommandAuditOutcome }> => {
+      const advanced = await markConsultationCompleted(ctx.client, {
         consultationId: input.consultationId,
         endedAt: nowIso,
         clinicalNotes: input.clinicalNotes,
         updatedAt: nowIso
       });
+      if (!advanced) {
+        return {
+          result: { status: "invalid-transition", fromStatus: consultation.status },
+          audit: {
+            outcome: "rejected-invalid-transition",
+            safeDetails: {
+              consultationRef: input.consultationId,
+              reasonCode: "invalid-state-transition"
+            }
+          }
+        };
+      }
       await ctx.enqueueDomainEvent(
         createDomainEventEnvelope({
           eventType: "ConsultationCompleted",
@@ -427,6 +498,7 @@ export async function completeConsultation(
 export interface CancelConsultationInput {
   consultationId: string;
   cancellationReasonCode: string;
+  access: ConsultationWriteAccessContext;
   actor: CommandActor;
   safeContext: ConsultationSafeContext;
   now?: () => Date;
@@ -434,10 +506,12 @@ export interface CancelConsultationInput {
 
 export type CancelConsultationOutcome =
   | { status: "cancelled"; consultationId: string }
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft }
   | { status: "not-found" }
   | { status: "not-cancellable" };
 
-/** Cancel a consultation before it completes. Emits ConsultationCancelled. */
+/** Cancel a consultation before it completes. PATIENT-SUBJECT: decide (full
+ * pipeline) first, then a TOCTOU-safe conditional cancel. Emits ConsultationCancelled. */
 export async function cancelConsultation(
   deps: ConsultationServiceDeps,
   input: CancelConsultationInput
@@ -449,8 +523,16 @@ export async function cancelConsultation(
   if (!consultation) {
     return { status: "not-found" };
   }
-  if (!ALLOWED_TRANSITIONS[consultation.status].includes("cancelled")) {
-    return { status: "not-cancellable" };
+
+  const decision = await resolveDecideAndAuditAccess(deps.pool, {
+    ...input.access,
+    patientId: consultation.patientRef,
+    organizationId: consultation.organizationRef,
+    requestedResource: "consultation",
+    requestedAction: "cancel"
+  });
+  if (decision.status !== "allowed") {
+    return { status: "denied", decision };
   }
 
   const { result } = await runTransactionalCommand({
@@ -465,12 +547,26 @@ export async function cancelConsultation(
       actor: input.actor,
       safeContext: input.safeContext
     },
-    work: async (ctx) => {
-      await markConsultationCancelled(ctx.client, {
+    work: async (
+      ctx
+    ): Promise<{ result: CancelConsultationOutcome; audit: CommandAuditOutcome }> => {
+      const cancelled = await markConsultationCancelled(ctx.client, {
         consultationId: input.consultationId,
         cancellationReasonCode: input.cancellationReasonCode,
         updatedAt: nowIso
       });
+      if (!cancelled) {
+        return {
+          result: { status: "not-cancellable" },
+          audit: {
+            outcome: "denied-stale-artifact-state",
+            safeDetails: {
+              consultationRef: input.consultationId,
+              reasonCode: "stale-artifact-state"
+            }
+          }
+        };
+      }
       await ctx.enqueueDomainEvent(
         createDomainEventEnvelope({
           eventType: "ConsultationCancelled",

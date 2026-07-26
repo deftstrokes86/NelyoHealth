@@ -9,9 +9,10 @@ import {
   insertDocument,
   loadDocument,
   runTransactionalCommand,
-  setDocumentStatus,
+  transitionDocumentStatusIf,
   type AuditSink,
   type CommandActor,
+  type CommandAuditOutcome,
   type DocumentType,
   type PersistedDocument
 } from "@nelyohealth/database";
@@ -20,7 +21,12 @@ import {
   type ResolvedAuthorizationInputs,
   type ResourceAccessRequest
 } from "./resource-authorization.js";
-import { resolveDecideAndAuditAccess } from "./access-audit.js";
+import {
+  decideCapabilityWorkspaceAndAudit,
+  recordCommandRejectionAudit,
+  resolveDecideAndAuditAccess,
+  type CapabilityWriteAccessContext
+} from "./access-audit.js";
 import type { AuthorizationPolicyDecisionDraft } from "./authorization-policy.js";
 
 /**
@@ -180,6 +186,7 @@ export async function registerDocument(
 
 export interface ArchiveDocumentInput {
   documentId: string;
+  access: CapabilityWriteAccessContext;
   actor: CommandActor;
   safeContext: DocumentSafeContext;
   now?: () => Date;
@@ -187,10 +194,15 @@ export interface ArchiveDocumentInput {
 
 export type ArchiveDocumentOutcome =
   | { status: "archived"; documentId: string }
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft }
+  | { status: "not-owner" }
   | { status: "not-found" }
   | { status: "already-archived" };
 
-/** Archive a document. Emits DocumentArchived. */
+/** Archive a document. DERIVED-AUTHORITY (ADR-0012) with NO consent chain (a
+ * document is not a consent-bearing artifact): capability + workspace, then an
+ * artifact-relationship (ownership) check. Authz FIRST; TOCTOU-safe conditional
+ * archive. Emits DocumentArchived. */
 export async function archiveDocument(
   deps: DocumentServiceDeps,
   input: ArchiveDocumentInput
@@ -200,8 +212,29 @@ export async function archiveDocument(
   if (!document) {
     return { status: "not-found" };
   }
-  if (document.status === "archived") {
-    return { status: "already-archived" };
+
+  const decision = await decideCapabilityWorkspaceAndAudit(deps.pool, {
+    ...input.access,
+    subjectRef: document.patientRef,
+    organizationId: document.organizationRef,
+    requestedResource: DOCUMENT_RESOURCE,
+    requestedAction: "archive"
+  });
+  if (decision.status !== "allowed") {
+    return { status: "denied", decision };
+  }
+  // Artifact-relationship: only the uploader (owner) may archive. Audited honestly.
+  if (input.access.actorId !== document.uploadedByRef) {
+    await recordCommandRejectionAudit(deps.pool, {
+      actor: input.actor,
+      safeContext: input.safeContext,
+      aggregateId: input.documentId,
+      resource: DOCUMENT_RESOURCE,
+      action: "archive",
+      outcome: "denied-not-owner",
+      reasonCode: "not-document-owner"
+    });
+    return { status: "not-owner" };
   }
 
   const { result } = await runTransactionalCommand({
@@ -216,12 +249,24 @@ export async function archiveDocument(
       actor: input.actor,
       safeContext: input.safeContext
     },
-    work: async (ctx) => {
-      await setDocumentStatus(ctx.client, {
+    work: async (ctx): Promise<{ result: ArchiveDocumentOutcome; audit: CommandAuditOutcome }> => {
+      // TOCTOU-safe: archive only an 'active' document; a raced archive yields
+      // zero rows -> already-archived, nothing written.
+      const archived = await transitionDocumentStatusIf(ctx.client, {
         documentId: input.documentId,
-        status: "archived",
+        expected: ["active"],
+        next: "archived",
         updatedAt: nowIso
       });
+      if (!archived) {
+        return {
+          result: { status: "already-archived" },
+          audit: {
+            outcome: "rejected-already-archived",
+            safeDetails: { documentRef: input.documentId, reasonCode: "stale-artifact-state" }
+          }
+        };
+      }
       await ctx.enqueueDomainEvent(
         createDomainEventEnvelope({
           eventType: "DocumentArchived",

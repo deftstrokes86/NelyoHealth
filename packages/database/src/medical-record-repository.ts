@@ -168,6 +168,29 @@ export async function setMedicalRecordEntryStatus(
   );
 }
 
+/**
+ * Conditional entry-status transition (roadmap M6.4, ADR-0012 TOCTOU-safety):
+ * change status to `next` only if the entry is currently one of `expected`,
+ * atomically. Returns true iff a row changed (false = stale entry state).
+ */
+export async function transitionMedicalRecordEntryStatusIf(
+  client: ClientBase,
+  input: {
+    entryId: string;
+    expected: MedicalRecordEntryStatus[];
+    next: MedicalRecordEntryStatus;
+    updatedAt: string;
+  }
+): Promise<boolean> {
+  const result = await client.query(
+    `UPDATE nelyo_medical_record.medical_record_entry
+        SET status = $2, updated_at = $3
+      WHERE entry_id = $1 AND status = ANY($4::text[])`,
+    [input.entryId, input.next, input.updatedAt, input.expected]
+  );
+  return (result.rowCount ?? 0) > 0;
+}
+
 // ---------- Reads ----------
 
 async function loadEntries(
