@@ -97,18 +97,53 @@ The outbox is drained (not a permanent event store), so rebuild re-derives entri
    cannot diverge silently.
 2. **This coupling is a contract:** the audit `safeDetails.patientRef` + `aggregate_id` + `occurred_at`
    the rebuild consumes may not change without updating the rebuild map; the **rebuild-equivalence
-   test** is the enforcement. Because the domain eventId is NOT in the audit row (command audits carry
-   `audit_id`, not the event id) and `occurred_at` is set microseconds apart from the event's
-   `createdAt` in the same transaction, incremental and rebuild entries legitimately differ in
-   `source_event_ref` and `occurred_at`. **Equivalence is therefore by FACT** — the multiset of
-   `(patient_ref, resource_domain, entry_type, aggregate_ref)` must match between the two paths — not
-   by row identity. Rebuild is a reconcile (TRUNCATE + re-derive), using `audit_id` as `source_event_ref`.
+   test** is the enforcement. The two paths do **not** produce byte-identical rows, on two axes:
+   - **`source_event_ref`** differs by construction — the incremental fold keys on the domain **event
+     id**, the rebuild on the **`audit_id`** (the event id is not in the audit row). This affects only
+     idempotency keying, never display.
+   - **`occurred_at`** comes from **two distinct sources**, each a JS `new Date()` taken **within the
+     same atomic command transaction**: the incremental fold uses the outbox event's `createdAt`
+     (stamped at `enqueue`), the rebuild uses the audit row's `occurred_at` (stamped after the command
+     `work` returns). The audit stamp is therefore always **≥** the event stamp, differing by the
+     **intra-transaction delta** (sub-millisecond to a few ms). The event `createdAt` is
+     **unrecoverable once the outbox drains**, so the rebuild cannot reuse it — **the audit
+     `occurred_at` is the canonical rebuild ordering key**, and the incremental fold's `createdAt` is
+     an equal-to-within-the-transaction-window proxy for it.
+   - **Ordering impact, bounded:** for entries separated by more than that intra-transaction delta (the
+     normal case — sequential commits), both sources yield the **same chronological order**, so a
+     rebuilt feed displays in the same order as the incremental one. Only two commits whose
+     `[createdAt … occurred_at]` windows **overlap** (concurrent transactions committing within the same
+     sub-second window) can swap relative order between the two views — a bound of the concurrency
+     window, immaterial to a day/session-granularity feed, and not stable across a rebuild anyway
+     because `entry_id` (the sort tiebreaker) is reassigned on TRUNCATE + re-derive.
+
+   **Equivalence is therefore by FACT** — the multiset of `(patient_ref, resource_domain, entry_type,
+   aggregate_ref)` must match between the two paths — with `occurred_at` deliberately **excluded** from
+   the multiset (it legitimately differs per the above). The rebuild-equivalence test **additionally
+   asserts order-preservation** for well-separated events (the bounded guarantee above). Rebuild is a
+   reconcile (TRUNCATE + re-derive), using `audit_id` as `source_event_ref`.
 3. **Not the endorsed end state:** if a durable event archive ever exists (e.g. a retained outbox),
    rebuild should migrate to it. Audit-as-archive is the pragmatic choice for now.
 4. **Historical gap (KL-003):** events and audit rows written before the `patientRef` fix lack it for
    the 9 late-added types. As this is a dev/test-stage platform (no production data), the accepted
    position is (ii): pre-fix entries of those 9 types are absent from a rebuild — recorded in
    `known-limitations.md` KL-003 — rather than a one-time legacy aggregate-lookup backfill branch.
+
+### 6. Poison-event terminal path (the `patientRef` guard cannot retry forever)
+
+The fold-time throw (§4) hands a `patientRef`-less policy-matched event to the dispatcher as a failure.
+Under at-least-once redelivery the dispatcher does **not** retry indefinitely: `dispatchPendingOutboxEvents`
+retries the whole event (re-offering it to every consumer) up to `maxAttempts`, then marks it
+**`dead-lettered`** — a terminal status that is no longer `pending`, so it is never re-offered;
+`lastError` records the guard message for diagnosis. A permanently-malformed timeline event therefore
+fails **loudly and terminally** (dead-lettered + recorded), never silently dropped and never an
+infinite-retry hot loop.
+
+This is **defense in depth**: the **policy-guard test (§4) is the primary control** — it makes such an
+event structurally impossible to emit in the first place — and the dead-letter path is the runtime
+backstop if one ever slips through. Turning dead-letters into an operator signal (a **dead-letter alert
+consumer**) is a tracked production-gating item in the operational-hardening backlog. Asserted by test:
+a policy-matched event with no `patientRef` reaches `dead-lettered` at `maxAttempts` and writes no entry.
 
 ## Retention & volume
 

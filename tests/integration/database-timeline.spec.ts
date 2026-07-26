@@ -54,7 +54,8 @@ describe.skipIf(!shouldRun)("timeline projection + per-domain filtering", () => 
     eventType: string,
     patientRef: string,
     organizationRef: string,
-    aggregateRef: string
+    aggregateRef: string,
+    createdAt?: string
   ): OutboxEventRecord<Record<string, unknown>> {
     return {
       eventId: randomUUID(),
@@ -67,7 +68,7 @@ describe.skipIf(!shouldRun)("timeline projection + per-domain filtering", () => 
         operationTag: "t"
       },
       payload: { patientRef, organizationRef, aggregateRef },
-      createdAt: new Date().toISOString(),
+      createdAt: createdAt ?? new Date().toISOString(),
       dispatchStatus: "pending",
       dispatchAttempts: 0,
       lastError: null,
@@ -238,7 +239,7 @@ describe.skipIf(!shouldRun)("timeline projection + per-domain filtering", () => 
     expect(after.status).toBe("denied");
   });
 
-  it("rebuild-from-audit equals the incremental fold by FACT (patient/domain/type/aggregate)", async () => {
+  it("rebuild-from-audit equals the incremental fold by FACT and preserves display order", async () => {
     const { patientRef, organizationRef } = newPatient();
     // A sample of kinds across domains; incremental via events + matching audit rows.
     const sample = TIMELINE_ENTRY_KINDS.filter((k) =>
@@ -246,42 +247,60 @@ describe.skipIf(!shouldRun)("timeline projection + per-domain filtering", () => 
         k.eventType
       )
     );
+    // DISTINCT timestamp sources (ADR-0013 §5.2): the incremental fold reads the event's
+    // `createdAt`; the rebuild reads the audit row's `occurred_at`. We model production —
+    // audit stamp always ≥ event stamp within a transaction — by offsetting the audit
+    // occurred_at +300ms after the event createdAt, while spacing the events 2s apart so
+    // the two sources still yield the SAME chronological order (the bounded guarantee).
+    const base = Date.now();
     const facts: string[] = [];
-    for (const kind of sample) {
+    for (let i = 0; i < sample.length; i += 1) {
+      const kind = sample[i];
       const aggregateRef = randomUUID();
-      await consumer.consume(event(kind.eventType, patientRef, organizationRef, aggregateRef));
+      const eventCreatedAt = new Date(base + i * 2000).toISOString();
+      const auditOccurredAt = new Date(base + i * 2000 + 300).toISOString(); // ≥ event stamp
+      await consumer.consume(
+        event(kind.eventType, patientRef, organizationRef, aggregateRef, eventCreatedAt)
+      );
       facts.push(`${kind.resourceDomain}|${kind.entryType}|${aggregateRef}`);
-      // A matching committed audit row (the rebuild source).
+      // A matching committed audit row (the rebuild source) with its OWN timestamp source.
       await client.query(
         `INSERT INTO nelyo_foundation.audit_event
            (audit_id, command_name, aggregate_id, action, outcome, actor_account_ref,
             actor_persona_kind, actor_role, tenant_ref, correlation_id, request_id,
             idempotency_key, safe_details, occurred_at)
-         VALUES ($1,$2,$3,'x','committed','a','staff','clinician',NULL,$4,$4,$4,$5,NOW())`,
+         VALUES ($1,$2,$3,'x','committed','a','staff','clinician',NULL,$4,$4,$4,$5,$6::timestamptz)`,
         [
           randomUUID(),
           kind.commandName,
           aggregateRef,
           `corr-${run}-rebuild-${aggregateRef}`,
-          JSON.stringify({ patientRef, organizationRef })
+          JSON.stringify({ patientRef, organizationRef }),
+          auditOccurredAt
         ]
       );
       correlationIds.push(`corr-${run}-rebuild-${aggregateRef}`);
     }
 
-    const incremental = await listTimelineForPatient(client, { patientRef, limit: 200 });
-    const incrementalFacts = incremental
-      .map((e) => `${e.resourceDomain}|${e.entryType}|${e.aggregateRef}`)
-      .sort();
+    const toFact = (e: { resourceDomain: string; entryType: string; aggregateRef: string }) =>
+      `${e.resourceDomain}|${e.entryType}|${e.aggregateRef}`;
+
+    // Order as returned by the feed (occurred_at DESC, entry_id DESC) — newest first.
+    const incrementalOrder = (await listTimelineForPatient(client, { patientRef, limit: 200 })).map(
+      toFact
+    );
 
     await rebuildTimelineFromAudit(client);
 
-    const rebuilt = await listTimelineForPatient(client, { patientRef, limit: 200 });
-    const rebuiltFacts = rebuilt
-      .map((e) => `${e.resourceDomain}|${e.entryType}|${e.aggregateRef}`)
-      .sort();
+    const rebuiltOrder = (await listTimelineForPatient(client, { patientRef, limit: 200 })).map(
+      toFact
+    );
 
-    expect(incrementalFacts).toEqual(facts.sort());
-    expect(rebuiltFacts).toEqual(incrementalFacts); // equivalence by fact
+    // (a) By-FACT equivalence — the multiset matches (occurred_at excluded, it differs by source).
+    expect([...incrementalOrder].sort()).toEqual([...facts].sort());
+    expect([...rebuiltOrder].sort()).toEqual([...incrementalOrder].sort());
+    // (b) Order-preservation — despite the two distinct occurred_at sources, well-separated
+    // events display in the SAME chronological order after a rebuild (ADR-0013 §5.2).
+    expect(rebuiltOrder).toEqual(incrementalOrder);
   });
 });
