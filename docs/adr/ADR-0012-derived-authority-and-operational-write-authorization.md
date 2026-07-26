@@ -79,9 +79,35 @@ state machine ships a test asserting the excluded transitions are rejected.
 ## State machines (kind 2 + lifecycle kind 1)
 
 Lifecycle writes validate the transition against an explicit state machine, not just the actor. An
-invalid transition is rejected with a **distinct reason code** (e.g. `invalid-state-transition`) and
-audited — it is an authorization/validity failure, not a silent no-op. The dedicated-command exclusions
-(above) are part of each machine's definition.
+invalid transition is rejected with a **distinct reason code** and audited — it is an
+authorization/validity failure, not a silent no-op. The dedicated-command exclusions (above) are part
+of each machine's definition.
+
+### Rejection-category taxonomy (M6.4 review clarification) — two distinct causes
+
+A non-allow on a state-machine write has one of two causes, and the audit category MUST reflect which:
+
+- **`rejected-invalid-transition`** — a **deterministic** failure: the artifact's CURRENT (loaded)
+  state does not permit the requested transition per the state machine. Detected by a **pre-check on
+  the loaded state**, before the write. The caller asked for something the machine never allows from
+  here (e.g. completing a cancelled consultation). Caller error; reproducible.
+
+- **`denied-stale-artifact-state`** — a **concurrency** failure: the pre-check passed, but the atomic
+  **conditional write** (`UPDATE … WHERE status = <expected source>`) affected **zero rows** because
+  the state changed between load and commit. A valid request that lost a race. Non-deterministic.
+
+**Implementation rule:** a state-machine lifecycle write does BOTH — a pre-check on the loaded state
+(emits `rejected-invalid-transition`) AND a conditional guard on the write (emits
+`denied-stale-artifact-state` on zero rows). One cannot substitute for the other: the pre-check gives
+the honest deterministic category and a fast path; the conditional guard is the TOCTOU-safety net.
+Applied to appointment `transition-status`, consultation `complete`/`cancel`, medical-record
+`void-entry`.
+
+For **derived-authority** writes without a separate lifecycle machine (prescription dispense/cancel,
+lab record/cancel, document archive), the conditional guard is the sole state check; its zero-row
+failure is `denied-stale-artifact-state` (the race is the security concern). Document's already-archived
+result is a benign **idempotency** outcome (`rejected-already-archived`), not a denial — it is neither
+of the two categories above.
 
 ## Invariants preserved
 

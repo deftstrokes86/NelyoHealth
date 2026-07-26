@@ -25,7 +25,7 @@ import {
   type ResolvedAuthorizationInputs,
   type ResourceAccessRequest
 } from "./resource-authorization.js";
-import { resolveDecideAndAuditAccess } from "./access-audit.js";
+import { recordDeniedAccessAudit, resolveDecideAndAuditAccess } from "./access-audit.js";
 import type { AuthorizationPolicyDecisionDraft } from "./authorization-policy.js";
 
 /**
@@ -457,6 +457,21 @@ export async function voidMedicalRecordEntry(
   });
   if (decision.status !== "allowed") {
     return { status: "denied", decision };
+  }
+  // Deterministic: only an 'active' entry is voidable (ADR-0012 taxonomy) -> a
+  // non-active loaded state is rejected-invalid-transition; a race is stale (below).
+  if (priorEntry.status !== "active") {
+    await recordDeniedAccessAudit(
+      deps.pool,
+      {
+        ...input.access,
+        patientId: record.patientRef,
+        requestedResource: CLINICAL_RESOURCE,
+        requestedAction: "void-entry"
+      },
+      { outcome: "rejected-invalid-transition", reasonCode: "invalid-state-transition" }
+    );
+    return { status: "not-voidable" };
   }
 
   const { result } = await runTransactionalCommand({

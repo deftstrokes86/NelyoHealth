@@ -26,7 +26,7 @@ import {
   type ResolvedAuthorizationInputs,
   type ResourceAccessRequest
 } from "./resource-authorization.js";
-import { resolveDecideAndAuditAccess } from "./access-audit.js";
+import { recordDeniedAccessAudit, resolveDecideAndAuditAccess } from "./access-audit.js";
 import type { AuthorizationPolicyDecisionDraft } from "./authorization-policy.js";
 
 /**
@@ -416,8 +416,7 @@ export async function completeConsultation(
     return { status: "not-found" };
   }
 
-  // Authz FIRST (patient-subject); transition validity is the TOCTOU-safe
-  // conditional guard inside the command.
+  // Authz FIRST (patient-subject).
   const decision = await resolveDecideAndAuditAccess(deps.pool, {
     ...input.access,
     patientId: consultation.patientRef,
@@ -427,6 +426,22 @@ export async function completeConsultation(
   });
   if (decision.status !== "allowed") {
     return { status: "denied", decision };
+  }
+  // Transition validity (ADR-0012 taxonomy): a deterministic machine-forbidden
+  // transition from the LOADED state -> rejected-invalid-transition (pre-check).
+  // A valid request that later loses the conditional-write race -> stale (below).
+  if (!ALLOWED_TRANSITIONS[consultation.status].includes("completed")) {
+    await recordDeniedAccessAudit(
+      deps.pool,
+      {
+        ...input.access,
+        patientId: consultation.patientRef,
+        requestedResource: "consultation",
+        requestedAction: "complete"
+      },
+      { outcome: "rejected-invalid-transition", reasonCode: "invalid-state-transition" }
+    );
+    return { status: "invalid-transition", fromStatus: consultation.status };
   }
 
   const { result } = await runTransactionalCommand({
@@ -451,13 +466,14 @@ export async function completeConsultation(
         updatedAt: nowIso
       });
       if (!advanced) {
+        // Pre-check passed but the conditional write raced -> stale, not invalid.
         return {
           result: { status: "invalid-transition", fromStatus: consultation.status },
           audit: {
-            outcome: "rejected-invalid-transition",
+            outcome: "denied-stale-artifact-state",
             safeDetails: {
               consultationRef: input.consultationId,
-              reasonCode: "invalid-state-transition"
+              reasonCode: "stale-artifact-state"
             }
           }
         };
@@ -533,6 +549,20 @@ export async function cancelConsultation(
   });
   if (decision.status !== "allowed") {
     return { status: "denied", decision };
+  }
+  // Deterministic machine-forbidden transition -> rejected-invalid-transition.
+  if (!ALLOWED_TRANSITIONS[consultation.status].includes("cancelled")) {
+    await recordDeniedAccessAudit(
+      deps.pool,
+      {
+        ...input.access,
+        patientId: consultation.patientRef,
+        requestedResource: "consultation",
+        requestedAction: "cancel"
+      },
+      { outcome: "rejected-invalid-transition", reasonCode: "invalid-state-transition" }
+    );
+    return { status: "not-cancellable" };
   }
 
   const { result } = await runTransactionalCommand({
