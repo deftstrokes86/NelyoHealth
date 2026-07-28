@@ -98,6 +98,9 @@ importers:
 
   apps/api:
     dependencies:
+      '@nelyohealth/api-client':
+        specifier: workspace:*
+        version: link:../../packages/api-client
       '@nelyohealth/config':
         specifier: workspace:*
         version: link:../../packages/config

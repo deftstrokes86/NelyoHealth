@@ -105,7 +105,12 @@ export interface AuthorizationPolicyDecisionDraft {
     | "break-glass-reason-required"
     | "break-glass-window-exceeded"
     | "administrator-impersonation-denied"
-    | "audit-event-append-only";
+    | "audit-event-append-only"
+    // Self-access decision kind (ADR-0014): a data subject reaching their OWN
+    // record. Consent is not an input (consent governs delegation; there is no
+    // delegate), so these are the only self-kind denials.
+    | "self-identity-unverified"
+    | "self-access-restricted";
   dimensionOutcomes: {
     rbac: AuthorizationPolicyDimensionOutcome;
     abac: AuthorizationPolicyDimensionOutcome;

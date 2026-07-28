@@ -21,6 +21,7 @@
     "@nestjs/core": "11.1.27",
     "@nestjs/platform-express": "11.1.27",
     "@nestjs/swagger": "11.4.4",
+    "@nelyohealth/api-client": "workspace:*",
     "@nelyohealth/config": "workspace:*",
     "@nelyohealth/observability": "workspace:*",
     "@nelyohealth/platform-adapters": "workspace:*",

@@ -8,7 +8,7 @@ import {
   resolveAndDecideResourceAccess,
   type ResourceAccessRequest
 } from "./resource-authorization.js";
-import { resolveDecideAndAuditAccess } from "./access-audit.js";
+import { decideSelfAccessAndAudit, resolveDecideAndAuditAccess } from "./access-audit.js";
 import type { AuthorizationPolicyDecisionDraft } from "./authorization-policy.js";
 
 /**
@@ -73,16 +73,39 @@ export async function readPatientTimeline(
   deps: TimelineServiceDeps,
   input: {
     access: TimelineAccessContext;
+    /**
+     * Server-derived (ADR-0014): the reader IS the data subject. Set only by the
+     * trust seam after it verified the identity linkage — never a client claim.
+     * When true, access routes to the SELF decision kind (consent inapplicable)
+     * and every domain is self-visible.
+     */
+    subjectIsSelf?: boolean;
     limit?: number;
     before?: { occurredAt: string; entryId: string };
   }
 ): Promise<ReadTimelineOutcome> {
-  // ACCESS decision (audited, once).
-  const decision = await resolveDecideAndAuditAccess(deps.pool, {
-    ...input.access,
-    requestedResource: "timeline",
-    requestedAction: "read"
-  });
+  // ACCESS decision (audited, once) — self kind for a data subject, else the
+  // composed consent/relationship/break-glass pipeline for a third party.
+  const decision = input.subjectIsSelf
+    ? await decideSelfAccessAndAudit(deps.pool, {
+        decisionRequestId: input.access.decisionRequestId,
+        actorId: input.access.actorId,
+        actorRole: input.access.actorRole,
+        actorType: input.access.actorType,
+        subjectRef: input.access.patientId,
+        subjectVerified: true,
+        workspace: "personal",
+        requestedResource: "timeline",
+        requestedAction: "read",
+        purpose: input.access.purpose,
+        sessionStatus: input.access.sessionStatus,
+        evaluatedAt: input.access.evaluatedAt
+      })
+    : await resolveDecideAndAuditAccess(deps.pool, {
+        ...input.access,
+        requestedResource: "timeline",
+        requestedAction: "read"
+      });
   if (decision.status !== "allowed") {
     return { status: "denied", decision };
   }
@@ -94,6 +117,12 @@ export async function readPatientTimeline(
       before: input.before
     })
   );
+
+  // A data subject sees every domain of their own timeline (self-scope); no
+  // per-domain consent filter applies (there is no delegation to gate).
+  if (input.subjectIsSelf) {
+    return { status: "allowed", entries, decision };
+  }
 
   // FILTER decisions (decide-only, per DISTINCT domain present — never audited).
   const domainsPresent = new Set(entries.map((entry) => entry.resourceDomain));

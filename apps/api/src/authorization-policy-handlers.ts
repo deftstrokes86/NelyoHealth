@@ -851,6 +851,114 @@ function evaluateCapabilityOutcome(
   return { status: "allowed", reasonCode: "allowed" };
 }
 
+export interface SelfAccessDecisionInput {
+  decisionRequestId: string;
+  actorId: string;
+  actorRole: AuthorizationActorRole;
+  actorType: AuthorizationPolicyDecisionDraftInput["actorType"];
+  /** The data subject (person ref). MUST equal the server-resolved identity of the actor. */
+  subjectRef: string;
+  /**
+   * Server-derived actor==subject linkage (session -> account -> patient identity).
+   * NEVER a client claim (ADR-0014): the seam sets this true only when it verified
+   * the linkage itself. A false value denies (`self-identity-unverified`).
+   */
+  subjectVerified: boolean;
+  /** Self-access is a personal-workspace act; an org persona is not a data subject. */
+  workspace: "personal" | "organization";
+  requestedResource: string;
+  requestedAction: string;
+  purpose: string;
+  sessionStatus: SessionStatus;
+  /**
+   * Restriction hook (default "none" = allow). A future policy — guardian-mediated
+   * minors (that is ReBAC, not self — do not route it here), jurisdictional clinical
+   * withholds — sets "restricted" to deny a specific self-read. Arrives as policy,
+   * not a redesign.
+   */
+  restriction?: "none" | "restricted";
+  evaluatedAt: string;
+}
+
+/**
+ * Self-access decision kind (ADR-0014). A data subject reaching their OWN record.
+ *
+ * Consent, relationship, and break-glass are NOT inputs: consent is the machinery
+ * of DELEGATION (it grants an *other* access to the subject's data), and a data
+ * subject reading their own record delegates nothing — so consent is definitionally
+ * inapplicable, not "missing". This is the invariant it protects: a patient who has
+ * withdrawn every consent grant can still read their own record. Authorized by
+ * VERIFIED identity + patient persona in a personal workspace + a valid session;
+ * a restriction hook (default allow) leaves room for minors/withholds as policy.
+ * Guardian-mediated access is ReBAC, not self — it does not come here.
+ */
+export function evaluateSelfAccessAuthorization(
+  input: SelfAccessDecisionInput
+): AuthorizationPolicyDecisionDraft {
+  const outcome = evaluateSelfAccessOutcome(input);
+  const status = outcome.status;
+  const reasonCode = outcome.reasonCode;
+
+  const auditInput: AuthorizationPolicyDecisionDraftInput = {
+    decisionRequestId: input.decisionRequestId,
+    actorId: input.actorId,
+    actorRole: input.actorRole,
+    actorType: input.actorType,
+    organizationId: input.subjectRef,
+    patientId: input.subjectRef,
+    relationshipType: "none",
+    requestedConsentDomains: [],
+    requestedResource: input.requestedResource,
+    requestedAction: input.requestedAction,
+    purpose: input.purpose,
+    consentStatus: "revoked",
+    relationshipStatus: "none",
+    sessionStatus: input.sessionStatus,
+    activeEncounter: false,
+    emergencyStatus: "none",
+    sameTenant: true,
+    sponsorPaymentOnly: false,
+    requiresRelationship: false,
+    breakGlassRequested: false,
+    impersonationAttempt: false,
+    auditEventEditAttempt: false,
+    evaluatedAt: input.evaluatedAt
+  };
+
+  return {
+    decisionRequestId: input.decisionRequestId,
+    status,
+    reasonCode,
+    dimensionOutcomes: {
+      rbac: outcome,
+      // Consent + relationship are DEFINITIONALLY not inputs for self-access.
+      abac: { status: "allowed", reasonCode: "allowed" },
+      rebac: { status: "allowed", reasonCode: "allowed" }
+    },
+    breakGlassActive: false,
+    nextSteps: getNextSteps(reasonCode),
+    auditIntent: createAuditIntent({ input: auditInput, status, reasonCode }),
+    evaluatedAt: input.evaluatedAt
+  };
+}
+
+function evaluateSelfAccessOutcome(
+  input: SelfAccessDecisionInput
+): AuthorizationPolicyDimensionOutcome {
+  if (input.sessionStatus !== "active") {
+    return { status: "denied", reasonCode: "stale-session" };
+  }
+  // The actor must BE the verified data subject, in the patient persona / personal
+  // workspace. Anything else is not self-access (default-deny holds).
+  if (!input.subjectVerified || input.actorType !== "patient" || input.workspace !== "personal") {
+    return { status: "denied", reasonCode: "self-identity-unverified" };
+  }
+  if ((input.restriction ?? "none") !== "none") {
+    return { status: "denied", reasonCode: "self-access-restricted" };
+  }
+  return { status: "allowed", reasonCode: "allowed" };
+}
+
 export interface PatientProfileCreateDecisionInput {
   decisionRequestId: string;
   actorId: string;
@@ -1215,7 +1323,9 @@ function getNextSteps(reasonCode: AuthorizationPolicyDecisionDraft["reasonCode"]
     "break-glass-reason-required": ["capture-break-glass-reason"],
     "break-glass-window-exceeded": ["request-short-lived-break-glass"],
     "administrator-impersonation-denied": ["request-explicit-delegation"],
-    "audit-event-append-only": ["create-amendment-event"]
+    "audit-event-append-only": ["create-amendment-event"],
+    "self-identity-unverified": ["reauthenticate-as-data-subject"],
+    "self-access-restricted": ["contact-records-custodian"]
   };
 
   return stepsByReason[reasonCode];

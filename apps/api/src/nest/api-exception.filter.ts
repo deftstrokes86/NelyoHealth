@@ -23,20 +23,30 @@ export class ApiExceptionFilter implements ExceptionFilter {
     const status =
       exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
+    // Surface unexpected (non-HTTP) failures for operability — the response stays a
+    // generic 500, but the server records the cause rather than swallowing it.
+    if (!(exception instanceof HttpException)) {
+      console.error(
+        `[api] unhandled exception (${requestId}):`,
+        exception instanceof Error ? exception.stack : exception
+      );
+    }
+
     const message =
       exception instanceof HttpException
         ? this.extractExceptionMessage(exception)
         : "Internal server error";
 
+    // A resource exception may carry an explicit canonical `code` (+ `details`);
+    // otherwise fall back to the bare HTTP status. The canonical code is what keeps
+    // the deny/not-found 404s byte-identical (ADR-0014) rather than leaking through
+    // differentiated messages the way `HTTP_403` vs `HTTP_404` would.
+    const { code, details } = this.extractCodeAndDetails(exception, status);
+
     response.status(status).json({
       data: null,
       meta: createMeta(requestId, correlationId, "api.request", `http-${status}`),
-      errors: [
-        {
-          code: `HTTP_${status}`,
-          message
-        }
-      ]
+      errors: [details ? { code, message, details } : { code, message }]
     });
   }
 
@@ -49,5 +59,21 @@ export class ApiExceptionFilter implements ExceptionFilter {
       if (typeof value === "string") return value;
     }
     return exception.message;
+  }
+
+  private extractCodeAndDetails(
+    exception: unknown,
+    status: number
+  ): { code: string; details?: string } {
+    if (exception instanceof HttpException) {
+      const payload = exception.getResponse();
+      if (payload && typeof payload === "object") {
+        const record = payload as { code?: unknown; details?: unknown };
+        const code = typeof record.code === "string" ? record.code : `HTTP_${status}`;
+        const details = typeof record.details === "string" ? record.details : undefined;
+        return { code, details };
+      }
+    }
+    return { code: `HTTP_${status}` };
   }
 }

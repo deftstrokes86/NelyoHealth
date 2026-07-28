@@ -1,0 +1,6 @@
+/** DI tokens for the M7 resource module (roadmap M7). */
+export const RESOURCE_DATABASE_POOL = Symbol("RESOURCE_DATABASE_POOL");
+export const TIMELINE_SERVICE_DEPS = Symbol("TIMELINE_SERVICE_DEPS");
+export const CARE_CIRCLE_SERVICE_DEPS = Symbol("CARE_CIRCLE_SERVICE_DEPS");
+export const NOTIFICATION_SERVICE_DEPS = Symbol("NOTIFICATION_SERVICE_DEPS");
+export const APPOINTMENT_SERVICE_DEPS = Symbol("APPOINTMENT_SERVICE_DEPS");

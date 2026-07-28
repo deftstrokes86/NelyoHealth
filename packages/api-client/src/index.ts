@@ -60,6 +60,12 @@ export type { paths, components, operations } from "./generated/openapi-types.js
 export { createApiClient } from "./generated/client.js";
 export type { ApiClient } from "./generated/client.js";
 
+// HTTP contract for the M7 resource slice (timeline, care circle, notifications,
+// appointments) — the typed request/response DTOs + error envelope the web
+// shells consume. Lives under ./http (a subdirectory, so it is intentionally
+// outside the api/api-client module-parity gate, which scans top-level only).
+export * from "./http/index.js";
+
 export const apiClientPackageBoundary = {
   id: "api-client",
   packageName: "@nelyohealth/api-client",

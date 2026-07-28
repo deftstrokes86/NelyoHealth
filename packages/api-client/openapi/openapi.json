@@ -150,6 +150,258 @@
           "observability"
         ]
       }
+    },
+    "/api/me/timeline": {
+      "get": {
+        "operationId": "TimelineController_myTimeline",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Timeline page envelope"
+          }
+        },
+        "summary": "Read the authenticated data subject's own timeline",
+        "tags": [
+          "timeline"
+        ]
+      }
+    },
+    "/api/patients/{patientRef}/timeline": {
+      "get": {
+        "operationId": "TimelineController_patientTimeline",
+        "parameters": [
+          {
+            "name": "patientRef",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Timeline page envelope"
+          }
+        },
+        "summary": "Read a patient's timeline (self or delegated)",
+        "tags": [
+          "timeline"
+        ]
+      }
+    },
+    "/api/me/care-circle": {
+      "get": {
+        "operationId": "CareCircleController_myCareCircle",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Care circle envelope"
+          }
+        },
+        "summary": "Read the authenticated data subject's own care circle",
+        "tags": [
+          "care-circle"
+        ]
+      }
+    },
+    "/api/patients/{patientRef}/care-circle": {
+      "get": {
+        "operationId": "CareCircleController_patientCareCircle",
+        "parameters": [
+          {
+            "name": "patientRef",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Care circle envelope"
+          }
+        },
+        "summary": "Read a patient's care circle (self or delegated)",
+        "tags": [
+          "care-circle"
+        ]
+      }
+    },
+    "/api/me/wards": {
+      "get": {
+        "operationId": "CareCircleController_myWards",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Wards envelope"
+          }
+        },
+        "summary": "List the patients the caller can currently act for",
+        "tags": [
+          "care-circle"
+        ]
+      }
+    },
+    "/api/notifications": {
+      "get": {
+        "operationId": "NotificationsController_listInbox",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Notification inbox envelope"
+          }
+        },
+        "summary": "List the authenticated actor's own notifications",
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/api/notifications/{notificationId}/read": {
+      "post": {
+        "operationId": "NotificationsController_markRead",
+        "parameters": [
+          {
+            "name": "notificationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mark-read result envelope"
+          }
+        },
+        "summary": "Mark one of the caller's own notifications read",
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/api/appointments": {
+      "post": {
+        "operationId": "AppointmentsController_book",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Booking result envelope"
+          }
+        },
+        "summary": "Book an appointment for the authenticated data subject",
+        "tags": [
+          "appointments"
+        ]
+      }
+    },
+    "/api/appointments/{appointmentId}": {
+      "get": {
+        "operationId": "AppointmentsController_read",
+        "parameters": [
+          {
+            "name": "appointmentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Appointment envelope"
+          }
+        },
+        "summary": "Read one of the caller's own appointments",
+        "tags": [
+          "appointments"
+        ]
+      }
+    },
+    "/api/appointments/{appointmentId}/reschedule": {
+      "post": {
+        "operationId": "AppointmentsController_reschedule",
+        "parameters": [
+          {
+            "name": "appointmentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reschedule result envelope"
+          }
+        },
+        "summary": "Reschedule one of the caller's own appointments",
+        "tags": [
+          "appointments"
+        ]
+      }
+    },
+    "/api/appointments/{appointmentId}/cancel": {
+      "post": {
+        "operationId": "AppointmentsController_cancel",
+        "parameters": [
+          {
+            "name": "appointmentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cancel result envelope"
+          }
+        },
+        "summary": "Cancel one of the caller's own appointments",
+        "tags": [
+          "appointments"
+        ]
+      }
     }
   },
   "info": {

@@ -27,6 +27,7 @@ import {
 } from "./resource-authorization.js";
 import {
   decideCapabilityWorkspaceAndAudit,
+  decideSelfAccessAndAuditFor,
   recordDeniedAccessAudit,
   resolveDecideAndAuditAccess,
   type CapabilityWriteAccessContext
@@ -201,6 +202,13 @@ export interface BookAppointmentInput {
   /** Clinical; access-controlled; never travels in events or audit detail. */
   reasonForVisit?: string;
   access: AppointmentAccessContext;
+  /**
+   * Server-resolved data-subject identity of the actor (person ref), set by the
+   * trust seam (ADR-0014). When it equals the booked patient, the booking is a
+   * SELF act and routes to the self decision kind (consent inapplicable). Never a
+   * client claim.
+   */
+  subjectPersonRef?: string;
   actor: CommandActor;
   safeContext: AppointmentSafeContext;
   now?: () => Date;
@@ -228,13 +236,23 @@ export async function bookAppointment(
     return slot ? { status: "slot-unavailable" } : { status: "slot-not-found" };
   }
 
-  // Decide before writing: the patient subject governs consent / ReBAC / break-glass.
-  const decision = await resolveDecideAndAuditAccess(deps.pool, {
-    ...input.access,
-    organizationId: slot.organizationRef,
-    requestedResource: "appointment",
-    requestedAction: "book"
-  });
+  // Decide before writing. A patient booking their OWN appointment is self-access
+  // (consent inapplicable); anyone else flows through the composed pipeline where
+  // the patient subject governs consent / ReBAC / break-glass.
+  const bookingSelf =
+    input.subjectPersonRef != null && input.access.patientId === input.subjectPersonRef;
+  const decision = bookingSelf
+    ? await decideSelfAccessAndAuditFor(deps.pool, input.access, {
+        subjectRef: input.access.patientId,
+        requestedResource: "appointment",
+        requestedAction: "book"
+      })
+    : await resolveDecideAndAuditAccess(deps.pool, {
+        ...input.access,
+        organizationId: slot.organizationRef,
+        requestedResource: "appointment",
+        requestedAction: "book"
+      });
   if (decision.status !== "allowed") {
     return { status: "denied", decision };
   }
@@ -320,6 +338,8 @@ export interface RescheduleAppointmentInput {
   appointmentId: string;
   newSlotId: string;
   access: AppointmentWriteAccessContext;
+  /** Server-resolved actor person ref; self when it equals the loaded appointment's patient. */
+  subjectPersonRef?: string;
   actor: CommandActor;
   safeContext: AppointmentSafeContext;
   now?: () => Date;
@@ -346,13 +366,21 @@ export async function rescheduleAppointment(
     return { status: "not-found" };
   }
 
-  const decision = await resolveDecideAndAuditAccess(deps.pool, {
-    ...input.access,
-    patientId: appointment.patientRef,
-    organizationId: appointment.organizationRef,
-    requestedResource: "appointment",
-    requestedAction: "reschedule"
-  });
+  const reschedulingSelf =
+    input.subjectPersonRef != null && appointment.patientRef === input.subjectPersonRef;
+  const decision = reschedulingSelf
+    ? await decideSelfAccessAndAuditFor(deps.pool, input.access, {
+        subjectRef: appointment.patientRef,
+        requestedResource: "appointment",
+        requestedAction: "reschedule"
+      })
+    : await resolveDecideAndAuditAccess(deps.pool, {
+        ...input.access,
+        patientId: appointment.patientRef,
+        organizationId: appointment.organizationRef,
+        requestedResource: "appointment",
+        requestedAction: "reschedule"
+      });
   if (decision.status !== "allowed") {
     return { status: "denied", decision };
   }
@@ -445,6 +473,8 @@ export interface CancelAppointmentInput {
   appointmentId: string;
   cancellationReasonCode: string;
   access: AppointmentWriteAccessContext;
+  /** Server-resolved actor person ref; self when it equals the loaded appointment's patient. */
+  subjectPersonRef?: string;
   actor: CommandActor;
   safeContext: AppointmentSafeContext;
   now?: () => Date;
@@ -470,13 +500,21 @@ export async function cancelAppointment(
     return { status: "not-found" };
   }
 
-  const decision = await resolveDecideAndAuditAccess(deps.pool, {
-    ...input.access,
-    patientId: appointment.patientRef,
-    organizationId: appointment.organizationRef,
-    requestedResource: "appointment",
-    requestedAction: "cancel"
-  });
+  const cancellingSelf =
+    input.subjectPersonRef != null && appointment.patientRef === input.subjectPersonRef;
+  const decision = cancellingSelf
+    ? await decideSelfAccessAndAuditFor(deps.pool, input.access, {
+        subjectRef: appointment.patientRef,
+        requestedResource: "appointment",
+        requestedAction: "cancel"
+      })
+    : await resolveDecideAndAuditAccess(deps.pool, {
+        ...input.access,
+        patientId: appointment.patientRef,
+        organizationId: appointment.organizationRef,
+        requestedResource: "appointment",
+        requestedAction: "cancel"
+      });
   if (decision.status !== "allowed") {
     return { status: "denied", decision };
   }
@@ -689,13 +727,21 @@ export type ReadAppointmentOutcome =
  */
 export async function readAppointment(
   deps: Pick<AppointmentServiceDeps, "pool">,
-  input: { appointmentId: string; access: AppointmentAccessContext }
+  input: { appointmentId: string; access: AppointmentAccessContext; subjectPersonRef?: string }
 ): Promise<ReadAppointmentOutcome> {
-  const decision = await resolveDecideAndAuditAccess(deps.pool, {
-    ...input.access,
-    requestedResource: "appointment",
-    requestedAction: "read"
-  });
+  const readingSelf =
+    input.subjectPersonRef != null && input.access.patientId === input.subjectPersonRef;
+  const decision = readingSelf
+    ? await decideSelfAccessAndAuditFor(deps.pool, input.access, {
+        subjectRef: input.access.patientId,
+        requestedResource: "appointment",
+        requestedAction: "read"
+      })
+    : await resolveDecideAndAuditAccess(deps.pool, {
+        ...input.access,
+        requestedResource: "appointment",
+        requestedAction: "read"
+      });
   if (decision.status !== "allowed") {
     return { status: "denied", decision };
   }

@@ -9,7 +9,7 @@ import {
   type ResolvedAuthorizationInputs,
   type ResourceAccessRequest
 } from "./resource-authorization.js";
-import { resolveDecideAndAuditAccess } from "./access-audit.js";
+import { decideSelfAccessAndAudit, resolveDecideAndAuditAccess } from "./access-audit.js";
 import type { AuthorizationPolicyDecisionDraft } from "./authorization-policy.js";
 
 /**
@@ -72,13 +72,31 @@ export type ReadPatientCareCircleOutcome =
  */
 export async function readPatientCareCircle(
   deps: CareCircleServiceDeps,
-  input: { access: CareCircleAccessContext }
+  input: { access: CareCircleAccessContext; subjectIsSelf?: boolean }
 ): Promise<ReadPatientCareCircleOutcome> {
-  const decision = await resolveDecideAndAuditAccess(deps.pool, {
-    ...input.access,
-    requestedResource: CARE_CIRCLE_RESOURCE,
-    requestedAction: "read"
-  });
+  // A data subject reads their own circle via the SELF kind (consent inapplicable);
+  // a third party flows through the composed pipeline. `subjectIsSelf` is set only
+  // by the trust seam after verifying the identity linkage (ADR-0014).
+  const decision = input.subjectIsSelf
+    ? await decideSelfAccessAndAudit(deps.pool, {
+        decisionRequestId: input.access.decisionRequestId,
+        actorId: input.access.actorId,
+        actorRole: input.access.actorRole,
+        actorType: input.access.actorType,
+        subjectRef: input.access.patientId,
+        subjectVerified: true,
+        workspace: "personal",
+        requestedResource: CARE_CIRCLE_RESOURCE,
+        requestedAction: "read",
+        purpose: input.access.purpose,
+        sessionStatus: input.access.sessionStatus,
+        evaluatedAt: input.access.evaluatedAt
+      })
+    : await resolveDecideAndAuditAccess(deps.pool, {
+        ...input.access,
+        requestedResource: CARE_CIRCLE_RESOURCE,
+        requestedAction: "read"
+      });
   if (decision.status !== "allowed") {
     return { status: "denied", decision };
   }

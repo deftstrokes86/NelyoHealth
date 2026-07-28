@@ -12,7 +12,9 @@ import {
 } from "./resource-authorization.js";
 import {
   evaluateCapabilityWorkspaceAuthorization,
-  type CapabilityWorkspaceDecisionInput
+  evaluateSelfAccessAuthorization,
+  type CapabilityWorkspaceDecisionInput,
+  type SelfAccessDecisionInput
 } from "./authorization-policy-handlers.js";
 import type { AuthorizationPolicyDecisionDraft } from "./authorization-policy.js";
 
@@ -87,6 +89,84 @@ export async function decideCapabilityWorkspaceAndAudit(
     );
   }
   return decision;
+}
+
+/**
+ * Self-access decide-and-audit (ADR-0014): the analog for a data subject reaching
+ * their OWN record. Decides on VERIFIED identity (not consent — consent governs
+ * delegation, and self-access delegates nothing), and persists a denied audit on
+ * any non-allow, uniformly with every other decision kind (kind: self). The
+ * withdraw-all-consent-still-read-own invariant lives here: this path never reads a
+ * consent record.
+ */
+export async function decideSelfAccessAndAudit(
+  pool: Pool,
+  input: SelfAccessDecisionInput
+): Promise<AuthorizationPolicyDecisionDraft> {
+  const decision = evaluateSelfAccessAuthorization(input);
+  if (decision.status !== "allowed") {
+    await recordDeniedAccessAudit(
+      pool,
+      {
+        actorId: input.actorId,
+        actorRole: input.actorRole,
+        actorType: input.actorType,
+        patientId: input.subjectRef,
+        requestedResource: input.requestedResource,
+        requestedAction: input.requestedAction,
+        purpose: input.purpose,
+        decisionRequestId: input.decisionRequestId,
+        evaluatedAt: input.evaluatedAt
+      },
+      { outcome: decision.status, reasonCode: decision.reasonCode }
+    );
+  }
+  return decision;
+}
+
+/** The actor half of a self-access decision (the subject/resource/action vary per call). */
+export type SelfAccessActorContext = Pick<
+  ResourceAccessRequest,
+  | "decisionRequestId"
+  | "actorId"
+  | "actorRole"
+  | "actorType"
+  | "purpose"
+  | "sessionStatus"
+  | "evaluatedAt"
+>;
+
+/**
+ * Convenience over `decideSelfAccessAndAudit` for callers that already hold a
+ * resource access context: the caller has ALREADY determined (server-side) that the
+ * actor is the data subject, so `subjectVerified` is asserted true here. Use only on
+ * a verified-self branch.
+ */
+export function decideSelfAccessAndAuditFor(
+  pool: Pool,
+  actor: SelfAccessActorContext,
+  opts: {
+    subjectRef: string;
+    requestedResource: string;
+    requestedAction: string;
+    restriction?: "none" | "restricted";
+  }
+): Promise<AuthorizationPolicyDecisionDraft> {
+  return decideSelfAccessAndAudit(pool, {
+    decisionRequestId: actor.decisionRequestId,
+    actorId: actor.actorId,
+    actorRole: actor.actorRole,
+    actorType: actor.actorType,
+    subjectRef: opts.subjectRef,
+    subjectVerified: true,
+    workspace: "personal",
+    requestedResource: opts.requestedResource,
+    requestedAction: opts.requestedAction,
+    purpose: actor.purpose,
+    sessionStatus: actor.sessionStatus,
+    restriction: opts.restriction,
+    evaluatedAt: actor.evaluatedAt
+  });
 }
 
 /** Persist one denied/non-allow access decision as an append-only audit event. */
