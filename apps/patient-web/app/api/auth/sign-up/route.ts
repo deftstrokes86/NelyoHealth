@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { nestApiBaseUrl } from "../../../../src/lib/api-base";
+import { assertSameOrigin } from "../../../../src/lib/csrf";
 
 interface NestRegistrationResponse {
   data: { accepted: true } | null;
@@ -8,6 +9,9 @@ interface NestRegistrationResponse {
 
 /** BFF sign-up route (patient-web). No cookie is set here — registration does not sign the caller in. */
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  const csrf = assertSameOrigin(request);
+  if (csrf) return csrf;
+
   const body = await request.json().catch(() => null);
   if (
     !body ||

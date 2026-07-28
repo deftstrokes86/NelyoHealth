@@ -8,13 +8,16 @@ import {
   Inject,
   Param,
   Post,
+  Query,
   Req
 } from "@nestjs/common";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import {
   createAppointmentDto,
+  createAppointmentSummaryDto,
   type ApiEnvelope,
   type AppointmentDto,
+  type AppointmentPageDto,
   type BookAppointmentRequestDto,
   type BookAppointmentResultDto,
   type CancelAppointmentRequestDto,
@@ -25,6 +28,7 @@ import {
 import {
   bookAppointment,
   cancelAppointment,
+  listMyAppointments,
   readAppointment,
   rescheduleAppointment,
   type AppointmentSafeContext,
@@ -36,6 +40,7 @@ import { Authorize } from "../authorization/authorization-metadata.js";
 import type { AuthenticatedRequest } from "../authorization/authorization.guard.js";
 import { buildResourceAccessContext } from "./resource-access-context.js";
 import { ResourceUnavailableException, StateConflictException } from "./resource-http.js";
+import { decodeTimelineCursor, encodeTimelineCursor, parseLimit } from "./timeline-cursor.js";
 import { APPOINTMENT_SERVICE_DEPS } from "./resource-tokens.js";
 
 /**
@@ -46,12 +51,68 @@ import { APPOINTMENT_SERVICE_DEPS } from "./resource-tokens.js";
  * (invalid transition, raced slot) -> 409, reachable only after authorization so the
  * state machine never leaks to an unauthorized actor.
  */
-@Controller("api/appointments")
+@Controller("api")
 @ApiTags("appointments")
 export class AppointmentsController {
   constructor(@Inject(APPOINTMENT_SERVICE_DEPS) private readonly deps: AppointmentServiceDeps) {}
 
-  @Post()
+  @Get("me/appointments")
+  @Authorize()
+  @ApiOperation({ summary: "List the authenticated data subject's own appointments" })
+  @ApiOkResponse({ description: "Appointment page envelope" })
+  async listMine(
+    @Req() req: AuthenticatedRequest,
+    @Query("limit") limit?: string,
+    @Query("cursor") cursor?: string
+  ): Promise<ApiEnvelope<AppointmentPageDto>> {
+    const actingContext = req.actingContext!;
+    const resolution = buildResourceAccessContext(actingContext, {
+      subjectPatientRef: actingContext.identity.personId,
+      purpose: "care-delivery"
+    });
+    // The keyset cursor is a generic (sortValue, id) pair; here (scheduledStart, id).
+    const decoded = cursor ? decodeTimelineCursor(cursor) : undefined; // malformed -> 400
+    const before = decoded
+      ? { scheduledStart: decoded.occurredAt, appointmentId: decoded.entryId }
+      : undefined;
+    const pageLimit = parseLimit(limit);
+
+    const outcome = await listMyAppointments(this.deps, {
+      access: resolution.access,
+      limit: pageLimit,
+      before
+    });
+    if (outcome.status !== "allowed") {
+      throw new ResourceUnavailableException();
+    }
+    const appointments = outcome.appointments.map((appointment) =>
+      createAppointmentSummaryDto({
+        appointmentId: appointment.appointmentId,
+        clinicianRef: appointment.clinicianRef,
+        scheduledStart: appointment.scheduledStart,
+        scheduledEnd: appointment.scheduledEnd,
+        appointmentType: appointment.appointmentType,
+        status: appointment.status
+      })
+    );
+    const last = outcome.appointments[outcome.appointments.length - 1];
+    const nextCursor =
+      last && outcome.appointments.length === pageLimit
+        ? encodeTimelineCursor({ occurredAt: last.scheduledStart, entryId: last.appointmentId })
+        : null;
+    return {
+      data: { appointments, nextCursor },
+      meta: createMeta(
+        req.requestId ?? "missing-request-id",
+        req.correlationId ?? "missing-correlation-id",
+        "api.appointments.list",
+        "self"
+      ),
+      errors: []
+    };
+  }
+
+  @Post("appointments")
   @Authorize()
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: "Book an appointment for the authenticated data subject" })
@@ -86,7 +147,7 @@ export class AppointmentsController {
     throw new ResourceUnavailableException(); // denied | slot-not-found
   }
 
-  @Get(":appointmentId")
+  @Get("appointments/:appointmentId")
   @Authorize()
   @ApiOperation({ summary: "Read one of the caller's own appointments" })
   @ApiOkResponse({ description: "Appointment envelope" })
@@ -126,7 +187,7 @@ export class AppointmentsController {
     );
   }
 
-  @Post(":appointmentId/reschedule")
+  @Post("appointments/:appointmentId/reschedule")
   @Authorize()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: "Reschedule one of the caller's own appointments" })
@@ -157,7 +218,7 @@ export class AppointmentsController {
     throw new ResourceUnavailableException(); // denied | not-found | slot-not-found
   }
 
-  @Post(":appointmentId/cancel")
+  @Post("appointments/:appointmentId/cancel")
   @Authorize()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: "Cancel one of the caller's own appointments" })

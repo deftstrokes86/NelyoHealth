@@ -8,6 +8,7 @@ import {
   createDomainEventEnvelope,
   insertAppointment,
   insertAvailabilitySlot,
+  listPatientAppointments,
   loadAppointment,
   loadAvailabilitySlot,
   runTransactionalCommand,
@@ -752,6 +753,46 @@ export async function readAppointment(
     return { status: "not-found", decision };
   }
   return { status: "allowed", appointment, decision };
+}
+
+export type ListMyAppointmentsOutcome =
+  | {
+      status: "allowed";
+      appointments: PersistedAppointment[];
+      decision: AuthorizationPolicyDecisionDraft;
+    }
+  | { status: "denied"; decision: AuthorizationPolicyDecisionDraft };
+
+/**
+ * List the authenticated data subject's OWN appointments (roadmap M7.1). Inherently
+ * self-scoped — the caller reads their own record — so it decides with the self kind
+ * (consent inapplicable, ADR-0014). `access.patientId` MUST be the caller's own
+ * server-resolved person ref (the `/api/me/appointments` route supplies it).
+ */
+export async function listMyAppointments(
+  deps: Pick<AppointmentServiceDeps, "pool">,
+  input: {
+    access: AppointmentAccessContext;
+    limit?: number;
+    before?: { scheduledStart: string; appointmentId: string };
+  }
+): Promise<ListMyAppointmentsOutcome> {
+  const decision = await decideSelfAccessAndAuditFor(deps.pool, input.access, {
+    subjectRef: input.access.patientId,
+    requestedResource: "appointment",
+    requestedAction: "read"
+  });
+  if (decision.status !== "allowed") {
+    return { status: "denied", decision };
+  }
+  const appointments = await withClient(deps.pool, (client) =>
+    listPatientAppointments(client, {
+      patientRef: input.access.patientId,
+      limit: input.limit,
+      before: input.before
+    })
+  );
+  return { status: "allowed", appointments, decision };
 }
 
 /** Pure composition entry point for unit tests (no database). */

@@ -31,7 +31,10 @@ export {
 } from "./notifications.js";
 export {
   createAppointmentDto,
+  createAppointmentSummaryDto,
   type AppointmentDto,
+  type AppointmentSummaryDto,
+  type AppointmentPageDto,
   type BookAppointmentRequestDto,
   type RescheduleAppointmentRequestDto,
   type CancelAppointmentRequestDto,
@@ -39,3 +42,10 @@ export {
   type RescheduleAppointmentResultDto,
   type CancelAppointmentResultDto
 } from "./appointments.js";
+export type { SessionContextDto } from "./session.js";
+export {
+  createPatientApiClient,
+  type PatientApiClient,
+  type PatientApiClientConfig,
+  type ApiResult
+} from "./patient-client.js";

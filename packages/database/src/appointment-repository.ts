@@ -284,3 +284,39 @@ export async function listAppointmentsForPatient(
   );
   return result.rows.map(mapAppointment);
 }
+
+/**
+ * A patient's own appointments across all organizations (M7.1). Sorted by start
+ * time, newest first — one list covering upcoming and recent-past — keyset-paginated
+ * on `(scheduled_start, appointment_id)`. Deliberately minimal (no filters / query
+ * language); the self-scoped `/api/me/appointments` read is the only caller.
+ */
+export async function listPatientAppointments(
+  client: ClientBase,
+  input: {
+    patientRef: string;
+    limit?: number;
+    before?: { scheduledStart: string; appointmentId: string };
+  }
+): Promise<PersistedAppointment[]> {
+  const limit = Math.min(input.limit ?? 50, 200);
+  if (input.before) {
+    const result = await client.query<AppointmentRow>(
+      `SELECT ${APPOINTMENT_COLUMNS} FROM nelyo_appointment.appointment
+        WHERE patient_ref = $1
+          AND (scheduled_start, appointment_id) < ($2::timestamptz, $3::uuid)
+        ORDER BY scheduled_start DESC, appointment_id DESC
+        LIMIT $4`,
+      [input.patientRef, input.before.scheduledStart, input.before.appointmentId, limit]
+    );
+    return result.rows.map(mapAppointment);
+  }
+  const result = await client.query<AppointmentRow>(
+    `SELECT ${APPOINTMENT_COLUMNS} FROM nelyo_appointment.appointment
+      WHERE patient_ref = $1
+      ORDER BY scheduled_start DESC, appointment_id DESC
+      LIMIT $2`,
+    [input.patientRef, limit]
+  );
+  return result.rows.map(mapAppointment);
+}

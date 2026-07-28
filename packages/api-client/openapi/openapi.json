@@ -316,6 +316,38 @@
         ]
       }
     },
+    "/api/me/appointments": {
+      "get": {
+        "operationId": "AppointmentsController_listMine",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Appointment page envelope"
+          }
+        },
+        "summary": "List the authenticated data subject's own appointments",
+        "tags": [
+          "appointments"
+        ]
+      }
+    },
     "/api/appointments": {
       "post": {
         "operationId": "AppointmentsController_book",

@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { assertSameOrigin } from "../../../../src/lib/csrf";
 import { SESSION_COOKIE_NAME } from "../../../../src/lib/session-cookie";
 
 /**
@@ -13,6 +14,9 @@ import { SESSION_COOKIE_NAME } from "../../../../src/lib/session-cookie";
  * revoke-on-sign-out endpoint is a follow-up, not fabricated here.
  */
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  const csrf = assertSameOrigin(request);
+  if (csrf) return csrf;
+
   const response = NextResponse.redirect(new URL("/sign-in", request.url), 303);
   response.cookies.delete(SESSION_COOKIE_NAME);
   return response;

@@ -135,12 +135,45 @@ which scans top-level only.)
 
 - **In:** timeline / care-circle / notifications reads + the self appointment booking loop
   (book/read/reschedule/cancel), all over the existing Nest runtime.
-- **Deferred (M7.x):** the web-shell UIs; the other five resource controllers; `openAvailabilitySlot`
-  (org-persona path — its own slice); durable idempotency with response replay; a Valkey-backed
-  idempotency store; and **cross-patient capacity resolution** — deriving a caregiver/guardian actor
-  role for a *non-self* subject from the relationship graph. Until then, a personal-workspace
-  cross-patient read presents the persona capacity and is governed by the pipeline (a mismatch denies →
-  404); org-workspace clinicians reach a consented patient today.
+- **Delivered (M7.1):** the first patient web shell (reads-first dashboard: persona, timeline,
+  notification inbox with mark-read, appointments list + cancel) + `GET /api/me/appointments`
+  (self-kind list, keyset-paginated).
+- **Deferred (named slices):**
+  - **Slot discovery / availability search** — the read surface a patient books/reschedules against
+    (search open availability by provider/time/facility). Its absence is why M7.1 shipped
+    appointment *view + cancel* but not *book/reschedule* from the UI. Scope: an availability query
+    endpoint + its own DTO/paging, plus the org-persona `openAvailabilitySlot` write path (its own
+    slice with org-workspace testing). The book/reschedule UI lands on top of it.
+  - **Cross-patient capacity resolution** — deriving a caregiver/guardian actor role for a *non-self*
+    subject from the relationship graph (full plan-first, authz-core change). Until then a
+    personal-workspace cross-patient read presents the persona capacity and is governed by the
+    pipeline (a mismatch denies → 404); org-workspace clinicians reach a consented patient today.
+  - The remaining resource controllers; durable idempotency with response replay / a Valkey-backed
+    idempotency store; the other web shells.
+
+## M7.1 addendum — the patient web shell, the BFF, and CSRF
+
+The patient web shell (Next.js) consumes this API through a **typed client**
+(`createPatientApiClient`, in `@nelyohealth/api-client/http`) — server components read
+with it; nothing does raw `fetch`. Two disciplines make the shell safe:
+
+- **The BFF is a proxy, not a translator.** Browser mutations go through Next.js BFF
+  route handlers (sign-in/out, mark-read, cancel) that forward to the Nest API via the
+  typed client and **pass the `ApiEnvelope` + status straight back** — no reshaping of
+  error bodies, no remapping the uniform 404 into a richer client error, no retries.
+  The non-enumeration and DTO guarantees were earned at the Nest edge; the BFF must be
+  incapable of undoing them. `401 → redirect to sign-in` is the single exception. The
+  shell closes the loop by rendering **404 identically to empty/absent** — it never
+  distinguishes denied from not-found, and holds no authorization logic of its own.
+
+- **CSRF on BFF mutation routes.** Moving auth from a bearer header to an HttpOnly
+  cookie reintroduces CSRF (the browser attaches the cookie automatically). Defense is
+  two-layer: the session cookie is already **`SameSite=Lax`** + `HttpOnly` + `secure`
+  in production (confirmed in `session-cookie.ts`), and every BFF mutation route runs an
+  **origin check** (`Origin`, falling back to `Referer`, must match `Host`; neither
+  present ⇒ reject) returning a uniform 403. Reads (server components) don't need it —
+  they never rely on ambient browser cookies. Established now, before the portal grows,
+  because retrofitting it across a grown surface is far costlier.
 
 ## Sanctioned-public routes (the allowlist is a security artifact)
 

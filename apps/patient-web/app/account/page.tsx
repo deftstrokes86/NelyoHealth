@@ -3,18 +3,11 @@ import { redirect } from "next/navigation";
 import { ShieldCheck } from "lucide-react";
 import { Card } from "@nelyohealth/ui-foundation";
 import { marketingContentById } from "@nelyohealth/content-registry";
+import { createPatientApiClient } from "@nelyohealth/api-client";
 import { nestApiBaseUrl } from "../../src/lib/api-base";
 import { SESSION_COOKIE_NAME } from "../../src/lib/session-cookie";
 
 export const metadata = { title: "Your account — NelyoHealth" };
-
-interface SessionContextData {
-  accountId: string;
-  personId: string;
-  workspace: string;
-  persona: { kind: string; actorRole: string; actorRoles: string[] };
-  activeTenantId: string | null;
-}
 
 // Server Component: useContent()'s React Context isn't available here, so
 // copy is read directly from the registry map (the same pattern layout.tsx
@@ -34,17 +27,13 @@ export default async function AccountPage() {
     redirect("/sign-in");
   }
 
-  const response = await fetch(`${nestApiBaseUrl()}/api/session/context`, {
-    headers: { authorization: `Bearer ${sessionId}` },
-    cache: "no-store"
-  });
-
-  if (!response.ok) {
+  // Reads go through the typed client, never a raw fetch (ADR-0014).
+  const client = createPatientApiClient({ baseUrl: nestApiBaseUrl(), sessionToken: sessionId });
+  const result = await client.getSessionContext();
+  if (result.status === 401 || !result.data) {
     redirect("/sign-in");
   }
-
-  const body = (await response.json()) as { data: SessionContextData };
-  const context = body.data;
+  const context = result.data;
 
   const welcomeHeadline = content("account.welcome.headline");
   const welcomeBody = content("account.welcome.body");

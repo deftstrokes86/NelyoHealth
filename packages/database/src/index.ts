@@ -259,6 +259,7 @@ export {
   insertAppointment,
   insertAvailabilitySlot,
   listAppointmentsForPatient,
+  listPatientAppointments,
   loadAppointment,
   loadAvailabilitySlot,
   setAppointmentSchedule,

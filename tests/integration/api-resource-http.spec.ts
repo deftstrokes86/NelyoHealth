@@ -284,4 +284,25 @@ describe.skipIf(!shouldRun)("resource HTTP surface (M7)", () => {
     expect(res.status).toBe(404);
     expect((await res.json()).errors[0].code).toBe("RESOURCE_UNAVAILABLE");
   });
+
+  it("lists the data subject's own appointments via the self kind (M7.1)", async () => {
+    // Runs after the booking loop, so the subject has (at least) the cancelled one.
+    const res = await get("/api/me/appointments", authed());
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(Array.isArray(body.data.appointments)).toBe(true);
+    expect(body.data.appointments.length).toBeGreaterThan(0);
+    // Summary DTO only — no clinical reasonForVisit crosses the wire in a list.
+    expect(Object.keys(body.data.appointments[0]).sort()).toEqual(
+      [
+        "appointmentId",
+        "appointmentType",
+        "clinicianRef",
+        "scheduledEnd",
+        "scheduledStart",
+        "status"
+      ].sort()
+    );
+    expect(JSON.stringify(body.data).toLowerCase()).not.toContain("reasonforvisit");
+  });
 });

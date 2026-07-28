@@ -9,6 +9,10 @@ const collectRouteFiles = (dir: string, acc: string[] = []) => {
     const full = join(dir, entry.name);
     if (entry.isDirectory()) {
       if (entry.name === "_gallery" || entry.name.startsWith("_")) continue;
+      // The (portal) route group is the authenticated patient app shell (M7.1),
+      // not marketing — it carries functional UI labels, not content-registry copy,
+      // and is deliberately outside this marketing boundary (ADR-0014 Ruling 3).
+      if (entry.name === "(portal)") continue;
       collectRouteFiles(full, acc);
       continue;
     }
@@ -61,10 +65,7 @@ describe("marketing pages boundary — no inline strings", () => {
 });
 
 describe("marketing redirects boundary", () => {
-  const nextConfig = readFileSync(
-    join(APP_ROOT, "..", "next.config.mjs"),
-    "utf8"
-  );
+  const nextConfig = readFileSync(join(APP_ROOT, "..", "next.config.mjs"), "utf8");
 
   const expectedRedirects: Array<[string, string]> = [
     ["/for-diaspora", "/diaspora"],

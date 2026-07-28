@@ -20,6 +20,39 @@ export interface AppointmentDto {
   cancellationReasonCode: string | null;
 }
 
+/** A list-view summary (no clinical `reasonForVisit`) for the dashboard card. */
+export interface AppointmentSummaryDto {
+  appointmentId: string;
+  clinicianRef: string;
+  scheduledStart: string;
+  scheduledEnd: string;
+  appointmentType: string;
+  status: string;
+}
+
+export interface AppointmentPageDto {
+  appointments: AppointmentSummaryDto[];
+  nextCursor: string | null;
+}
+
+export function createAppointmentSummaryDto(fields: {
+  appointmentId: string;
+  clinicianRef: string;
+  scheduledStart: string;
+  scheduledEnd: string;
+  appointmentType: string;
+  status: string;
+}): AppointmentSummaryDto {
+  return {
+    appointmentId: fields.appointmentId,
+    clinicianRef: fields.clinicianRef,
+    scheduledStart: fields.scheduledStart,
+    scheduledEnd: fields.scheduledEnd,
+    appointmentType: fields.appointmentType,
+    status: fields.status
+  };
+}
+
 export interface BookAppointmentRequestDto {
   slotId: string;
   appointmentType: string;
