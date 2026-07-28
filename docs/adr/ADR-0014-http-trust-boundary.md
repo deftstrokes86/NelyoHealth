@@ -142,6 +142,31 @@ which scans top-level only.)
   cross-patient read presents the persona capacity and is governed by the pipeline (a mismatch denies →
   404); org-workspace clinicians reach a consented patient today.
 
+## Sanctioned-public routes (the allowlist is a security artifact)
+
+Default-deny means every route is protected unless it appears in `SANCTIONED_PUBLIC_ROUTES` (the
+endpoint-coverage gate). That list is security-relevant: an addition must be a **visible diff against
+this documented set**, not a quiet gate exemption. The 10 sanctioned routes and why each legitimately
+needs no principal:
+
+| Route | Why public |
+|---|---|
+| `GET /api/health` | Liveness probe — no principal. |
+| `GET /api/ready` | Readiness probe (dependency checks) — no principal. |
+| `GET /api/health (hono)` | Legacy Hono liveness — no principal. |
+| `POST /api/idempotency/probe` | Synthetic operational plumbing; no principal-scoped resource. |
+| `POST /api/observability/probe` | Synthetic telemetry/correlation probe; no principal-scoped resource. |
+| `POST /api/storage/signed-url/upload` | Synthetic storage scaffolding (synthetic objects); real document access is a protected business route. |
+| `POST /api/storage/signed-url/download` | Same synthetic storage scaffolding. |
+| `DELETE /api/storage/synthetic-objects` | Synthetic-only test-object cleanup. |
+| `POST /api/auth/sessions` | Sign-in — necessarily pre-authentication (creating a session cannot itself require one), and non-enumerating by construction. |
+| `POST /api/auth/registrations` | Sign-up — necessarily pre-authentication. |
+
+None serve principal-scoped patient data; the storage/probe entries are synthetic scaffolding that a
+later milestone replaces with protected business routes. A new `@Public()` route that is not added here
+fails the gate (accidental exposure), and a stale entry (no longer `@Public()`) also fails — so the
+debt cannot rot silently.
+
 ## Invariants preserved
 
 Default-deny; non-enumeration (deny/not-found indistinguishable over HTTP); authz-before-validity (409
