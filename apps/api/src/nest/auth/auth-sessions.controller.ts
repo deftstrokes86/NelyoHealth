@@ -93,10 +93,11 @@ export class AuthSessionsController {
       sessionId: outcome.session.id
     });
 
-    // Both workspaces resolve to the same minimal landing page today — no
-    // differentiated organization-workspace shell exists yet. Computed from
-    // the real ActingContext (not hardcoded) so this is forward-compatible.
-    const redirectPath = actingContext.workspace === "organization" ? "/account" : "/account";
+    // Personal-workspace sign-in lands on the patient dashboard (M7.1). The
+    // organization workspace has no dashboard shell yet, so it stays on the
+    // minimal account page. Computed from the real ActingContext (not hardcoded)
+    // so it stays forward-compatible when an org shell lands.
+    const redirectPath = actingContext.workspace === "organization" ? "/account" : "/dashboard";
 
     return {
       data: {
