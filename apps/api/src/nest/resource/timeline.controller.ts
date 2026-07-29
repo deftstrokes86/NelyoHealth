@@ -9,7 +9,10 @@ import { readPatientTimeline, type TimelineServiceDeps } from "../../timeline-se
 import { createMeta } from "../api-envelope.js";
 import { Authorize } from "../authorization/authorization-metadata.js";
 import type { AuthenticatedRequest } from "../authorization/authorization.guard.js";
-import { buildResourceAccessContext } from "./resource-access-context.js";
+import {
+  createCapacityResolverPorts,
+  resolveResourceAccessContext
+} from "./resource-access-context.js";
 import { ResourceUnavailableException } from "./resource-http.js";
 import { decodeTimelineCursor, encodeTimelineCursor, parseLimit } from "./timeline-cursor.js";
 import { TIMELINE_SERVICE_DEPS } from "./resource-tokens.js";
@@ -57,16 +60,26 @@ export class TimelineController {
     limit: string | undefined,
     cursor: string | undefined
   ): Promise<ApiEnvelope<TimelinePageDto>> {
-    const resolution = buildResourceAccessContext(req.actingContext!, {
-      subjectPatientRef,
-      purpose: "care-coordination"
-    });
+    // The resolver short-circuits for self; for a cross-patient subject it derives
+    // capacity from the relationship graph (M7.2). Cursor is decoded first so a
+    // malformed cursor is a 400 before any capacity work.
     const before = cursor ? decodeTimelineCursor(cursor) : undefined; // malformed -> 400
+    const resolution = await resolveResourceAccessContext(
+      createCapacityResolverPorts(this.deps.pool),
+      req.actingContext!,
+      { subjectPatientRef, purpose: "care-coordination" }
+    );
     const pageLimit = parseLimit(limit);
 
     const outcome = await readPatientTimeline(this.deps, {
       access: resolution.access,
       subjectIsSelf: resolution.subjectIsSelf,
+      delegation: resolution.selectedRelationshipRef
+        ? {
+            relationshipRef: resolution.selectedRelationshipRef,
+            derivedActorRole: resolution.derivedActorRole ?? ""
+          }
+        : undefined,
       limit: pageLimit,
       before
     });

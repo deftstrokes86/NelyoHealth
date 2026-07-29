@@ -80,6 +80,8 @@ export async function readPatientTimeline(
      * and every domain is self-visible.
      */
     subjectIsSelf?: boolean;
+    /** Delegated (cross-patient) capacity for a caregiver/guardian read (M7.2), audited. */
+    delegation?: { relationshipRef: string; derivedActorRole: string };
     limit?: number;
     before?: { occurredAt: string; entryId: string };
   }
@@ -101,11 +103,15 @@ export async function readPatientTimeline(
         sessionStatus: input.access.sessionStatus,
         evaluatedAt: input.access.evaluatedAt
       })
-    : await resolveDecideAndAuditAccess(deps.pool, {
-        ...input.access,
-        requestedResource: "timeline",
-        requestedAction: "read"
-      });
+    : await resolveDecideAndAuditAccess(
+        deps.pool,
+        {
+          ...input.access,
+          requestedResource: "timeline",
+          requestedAction: "read"
+        },
+        { delegation: input.delegation }
+      );
   if (decision.status !== "allowed") {
     return { status: "denied", decision };
   }

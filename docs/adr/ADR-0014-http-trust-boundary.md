@@ -138,18 +138,20 @@ which scans top-level only.)
 - **Delivered (M7.1):** the first patient web shell (reads-first dashboard: persona, timeline,
   notification inbox with mark-read, appointments list + cancel) + `GET /api/me/appointments`
   (self-kind list, keyset-paginated).
+- **Delivered (M7.2):** cross-patient capacity resolution — a caregiver/guardian reaches a consented
+  patient's read surfaces via a capacity derived from the relationship graph (guardian +
+  caregiver-delegation; deterministic multi-org tie-break; delegated-access audit).
 - **Deferred (named slices):**
+  - **Sponsor cross-patient capacity** — deferred from M7.2 to the **billing/payment slice**, where
+    sponsor's financial-only scope (`billing-ledger`, `payment-status`) is exposed and its
+    cross-patient visibility can be designed on purpose (the diaspora trust core), not inherited.
   - **Slot discovery / availability search** — the read surface a patient books/reschedules against
     (search open availability by provider/time/facility). Its absence is why M7.1 shipped
     appointment *view + cancel* but not *book/reschedule* from the UI. Scope: an availability query
     endpoint + its own DTO/paging, plus the org-persona `openAvailabilitySlot` write path (its own
-    slice with org-workspace testing). The book/reschedule UI lands on top of it.
-  - **Cross-patient capacity resolution** — deriving a caregiver/guardian actor role for a *non-self*
-    subject from the relationship graph (full plan-first, authz-core change). Until then a
-    personal-workspace cross-patient read presents the persona capacity and is governed by the
-    pipeline (a mismatch denies → 404); org-workspace clinicians reach a consented patient today.
-  - The remaining resource controllers; durable idempotency with response replay / a Valkey-backed
-    idempotency store; the other web shells.
+    slice with org-workspace testing).
+  - Additional relationship types (`household`, `clinical-proxy`) as each is deliberately modelled;
+    the remaining resource controllers; durable idempotency with response replay; the other web shells.
 
 ## M7.1 addendum — the patient web shell, the BFF, and CSRF
 
@@ -174,6 +176,47 @@ with it; nothing does raw `fetch`. Two disciplines make the shell safe:
   present ⇒ reject) returning a uniform 403. Reads (server components) don't need it —
   they never rely on ambient browser cookies. Established now, before the portal grows,
   because retrofitting it across a grown surface is far costlier.
+
+## M7.2 addendum — cross-patient capacity resolution
+
+A Care Circle member (caregiver/guardian) reaches a **consented** patient's read
+surfaces over HTTP by a capacity **derived server-side from the relationship graph** —
+never a client claim, and never from the care-circle projection (a projection is
+eventually-consistent DATA, forbidden as an authorization input; capacity reads the
+authoritative `nelyo_relationship` table).
+
+- **Capacity as input-supply, not new composition.** The resolver only chooses
+  `actorRole` + `relationshipType` + `organizationId` (from the resolved relationship);
+  the **unchanged** consent + ReBAC + break-glass pipeline then decides. The pipeline
+  **re-loads the relationship live** for the decision, so a revocation between the
+  resolver's read and the pipeline's read is caught — immediate-revocation propagation
+  is preserved (proved: revoke → next read 404).
+- **"Not self" is server-derived** (`identity.personId === subjectPatientRef`); the
+  capacity is keyed by the server's `accountId`. A client controls neither, so it can
+  forge neither self nor a caregiver capability.
+- **The mapping is deliberately small** (default-deny for the rest): `guardian→guardian`,
+  `caregiver-delegation→caregiver`. **`sponsor` is deferred** to the billing/payment
+  slice — its RBAC is financial-only (`billing-ledger`, `payment-status`) with no
+  timeline/care-circle capability, so it belongs designed with those surfaces, not
+  inherited here. `household` / `emergency-contact` (break-glass territory) /
+  `clinical-proxy` are excluded until modelled.
+- **Deterministic selection.** When an actor holds several active relationships to a
+  patient: highest tier first (guardian > caregiver); within a tier the
+  **most-recently-effective wins** (the multi-org tie-break — two caregiver delegations
+  at different facilities resolve to exactly one relationship, hence one org and one
+  consent scope); `relationship_id` is the final stable tie-break. Nondeterministic
+  capacity would be nondeterministic visibility.
+- **The visibility invariant is untouched.** Once allowed, the existing per-domain
+  filter runs unchanged — a caregiver sees consented domains and **messaging stays
+  hidden** (participant/self-scoped; a caregiver is never a thread participant). M7.2
+  changes only *whether the access decision allows*, not *what the filter shows*.
+- **Non-enumeration holds.** No capacity ⇒ a non-privileged context the pipeline denies
+  ⇒ a uniform 404, **indistinguishable from a non-existent subject** (a stranger and a
+  bogus ref both 404 with identical bodies — proved).
+- **Delegated access is audited.** An allowed cross-patient read writes an append-only
+  audit (`delegated-access-granted`) recording the **selected relationship ref + derived
+  actorRole** — so a caregiver's access is traceable to the capacity it ran under, not
+  just "allowed". The same fields are attached to a deny-audit.
 
 ## Sanctioned-public routes (the allowlist is a security artifact)
 

@@ -260,3 +260,25 @@ export async function listRelationshipsForActorPatient(
   );
   return result.rows.map(mapRelationship);
 }
+
+/**
+ * Every relationship an actor holds toward a patient, across ALL organizations
+ * (roadmap M7.2). A personal-workspace caregiver has no active tenant, so the org
+ * that scopes their consent must be DERIVED from the resolved relationship, not
+ * supplied — this is the org-agnostic lookup the capacity resolver runs. Ordered
+ * most-recently-effective first (with `relationship_id` as a stable final tie-break)
+ * so capacity selection among same-tier relationships is deterministic.
+ */
+export async function listActiveRelationshipsForActorPatient(
+  client: ClientBase,
+  input: { actorRef: string; patientRef: string }
+): Promise<PersistedRelationship[]> {
+  const result = await client.query<RelationshipRow>(
+    `SELECT ${RELATIONSHIP_COLUMNS}
+       FROM nelyo_relationship.relationship
+      WHERE actor_ref = $1 AND patient_ref = $2 AND status = 'active'
+      ORDER BY effective_date DESC, relationship_id ASC`,
+    [input.actorRef, input.patientRef]
+  );
+  return result.rows.map(mapRelationship);
+}

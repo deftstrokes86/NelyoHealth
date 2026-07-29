@@ -217,6 +217,7 @@ export {
 
 export {
   insertRelationship,
+  listActiveRelationshipsForActorPatient,
   listRelationshipsForActorPatient,
   loadRelationship,
   loadRelationshipForSubject,

@@ -72,7 +72,12 @@ export type ReadPatientCareCircleOutcome =
  */
 export async function readPatientCareCircle(
   deps: CareCircleServiceDeps,
-  input: { access: CareCircleAccessContext; subjectIsSelf?: boolean }
+  input: {
+    access: CareCircleAccessContext;
+    subjectIsSelf?: boolean;
+    /** Delegated (cross-patient) capacity for a caregiver/guardian read (M7.2), audited. */
+    delegation?: { relationshipRef: string; derivedActorRole: string };
+  }
 ): Promise<ReadPatientCareCircleOutcome> {
   // A data subject reads their own circle via the SELF kind (consent inapplicable);
   // a third party flows through the composed pipeline. `subjectIsSelf` is set only
@@ -92,11 +97,15 @@ export async function readPatientCareCircle(
         sessionStatus: input.access.sessionStatus,
         evaluatedAt: input.access.evaluatedAt
       })
-    : await resolveDecideAndAuditAccess(deps.pool, {
-        ...input.access,
-        requestedResource: CARE_CIRCLE_RESOURCE,
-        requestedAction: "read"
-      });
+    : await resolveDecideAndAuditAccess(
+        deps.pool,
+        {
+          ...input.access,
+          requestedResource: CARE_CIRCLE_RESOURCE,
+          requestedAction: "read"
+        },
+        { delegation: input.delegation }
+      );
   if (decision.status !== "allowed") {
     return { status: "denied", decision };
   }

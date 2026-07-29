@@ -15,7 +15,10 @@ import {
 import { createMeta } from "../api-envelope.js";
 import { Authorize } from "../authorization/authorization-metadata.js";
 import type { AuthenticatedRequest } from "../authorization/authorization.guard.js";
-import { buildResourceAccessContext } from "./resource-access-context.js";
+import {
+  createCapacityResolverPorts,
+  resolveResourceAccessContext
+} from "./resource-access-context.js";
 import { ResourceUnavailableException } from "./resource-http.js";
 import { CARE_CIRCLE_SERVICE_DEPS } from "./resource-tokens.js";
 
@@ -85,13 +88,20 @@ export class CareCircleController {
     req: AuthenticatedRequest,
     subjectPatientRef: string
   ): Promise<ApiEnvelope<CareCircleDto>> {
-    const resolution = buildResourceAccessContext(req.actingContext!, {
-      subjectPatientRef,
-      purpose: "care-coordination"
-    });
+    const resolution = await resolveResourceAccessContext(
+      createCapacityResolverPorts(this.deps.pool),
+      req.actingContext!,
+      { subjectPatientRef, purpose: "care-coordination" }
+    );
     const outcome = await readPatientCareCircle(this.deps, {
       access: resolution.access,
-      subjectIsSelf: resolution.subjectIsSelf
+      subjectIsSelf: resolution.subjectIsSelf,
+      delegation: resolution.selectedRelationshipRef
+        ? {
+            relationshipRef: resolution.selectedRelationshipRef,
+            derivedActorRole: resolution.derivedActorRole ?? ""
+          }
+        : undefined
     });
     if (outcome.status !== "allowed") {
       throw new ResourceUnavailableException();

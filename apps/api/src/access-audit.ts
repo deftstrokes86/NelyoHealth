@@ -45,18 +45,62 @@ export type CapabilityWriteAccessContext = Omit<
  * DECISION only — a policy reasonCode + resource/action, never PHI — so it needs
  * no transaction.
  */
+/** A delegated (cross-patient) access: the relationship + capacity it ran under (M7.2). */
+export interface AccessDelegation {
+  relationshipRef: string;
+  derivedActorRole: string;
+}
+
 export async function resolveDecideAndAuditAccess(
   pool: Pool,
-  request: ResourceAccessRequest
+  request: ResourceAccessRequest,
+  options?: { delegation?: AccessDelegation }
 ): Promise<AuthorizationPolicyDecisionDraft> {
   const decision = await resolveAndDecideResourceAccess(pool, request);
   if (decision.status !== "allowed") {
     await recordDeniedAccessAudit(pool, request, {
       outcome: decision.status,
-      reasonCode: decision.reasonCode
+      reasonCode: decision.reasonCode,
+      extraSafeDetails: options?.delegation
+        ? {
+            selectedRelationshipRef: options.delegation.relationshipRef,
+            derivedActorRole: options.delegation.derivedActorRole
+          }
+        : undefined
     });
+  } else if (options?.delegation) {
+    // Audit the ALLOWED delegated access — who acted for whom, under which
+    // relationship + capacity — so a caregiver's access is traceable, not just "allowed".
+    await recordDelegatedAccessAudit(pool, request, options.delegation);
   }
   return decision;
+}
+
+/** Persist an append-only audit for an ALLOWED delegated (cross-patient) access. */
+export async function recordDelegatedAccessAudit(
+  pool: Pool,
+  request: Pick<
+    ResourceAccessRequest,
+    | "actorId"
+    | "actorRole"
+    | "actorType"
+    | "patientId"
+    | "requestedResource"
+    | "requestedAction"
+    | "purpose"
+    | "decisionRequestId"
+    | "evaluatedAt"
+  >,
+  delegation: AccessDelegation
+): Promise<void> {
+  await recordDeniedAccessAudit(pool, request, {
+    outcome: "delegated-access-granted",
+    reasonCode: "allowed",
+    extraSafeDetails: {
+      selectedRelationshipRef: delegation.relationshipRef,
+      derivedActorRole: delegation.derivedActorRole
+    }
+  });
 }
 
 /**
