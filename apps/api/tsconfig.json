@@ -6,7 +6,7 @@
     "baseUrl": "../..",
     "paths": {
       "@nelyohealth/config": ["packages/config/src/index.ts"],
-      "@nelyohealth/api-client": ["packages/api-client/src/index.ts"],
+      "@nelyohealth/api-client": ["packages/api-client/lib/index.d.ts"],
       "@nelyohealth/database": ["packages/database/lib/index.d.ts"],
       "@nelyohealth/domain": ["packages/domain/lib/index.d.ts"]
     },
