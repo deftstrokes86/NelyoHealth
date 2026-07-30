@@ -1,0 +1,1 @@
+{"version":3,"file":"prescriptions.js","sourceRoot":"","sources":["prescriptions.ts"],"names":[],"mappings":"AAgBA,MAAM,UAAU,0BAA0B,CACxC,KAAkC;IAElC,OAAO;QACL,cAAc,EAAE,KAAK,CAAC,cAAc;QACpC,UAAU,EAAE,KAAK,CAAC,UAAU;QAC5B,cAAc,EAAE,KAAK,CAAC,cAAc;QACpC,MAAM,EAAE,KAAK,CAAC,MAAM;QACpB,MAAM,EAAE,KAAK,CAAC,MAAM;KACrB,CAAC;AACJ,CAAC"}

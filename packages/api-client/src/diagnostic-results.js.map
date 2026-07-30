@@ -1,0 +1,1 @@
+{"version":3,"file":"diagnostic-results.js","sourceRoot":"","sources":["diagnostic-results.ts"],"names":[],"mappings":"AAcA,MAAM,UAAU,8BAA8B,CAC5C,KAAsC;IAEtC,OAAO;QACL,kBAAkB,EAAE,KAAK,CAAC,kBAAkB;QAC5C,OAAO,EAAE,KAAK,CAAC,OAAO;QACtB,MAAM,EAAE,KAAK,CAAC,MAAM;QACpB,OAAO,EAAE,KAAK,CAAC,OAAO;KACvB,CAAC;AACJ,CAAC"}

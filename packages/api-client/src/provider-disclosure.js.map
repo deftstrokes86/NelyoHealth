@@ -1,0 +1,1 @@
+{"version":3,"file":"provider-disclosure.js","sourceRoot":"","sources":["provider-disclosure.ts"],"names":[],"mappings":"AA0BA,MAAM,UAAU,wCAAwC,CACtD,KAAgD;IAEhD,OAAO;QACL,OAAO,EAAE,KAAK,CAAC,OAAO;QACtB,MAAM,EAAE,KAAK,CAAC,MAAM;QACpB,UAAU,EAAE,KAAK,CAAC,UAAU;QAC5B,mBAAmB,EAAE,KAAK,CAAC,mBAAmB;QAC9C,YAAY,EAAE,KAAK,CAAC,YAAY;KACjC,CAAC;AACJ,CAAC"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"appointments.js","sourceRoot":"","sources":["appointments.ts"],"names":[],"mappings":"AAcA,MAAM,UAAU,yBAAyB,CAAC,KAAiC;IACzE,OAAO;QACL,aAAa,EAAE,KAAK,CAAC,aAAa;QAClC,SAAS,EAAE,KAAK,CAAC,SAAS;QAC1B,YAAY,EAAE,KAAK,CAAC,YAAY;QAChC,MAAM,EAAE,KAAK,CAAC,MAAM;KACrB,CAAC;AACJ,CAAC"}
