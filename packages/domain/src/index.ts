@@ -14,3 +14,4 @@ export type DomainPackageBoundary = typeof domainPackageBoundary;
 
 export * from "./identity-tenancy-model.js";
 export * from "./platform-events.js";
+export * from "./data-classification.js";

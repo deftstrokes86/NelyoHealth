@@ -9,12 +9,14 @@ import { readPatientTimeline, type TimelineServiceDeps } from "../../timeline-se
 import { createMeta } from "../api-envelope.js";
 import { Authorize } from "../authorization/authorization-metadata.js";
 import type { AuthenticatedRequest } from "../authorization/authorization.guard.js";
+import { projectExact } from "../../projection.js";
 import {
   createCapacityResolverPorts,
   resolveResourceAccessContext
 } from "./resource-access-context.js";
 import { ResourceUnavailableException } from "./resource-http.js";
 import { decodeTimelineCursor, encodeTimelineCursor, parseLimit } from "./timeline-cursor.js";
+import { TIMELINE_ENTRY_CLASSIFICATION, authorizedReaderContext } from "./dto-classification.js";
 import { TIMELINE_SERVICE_DEPS } from "./resource-tokens.js";
 
 /**
@@ -87,14 +89,19 @@ export class TimelineController {
       throw new ResourceUnavailableException();
     }
 
+    const readerContext = authorizedReaderContext("api.timeline.read");
     const entries = outcome.entries.map((entry) =>
-      createTimelineEntryDto({
-        entryId: entry.entryId,
-        resourceDomain: entry.resourceDomain,
-        entryType: entry.entryType,
-        aggregateRef: entry.aggregateRef,
-        occurredAt: entry.occurredAt
-      })
+      projectExact(
+        createTimelineEntryDto({
+          entryId: entry.entryId,
+          resourceDomain: entry.resourceDomain,
+          entryType: entry.entryType,
+          aggregateRef: entry.aggregateRef,
+          occurredAt: entry.occurredAt
+        }),
+        TIMELINE_ENTRY_CLASSIFICATION,
+        readerContext
+      )
     );
     const last = outcome.entries[outcome.entries.length - 1];
     const nextCursor =

@@ -38,9 +38,15 @@ import type { CommandActor } from "@nelyohealth/database";
 import { createMeta } from "../api-envelope.js";
 import { Authorize } from "../authorization/authorization-metadata.js";
 import type { AuthenticatedRequest } from "../authorization/authorization.guard.js";
+import { projectExact } from "../../projection.js";
 import { buildResourceAccessContext } from "./resource-access-context.js";
 import { ResourceUnavailableException, StateConflictException } from "./resource-http.js";
 import { decodeTimelineCursor, encodeTimelineCursor, parseLimit } from "./timeline-cursor.js";
+import {
+  APPOINTMENT_CLASSIFICATION,
+  APPOINTMENT_SUMMARY_CLASSIFICATION,
+  authorizedReaderContext
+} from "./dto-classification.js";
 import { APPOINTMENT_SERVICE_DEPS } from "./resource-tokens.js";
 
 /**
@@ -86,14 +92,18 @@ export class AppointmentsController {
       throw new ResourceUnavailableException();
     }
     const appointments = outcome.appointments.map((appointment) =>
-      createAppointmentSummaryDto({
-        appointmentId: appointment.appointmentId,
-        clinicianRef: appointment.clinicianRef,
-        scheduledStart: appointment.scheduledStart,
-        scheduledEnd: appointment.scheduledEnd,
-        appointmentType: appointment.appointmentType,
-        status: appointment.status
-      })
+      projectExact(
+        createAppointmentSummaryDto({
+          appointmentId: appointment.appointmentId,
+          clinicianRef: appointment.clinicianRef,
+          scheduledStart: appointment.scheduledStart,
+          scheduledEnd: appointment.scheduledEnd,
+          appointmentType: appointment.appointmentType,
+          status: appointment.status
+        }),
+        APPOINTMENT_SUMMARY_CLASSIFICATION,
+        authorizedReaderContext("api.appointments.list")
+      )
     );
     const last = outcome.appointments[outcome.appointments.length - 1];
     const nextCursor =
@@ -172,18 +182,22 @@ export class AppointmentsController {
     return this.ok(
       req,
       "api.appointments.read",
-      createAppointmentDto({
-        appointmentId: appointment.appointmentId,
-        patientRef: appointment.patientRef,
-        clinicianRef: appointment.clinicianRef,
-        organizationRef: appointment.organizationRef,
-        scheduledStart: appointment.scheduledStart,
-        scheduledEnd: appointment.scheduledEnd,
-        appointmentType: appointment.appointmentType,
-        status: appointment.status,
-        reasonForVisit: appointment.reasonForVisit ?? null,
-        cancellationReasonCode: appointment.cancellationReasonCode ?? null
-      })
+      projectExact(
+        createAppointmentDto({
+          appointmentId: appointment.appointmentId,
+          patientRef: appointment.patientRef,
+          clinicianRef: appointment.clinicianRef,
+          organizationRef: appointment.organizationRef,
+          scheduledStart: appointment.scheduledStart,
+          scheduledEnd: appointment.scheduledEnd,
+          appointmentType: appointment.appointmentType,
+          status: appointment.status,
+          reasonForVisit: appointment.reasonForVisit ?? null,
+          cancellationReasonCode: appointment.cancellationReasonCode ?? null
+        }),
+        APPOINTMENT_CLASSIFICATION,
+        authorizedReaderContext("api.appointments.read")
+      )
     );
   }
 

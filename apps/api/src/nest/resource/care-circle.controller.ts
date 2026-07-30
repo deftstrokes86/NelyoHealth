@@ -15,11 +15,17 @@ import {
 import { createMeta } from "../api-envelope.js";
 import { Authorize } from "../authorization/authorization-metadata.js";
 import type { AuthenticatedRequest } from "../authorization/authorization.guard.js";
+import { projectExact } from "../../projection.js";
 import {
   createCapacityResolverPorts,
   resolveResourceAccessContext
 } from "./resource-access-context.js";
 import { ResourceUnavailableException } from "./resource-http.js";
+import {
+  CARE_CIRCLE_MEMBER_CLASSIFICATION,
+  WARD_CLASSIFICATION,
+  authorizedReaderContext
+} from "./dto-classification.js";
 import { CARE_CIRCLE_SERVICE_DEPS } from "./resource-tokens.js";
 
 /**
@@ -69,14 +75,18 @@ export class CareCircleController {
     return {
       data: {
         wards: wards.map((ward) =>
-          createWardDto({
-            patientRef: ward.patientRef,
-            relationshipType: ward.relationshipType,
-            membershipStatus: ward.membershipStatus,
-            permittedActions: ward.permittedActions,
-            effectiveDate: ward.effectiveDate ?? null,
-            expiryDate: ward.expiryDate ?? null
-          })
+          projectExact(
+            createWardDto({
+              patientRef: ward.patientRef,
+              relationshipType: ward.relationshipType,
+              membershipStatus: ward.membershipStatus,
+              permittedActions: ward.permittedActions,
+              effectiveDate: ward.effectiveDate ?? null,
+              expiryDate: ward.expiryDate ?? null
+            }),
+            WARD_CLASSIFICATION,
+            authorizedReaderContext("api.care-circle.wards")
+          )
         )
       },
       meta: this.meta(req, "api.care-circle.wards", "self"),
@@ -109,15 +119,19 @@ export class CareCircleController {
     return {
       data: {
         members: outcome.members.map((member) =>
-          createCareCircleMemberDto({
-            memberRef: member.relationshipRef,
-            actorRef: member.actorRef,
-            relationshipType: member.relationshipType,
-            membershipStatus: member.membershipStatus,
-            permittedActions: member.permittedActions,
-            effectiveDate: member.effectiveDate ?? null,
-            expiryDate: member.expiryDate ?? null
-          })
+          projectExact(
+            createCareCircleMemberDto({
+              memberRef: member.relationshipRef,
+              actorRef: member.actorRef,
+              relationshipType: member.relationshipType,
+              membershipStatus: member.membershipStatus,
+              permittedActions: member.permittedActions,
+              effectiveDate: member.effectiveDate ?? null,
+              expiryDate: member.expiryDate ?? null
+            }),
+            CARE_CIRCLE_MEMBER_CLASSIFICATION,
+            authorizedReaderContext("api.care-circle.read")
+          )
         )
       },
       meta: this.meta(req, "api.care-circle.read", resolution.subjectIsSelf ? "self" : "delegated"),

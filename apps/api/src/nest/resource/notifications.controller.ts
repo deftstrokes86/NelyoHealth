@@ -14,7 +14,9 @@ import {
 import { createMeta } from "../api-envelope.js";
 import { Authorize } from "../authorization/authorization-metadata.js";
 import type { AuthenticatedRequest } from "../authorization/authorization.guard.js";
+import { projectExact } from "../../projection.js";
 import { ResourceUnavailableException } from "./resource-http.js";
+import { NOTIFICATION_CLASSIFICATION, authorizedReaderContext } from "./dto-classification.js";
 import { NOTIFICATION_SERVICE_DEPS } from "./resource-tokens.js";
 
 /**
@@ -39,16 +41,20 @@ export class NotificationsController {
     return {
       data: {
         notifications: notifications.map((notification) =>
-          createNotificationDto({
-            notificationId: notification.notificationId,
-            notificationType: notification.notificationType,
-            channel: notification.channel,
-            status: notification.status,
-            patientRef: notification.patientRef ?? null,
-            targetRef: notification.targetRef ?? null,
-            readAt: notification.readAt ?? null,
-            dispatchedAt: notification.dispatchedAt ?? null
-          })
+          projectExact(
+            createNotificationDto({
+              notificationId: notification.notificationId,
+              notificationType: notification.notificationType,
+              channel: notification.channel,
+              status: notification.status,
+              patientRef: notification.patientRef ?? null,
+              targetRef: notification.targetRef ?? null,
+              readAt: notification.readAt ?? null,
+              dispatchedAt: notification.dispatchedAt ?? null
+            }),
+            NOTIFICATION_CLASSIFICATION,
+            authorizedReaderContext("api.notifications.list")
+          )
         )
       },
       meta: this.meta(req, "api.notifications.list"),

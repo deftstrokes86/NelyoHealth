@@ -130,7 +130,11 @@ const apiOnlyModules = new Set([
   // Timeline read service (roadmap M6.5). Server-side per-patient timeline reads
   // with read-time per-domain filtering; a client DTO surface lands with the
   // timeline UI. Api-only.
-  "timeline-service"
+  "timeline-service",
+  // Central projection/redaction layer (roadmap M8.1, AM-8). Classification-driven
+  // minimum-necessary disclosure engine; pure server-side privacy infrastructure that
+  // every cross-context read passes through, never mirrored to clients. Api-only.
+  "projection"
 ]);
 // Note: apps/api/src/nest/** is not scanned by this gate at all (getContractModules
 // reads apps/api/src non-recursively) — the new auth controllers/module living

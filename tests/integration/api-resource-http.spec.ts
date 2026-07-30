@@ -259,7 +259,7 @@ describe.skipIf(!shouldRun)("resource HTTP surface (M7)", () => {
   it("runs the self booking loop: book 201 -> read 200 -> cancel 200 -> cancel-again 409", async () => {
     const booked = await post(
       "/api/appointments",
-      { slotId, appointmentType: "consultation" },
+      { slotId, appointmentType: "consultation", reasonForVisit: "annual checkup" },
       authed()
     );
     expect(booked.status).toBe(201);
@@ -268,7 +268,26 @@ describe.skipIf(!shouldRun)("resource HTTP surface (M7)", () => {
 
     const read = await get(`/api/appointments/${appointmentId}`, authed());
     expect(read.status).toBe(200);
-    expect((await read.json()).data.appointmentId).toBe(appointmentId);
+    const appt = (await read.json()).data;
+    expect(appt.appointmentId).toBe(appointmentId);
+    // M8.1 projection: the authorized self-reader receives the PROTECTED-CLINICAL
+    // reasonForVisit (projection permits authorized clinical), and the body carries
+    // ONLY the declared DTO fields (projectExact allowlist) — no internal leakage.
+    expect(appt.reasonForVisit).toBe("annual checkup");
+    expect(Object.keys(appt).sort()).toEqual(
+      [
+        "appointmentId",
+        "patientRef",
+        "clinicianRef",
+        "organizationRef",
+        "scheduledStart",
+        "scheduledEnd",
+        "appointmentType",
+        "status",
+        "reasonForVisit",
+        "cancellationReasonCode"
+      ].sort()
+    );
 
     const cancel = await post(`/api/appointments/${appointmentId}/cancel`, {}, authed());
     expect(cancel.status).toBe(200);

@@ -176,7 +176,8 @@ describe.skipIf(!shouldRun)("auth HTTP endpoints (POST /api/auth/sessions, /regi
     const res = await signIn({ email, password: "correct horse battery staple" });
     expect(res.status).toBe(201);
     const body = await res.json();
-    expect(body.data).toMatchObject({ requiresChallenge: false, redirectPath: "/account" });
+    // Personal-workspace sign-in lands on the patient dashboard (M7.1 shell).
+    expect(body.data).toMatchObject({ requiresChallenge: false, redirectPath: "/dashboard" });
     expect(typeof body.data.sessionId).toBe("string");
 
     const session = await client.query(
