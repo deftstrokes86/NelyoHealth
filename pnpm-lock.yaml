@@ -116,6 +116,9 @@ importers:
       '@nelyohealth/platform-adapters':
         specifier: workspace:*
         version: link:../../packages/platform-adapters
+      '@nelyohealth/platform-registry':
+        specifier: workspace:*
+        version: link:../../packages/platform-registry
       '@nelyohealth/worker':
         specifier: workspace:*
         version: link:../worker
@@ -314,6 +317,12 @@ importers:
       '@aws-sdk/s3-request-presigner':
         specifier: 3.1075.0
         version: 3.1075.0
+
+  packages/platform-registry:
+    dependencies:
+      zod:
+        specifier: 4.4.3
+        version: 4.4.3
 
   packages/testing-factories: {}
 

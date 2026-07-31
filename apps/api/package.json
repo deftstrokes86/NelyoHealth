@@ -30,7 +30,8 @@
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.2",
     "@nelyohealth/database": "workspace:*",
-    "@nelyohealth/domain": "workspace:*"
+    "@nelyohealth/domain": "workspace:*",
+    "@nelyohealth/platform-registry": "workspace:*"
   },
   "devDependencies": {
     "@nestjs/testing": "11.1.27",

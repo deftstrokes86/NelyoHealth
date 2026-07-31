@@ -11,7 +11,8 @@
     "paths": {
       "@nelyohealth/config": ["packages/config/src/index.ts"],
       "@nelyohealth/api-client": ["packages/api-client/src/index.ts"],
-      "@nelyohealth/database": ["packages/database/src/index.ts"]
+      "@nelyohealth/database": ["packages/database/src/index.ts"],
+      "@nelyohealth/platform-registry": ["packages/platform-registry/src/index.ts"]
     },
     "strict": true,
     "jsx": "react-jsx",
