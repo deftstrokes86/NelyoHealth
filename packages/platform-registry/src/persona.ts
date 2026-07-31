@@ -10,10 +10,11 @@ import { workspaceKindSchema } from "./workspace.js";
  * navigation, search scopes, notification preferences, reports, onboarding flows,
  * homepage composition, and interaction patterns.
  *
- * The composition fields are id arrays into the other registries. `capabilities`
- * resolved in M8.3a; `defaultDashboards` / `navigation` / `onboardingFlows` /
- * `homepageComposition` resolved in M8.3c and are now enforced by the validation gate.
- * `searchScopes` / `reports` remain FORWARD REFERENCES until M8.3d.
+ * The composition fields are id arrays into the other registries: `capabilities`
+ * (M8.3a), `defaultDashboards` / `navigation` / `onboardingFlows` / `homepageComposition`
+ * (M8.3c), and `searchScopes` / `reports` (M8.3d). As of M8.3d **every** reference on a
+ * persona resolves against a live registry and is enforced by the validation gate —
+ * there are no forward references left in this schema.
  */
 
 export const interactionPatternsSchema = z.object({
@@ -26,8 +27,9 @@ export const interactionPatternsSchema = z.object({
 
 /**
  * Behavioral metadata (refinement 4): how a persona prefers to be communicated with and
- * assisted. `preferredLandingExperience` / `default*Preference` are forward references
- * (Experience / Search / Report registries), cross-validated as those land.
+ * assisted. `preferredLandingExperience` (Experience, kind `profile`),
+ * `defaultSearchPreference` (Search), and `defaultReportPreference` (Report) are all
+ * resolved by the validation gate as of M8.3d; empty means "no preference declared".
  */
 export const personaBehaviorSchema = z.object({
   communicationStyle: z.enum(["supportive", "clinical", "concise"]).default("supportive"),
@@ -54,9 +56,10 @@ export const personaSchema = z.object({
   onboardingFlows: z.array(z.string()).default([]),
   /** Experience Registry refs, kind `homepage-section` — validated in M8.3c. */
   homepageComposition: z.array(z.string()).default([]),
-  // Forward references (resolved as later registries land):
-  searchScopes: z.array(z.string()).default([]), // Search Registry (M8.3d)
-  reports: z.array(z.string()).default([]), // Report Registry (M8.3d)
+  /** Search Registry refs — validated in M8.3d. */
+  searchScopes: z.array(z.string()).default([]),
+  /** Report Registry refs — validated in M8.3d. */
+  reports: z.array(z.string()).default([]),
   /** Default notification routing preferences (channel/opt-out defaults). */
   notificationPreferences: z.record(z.string(), z.unknown()).default({}),
   interactionPatterns: interactionPatternsSchema.default({
@@ -78,9 +81,9 @@ export type Persona = z.infer<typeof personaSchema>;
 
 /**
  * The persona catalog. `patient`, `clinician`, `organization-admin`, `caregiver`, and
- * `guardian` are the personas the Context Engine resolves today; the organization
- * sub-type personas are declared for the planned workspaces. Composition forward-refs
- * are populated as the target registries land.
+ * `guardian` carry a full composition; the organization sub-type personas are declared
+ * for the planned workspaces and compose nothing until their workspace is enabled and
+ * their surfaces are authored.
  */
 export const PERSONAS: readonly Persona[] = [
   personaSchema.parse({
@@ -110,6 +113,8 @@ export const PERSONAS: readonly Persona[] = [
     navigation: ["home", "appointments", "care-circle", "messages", "personal-health", "settings"],
     onboardingFlows: ["patient-onboarding"],
     homepageComposition: ["next-appointment-card", "care-circle-highlights", "health-tips"],
+    searchScopes: ["my-appointments", "my-documents", "my-messages", "provider-directory"],
+    reports: ["my-care-summary"],
     interactionPatterns: {
       density: "comfortable",
       primaryActions: ["appointment.book", "message.send"]
@@ -136,7 +141,9 @@ export const PERSONAS: readonly Persona[] = [
     ],
     defaultDashboards: ["patient-home"],
     navigation: ["home", "appointments", "care-circle", "messages", "personal-health"],
+    onboardingFlows: ["caregiver-onboarding"],
     homepageComposition: ["next-appointment-card", "care-circle-highlights"],
+    searchScopes: ["my-appointments", "my-messages", "provider-directory"],
     // Coordinating another person's care is task-work: override the workspace's warm
     // default with the compact profile.
     behavior: { preferredLandingExperience: "focused-personal" }
@@ -163,7 +170,9 @@ export const PERSONAS: readonly Persona[] = [
     defaultDashboards: ["patient-home"],
     navigation: ["home", "appointments", "care-circle", "messages", "personal-health", "settings"],
     onboardingFlows: ["patient-onboarding"],
-    homepageComposition: ["next-appointment-card", "care-circle-highlights"]
+    homepageComposition: ["next-appointment-card", "care-circle-highlights"],
+    searchScopes: ["my-appointments", "my-documents", "my-messages", "provider-directory"],
+    reports: ["my-care-summary"]
   }),
   personaSchema.parse({
     id: "clinician",
@@ -178,6 +187,7 @@ export const PERSONAS: readonly Persona[] = [
       "consultation.conduct",
       "clinical-record.read",
       "clinical-record.amend",
+      "patient-profile.read",
       "prescription.read",
       "laboratory.read",
       "message.read",
@@ -187,6 +197,8 @@ export const PERSONAS: readonly Persona[] = [
     navigation: ["org-home", "org-schedule", "org-clinical", "org-messages"],
     onboardingFlows: ["clinician-onboarding"],
     homepageComposition: ["clinic-day-summary", "pending-consultations"],
+    searchScopes: ["org-patients", "org-clinical-records", "org-schedule", "my-messages"],
+    reports: ["my-clinic-day"],
     interactionPatterns: { density: "compact", primaryActions: ["consultation.conduct"] },
     behavior: {
       communicationStyle: "clinical",
@@ -206,6 +218,15 @@ export const PERSONAS: readonly Persona[] = [
     // capabilities; it drops out for an administrator who does not.
     navigation: ["org-home", "org-schedule", "org-clinical", "org-admin"],
     onboardingFlows: ["organization-admin-onboarding"],
+    homepageComposition: ["org-admin-overview", "org-schedule-coverage"],
+    searchScopes: ["org-schedule", "provider-directory"],
+    // `platform-demand-trends` is declared but `planned`, so it never composes yet.
+    reports: [
+      "clinic-activity",
+      "schedule-utilisation",
+      "consent-evidence",
+      "platform-demand-trends"
+    ],
     interactionPatterns: { density: "compact", primaryActions: [] }
   }),
   personaSchema.parse({

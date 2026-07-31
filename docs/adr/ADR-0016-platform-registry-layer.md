@@ -68,7 +68,8 @@ developers — any incoherent reference fails the gate.
   cross-registry validation gate · Context Engine composition resolver. *(delivered)*
 - **M8.3b** — Care Circle Registry (first-class) · Workflow Registry · Event Registry. *(delivered)*
 - **M8.3c** — Navigation · Dashboard · Experience registries + a `composeSurface` read. *(delivered)*
-- **M8.3d** — Search · Report registries + the Tool-Registry AI/automation consumer contract.
+- **M8.3d** — Search · Report · Integration registries + the Tool-Registry AI/automation
+  consumer contract. *(delivered — completes the layer)*
 
 ## M8.3b increment — refinements + collaboration/behavior registries
 
@@ -147,6 +148,64 @@ declares them; the baseline is now `timeline.read`. The `personal` workspace gai
 **Invariant unchanged.** A surface is what may be **offered**. `composeSurface` must never be consulted
 to authorize an operation, and the absence of an item is a UX affordance, not a security control — the
 PDP re-decides at the resource door.
+
+## M8.3d increment — search, reports, integrations, and the consumer contract
+
+The last three registries and the second composition read. **The layer now has no forward
+references**: every id on every registry resolves against a live registry under `gates:registry`.
+
+- **Search Registry**: a scope declares its resource, reach (`self` / `care-circle` / `organization` /
+  `cross-organization`), searchable fields, and — decisively — the **highest classification a result
+  may carry**. Free-text search is the surface most likely to leak across a context boundary, so
+  cross-organization reach over `PROTECTED-CLINICAL-DATA` or `SENSITIVE-PERSONAL-DATA` is **rejected by
+  the schema**, and a scope's capability must cover the resource it searches. The projection layer
+  (M8.1) remains the enforcement point on the way out; this registry makes the claim reviewable.
+- **Report Registry**: reports are declared projections over the event stream. **ADR-0010 is enforced
+  structurally, not by reviewer discipline** — an `analytics` report must be aggregated or
+  de-identified and classified `DEIDENTIFIED-OR-AGGREGATED-DATA`, and the gate additionally refuses one
+  sourced from any event the Event Registry has not marked `analyticsVisible`. Row-level clinical
+  reporting stays expressible as an `operational` or `clinical` report, where it is visible for what it
+  is.
+- **Integration Registry**: every boundary where data enters or leaves — direction, protocol,
+  counterparty, classification, cross-border flag, auth mode, processor agreement. Non-public data may
+  not cross an unauthenticated boundary, and anything non-public that *sends* data (or crosses a
+  border) requires a processor agreement. This is the machine-readable half of the cross-border and
+  subprocessor registers, not a replacement for them.
+- **`resolveToolContract(workspace, persona, consumer)`**: the AI / Automation / Integration read,
+  delivering refinement 2. UI, Mobile, AI, Automation, API, and Offline call the **same** function over
+  the **same** Tool Registry and differ only in the surface they name. It reports **withheld** tools
+  with a reason (`capability-not-composed`, `surface-unsupported`, `composition-inactive`) — an agent
+  that cannot see why a tool is absent will retry, and an auditor needs the negative answer too. A
+  write tool exposed to AI or automation **must** require approval: enforced on the data by the gate
+  and re-asserted at resolution so a later data change cannot quietly widen the contract.
+
+`composeSurface` gains `search` and `reports`; a `planned` scope or report never composes.
+
+**Audit findings closed** (from the pre-commit architectural verification of M8.3c): the orphaned
+`send-message` tool is now reachable through reply widgets on both messaging dashboards and every tool
+is reachable from at least one widget; `caregiver` gained an onboarding flow and `organization-admin`
+gained homepage sections, moving both from Partial to Implemented; `clinician` gained
+`patient-profile.read`, without which it could not compose the patient search it plainly needs.
+
+**Still true, and unchanged by this increment**: there are **zero runtime consumers**. Neither
+`composeSurface` nor `resolveToolContract` is called by any app, controller, or worker, and no
+`GET /api/me/surface` exists. See "Known gaps" below.
+
+### Known gaps after M8.3d (recorded, not deferred silently)
+
+1. **No HTTP surface endpoint** — the layer is unreachable from outside the process.
+2. **Persona resolution is hardcoded** — `acting-context-resolver.ts` returns `actorRole: "patient"`
+   for every personal context, so the caregiver and guardian surfaces are unreachable at runtime.
+3. **Care Circle is not an input to composition** — `resolveComposition` reads workspace ∪ persona
+   only; `RELATIONSHIP_CAPACITY` remains a separate imperative path. There is no subject dimension, so
+   acting for oneself and acting for a ward compose identically.
+4. **Workspace id mapping is hardcoded** to `hospital`, so organization sub-types cannot resolve.
+5. **Diaspora is a taxonomy entry only** — `diaspora-sponsor`, `family-member`, and `household` exist
+   in the Care Circle Registry with `capacity: null`; there is **no** diaspora workspace, persona,
+   navigation, dashboard, or experience.
+
+Gaps 1–4 are the "surface wiring" milestone; gap 5 is a product-scope decision that should be made
+explicitly rather than inherited.
 
 ### Roadmap (not implemented) — Platform Templates
 Platform Templates (Hospital, Employer, Insurer, NGO, Government, Research, Diaspora Family, …) are the

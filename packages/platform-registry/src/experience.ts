@@ -116,6 +116,40 @@ export const EXPERIENCES: readonly Experience[] = [
     ]
   }),
   experienceSchema.parse({
+    id: "caregiver-onboarding",
+    kind: "onboarding",
+    label: "Caring for someone",
+    description: "Bring a delegated caregiver into the person's workspace.",
+    appliesToWorkspaceKinds: ["personal"],
+    tone: "neutral",
+    density: "compact",
+    steps: [
+      {
+        id: "confirm-delegation",
+        label: "Confirm your delegation",
+        description: "Accept the caregiver delegation the person granted you.",
+        requiresCapability: "care-circle.read",
+        order: 10
+      },
+      {
+        id: "review-what-you-can-see",
+        label: "Review what you can see",
+        description:
+          "Understand the scope of the delegation — what is shared with you, and what is not.",
+        requiresCapability: "care-circle.read",
+        order: 20
+      },
+      {
+        id: "set-up-scheduling",
+        label: "Help with appointments",
+        description: "Book and track appointments on this person's behalf.",
+        requiresCapability: "appointment.book",
+        optional: true,
+        order: 30
+      }
+    ]
+  }),
+  experienceSchema.parse({
     id: "clinician-onboarding",
     kind: "onboarding",
     label: "Clinician setup",
@@ -224,6 +258,26 @@ export const EXPERIENCES: readonly Experience[] = [
     appliesToWorkspaceKinds: ["organization"],
     requiresCapability: "consultation.conduct",
     requiresFeature: "consultations",
+    order: 20
+  }),
+
+  experienceSchema.parse({
+    id: "org-admin-overview",
+    kind: "homepage-section",
+    label: "Organization at a glance",
+    description: "Headline organization health: membership, verification, and coverage.",
+    appliesToWorkspaceKinds: ["organization"],
+    requiresCapability: "organization.administer",
+    order: 10
+  }),
+  experienceSchema.parse({
+    id: "org-schedule-coverage",
+    kind: "homepage-section",
+    label: "Schedule coverage",
+    description: "Published availability against demand across the organization.",
+    appliesToWorkspaceKinds: ["organization"],
+    requiresCapability: "availability-slot.open",
+    requiresFeature: "appointments",
     order: 20
   }),
 

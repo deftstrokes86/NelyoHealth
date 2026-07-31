@@ -8,11 +8,13 @@ import {
   findNavigationItem
 } from "./navigation.js";
 import { findPersona } from "./persona.js";
+import { type Report, findReport } from "./report.js";
 import {
   type ResolvedComposition,
   compositionHasCapability,
   resolveComposition
 } from "./resolve.js";
+import { type SearchScope, findSearchScope } from "./search.js";
 import { type Workspace, type WorkspaceLifecycle, findWorkspace } from "./workspace.js";
 
 /**
@@ -20,13 +22,14 @@ import { type Workspace, type WorkspaceLifecycle, findWorkspace } from "./worksp
  *
  * Given the workspace + persona the Context Engine already resolves, this assembles the
  * complete surface for that acting context: the navigation tree, the dashboards with
- * their widgets, the onboarding flows, the homepage sections, and the experience
- * profile — each filtered by the composition capability set, the workspace's available
- * features, and the workspace kind.
+ * their widgets, the onboarding flows, the homepage sections, the experience profile,
+ * and (M8.3d) the search scopes and reports — each filtered by the composition
+ * capability set, the workspace's available features, and the workspace kind.
  *
- * This is the single read every consumer uses. UI, Mobile, and (from M8.3d) AI and
- * Automation compose from the same declarations rather than each re-deriving what to
- * show, so a new organization type or persona changes DATA, never rendering code.
+ * This is the single read every VISUAL consumer uses: UI and Mobile compose from these
+ * declarations rather than each re-deriving what to show, so a new organization type or
+ * persona changes DATA, never rendering code. AI and Automation consume the parallel
+ * `resolveToolContract` read (`consumer.ts`) over the same registries.
  *
  * Fails CLOSED throughout: an inactive composition (unknown/disabled workspace,
  * non-applicable persona) yields an empty surface, and every reference that does not
@@ -63,6 +66,10 @@ export interface ComposedSurface {
   homepage: Experience[];
   /** Persona preference, else the workspace default; null when neither composes. */
   experienceProfile: Experience | null;
+  /** Search scopes offered to this context (M8.3d); `planned` entries never compose. */
+  search: SearchScope[];
+  /** Reports offered to this context (M8.3d); `planned` entries never compose. */
+  reports: Report[];
 }
 
 const emptySurface = (
@@ -81,7 +88,9 @@ const emptySurface = (
   landingDashboard: null,
   onboarding: [],
   homepage: [],
-  experienceProfile: null
+  experienceProfile: null,
+  search: [],
+  reports: []
 });
 
 /** The three filters every composable entry passes: capability, feature, workspace kind. */
@@ -175,6 +184,30 @@ export function composeSurface(workspaceId: string, personaId: string): Composed
 
   const homepage = resolveExperiences(persona.homepageComposition, "homepage-section");
 
+  // --- Search & reports (M8.3d). A `planned` entry never composes: it is declared for
+  // the roadmap, not offered to an actor.
+  const search = persona.searchScopes
+    .map((id) => findSearchScope(id))
+    .filter((scope): scope is SearchScope => scope !== undefined && scope.status !== "planned")
+    .filter(
+      (scope) =>
+        kindOk(scope.appliesToWorkspaceKinds) &&
+        capabilityOk(scope.requiresCapability) &&
+        featureOk(scope.requiresFeature)
+    )
+    .sort((a, b) => a.order - b.order);
+
+  const reports = persona.reports
+    .map((id) => findReport(id))
+    .filter((report): report is Report => report !== undefined && report.status !== "planned")
+    .filter(
+      (report) =>
+        kindOk(report.appliesToWorkspaceKinds) &&
+        capabilityOk(report.requiresCapability) &&
+        featureOk(report.requiresFeature)
+    )
+    .sort((a, b) => a.order - b.order);
+
   const profileId =
     persona.behavior.preferredLandingExperience || workspace.presentation.experienceProfile;
   const profile = profileId ? findExperience(profileId) : undefined;
@@ -193,7 +226,9 @@ export function composeSurface(workspaceId: string, personaId: string): Composed
     landingDashboard,
     onboarding,
     homepage,
-    experienceProfile
+    experienceProfile,
+    search,
+    reports
   };
 }
 

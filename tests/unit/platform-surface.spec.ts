@@ -150,7 +150,8 @@ describe("composeSurface — dashboards and experiences (M8.3c)", () => {
       "quick-book",
       "care-circle-summary",
       "health-timeline",
-      "unread-messages"
+      "unread-messages",
+      "reply-to-message"
     ]);
     expect(patient.landingDashboard?.id).toBe("patient-home");
   });

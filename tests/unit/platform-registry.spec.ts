@@ -138,16 +138,14 @@ describe("platform registry (M8.3a)", () => {
     expect(resolveComposition("hospital", "patient").reasonCode).toBe("persona-not-applicable");
   });
 
-  it("keeps personas expandable: live composition refs resolve, later phases stay empty", () => {
-    // M8.3c closed dashboards/navigation/onboarding/homepage — the live personas declare
-    // them and the validation gate resolves them.
+  it("resolves every composition reference on a live persona (no forward refs left)", () => {
+    // M8.3c closed dashboards/navigation/onboarding/homepage; M8.3d closed search/reports.
     const patient = PERSONAS.find((p) => p.id === "patient");
     expect(patient?.defaultDashboards).toContain("patient-home");
     expect(patient?.navigation).toContain("appointments");
-    for (const persona of PERSONAS) {
-      // Search / Report remain forward references until M8.3d: declared, empty, valid.
-      expect(persona.searchScopes).toEqual([]);
-      expect(persona.reports).toEqual([]);
-    }
+    expect(patient?.searchScopes).toContain("my-appointments");
+    expect(patient?.reports).toContain("my-care-summary");
+    // Planned personas stay declarable with empty composition — valid, not invalid.
+    expect(PERSONAS.find((p) => p.id === "insurer-agent")?.searchScopes).toEqual([]);
   });
 });

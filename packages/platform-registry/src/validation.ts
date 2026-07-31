@@ -1,4 +1,4 @@
-import { CAPABILITIES, capabilitySchema, isKnownCapability } from "./capability.js";
+import { CAPABILITIES, capabilitySchema, findCapability, isKnownCapability } from "./capability.js";
 import { TOOLS, toolSchema, findTool, isKnownTool } from "./tool.js";
 import { WORKSPACES, workspaceSchema, type WorkspaceKind } from "./workspace.js";
 import { PERSONAS, personaSchema, isKnownPersona } from "./persona.js";
@@ -19,6 +19,10 @@ import {
 } from "./navigation.js";
 import { DASHBOARDS, dashboardSchema, findDashboard } from "./dashboard.js";
 import { EXPERIENCES, experienceSchema, findExperience } from "./experience.js";
+import { SEARCH_SCOPES, searchScopeSchema, findSearchScope } from "./search.js";
+import { REPORTS, reportSchema, findReport } from "./report.js";
+import { INTEGRATIONS, integrationSchema } from "./integration.js";
+import { findEvent } from "./event.js";
 
 /**
  * Cross-registry validation (roadmap M8.3a; extended M8.3b, M8.3c). Parses every entry
@@ -27,12 +31,16 @@ import { EXPERIENCES, experienceSchema, findExperience } from "./experience.js";
  * platform builder: any change — developer or admin — that breaks a reference fails the
  * validation gate rather than silently producing an incoherent surface.
  *
- * M8.3c closes the persona/workspace composition forward references: `defaultDashboards`,
- * `navigation`, `onboardingFlows`, `homepageComposition`, `preferredLandingExperience`,
- * `landingDashboard`, and `experienceProfile` now resolve against live registries, with
- * workspace-kind coherence enforced so a persona can never declare a surface it could
- * never compose. Still forward references until M8.3d: persona `searchScopes` / `reports`
- * (Search / Report registries) and notification/workflow content templates.
+ * M8.3c closed the persona/workspace composition forward references; M8.3d closes the
+ * last two (`searchScopes`, `reports`) and adds the Search / Report / Integration
+ * registries. **No forward reference remains in the layer** except notification and
+ * workflow content templates, which point at the separate content-registry family.
+ *
+ * Several rules here are policy, not just referential integrity, and are stated as gate
+ * failures because a reviewer will not catch them reliably: an analytics report may only
+ * source events the Event Registry marks `analyticsVisible` (ADR-0010); a write tool
+ * exposed to AI or automation must require approval; a search scope's capability must
+ * match the resource it searches.
  */
 export interface RegistryValidationIssue {
   registry: string;
@@ -75,6 +83,9 @@ export function validatePlatformRegistry(): RegistryValidationIssue[] {
   parseAll("navigation", NAVIGATION_ITEMS, navigationItemSchema);
   parseAll("dashboard", DASHBOARDS, dashboardSchema);
   parseAll("experience", EXPERIENCES, experienceSchema);
+  parseAll("search-scope", SEARCH_SCOPES, searchScopeSchema);
+  parseAll("report", REPORTS, reportSchema);
+  parseAll("integration", INTEGRATIONS, integrationSchema);
 
   // 2. Unique ids within each registry.
   const assertUnique = (registry: string, ids: string[]) => {
@@ -131,6 +142,18 @@ export function validatePlatformRegistry(): RegistryValidationIssue[] {
   assertUnique(
     "experience",
     EXPERIENCES.map((e) => e.id)
+  );
+  assertUnique(
+    "search-scope",
+    SEARCH_SCOPES.map((e) => e.id)
+  );
+  assertUnique(
+    "report",
+    REPORTS.map((e) => e.id)
+  );
+  assertUnique(
+    "integration",
+    INTEGRATIONS.map((e) => e.id)
   );
 
   const cap = (registry: string, entryId: string, ids: string[]) => {
@@ -280,7 +303,71 @@ export function validatePlatformRegistry(): RegistryValidationIssue[] {
     }
   }
 
-  // 6. Referential integrity — persona / workspace composition declarations (M8.3c).
+  // 5b. Search / Report / Integration + the Tool safety rule (M8.3d).
+  const capabilityResources = new Set(CAPABILITIES.map((entry) => entry.resource));
+
+  for (const tool of TOOLS) {
+    // An unattended consumer must never be handed a silent write.
+    const unattended = tool.compatibility.supportsAI || tool.compatibility.supportsAutomation;
+    if (tool.effect === "write" && unattended && !tool.compatibility.requiresApproval) {
+      add(
+        "tool",
+        tool.id,
+        "a write tool exposed to AI or automation must set compatibility.requiresApproval"
+      );
+    }
+  }
+
+  for (const scope of SEARCH_SCOPES) {
+    capOpt("search-scope", scope.id, [scope.requiresCapability]);
+    feat("search-scope", scope.id, [scope.requiresFeature]);
+    if (scope.tool !== null && !isKnownTool(scope.tool)) {
+      add("search-scope", scope.id, `unknown tool '${scope.tool}'`);
+    }
+    if (!capabilityResources.has(scope.resource)) {
+      add("search-scope", scope.id, `resource '${scope.resource}' is not a capability resource`);
+    }
+    // Searching a resource under a capability for a different resource would let a scope
+    // claim reach its capability does not cover.
+    if (scope.requiresCapability !== null) {
+      const capability = findCapability(scope.requiresCapability);
+      if (capability && capability.resource !== scope.resource) {
+        add(
+          "search-scope",
+          scope.id,
+          `capability '${capability.id}' covers resource '${capability.resource}', not '${scope.resource}'`
+        );
+      }
+    }
+  }
+
+  for (const report of REPORTS) {
+    capOpt("report", report.id, [report.requiresCapability]);
+    feat("report", report.id, [report.requiresFeature]);
+    evt("report", report.id, report.sourceEvents);
+    if (report.kind !== "analytics") continue;
+    // ADR-0010: analytics may only be projected from events cleared for analytics.
+    for (const eventId of report.sourceEvents) {
+      const event = findEvent(eventId);
+      if (event && !event.analyticsVisible) {
+        add(
+          "report",
+          report.id,
+          `analytics report sources '${eventId}', which is not analyticsVisible (ADR-0010)`
+        );
+      }
+    }
+  }
+
+  for (const integration of INTEGRATIONS) {
+    capOpt("integration", integration.id, [integration.requiresCapability]);
+    evt("integration", integration.id, [
+      ...integration.events.produces,
+      ...integration.events.consumes
+    ]);
+  }
+
+  // 6. Referential integrity — persona / workspace composition declarations (M8.3c/d).
   for (const persona of PERSONAS) {
     for (const id of persona.defaultDashboards) {
       const dashboard = findDashboard(id);
@@ -336,6 +423,46 @@ export function validatePlatformRegistry(): RegistryValidationIssue[] {
     for (const id of persona.homepageComposition) experienceRef(id, "homepage-section");
     if (persona.behavior.preferredLandingExperience) {
       experienceRef(persona.behavior.preferredLandingExperience, "profile");
+    }
+    if (
+      persona.behavior.defaultSearchPreference &&
+      !findSearchScope(persona.behavior.defaultSearchPreference)
+    ) {
+      add(
+        "persona",
+        persona.id,
+        `unknown default search scope '${persona.behavior.defaultSearchPreference}'`
+      );
+    }
+    if (
+      persona.behavior.defaultReportPreference &&
+      !findReport(persona.behavior.defaultReportPreference)
+    ) {
+      add(
+        "persona",
+        persona.id,
+        `unknown default report '${persona.behavior.defaultReportPreference}'`
+      );
+    }
+    for (const id of persona.searchScopes) {
+      const scope = findSearchScope(id);
+      if (!scope) {
+        add("persona", persona.id, `unknown search scope '${id}'`);
+      } else if (!kindsOverlap(scope.appliesToWorkspaceKinds, persona.appliesToWorkspaceKinds)) {
+        add(
+          "persona",
+          persona.id,
+          `search scope '${id}' does not apply to this persona's workspaces`
+        );
+      }
+    }
+    for (const id of persona.reports) {
+      const report = findReport(id);
+      if (!report) {
+        add("persona", persona.id, `unknown report '${id}'`);
+      } else if (!kindsOverlap(report.appliesToWorkspaceKinds, persona.appliesToWorkspaceKinds)) {
+        add("persona", persona.id, `report '${id}' does not apply to this persona's workspaces`);
+      }
     }
   }
 

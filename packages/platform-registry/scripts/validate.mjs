@@ -11,6 +11,9 @@ import {
   NAVIGATION_ITEMS,
   DASHBOARDS,
   EXPERIENCES,
+  SEARCH_SCOPES,
+  REPORTS,
+  INTEGRATIONS,
   validatePlatformRegistry
 } from "../lib/index.js";
 
@@ -34,6 +37,9 @@ console.log(`  workflows:           ${WORKFLOWS.length}`);
 console.log(`  navigation items:    ${NAVIGATION_ITEMS.length}`);
 console.log(`  dashboards:          ${DASHBOARDS.length}`);
 console.log(`  experiences:         ${EXPERIENCES.length}`);
+console.log(`  search scopes:       ${SEARCH_SCOPES.length}`);
+console.log(`  reports:             ${REPORTS.length}`);
+console.log(`  integrations:        ${INTEGRATIONS.length}`);
 console.log(`  issues:              ${issues.length}`);
 
 if (issues.length > 0) {

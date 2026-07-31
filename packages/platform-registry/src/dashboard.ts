@@ -120,6 +120,17 @@ export const DASHBOARDS: readonly Dashboard[] = [
         requiresFeature: "messaging",
         size: "small",
         order: 50
+      },
+      {
+        id: "reply-to-message",
+        kind: "action-panel",
+        title: "Reply",
+        description: "Reply on an open message thread.",
+        requiresCapability: "message.send",
+        requiresFeature: "messaging",
+        tool: "send-message",
+        size: "small",
+        order: 60
       }
     ]
   }),
@@ -170,6 +181,17 @@ export const DASHBOARDS: readonly Dashboard[] = [
         requiresFeature: "messaging",
         size: "small",
         order: 40
+      },
+      {
+        id: "clinician-reply",
+        kind: "action-panel",
+        title: "Reply",
+        description: "Reply on an open message thread.",
+        requiresCapability: "message.send",
+        requiresFeature: "messaging",
+        tool: "send-message",
+        size: "small",
+        order: 50
       }
     ]
   }),
