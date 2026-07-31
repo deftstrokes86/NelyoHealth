@@ -32,6 +32,21 @@ export const workspaceLifecycleSchema = z.object({
 });
 export type WorkspaceLifecycle = z.infer<typeof workspaceLifecycleSchema>;
 
+/**
+ * Presentation metadata (refinement 3): a workspace is a complete EXPERIENCE
+ * definition, not just a permission container. `landingDashboard` and
+ * `experienceProfile` are forward references (Dashboard Registry M8.3c / Experience
+ * Registry M8.3c), cross-validated as those registries land.
+ */
+export const workspacePresentationSchema = z.object({
+  branding: z.string().default("nelyo"),
+  theme: z.string().default("warm-care"),
+  navigationStyle: z.enum(["sidebar", "topbar", "tabbed"]).default("sidebar"),
+  landingDashboard: z.string().default(""),
+  experienceProfile: z.string().default("")
+});
+export type WorkspacePresentation = z.infer<typeof workspacePresentationSchema>;
+
 export const workspaceSchema = z.object({
   id: z.string().regex(/^[a-z][a-z0-9-]*$/),
   kind: workspaceKindSchema,
@@ -43,7 +58,16 @@ export const workspaceSchema = z.object({
   personas: z.array(z.string()).default([]),
   /** Baseline capabilities the workspace confers (Capability catalog refs). */
   capabilities: z.array(z.string()).default([]),
+  /** Feature ids available to this workspace (Feature Registry refs, M8.3b). */
+  features: z.array(z.string()).default([]),
   lifecycle: workspaceLifecycleSchema,
+  presentation: workspacePresentationSchema.default({
+    branding: "nelyo",
+    theme: "warm-care",
+    navigationStyle: "sidebar",
+    landingDashboard: "",
+    experienceProfile: ""
+  }),
   metadata: z.record(z.string(), z.unknown()).default({})
 });
 export type Workspace = z.infer<typeof workspaceSchema>;
@@ -63,7 +87,9 @@ export const WORKSPACES: readonly Workspace[] = [
     description: "A person's own health workspace — self and care-circle scope.",
     personas: ["patient", "caregiver", "guardian"],
     capabilities: ["timeline.read", "care-circle.read", "appointment.read", "notification.read"],
-    lifecycle: { status: "active", enablementState: "enabled" }
+    features: ["appointments", "messaging", "care-circle"],
+    lifecycle: { status: "active", enablementState: "enabled" },
+    presentation: { navigationStyle: "tabbed" }
   }),
   workspaceSchema.parse({
     id: "hospital",
@@ -78,11 +104,13 @@ export const WORKSPACES: readonly Workspace[] = [
       "clinical-record.amend",
       "availability-slot.open"
     ],
+    features: ["appointments", "consultations", "clinical-records", "messaging"],
     lifecycle: {
       status: "active",
       enablementState: "enabled",
       verificationRequirements: ["organization-verified"]
-    }
+    },
+    presentation: { navigationStyle: "sidebar", theme: "clinical" }
   }),
   workspaceSchema.parse({
     id: "pharmacy",
@@ -92,6 +120,7 @@ export const WORKSPACES: readonly Workspace[] = [
     description: "A dispensing organization workspace.",
     personas: ["pharmacist", "organization-admin"],
     capabilities: ["prescription.read", "prescription.dispense"],
+    features: ["pharmacy"],
     lifecycle: {
       status: "planned",
       enablementState: "disabled",
@@ -106,6 +135,7 @@ export const WORKSPACES: readonly Workspace[] = [
     description: "A diagnostics organization workspace.",
     personas: ["lab-technician", "organization-admin"],
     capabilities: ["laboratory.read", "laboratory.record-result"],
+    features: ["labs"],
     lifecycle: {
       status: "planned",
       enablementState: "disabled",
@@ -120,6 +150,7 @@ export const WORKSPACES: readonly Workspace[] = [
     description: "An employer sponsoring employee health programs.",
     personas: ["employer-admin"],
     capabilities: [],
+    features: ["employer-portal"],
     lifecycle: {
       status: "planned",
       enablementState: "disabled",
@@ -159,6 +190,7 @@ export const WORKSPACES: readonly Workspace[] = [
     description: "A government health authority workspace.",
     personas: ["organization-admin"],
     capabilities: [],
+    features: ["government-portal"],
     lifecycle: {
       status: "planned",
       enablementState: "disabled",

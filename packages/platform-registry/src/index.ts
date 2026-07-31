@@ -17,24 +17,68 @@
 export {
   CAPABILITIES,
   capabilityCategorySchema,
+  capabilityDomainSchema,
   capabilityScopeSchema,
   capabilitySchema,
   findCapability,
   isKnownCapability,
   type Capability,
   type CapabilityCategory,
+  type CapabilityDomain,
   type CapabilityScope
 } from "./capability.js";
 
 export {
   TOOLS,
-  toolConsumerSchema,
+  toolCompatibilitySchema,
   toolFieldSchema,
   toolSchema,
   type Tool,
-  type ToolConsumer,
+  type ToolCompatibility,
   type ToolField
 } from "./tool.js";
+
+export {
+  EVENTS,
+  dataClassificationSchema,
+  deadLetterSchema,
+  eventSchema,
+  findEvent,
+  isKnownEvent,
+  retryPolicySchema,
+  type PlatformEvent
+} from "./event.js";
+
+export { FEATURES, featureSchema, findFeature, isKnownFeature, type Feature } from "./feature.js";
+
+export {
+  CARE_CIRCLE_ROLES,
+  careCircleCollaborationSchema,
+  careCircleRoleSchema,
+  findCareCircleRole,
+  isKnownCareCircleRole,
+  type CareCircleCollaboration,
+  type CareCircleRole
+} from "./care-circle.js";
+
+export {
+  NOTIFICATION_ROUTES,
+  findNotificationRoute,
+  isKnownNotificationRoute,
+  notificationChannelSchema,
+  notificationRouteSchema,
+  type NotificationRoute
+} from "./notification.js";
+
+export {
+  WORKFLOWS,
+  findWorkflow,
+  isKnownWorkflow,
+  workflowSchema,
+  workflowTransitionSchema,
+  type Workflow,
+  type WorkflowTransition
+} from "./workflow.js";
 
 export {
   WORKSPACES,
@@ -44,10 +88,12 @@ export {
   lifecycleStatusSchema,
   workspaceKindSchema,
   workspaceLifecycleSchema,
+  workspacePresentationSchema,
   workspaceSchema,
   type Workspace,
   type WorkspaceKind,
-  type WorkspaceLifecycle
+  type WorkspaceLifecycle,
+  type WorkspacePresentation
 } from "./workspace.js";
 
 export {
@@ -55,8 +101,10 @@ export {
   findPersona,
   interactionPatternsSchema,
   isKnownPersona,
+  personaBehaviorSchema,
   personaSchema,
-  type Persona
+  type Persona,
+  type PersonaBehavior
 } from "./persona.js";
 
 export {

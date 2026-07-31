@@ -25,6 +25,21 @@ export const interactionPatternsSchema = z.object({
   metadata: z.record(z.string(), z.unknown()).default({})
 });
 
+/**
+ * Behavioral metadata (refinement 4): how a persona prefers to be communicated with and
+ * assisted. `preferredLandingExperience` / `default*Preference` are forward references
+ * (Experience / Search / Report registries), cross-validated as those land.
+ */
+export const personaBehaviorSchema = z.object({
+  communicationStyle: z.enum(["supportive", "clinical", "concise"]).default("supportive"),
+  notificationStrategy: z.enum(["proactive", "balanced", "minimal"]).default("balanced"),
+  aiInteractionProfile: z.enum(["off", "assistive", "autonomous"]).default("assistive"),
+  preferredLandingExperience: z.string().default(""),
+  defaultSearchPreference: z.string().default(""),
+  defaultReportPreference: z.string().default("")
+});
+export type PersonaBehavior = z.infer<typeof personaBehaviorSchema>;
+
 export const personaSchema = z.object({
   id: z.string().regex(/^[a-z][a-z0-9-]*$/),
   label: z.string().min(1),
@@ -45,6 +60,14 @@ export const personaSchema = z.object({
     density: "comfortable",
     primaryActions: [],
     metadata: {}
+  }),
+  behavior: personaBehaviorSchema.default({
+    communicationStyle: "supportive",
+    notificationStrategy: "balanced",
+    aiInteractionProfile: "assistive",
+    preferredLandingExperience: "",
+    defaultSearchPreference: "",
+    defaultReportPreference: ""
   }),
   metadata: z.record(z.string(), z.unknown()).default({})
 });
@@ -83,6 +106,11 @@ export const PERSONAS: readonly Persona[] = [
     interactionPatterns: {
       density: "comfortable",
       primaryActions: ["appointment.book", "message.send"]
+    },
+    behavior: {
+      communicationStyle: "supportive",
+      notificationStrategy: "proactive",
+      aiInteractionProfile: "assistive"
     }
   }),
   personaSchema.parse({
@@ -138,7 +166,12 @@ export const PERSONAS: readonly Persona[] = [
       "message.read",
       "message.send"
     ],
-    interactionPatterns: { density: "compact", primaryActions: ["consultation.conduct"] }
+    interactionPatterns: { density: "compact", primaryActions: ["consultation.conduct"] },
+    behavior: {
+      communicationStyle: "clinical",
+      notificationStrategy: "minimal",
+      aiInteractionProfile: "assistive"
+    }
   }),
   personaSchema.parse({
     id: "organization-admin",

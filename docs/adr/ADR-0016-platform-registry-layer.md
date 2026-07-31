@@ -69,6 +69,47 @@ developers — any incoherent reference fails the gate.
 - **M8.3c** — Navigation · Dashboard · Experience registries + a `composeSurface` read.
 - **M8.3d** — Search · Report registries + the Tool-Registry AI/automation consumer contract.
 
+## M8.3b increment — refinements + collaboration/behavior registries
+
+Folded into the layer (no parallel architectures):
+
+- **Capability**: added a business `domain` (clinical, care-coordination, communication,
+  identity, administrative, finance, research, government, analytics, platform) and free-form `tags`
+  for discovery / AI reasoning / analytics / search.
+- **Tool**: replaced the coarse consumer list with a structured `compatibility` block (`supportsUI /
+  Mobile / AI / Automation / API / Offline`, `requiresApproval`, `requiresStreaming`) — AI remains a
+  consumer, never a parallel registry.
+- **Workspace**: added `presentation` (branding, theme, navigation style, landing dashboard, experience
+  profile) and `features[]` — a workspace is a complete experience definition.
+- **Persona**: added `behavior` (communication style, notification strategy, AI interaction profile,
+  preferred landing experience, default search/report preferences).
+- **Event Registry**: formalizes the M6 Event Platform as a contract (publishers, subscribers, retry,
+  dead-letter, classification, retention, analytics visibility). Other registries reference event ids
+  via `produces` / `consumes`, so M6 becomes implementation of a defined contract.
+- **Feature Registry**: org-available features (Appointments, Messaging, Care Circle, Labs, Pharmacy,
+  AI, Employer/Government portals) — **distinct from feature flags** (flags are the rollout mechanism in
+  workspace lifecycle).
+- **Workflow Registry**: a GENERIC state/transition engine; each transition declares its capability,
+  emitted events, and notification / automation / AI / reporting hooks. New workflows are data.
+- **Notification Registry**: declarative routing (event trigger → persona / care-circle-role /
+  capability audience → channels → template → classification → priority); Care Circle collaboration and
+  workflow transitions route through it, not hardcoded logic.
+- **Care Circle Registry**: Care Circle as a first-class construct modelling collaboration
+  (responsibilities, communication rules, shared resources, financial sponsorship, emergency
+  escalation, AI collaboration, care goals, task ownership). Membership stays event-projected
+  (derive-don't-persist). `capacity` is a DECLARATION mirroring the PDP capacity map — **not an
+  authorization input**; a role with `capacity: null` (family-member, diaspora-sponsor, household,
+  emergency-contact) is declared but PDP-default-denied, exactly as today.
+
+Cross-registry referential integrity (capability / event / feature / persona / care-circle-role /
+notification-route references) is enforced by the `gates:registry` validation gate.
+
+### Roadmap (not implemented) — Platform Templates
+Platform Templates (Hospital, Employer, Insurer, NGO, Government, Research, Diaspora Family, …) are the
+**composition layer above the registries** — a template selects and configures workspaces, personas,
+features, workflows, and notifications into a ready-to-run deployment. They are intentionally NOT built
+yet; the registry design (data-driven, id-referenced, validated) does not preclude them.
+
 ## Consequences
 
 - One extensible composition engine underlies dashboards, navigation, tools, search, reports,

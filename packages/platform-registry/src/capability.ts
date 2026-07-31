@@ -34,6 +34,25 @@ export const capabilityCategorySchema = z.enum([
 export type CapabilityCategory = z.infer<typeof capabilityCategorySchema>;
 
 /**
+ * The business DOMAIN a capability belongs to — a higher-level classification than
+ * `category` (which is UI/grouping oriented). Domains support future discovery, AI
+ * reasoning, analytics, and search. Extended additively.
+ */
+export const capabilityDomainSchema = z.enum([
+  "clinical",
+  "care-coordination",
+  "communication",
+  "identity",
+  "administrative",
+  "finance",
+  "research",
+  "government",
+  "analytics",
+  "platform"
+]);
+export type CapabilityDomain = z.infer<typeof capabilityDomainSchema>;
+
+/**
  * The relational reach of a capability. Mirrors the platform's access scopes so the
  * Context Engine can resolve a capability set consistently with the Scope Registry
  * (M8.2) and the PDP scopes — self, care-circle, one organization, across
@@ -54,9 +73,13 @@ export const capabilitySchema = z
     id: z.string().regex(/^[a-z][a-z-]*\.[a-z][a-z-]*$/),
     resource: z.string().regex(/^[a-z][a-z-]*$/),
     action: z.string().regex(/^[a-z][a-z-]*$/),
+    /** Business domain — higher-level than category (discovery / AI / analytics / search). */
+    domain: capabilityDomainSchema,
     category: capabilityCategorySchema,
     scope: capabilityScopeSchema,
     description: z.string().min(1),
+    /** Free-form tags for discovery, AI reasoning, analytics, and search. */
+    tags: z.array(z.string()).default([]),
     /** Open extension point (feature flags, ownership, future scope hints). */
     metadata: z.record(z.string(), z.unknown()).default({})
   })
@@ -75,17 +98,21 @@ export type Capability = z.infer<typeof capabilitySchema>;
 const capability = (
   resource: string,
   action: string,
+  domain: CapabilityDomain,
   category: CapabilityCategory,
   scope: CapabilityScope,
-  description: string
+  description: string,
+  tags: string[] = []
 ): Capability =>
   capabilitySchema.parse({
     id: `${resource}.${action}`,
     resource,
     action,
+    domain,
     category,
     scope,
-    description
+    description,
+    tags
   });
 
 /**
@@ -99,12 +126,15 @@ export const CAPABILITIES: readonly Capability[] = [
     "timeline",
     "read",
     "care-coordination",
+    "care-coordination",
     "care-circle",
-    "Read a patient's longitudinal timeline."
+    "Read a patient's longitudinal timeline.",
+    ["longitudinal"]
   ),
   capability(
     "care-circle",
     "read",
+    "care-coordination",
     "care-coordination",
     "care-circle",
     "View a patient's care circle."
@@ -113,34 +143,68 @@ export const CAPABILITIES: readonly Capability[] = [
     "care-circle",
     "manage",
     "care-coordination",
+    "care-coordination",
     "care-circle",
     "Invite/adjust care-circle membership."
   ),
-  capability("consent", "grant", "identity", "self", "Grant a consent to a party."),
-  capability("consent", "withdraw", "identity", "self", "Withdraw a previously granted consent."),
+  capability(
+    "consent",
+    "grant",
+    "care-coordination",
+    "identity",
+    "self",
+    "Grant a consent to a party.",
+    ["consent"]
+  ),
+  capability(
+    "consent",
+    "withdraw",
+    "care-coordination",
+    "identity",
+    "self",
+    "Withdraw a previously granted consent.",
+    ["consent"]
+  ),
   // Scheduling
-  capability("appointment", "read", "scheduling", "self", "View appointments."),
-  capability("appointment", "book", "scheduling", "self", "Book an appointment into an open slot."),
+  capability("appointment", "read", "clinical", "scheduling", "self", "View appointments."),
+  capability(
+    "appointment",
+    "book",
+    "clinical",
+    "scheduling",
+    "self",
+    "Book an appointment into an open slot."
+  ),
   capability(
     "appointment",
     "reschedule",
+    "clinical",
     "scheduling",
     "self",
     "Move an appointment to another slot."
   ),
-  capability("appointment", "cancel", "scheduling", "self", "Cancel an appointment."),
+  capability("appointment", "cancel", "clinical", "scheduling", "self", "Cancel an appointment."),
   capability(
     "availability-slot",
     "open",
+    "administrative",
     "scheduling",
     "organization",
     "Publish clinician availability."
   ),
   // Clinical
-  capability("consultation", "read", "clinical", "care-circle", "View a consultation record."),
+  capability(
+    "consultation",
+    "read",
+    "clinical",
+    "clinical",
+    "care-circle",
+    "View a consultation record."
+  ),
   capability(
     "consultation",
     "conduct",
+    "clinical",
     "clinical",
     "organization",
     "Start/complete a consultation."
@@ -149,6 +213,7 @@ export const CAPABILITIES: readonly Capability[] = [
     "clinical-record",
     "read",
     "clinical",
+    "clinical",
     "care-circle",
     "Read the clinical record summary."
   ),
@@ -156,37 +221,78 @@ export const CAPABILITIES: readonly Capability[] = [
     "clinical-record",
     "amend",
     "clinical",
+    "clinical",
     "organization",
     "Amend a clinical record entry."
   ),
-  capability("prescription", "read", "clinical", "care-circle", "View prescriptions."),
+  capability("prescription", "read", "clinical", "clinical", "care-circle", "View prescriptions."),
   capability(
     "prescription",
     "dispense",
     "clinical",
+    "clinical",
     "organization",
-    "Dispense a prescription fill."
+    "Dispense a prescription fill.",
+    ["pharmacy"]
   ),
-  capability("laboratory", "read", "clinical", "care-circle", "View laboratory orders/results."),
+  capability(
+    "laboratory",
+    "read",
+    "clinical",
+    "clinical",
+    "care-circle",
+    "View laboratory orders/results."
+  ),
   capability(
     "laboratory",
     "record-result",
     "clinical",
+    "clinical",
     "organization",
-    "Record a laboratory result."
+    "Record a laboratory result.",
+    ["labs"]
   ),
   // Communication / documents / notifications
-  capability("message", "read", "communication", "care-circle", "Read secure messages."),
-  capability("message", "send", "communication", "care-circle", "Send a secure message."),
-  capability("notification", "read", "communication", "self", "Read the notification inbox."),
-  capability("document", "read", "documents", "care-circle", "View documents."),
-  capability("document", "upload", "documents", "care-circle", "Upload a document."),
+  capability(
+    "message",
+    "read",
+    "communication",
+    "communication",
+    "care-circle",
+    "Read secure messages."
+  ),
+  capability(
+    "message",
+    "send",
+    "communication",
+    "communication",
+    "care-circle",
+    "Send a secure message."
+  ),
+  capability(
+    "notification",
+    "read",
+    "communication",
+    "communication",
+    "self",
+    "Read the notification inbox."
+  ),
+  capability("document", "read", "clinical", "documents", "care-circle", "View documents."),
+  capability("document", "upload", "clinical", "documents", "care-circle", "Upload a document."),
   // Identity / administrative
-  capability("patient-profile", "read", "identity", "self", "View a patient profile."),
-  capability("patient-profile", "update", "identity", "self", "Update a patient profile."),
+  capability("patient-profile", "read", "identity", "identity", "self", "View a patient profile."),
+  capability(
+    "patient-profile",
+    "update",
+    "identity",
+    "identity",
+    "self",
+    "Update a patient profile."
+  ),
   capability(
     "organization",
     "administer",
+    "administrative",
     "administrative",
     "organization",
     "Administer an organization workspace."

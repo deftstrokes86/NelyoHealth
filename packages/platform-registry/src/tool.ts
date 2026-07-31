@@ -2,21 +2,34 @@ import { z } from "zod";
 import { capabilityCategorySchema } from "./capability.js";
 
 /**
- * Tool Registry (roadmap M8.3a, refinement: "AI is a consumer, not a parallel
- * platform").
+ * Tool Registry (roadmap M8.3a; extended M8.3b, refinement 2 — "AI is a consumer, not
+ * a parallel platform").
  *
  * A tool is an invocable unit of platform behaviour that EXPOSES a capability. Every
- * consumer — AI, UI, Mobile, Automation, and future Integrations — invokes the SAME
- * tool through the same declared input/output contract. There is deliberately no
- * separate "AI capability" surface: the AI Context Resolver (a later consumer) reads
- * this registry exactly as the UI does, and the PDP still authorizes the underlying
- * capability at invocation. The `input`/`output` shapes are declarative contracts
- * (JSON-serializable) so the same tool description drives an AI tool schema, a UI
- * action, a mobile action, and an automation step without divergence.
+ * consumer — UI, Mobile, AI, Automation, Integration — invokes the SAME tool through
+ * the same declared contract. There is deliberately no separate "AI tool" surface; the
+ * AI Context Resolver reads this registry exactly as the UI does, and the PDP still
+ * authorizes the underlying capability at invocation.
+ *
+ * Each tool declares its `compatibility` (which surfaces it supports) and `execution`
+ * characteristics (approval, streaming) so a consumer can decide whether/how to invoke
+ * it without hardcoded per-tool branching.
  */
 
-export const toolConsumerSchema = z.enum(["ui", "mobile", "ai", "automation", "integration"]);
-export type ToolConsumer = z.infer<typeof toolConsumerSchema>;
+/** Which surfaces a tool supports, and its execution characteristics. */
+export const toolCompatibilitySchema = z.object({
+  supportsUI: z.boolean().default(true),
+  supportsMobile: z.boolean().default(true),
+  supportsAI: z.boolean().default(false),
+  supportsAutomation: z.boolean().default(false),
+  supportsAPI: z.boolean().default(true),
+  supportsOffline: z.boolean().default(false),
+  /** A human must approve before the effect commits (e.g. an AI-initiated write). */
+  requiresApproval: z.boolean().default(false),
+  /** The tool streams its output (long-running / incremental). */
+  requiresStreaming: z.boolean().default(false)
+});
+export type ToolCompatibility = z.infer<typeof toolCompatibilitySchema>;
 
 /** A declarative field contract for a tool's input/output (builder- and AI-friendly). */
 export const toolFieldSchema = z.object({
@@ -34,20 +47,26 @@ export const toolSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1),
   category: capabilityCategorySchema,
-  /** Every consumer surface that may invoke this tool. */
-  consumers: z.array(toolConsumerSchema).min(1),
+  compatibility: toolCompatibilitySchema,
   input: z.array(toolFieldSchema).default([]),
   output: z.array(toolFieldSchema).default([]),
-  /** Whether the tool changes state (an AI/automation consumer may gate on this). */
+  /** Whether the tool changes state (an AI/automation consumer gates on this). */
   effect: z.enum(["read", "write"]),
+  /** Event Registry refs this tool produces/consumes (validated in M8.3b). */
+  events: z
+    .object({
+      produces: z.array(z.string()).default([]),
+      consumes: z.array(z.string()).default([])
+    })
+    .default({ produces: [], consumes: [] }),
   metadata: z.record(z.string(), z.unknown()).default({})
 });
 export type Tool = z.infer<typeof toolSchema>;
 
-/**
- * The initial tool set — one shared contract per capability, consumable everywhere.
- * Extended additively as capabilities are exposed to more surfaces.
- */
+const compat = (overrides: Partial<ToolCompatibility>): ToolCompatibility =>
+  toolCompatibilitySchema.parse(overrides);
+
+/** The initial tool set — one shared contract per capability, consumable everywhere. */
 export const TOOLS: readonly Tool[] = [
   toolSchema.parse({
     id: "view-timeline",
@@ -55,7 +74,7 @@ export const TOOLS: readonly Tool[] = [
     name: "View timeline",
     description: "Return a patient's longitudinal timeline entries.",
     category: "care-coordination",
-    consumers: ["ui", "mobile", "ai"],
+    compatibility: compat({ supportsAI: true, supportsOffline: true }),
     input: [{ name: "patientRef", type: "reference", required: true }],
     effect: "read"
   }),
@@ -65,7 +84,7 @@ export const TOOLS: readonly Tool[] = [
     name: "View care circle",
     description: "Return a patient's care-circle membership.",
     category: "care-coordination",
-    consumers: ["ui", "mobile", "ai"],
+    compatibility: compat({ supportsAI: true }),
     input: [{ name: "patientRef", type: "reference", required: true }],
     effect: "read"
   }),
@@ -75,12 +94,13 @@ export const TOOLS: readonly Tool[] = [
     name: "Book appointment",
     description: "Book an appointment into an open availability slot.",
     category: "scheduling",
-    consumers: ["ui", "mobile", "ai", "automation"],
+    compatibility: compat({ supportsAI: true, supportsAutomation: true, requiresApproval: true }),
     input: [
       { name: "slotId", type: "reference", required: true },
       { name: "reasonForVisit", type: "string", required: false }
     ],
-    effect: "write"
+    effect: "write",
+    events: { produces: ["AppointmentBooked"], consumes: [] }
   }),
   toolSchema.parse({
     id: "send-message",
@@ -88,12 +108,13 @@ export const TOOLS: readonly Tool[] = [
     name: "Send message",
     description: "Send a secure message on a thread.",
     category: "communication",
-    consumers: ["ui", "mobile"],
+    compatibility: compat({ requiresApproval: true }),
     input: [
       { name: "threadId", type: "reference", required: true },
       { name: "body", type: "string", required: true }
     ],
-    effect: "write"
+    effect: "write",
+    events: { produces: ["MessagePosted"], consumes: [] }
   }),
   toolSchema.parse({
     id: "list-appointments",
@@ -101,7 +122,7 @@ export const TOOLS: readonly Tool[] = [
     name: "List appointments",
     description: "List a patient's appointments.",
     category: "scheduling",
-    consumers: ["ui", "mobile", "ai", "integration"],
+    compatibility: compat({ supportsAI: true, supportsAutomation: true, supportsOffline: true }),
     input: [{ name: "patientRef", type: "reference", required: true }],
     effect: "read"
   })
