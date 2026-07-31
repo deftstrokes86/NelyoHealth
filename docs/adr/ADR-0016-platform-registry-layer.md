@@ -3,8 +3,9 @@
 ## Status
 
 ACCEPTED (roadmap M8.3 — architecture-completion arc). Design reviewed and approved with 12
-architectural refinements, all folded in below. Delivered in phases; M8.3a (this record's first
-increment) ships the foundation.
+architectural refinements, all folded in below. Delivered in phases; M8.3a shipped the foundation,
+M8.3b the collaboration/behavior registries, and M8.3c the composition surface. M8.3c closes the
+Design-Freeze gap "Navigation / Dashboard Registries" in `architecture-evolution-report.md`.
 
 ## Date
 
@@ -64,9 +65,9 @@ developers — any incoherent reference fails the gate.
 
 ### Phasing
 - **M8.3a** — structured Capability model · Tool Registry · Workspace Registry · Persona Registry ·
-  cross-registry validation gate · Context Engine composition resolver. *(this increment)*
-- **M8.3b** — Care Circle Registry (first-class) · Workflow Registry · Event Registry.
-- **M8.3c** — Navigation · Dashboard · Experience registries + a `composeSurface` read.
+  cross-registry validation gate · Context Engine composition resolver. *(delivered)*
+- **M8.3b** — Care Circle Registry (first-class) · Workflow Registry · Event Registry. *(delivered)*
+- **M8.3c** — Navigation · Dashboard · Experience registries + a `composeSurface` read. *(delivered)*
 - **M8.3d** — Search · Report registries + the Tool-Registry AI/automation consumer contract.
 
 ## M8.3b increment — refinements + collaboration/behavior registries
@@ -104,6 +105,49 @@ Folded into the layer (no parallel architectures):
 Cross-registry referential integrity (capability / event / feature / persona / care-circle-role /
 notification-route references) is enforced by the `gates:registry` validation gate.
 
+## M8.3c increment — the composition surface
+
+The three remaining composition registries plus the read that assembles them. What a persona sees is
+now **declared and filtered**, never rendered by per-persona code.
+
+- **Navigation Registry**: items declare route, section, hierarchy (`parentId`), order, workspace
+  kinds, required capability, required feature, and a notification-route badge source. An item with an
+  empty `route` is a **group**; a group whose children all filter out is **dropped** — a menu entry
+  that opens nothing is never offered. Nesting is capped at one level, which also makes parent cycles
+  structurally impossible.
+- **Dashboard Registry**: a dashboard is a declared set of **widgets**, each with its own capability /
+  feature requirement and, where it reads data, the **Tool Registry** tool that supplies it. Widgets
+  filter individually, so one dashboard serves several personas (`patient-home` serves patient,
+  caregiver, and guardian) instead of a page per persona. A dashboard left with no widget is dropped.
+- **Experience Registry**: one id space, three kinds — `onboarding` (an ordered, capability-filtered
+  step flow), `homepage-section` (a composable landing section), and `profile` (tone / density /
+  motion). One registry keeps a single validated id space and one filter rule while `kind` keeps each
+  reference site strict: an onboarding flow can never be used as an experience profile.
+- **`composeSurface(workspace, persona)`**: the single composition read. It applies the same three
+  filters — capability, feature, workspace kind — uniformly across navigation, dashboards, and
+  experiences, resolves the landing dashboard (workspace default, falling back to the first that
+  composed) and the experience profile (persona preference overriding the workspace default), and
+  fails **closed**: an inactive composition yields an empty surface and any unresolved reference is
+  dropped rather than defaulted.
+
+**Forward references closed.** `persona.defaultDashboards / navigation / onboardingFlows /
+homepageComposition / behavior.preferredLandingExperience` and `workspace.presentation.landingDashboard
+/ experienceProfile` now resolve against live registries in `gates:registry`, with **workspace-kind
+coherence** enforced so a persona can never declare a surface it could never compose, and a nested
+navigation item can never be declared where a top-level one is required. A widget's
+`requiresCapability` must match its tool's capability, so the filter cannot offer a widget the PDP
+will refuse. Only `searchScopes` / `reports` remain forward references, until M8.3d.
+
+**Data correction.** The `hospital` workspace baseline previously conferred `consultation.conduct` and
+`clinical-record.amend` on **every** persona in the workspace, including an administrator. A workspace
+baseline is what every persona composes, so those moved to the `clinician` persona that already
+declares them; the baseline is now `timeline.read`. The `personal` workspace gained the
+`clinical-records` feature, which its document surfaces require.
+
+**Invariant unchanged.** A surface is what may be **offered**. `composeSurface` must never be consulted
+to authorize an operation, and the absence of an item is a UX affordance, not a security control — the
+PDP re-decides at the resource door.
+
 ### Roadmap (not implemented) — Platform Templates
 Platform Templates (Hospital, Employer, Insurer, NGO, Government, Research, Diaspora Family, …) are the
 **composition layer above the registries** — a template selects and configures workspaces, personas,
@@ -117,6 +161,8 @@ yet; the registry design (data-driven, id-referenced, validated) does not preclu
 - Invariants preserved: Context Engine authoritative; registries never grant; PDP sole decision point;
   derive-don't-persist; context isolation.
 - Forward references (persona → dashboards/navigation/search/reports/onboarding/homepage) are modelled
-  now and cross-validated as each target registry lands (M8.3c/M8.3d).
+  now and cross-validated as each target registry lands; navigation/dashboard/onboarding/homepage
+  closed in M8.3c, search/reports remain open until M8.3d.
 - Cost: a new `@nelyohealth/platform-registry` package + a light Context Engine adapter; no existing
-  behavior changed in M8.3a.
+  behavior changed in M8.3a. M8.3c likewise adds only declarations and a read — no consumer is wired
+  to `composeSurface` yet, so no rendered surface changed.

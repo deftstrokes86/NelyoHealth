@@ -141,6 +141,13 @@ For each: current implementation · current documentation · recommended canonic
 - **Canonical.** Keep a **thin kernel** = the existing middleware + policy + outbox, formalized. **Remove** Resource/Capability registries (derive from classification + role defs). **Add** Navigation/Dashboard **declarative** registries and a **central Projection layer**. Align PDP naming to the implemented dimensions.
 - **Migration impact.** Mixed: deletions (docs), additions (two registries + projection layer). Medium.
 - **Risk.** Medium. **Priority: P0 (docs) / P1 (new layers).**
+- **RESOLVED (M8.3, ADR-0016).** The central Projection layer landed at M8.1. The declarative
+  registries landed as the **Platform Registry Layer**, which supersedes the narrower
+  "Navigation/Dashboard registries" scope: Capability · Tool · Workspace · Persona (M8.3a); Care
+  Circle · Workflow · Event · Feature · Notification (M8.3b); **Navigation · Dashboard · Experience +
+  `composeSurface`** (M8.3c). Resource and Capability registries remain **removed** as decided.
+  Cross-registry referential integrity is enforced by the `gates:registry` CI gate. Remaining under
+  AM-4: nothing — M8.3d (Search / Report) is an extension, not a freeze condition.
 
 ### AM-5 — Platform Runtime / compute
 - **Implementation.** NestJS modular monolith + a persistent worker running the outbox dispatcher and queue consumer.
@@ -308,7 +315,7 @@ The modular monolith (ADR-0005) with clean bounded contexts, an outbox-driven ev
 | Event Architecture (mandatory outbox) | ⚠ | Adopt transactional-command + gate; freeze schemas. |
 | Projection Layer | ❌ | Build central redaction layer. |
 | Notification Architecture | ❌ | Build orchestration module. |
-| Navigation / Dashboard Registries | ❌ | Introduce declarative registries. |
+| Navigation / Dashboard Registries | ✅ | Delivered as the Platform Registry Layer (M8.3a–c, ADR-0016) with a `gates:registry` integrity gate. |
 | Resource / Capability Registries | ✅ | Frozen by **removal**. |
 | Platform Services (DB/queue/storage/observability) | ✅ | Production vendor hardening tracked separately. |
 | Platform Runtime / Deployment | ❌ | Retarget to containers (AM-5). |

@@ -127,3 +127,13 @@ export const TOOLS: readonly Tool[] = [
     effect: "read"
   })
 ] as const;
+
+const TOOL_IDS = new Set(TOOLS.map((entry) => entry.id));
+
+export function isKnownTool(id: string): boolean {
+  return TOOL_IDS.has(id);
+}
+
+export function findTool(id: string): Tool | undefined {
+  return TOOLS.find((entry) => entry.id === id);
+}

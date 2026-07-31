@@ -8,6 +8,9 @@ import {
   CARE_CIRCLE_ROLES,
   NOTIFICATION_ROUTES,
   WORKFLOWS,
+  NAVIGATION_ITEMS,
+  DASHBOARDS,
+  EXPERIENCES,
   validatePlatformRegistry
 } from "../lib/index.js";
 
@@ -28,6 +31,9 @@ console.log(`  features:            ${FEATURES.length}`);
 console.log(`  care-circle roles:   ${CARE_CIRCLE_ROLES.length}`);
 console.log(`  notification routes: ${NOTIFICATION_ROUTES.length}`);
 console.log(`  workflows:           ${WORKFLOWS.length}`);
+console.log(`  navigation items:    ${NAVIGATION_ITEMS.length}`);
+console.log(`  dashboards:          ${DASHBOARDS.length}`);
+console.log(`  experiences:         ${EXPERIENCES.length}`);
 console.log(`  issues:              ${issues.length}`);
 
 if (issues.length > 0) {

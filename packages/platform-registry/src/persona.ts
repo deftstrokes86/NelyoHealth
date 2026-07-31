@@ -10,11 +10,10 @@ import { workspaceKindSchema } from "./workspace.js";
  * navigation, search scopes, notification preferences, reports, onboarding flows,
  * homepage composition, and interaction patterns.
  *
- * The composition fields are FORWARD REFERENCES to registries that land in later
- * phases (Dashboard/Navigation/Experience in M8.3c; Search/Report in M8.3d). They are
- * modelled now as id arrays so personas are extensible from the outset; cross-registry
- * referential validation is added as each target registry lands. Only `capabilities`
- * is validated against a live registry (the Capability catalog) in M8.3a.
+ * The composition fields are id arrays into the other registries. `capabilities`
+ * resolved in M8.3a; `defaultDashboards` / `navigation` / `onboardingFlows` /
+ * `homepageComposition` resolved in M8.3c and are now enforced by the validation gate.
+ * `searchScopes` / `reports` remain FORWARD REFERENCES until M8.3d.
  */
 
 export const interactionPatternsSchema = z.object({
@@ -47,11 +46,15 @@ export const personaSchema = z.object({
   appliesToWorkspaceKinds: z.array(workspaceKindSchema).min(1),
   /** Capability catalog refs — validated in M8.3a. */
   capabilities: z.array(z.string()).default([]),
+  /** Dashboard Registry refs — validated in M8.3c. */
+  defaultDashboards: z.array(z.string()).default([]),
+  /** Navigation Registry refs — TOP-LEVEL items only; children come from the hierarchy. */
+  navigation: z.array(z.string()).default([]),
+  /** Experience Registry refs, kind `onboarding` — validated in M8.3c. */
+  onboardingFlows: z.array(z.string()).default([]),
+  /** Experience Registry refs, kind `homepage-section` — validated in M8.3c. */
+  homepageComposition: z.array(z.string()).default([]),
   // Forward references (resolved as later registries land):
-  defaultDashboards: z.array(z.string()).default([]), // Dashboard Registry (M8.3c)
-  navigation: z.array(z.string()).default([]), // Navigation Registry (M8.3c)
-  onboardingFlows: z.array(z.string()).default([]), // Experience Registry (M8.3c)
-  homepageComposition: z.array(z.string()).default([]), // Experience Registry (M8.3c)
   searchScopes: z.array(z.string()).default([]), // Search Registry (M8.3d)
   reports: z.array(z.string()).default([]), // Report Registry (M8.3d)
   /** Default notification routing preferences (channel/opt-out defaults). */
@@ -103,6 +106,10 @@ export const PERSONAS: readonly Persona[] = [
       "consent.grant",
       "consent.withdraw"
     ],
+    defaultDashboards: ["patient-home"],
+    navigation: ["home", "appointments", "care-circle", "messages", "personal-health", "settings"],
+    onboardingFlows: ["patient-onboarding"],
+    homepageComposition: ["next-appointment-card", "care-circle-highlights", "health-tips"],
     interactionPatterns: {
       density: "comfortable",
       primaryActions: ["appointment.book", "message.send"]
@@ -126,7 +133,13 @@ export const PERSONAS: readonly Persona[] = [
       "notification.read",
       "message.read",
       "message.send"
-    ]
+    ],
+    defaultDashboards: ["patient-home"],
+    navigation: ["home", "appointments", "care-circle", "messages", "personal-health"],
+    homepageComposition: ["next-appointment-card", "care-circle-highlights"],
+    // Coordinating another person's care is task-work: override the workspace's warm
+    // default with the compact profile.
+    behavior: { preferredLandingExperience: "focused-personal" }
   }),
   personaSchema.parse({
     id: "guardian",
@@ -146,7 +159,11 @@ export const PERSONAS: readonly Persona[] = [
       "message.send",
       "consent.grant",
       "consent.withdraw"
-    ]
+    ],
+    defaultDashboards: ["patient-home"],
+    navigation: ["home", "appointments", "care-circle", "messages", "personal-health", "settings"],
+    onboardingFlows: ["patient-onboarding"],
+    homepageComposition: ["next-appointment-card", "care-circle-highlights"]
   }),
   personaSchema.parse({
     id: "clinician",
@@ -166,11 +183,16 @@ export const PERSONAS: readonly Persona[] = [
       "message.read",
       "message.send"
     ],
+    defaultDashboards: ["clinician-home"],
+    navigation: ["org-home", "org-schedule", "org-clinical", "org-messages"],
+    onboardingFlows: ["clinician-onboarding"],
+    homepageComposition: ["clinic-day-summary", "pending-consultations"],
     interactionPatterns: { density: "compact", primaryActions: ["consultation.conduct"] },
     behavior: {
       communicationStyle: "clinical",
       notificationStrategy: "minimal",
-      aiInteractionProfile: "assistive"
+      aiInteractionProfile: "assistive",
+      preferredLandingExperience: "clinical-focus"
     }
   }),
   personaSchema.parse({
@@ -179,6 +201,11 @@ export const PERSONAS: readonly Persona[] = [
     description: "An administrator of an organization workspace.",
     appliesToWorkspaceKinds: ["organization"],
     capabilities: ["organization.administer", "availability-slot.open"],
+    defaultDashboards: ["organization-admin-home"],
+    // `org-clinical` is declared but composes only for an admin who also holds clinical
+    // capabilities; it drops out for an administrator who does not.
+    navigation: ["org-home", "org-schedule", "org-clinical", "org-admin"],
+    onboardingFlows: ["organization-admin-onboarding"],
     interactionPatterns: { density: "compact", primaryActions: [] }
   }),
   personaSchema.parse({

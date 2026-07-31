@@ -5,9 +5,10 @@
  * for platform composition. M8.3a establishes the foundation: the structured
  * Capability vocabulary, the Tool Registry (the shared consumption layer for UI /
  * Mobile / AI / Automation / Integration), the Workspace Registry (with lifecycle),
- * and the Persona Registry (expanded composition). Later phases add Care Circle /
- * Workflow / Event (M8.3b), Navigation / Dashboard / Experience (M8.3c), and Search /
- * Report (M8.3d).
+ * and the Persona Registry (expanded composition). M8.3b added Care Circle / Workflow /
+ * Event; M8.3c adds Navigation / Dashboard / Experience and `composeSurface`, the single
+ * composition read every consumer assembles a surface from. Search / Report follow in
+ * M8.3d.
  *
  * Governing invariant: registries FORMALIZE what the Context Engine resolves — they do
  * not duplicate it, and they never grant authorization (the PDP remains the sole
@@ -30,6 +31,8 @@ export {
 
 export {
   TOOLS,
+  findTool,
+  isKnownTool,
   toolCompatibilitySchema,
   toolFieldSchema,
   toolSchema,
@@ -108,10 +111,54 @@ export {
 } from "./persona.js";
 
 export {
+  NAVIGATION_ITEMS,
+  findNavigationItem,
+  isKnownNavigationItem,
+  isNavigationGroup,
+  navigationChildren,
+  navigationItemSchema,
+  navigationSectionSchema,
+  type NavigationItem,
+  type NavigationSection
+} from "./navigation.js";
+
+export {
+  DASHBOARDS,
+  dashboardSchema,
+  dashboardWidgetKindSchema,
+  dashboardWidgetSchema,
+  findDashboard,
+  isKnownDashboard,
+  type Dashboard,
+  type DashboardWidget,
+  type DashboardWidgetKind
+} from "./dashboard.js";
+
+export {
+  EXPERIENCES,
+  experienceKindSchema,
+  experienceSchema,
+  experienceStepSchema,
+  findExperience,
+  isExperienceOfKind,
+  isKnownExperience,
+  type Experience,
+  type ExperienceKind,
+  type ExperienceStep
+} from "./experience.js";
+
+export {
   compositionHasCapability,
   resolveComposition,
   type ResolvedComposition
 } from "./resolve.js";
+
+export {
+  composeSurface,
+  surfaceRoutes,
+  type ComposedNavigationItem,
+  type ComposedSurface
+} from "./surface.js";
 
 export {
   assertPlatformRegistryValid,

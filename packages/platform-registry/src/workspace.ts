@@ -34,9 +34,9 @@ export type WorkspaceLifecycle = z.infer<typeof workspaceLifecycleSchema>;
 
 /**
  * Presentation metadata (refinement 3): a workspace is a complete EXPERIENCE
- * definition, not just a permission container. `landingDashboard` and
- * `experienceProfile` are forward references (Dashboard Registry M8.3c / Experience
- * Registry M8.3c), cross-validated as those registries land.
+ * definition, not just a permission container. `landingDashboard` (Dashboard Registry)
+ * and `experienceProfile` (Experience Registry, kind `profile`) resolved in M8.3c and
+ * are enforced by the validation gate; empty means "none declared".
  */
 export const workspacePresentationSchema = z.object({
   branding: z.string().default("nelyo"),
@@ -87,9 +87,13 @@ export const WORKSPACES: readonly Workspace[] = [
     description: "A person's own health workspace — self and care-circle scope.",
     personas: ["patient", "caregiver", "guardian"],
     capabilities: ["timeline.read", "care-circle.read", "appointment.read", "notification.read"],
-    features: ["appointments", "messaging", "care-circle"],
+    features: ["appointments", "messaging", "care-circle", "clinical-records"],
     lifecycle: { status: "active", enablementState: "enabled" },
-    presentation: { navigationStyle: "tabbed" }
+    presentation: {
+      navigationStyle: "tabbed",
+      landingDashboard: "patient-home",
+      experienceProfile: "warm-care-personal"
+    }
   }),
   workspaceSchema.parse({
     id: "hospital",
@@ -98,19 +102,21 @@ export const WORKSPACES: readonly Workspace[] = [
     label: "Hospital / Clinic",
     description: "A care-delivery organization workspace.",
     personas: ["clinician", "organization-admin"],
-    capabilities: [
-      "timeline.read",
-      "consultation.conduct",
-      "clinical-record.amend",
-      "availability-slot.open"
-    ],
+    // Baseline = what EVERY persona in the workspace composes. Clinical actions belong to
+    // the clinician persona (which declares them), not to the workspace floor.
+    capabilities: ["timeline.read"],
     features: ["appointments", "consultations", "clinical-records", "messaging"],
     lifecycle: {
       status: "active",
       enablementState: "enabled",
       verificationRequirements: ["organization-verified"]
     },
-    presentation: { navigationStyle: "sidebar", theme: "clinical" }
+    presentation: {
+      navigationStyle: "sidebar",
+      theme: "clinical",
+      landingDashboard: "clinician-home",
+      experienceProfile: "clinical-focus"
+    }
   }),
   workspaceSchema.parse({
     id: "pharmacy",

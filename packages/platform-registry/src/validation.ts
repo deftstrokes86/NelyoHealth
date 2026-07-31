@@ -1,6 +1,6 @@
 import { CAPABILITIES, capabilitySchema, isKnownCapability } from "./capability.js";
-import { TOOLS, toolSchema } from "./tool.js";
-import { WORKSPACES, workspaceSchema } from "./workspace.js";
+import { TOOLS, toolSchema, findTool, isKnownTool } from "./tool.js";
+import { WORKSPACES, workspaceSchema, type WorkspaceKind } from "./workspace.js";
 import { PERSONAS, personaSchema, isKnownPersona } from "./persona.js";
 import { EVENTS, eventSchema, isKnownEvent } from "./event.js";
 import { FEATURES, featureSchema, isKnownFeature } from "./feature.js";
@@ -11,18 +11,28 @@ import {
   isKnownNotificationRoute
 } from "./notification.js";
 import { WORKFLOWS, workflowSchema } from "./workflow.js";
+import {
+  NAVIGATION_ITEMS,
+  navigationItemSchema,
+  findNavigationItem,
+  isNavigationGroup
+} from "./navigation.js";
+import { DASHBOARDS, dashboardSchema, findDashboard } from "./dashboard.js";
+import { EXPERIENCES, experienceSchema, findExperience } from "./experience.js";
 
 /**
- * Cross-registry validation (roadmap M8.3a; extended M8.3b). Parses every entry against
- * its schema and enforces referential integrity ACROSS registries. This is what lets
- * the Platform Registry Layer eventually be edited by an administrator through a
+ * Cross-registry validation (roadmap M8.3a; extended M8.3b, M8.3c). Parses every entry
+ * against its schema and enforces referential integrity ACROSS registries. This is what
+ * lets the Platform Registry Layer eventually be edited by an administrator through a
  * platform builder: any change — developer or admin — that breaks a reference fails the
  * validation gate rather than silently producing an incoherent surface.
  *
- * Forward references to registries that land in later phases (persona/workspace →
- * dashboards / navigation / search / reports / onboarding / homepage / experience;
- * notification/workflow → content templates) are intentionally NOT validated yet — each
- * is enabled as its target registry lands.
+ * M8.3c closes the persona/workspace composition forward references: `defaultDashboards`,
+ * `navigation`, `onboardingFlows`, `homepageComposition`, `preferredLandingExperience`,
+ * `landingDashboard`, and `experienceProfile` now resolve against live registries, with
+ * workspace-kind coherence enforced so a persona can never declare a surface it could
+ * never compose. Still forward references until M8.3d: persona `searchScopes` / `reports`
+ * (Search / Report registries) and notification/workflow content templates.
  */
 export interface RegistryValidationIssue {
   registry: string;
@@ -62,6 +72,9 @@ export function validatePlatformRegistry(): RegistryValidationIssue[] {
   parseAll("care-circle-role", CARE_CIRCLE_ROLES, careCircleRoleSchema);
   parseAll("notification-route", NOTIFICATION_ROUTES, notificationRouteSchema);
   parseAll("workflow", WORKFLOWS, workflowSchema);
+  parseAll("navigation", NAVIGATION_ITEMS, navigationItemSchema);
+  parseAll("dashboard", DASHBOARDS, dashboardSchema);
+  parseAll("experience", EXPERIENCES, experienceSchema);
 
   // 2. Unique ids within each registry.
   const assertUnique = (registry: string, ids: string[]) => {
@@ -106,6 +119,18 @@ export function validatePlatformRegistry(): RegistryValidationIssue[] {
   assertUnique(
     "workflow",
     WORKFLOWS.map((e) => e.id)
+  );
+  assertUnique(
+    "navigation",
+    NAVIGATION_ITEMS.map((e) => e.id)
+  );
+  assertUnique(
+    "dashboard",
+    DASHBOARDS.map((e) => e.id)
+  );
+  assertUnique(
+    "experience",
+    EXPERIENCES.map((e) => e.id)
   );
 
   const cap = (registry: string, entryId: string, ids: string[]) => {
@@ -170,7 +195,186 @@ export function validatePlatformRegistry(): RegistryValidationIssue[] {
     if (route.audience.capability) cap("notification-route", route.id, [route.audience.capability]);
   }
 
-  // 5. Coherence: workspace personas apply to the workspace kind.
+  // 5. Referential integrity — composition surfaces (M8.3c).
+  const feat = (registry: string, entryId: string, ids: (string | null)[]) => {
+    for (const id of ids)
+      if (id !== null && !isKnownFeature(id)) add(registry, entryId, `unknown feature '${id}'`);
+  };
+  const capOpt = (registry: string, entryId: string, ids: (string | null)[]) =>
+    cap(
+      registry,
+      entryId,
+      ids.filter((id): id is string => id !== null)
+    );
+  /** Two kind lists must overlap, or the entry could never compose. */
+  const kindsOverlap = (a: readonly WorkspaceKind[], b: readonly WorkspaceKind[]) =>
+    a.some((kind) => b.includes(kind));
+
+  for (const item of NAVIGATION_ITEMS) {
+    capOpt("navigation", item.id, [item.requiresCapability]);
+    feat("navigation", item.id, [item.requiresFeature]);
+    if (item.badgeSource && !isKnownNotificationRoute(item.badgeSource)) {
+      add("navigation", item.id, `unknown notification route '${item.badgeSource}'`);
+    }
+    if (item.parentId !== null) {
+      const parent = findNavigationItem(item.parentId);
+      if (!parent) {
+        add("navigation", item.id, `unknown parent '${item.parentId}'`);
+      } else if (item.parentId === item.id) {
+        add("navigation", item.id, "item is its own parent");
+      } else if (parent.parentId !== null) {
+        // One level of nesting keeps composition (and the UI) tractable, and makes
+        // parent cycles structurally impossible.
+        add("navigation", item.id, `parent '${parent.id}' is itself nested (max depth 2)`);
+      } else if (!kindsOverlap(item.workspaceKinds, parent.workspaceKinds)) {
+        add(
+          "navigation",
+          item.id,
+          `workspace kinds do not overlap parent '${parent.id}' — it could never compose`
+        );
+      }
+    }
+    if (isNavigationGroup(item) && !NAVIGATION_ITEMS.some((e) => e.parentId === item.id)) {
+      add("navigation", item.id, "group item has no route and no children");
+    }
+  }
+
+  for (const dashboard of DASHBOARDS) {
+    assertUnique(
+      `dashboard:${dashboard.id}`,
+      dashboard.widgets.map((w) => w.id)
+    );
+    for (const widget of dashboard.widgets) {
+      capOpt("dashboard", `${dashboard.id}/${widget.id}`, [widget.requiresCapability]);
+      feat("dashboard", `${dashboard.id}/${widget.id}`, [widget.requiresFeature]);
+      if (widget.tool === null) continue;
+      if (!isKnownTool(widget.tool)) {
+        add("dashboard", `${dashboard.id}/${widget.id}`, `unknown tool '${widget.tool}'`);
+        continue;
+      }
+      // A widget must require the capability its tool exposes, or the filter would offer
+      // a widget whose tool the PDP will refuse.
+      const toolCapability = findTool(widget.tool)!.capability;
+      if (widget.requiresCapability !== null && widget.requiresCapability !== toolCapability) {
+        add(
+          "dashboard",
+          `${dashboard.id}/${widget.id}`,
+          `requiresCapability '${widget.requiresCapability}' does not match tool '${widget.tool}' capability '${toolCapability}'`
+        );
+      }
+    }
+  }
+
+  for (const experience of EXPERIENCES) {
+    capOpt("experience", experience.id, [experience.requiresCapability]);
+    feat("experience", experience.id, [experience.requiresFeature]);
+    assertUnique(
+      `experience:${experience.id}`,
+      experience.steps.map((s) => s.id)
+    );
+    for (const step of experience.steps) {
+      capOpt("experience", `${experience.id}/${step.id}`, [step.requiresCapability]);
+      if (step.tool !== null && !isKnownTool(step.tool)) {
+        add("experience", `${experience.id}/${step.id}`, `unknown tool '${step.tool}'`);
+      }
+    }
+  }
+
+  // 6. Referential integrity — persona / workspace composition declarations (M8.3c).
+  for (const persona of PERSONAS) {
+    for (const id of persona.defaultDashboards) {
+      const dashboard = findDashboard(id);
+      if (!dashboard) {
+        add("persona", persona.id, `unknown dashboard '${id}'`);
+      } else if (
+        !kindsOverlap(dashboard.appliesToWorkspaceKinds, persona.appliesToWorkspaceKinds)
+      ) {
+        add("persona", persona.id, `dashboard '${id}' does not apply to this persona's workspaces`);
+      }
+    }
+    for (const id of persona.navigation) {
+      const item = findNavigationItem(id);
+      if (!item) {
+        add("persona", persona.id, `unknown navigation item '${id}'`);
+      } else if (item.parentId !== null) {
+        add(
+          "persona",
+          persona.id,
+          `navigation item '${id}' is nested — declare its top-level parent '${item.parentId}'`
+        );
+      } else if (!kindsOverlap(item.workspaceKinds, persona.appliesToWorkspaceKinds)) {
+        add(
+          "persona",
+          persona.id,
+          `navigation item '${id}' does not apply to this persona's workspaces`
+        );
+      }
+    }
+    const experienceRef = (id: string, kind: "onboarding" | "homepage-section" | "profile") => {
+      const experience = findExperience(id);
+      if (!experience) {
+        add("persona", persona.id, `unknown experience '${id}'`);
+        return;
+      }
+      if (experience.kind !== kind) {
+        add(
+          "persona",
+          persona.id,
+          `experience '${id}' is kind '${experience.kind}', expected '${kind}'`
+        );
+        return;
+      }
+      if (!kindsOverlap(experience.appliesToWorkspaceKinds, persona.appliesToWorkspaceKinds)) {
+        add(
+          "persona",
+          persona.id,
+          `experience '${id}' does not apply to this persona's workspaces`
+        );
+      }
+    };
+    for (const id of persona.onboardingFlows) experienceRef(id, "onboarding");
+    for (const id of persona.homepageComposition) experienceRef(id, "homepage-section");
+    if (persona.behavior.preferredLandingExperience) {
+      experienceRef(persona.behavior.preferredLandingExperience, "profile");
+    }
+  }
+
+  for (const workspace of WORKSPACES) {
+    const landing = workspace.presentation.landingDashboard;
+    if (landing) {
+      const dashboard = findDashboard(landing);
+      if (!dashboard) {
+        add("workspace", workspace.id, `unknown landing dashboard '${landing}'`);
+      } else if (!dashboard.appliesToWorkspaceKinds.includes(workspace.kind)) {
+        add(
+          "workspace",
+          workspace.id,
+          `landing dashboard '${landing}' does not apply to kind '${workspace.kind}'`
+        );
+      }
+    }
+    const profileId = workspace.presentation.experienceProfile;
+    if (profileId) {
+      const profile = findExperience(profileId);
+      if (!profile) {
+        add("workspace", workspace.id, `unknown experience profile '${profileId}'`);
+      } else if (profile.kind !== "profile") {
+        add(
+          "workspace",
+          workspace.id,
+          `experience '${profileId}' is kind '${profile.kind}', expected 'profile'`
+        );
+      } else if (!profile.appliesToWorkspaceKinds.includes(workspace.kind)) {
+        add(
+          "workspace",
+          workspace.id,
+          `experience profile '${profileId}' does not apply to kind '${workspace.kind}'`
+        );
+      }
+    }
+  }
+
+  // 7. Coherence: workspace personas apply to the workspace kind.
   for (const workspace of WORKSPACES) {
     for (const personaId of workspace.personas) {
       const persona = PERSONAS.find((entry) => entry.id === personaId);
