@@ -269,6 +269,7 @@ export async function dispensePrescription(
     ): Promise<{ result: DispensePrescriptionOutcome; audit: CommandAuditOutcome }> => {
       const claimed = await claimPrescriptionFill(ctx.client, {
         prescriptionId: input.prescriptionId,
+        organizationRef: existing.organizationRef,
         updatedAt: nowIso
       });
       if (!claimed) {
@@ -395,6 +396,7 @@ export async function cancelPrescription(
     ): Promise<{ result: CancelPrescriptionOutcome; audit: CommandAuditOutcome }> => {
       const cancelled = await markPrescriptionCancelled(ctx.client, {
         prescriptionId: input.prescriptionId,
+        organizationRef: existing.organizationRef,
         cancellationReasonCode: input.cancellationReasonCode,
         updatedAt: nowIso
       });

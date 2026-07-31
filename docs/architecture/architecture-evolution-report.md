@@ -162,6 +162,7 @@ For each: current implementation · current documentation · recommended canonic
 - **Canonical.** A mandatory guard that calls the PDP for every protected route + a repository-level tenant-scope guard; complete ABAC legs (Care-Circle membership; time/location where applicable). Promote `authorization-policy-endpoint-coverage.test.ts` to a gate.
 - **Migration impact.** Guard + repo wrapper + gate. Medium.
 - **Risk.** High (latent authorization bypass). **Priority: P1.**
+- **RESOLVED (M8.2, ADR-0015).** The mandatory edge PEP + audited service decision landed at M7 (two-tier PEP); the **repository-level tenant-scope guard** landed at M8.2 as the extensible **Scope Registry** + belt-and-suspenders scope predicate on every scope-owned statement + the runtime fail-closed guard + the `gates:tenant-scope` CI construction gate. Postgres RLS is documented as future defense-in-depth beneath these layers (PDP → Repository Tenant-Scope Guard → RLS → DB). Remaining under AM-7: complete the ABAC time/location legs where applicable.
 
 ### AM-8 — Redaction / Projection
 - **Implementation.** Redaction lives inside `provider-disclosure` and per-handler code.

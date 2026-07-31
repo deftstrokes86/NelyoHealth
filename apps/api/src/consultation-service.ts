@@ -259,6 +259,7 @@ export async function startConsultation(
     work: async (ctx) => {
       await markConsultationStarted(ctx.client, {
         consultationId: input.consultationId,
+        organizationRef: consultation.organizationRef,
         startedAt: nowIso,
         updatedAt: nowIso
       });
@@ -463,6 +464,7 @@ export async function completeConsultation(
     ): Promise<{ result: CompleteConsultationOutcome; audit: CommandAuditOutcome }> => {
       const advanced = await markConsultationCompleted(ctx.client, {
         consultationId: input.consultationId,
+        organizationRef: consultation.organizationRef,
         endedAt: nowIso,
         clinicalNotes: input.clinicalNotes,
         updatedAt: nowIso
@@ -584,6 +586,7 @@ export async function cancelConsultation(
     ): Promise<{ result: CancelConsultationOutcome; audit: CommandAuditOutcome }> => {
       const cancelled = await markConsultationCancelled(ctx.client, {
         consultationId: input.consultationId,
+        organizationRef: consultation.organizationRef,
         cancellationReasonCode: input.cancellationReasonCode,
         updatedAt: nowIso
       });

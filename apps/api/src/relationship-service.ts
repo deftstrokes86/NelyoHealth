@@ -160,6 +160,7 @@ export async function establishRelationship(
       } else {
         await reactivateRelationship(ctx.client, {
           relationshipId,
+          organizationRef: input.organizationRef,
           verificationMethod: input.verificationMethod,
           effectiveDate: input.effectiveDate,
           expiryDate: input.expiryDate,
@@ -250,6 +251,7 @@ export async function verifyRelationship(
     work: async (ctx) => {
       await setRelationshipVerificationMethod(ctx.client, {
         relationshipId: input.relationshipId,
+        organizationRef: existing.organizationRef,
         verificationMethod: input.verificationMethod,
         updatedAt: nowIso
       });
@@ -348,6 +350,7 @@ export async function revokeRelationship(
 
       await markRelationshipRevoked(ctx.client, {
         relationshipId: input.relationshipId,
+        organizationRef: current.organizationRef,
         revokedAt: nowIso,
         revokedByActorRef: input.actor.accountRef,
         revocationReason: input.revocationReason,

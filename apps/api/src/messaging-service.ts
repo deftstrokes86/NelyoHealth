@@ -259,7 +259,11 @@ export async function postMessage(
         sentAt: nowIso,
         createdAt: nowIso
       });
-      await touchMessageThread(ctx.client, { threadId: input.threadId, updatedAt: nowIso });
+      await touchMessageThread(ctx.client, {
+        threadId: input.threadId,
+        organizationRef: thread.organizationRef,
+        updatedAt: nowIso
+      });
       await ctx.enqueueDomainEvent(
         createDomainEventEnvelope({
           eventType: "MessagePosted",
@@ -461,6 +465,7 @@ export async function closeMessageThread(
     work: async (ctx) => {
       await setMessageThreadStatus(ctx.client, {
         threadId: input.threadId,
+        organizationRef: thread.organizationRef,
         status: "closed",
         updatedAt: nowIso
       });

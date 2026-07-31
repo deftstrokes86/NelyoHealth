@@ -1,4 +1,5 @@
 import type { ClientBase } from "pg";
+import { assertScopedMutation, requireOrganizationScope } from "./scope-guard.js";
 
 /**
  * Appointment repository (roadmap M5.2 — Appointments).
@@ -155,13 +156,28 @@ export async function insertAvailabilitySlot(
  */
 export async function transitionSlotStatusIf(
   client: ClientBase,
-  input: { slotId: string; expected: SlotStatus; next: SlotStatus; updatedAt: string }
+  input: {
+    slotId: string;
+    organizationRef: string;
+    expected: SlotStatus;
+    next: SlotStatus;
+    updatedAt: string;
+  }
 ): Promise<boolean> {
+  // Belt-and-suspenders (M8.2): scope the compare-and-set to the expected organization.
+  // A cross-organization slot simply won't match — the guard returns false (a benign
+  // conflict), so no assertion here; the org predicate is the independent scope proof.
   const result = await client.query(
     `UPDATE nelyo_appointment.availability_slot
         SET status = $3, updated_at = $4
-      WHERE slot_id = $1 AND status = $2`,
-    [input.slotId, input.expected, input.next, input.updatedAt]
+      WHERE slot_id = $1 AND status = $2 AND organization_ref = $5`,
+    [
+      input.slotId,
+      input.expected,
+      input.next,
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "transitionSlotStatusIf")
+    ]
   );
   return (result.rowCount ?? 0) > 0;
 }
@@ -223,41 +239,52 @@ export async function setAppointmentStatus(
   client: ClientBase,
   input: {
     appointmentId: string;
+    organizationRef: string;
     status: AppointmentStatus;
     cancellationReasonCode?: string;
     updatedAt: string;
   }
 ): Promise<void> {
-  await client.query(
+  const result = await client.query(
     `UPDATE nelyo_appointment.appointment
         SET status = $2, cancellation_reason_code = $3, updated_at = $4
-      WHERE appointment_id = $1`,
-    [input.appointmentId, input.status, input.cancellationReasonCode ?? null, input.updatedAt]
+      WHERE appointment_id = $1 AND organization_ref = $5`,
+    [
+      input.appointmentId,
+      input.status,
+      input.cancellationReasonCode ?? null,
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "setAppointmentStatus")
+    ]
   );
+  assertScopedMutation(result.rowCount, "setAppointmentStatus");
 }
 
 export async function setAppointmentSchedule(
   client: ClientBase,
   input: {
     appointmentId: string;
+    organizationRef: string;
     slotRef?: string;
     scheduledStart: string;
     scheduledEnd: string;
     updatedAt: string;
   }
 ): Promise<void> {
-  await client.query(
+  const result = await client.query(
     `UPDATE nelyo_appointment.appointment
         SET slot_ref = $2, scheduled_start = $3, scheduled_end = $4, updated_at = $5
-      WHERE appointment_id = $1`,
+      WHERE appointment_id = $1 AND organization_ref = $6`,
     [
       input.appointmentId,
       input.slotRef ?? null,
       input.scheduledStart,
       input.scheduledEnd,
-      input.updatedAt
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "setAppointmentSchedule")
     ]
   );
+  assertScopedMutation(result.rowCount, "setAppointmentSchedule");
 }
 
 export async function loadAppointment(

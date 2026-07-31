@@ -254,6 +254,7 @@ export async function archiveDocument(
       // zero rows -> already-archived, nothing written.
       const archived = await transitionDocumentStatusIf(ctx.client, {
         documentId: input.documentId,
+        organizationRef: document.organizationRef,
         expected: ["active"],
         next: "archived",
         updatedAt: nowIso

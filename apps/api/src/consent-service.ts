@@ -170,6 +170,7 @@ export async function grantConsent(
         });
         await setConsentRecordCurrentVersion(ctx.client, {
           consentId,
+          organizationRef: input.organizationRef,
           currentVersion: version,
           updatedAt: nowIso
         });
@@ -284,6 +285,7 @@ export async function withdrawConsent(
 
       await markConsentVersionRevoked(ctx.client, {
         consentId,
+        organizationRef: current.organizationRef,
         version: currentVersion.version,
         revokedAt: nowIso,
         revokedByActorRef: input.actor.accountRef,

@@ -1,4 +1,5 @@
 import type { ClientBase } from "pg";
+import { assertScopedMutation, requireOrganizationScope } from "./scope-guard.js";
 
 /**
  * Consent repository (roadmap M4.1 — Consent Persistence).
@@ -166,20 +167,27 @@ export async function markConsentVersionSuperseded(
 
 export async function setConsentRecordCurrentVersion(
   client: ClientBase,
-  input: { consentId: string; currentVersion: number; updatedAt: string }
+  input: { consentId: string; organizationRef: string; currentVersion: number; updatedAt: string }
 ): Promise<void> {
-  await client.query(
+  const result = await client.query(
     `UPDATE nelyo_consent.consent_record
         SET current_version = $2, updated_at = $3
-      WHERE consent_id = $1`,
-    [input.consentId, input.currentVersion, input.updatedAt]
+      WHERE consent_id = $1 AND organization_ref = $4`,
+    [
+      input.consentId,
+      input.currentVersion,
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "setConsentRecordCurrentVersion")
+    ]
   );
+  assertScopedMutation(result.rowCount, "setConsentRecordCurrentVersion");
 }
 
 export async function markConsentVersionRevoked(
   client: ClientBase,
   input: {
     consentId: string;
+    organizationRef: string;
     version: number;
     revokedAt: string;
     revokedByActorRef: string;
@@ -187,6 +195,8 @@ export async function markConsentVersionRevoked(
     updatedAt: string;
   }
 ): Promise<void> {
+  // consent_version is a child of consent_record (scoped via consent_id); the aggregate
+  // touch below carries the belt-and-suspenders organization predicate.
   await client.query(
     `UPDATE nelyo_consent.consent_version
         SET status = 'revoked',
@@ -202,12 +212,17 @@ export async function markConsentVersionRevoked(
       input.revocationReason
     ]
   );
-  await client.query(
+  const result = await client.query(
     `UPDATE nelyo_consent.consent_record
         SET updated_at = $2
-      WHERE consent_id = $1`,
-    [input.consentId, input.updatedAt]
+      WHERE consent_id = $1 AND organization_ref = $3`,
+    [
+      input.consentId,
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "markConsentVersionRevoked")
+    ]
   );
+  assertScopedMutation(result.rowCount, "markConsentVersionRevoked");
 }
 
 // ---------- Reads ----------

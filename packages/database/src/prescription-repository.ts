@@ -1,4 +1,5 @@
 import type { ClientBase } from "pg";
+import { requireOrganizationScope } from "./scope-guard.js";
 
 /**
  * Prescription repository (roadmap M5.5 — Prescriptions).
@@ -181,7 +182,7 @@ export async function insertPrescription(
  */
 export async function claimPrescriptionFill(
   client: ClientBase,
-  input: { prescriptionId: string; updatedAt: string }
+  input: { prescriptionId: string; organizationRef: string; updatedAt: string }
 ): Promise<{ refillsRemaining: number; status: PrescriptionStatus } | null> {
   const result = await client.query<{ refills_remaining: number; status: PrescriptionStatus }>(
     `UPDATE nelyo_prescription.prescription
@@ -189,8 +190,13 @@ export async function claimPrescriptionFill(
             status = CASE WHEN refills_remaining - 1 <= 0 THEN 'completed' ELSE status END,
             updated_at = $2
       WHERE prescription_id = $1 AND status = 'active' AND refills_remaining > 0
+        AND organization_ref = $3
       RETURNING refills_remaining, status`,
-    [input.prescriptionId, input.updatedAt]
+    [
+      input.prescriptionId,
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "claimPrescriptionFill")
+    ]
   );
   const row = result.rows[0];
   return row ? { refillsRemaining: row.refills_remaining, status: row.status } : null;
@@ -224,13 +230,23 @@ export async function insertPrescriptionDispense(
 
 export async function markPrescriptionCancelled(
   client: ClientBase,
-  input: { prescriptionId: string; cancellationReasonCode: string; updatedAt: string }
+  input: {
+    prescriptionId: string;
+    organizationRef: string;
+    cancellationReasonCode: string;
+    updatedAt: string;
+  }
 ): Promise<boolean> {
   const result = await client.query(
     `UPDATE nelyo_prescription.prescription
         SET status = 'cancelled', cancellation_reason_code = $2, updated_at = $3
-      WHERE prescription_id = $1 AND status = 'active'`,
-    [input.prescriptionId, input.cancellationReasonCode, input.updatedAt]
+      WHERE prescription_id = $1 AND status = 'active' AND organization_ref = $4`,
+    [
+      input.prescriptionId,
+      input.cancellationReasonCode,
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "markPrescriptionCancelled")
+    ]
   );
   return (result.rowCount ?? 0) > 0;
 }

@@ -1,4 +1,5 @@
 import type { ClientBase } from "pg";
+import { assertScopedMutation, requireOrganizationScope } from "./scope-guard.js";
 
 /**
  * Relationship repository (roadmap M4.2 — Relationship Persistence).
@@ -136,6 +137,7 @@ export async function reactivateRelationship(
   client: ClientBase,
   input: {
     relationshipId: string;
+    organizationRef: string;
     verificationMethod: string;
     effectiveDate: string;
     expiryDate?: string;
@@ -143,7 +145,7 @@ export async function reactivateRelationship(
     updatedAt: string;
   }
 ): Promise<void> {
-  await client.query(
+  const result = await client.query(
     `UPDATE nelyo_relationship.relationship
         SET status = 'active',
             verification_method = $2,
@@ -154,56 +156,72 @@ export async function reactivateRelationship(
             revoked_by_actor_ref = NULL,
             revocation_reason = NULL,
             updated_at = $6
-      WHERE relationship_id = $1`,
+      WHERE relationship_id = $1 AND organization_ref = $7`,
     [
       input.relationshipId,
       input.verificationMethod,
       input.effectiveDate,
       input.expiryDate ?? null,
       input.permittedActions,
-      input.updatedAt
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "reactivateRelationship")
     ]
   );
+  assertScopedMutation(result.rowCount, "reactivateRelationship");
 }
 
 export async function setRelationshipVerificationMethod(
   client: ClientBase,
-  input: { relationshipId: string; verificationMethod: string; updatedAt: string }
+  input: {
+    relationshipId: string;
+    organizationRef: string;
+    verificationMethod: string;
+    updatedAt: string;
+  }
 ): Promise<void> {
-  await client.query(
+  const result = await client.query(
     `UPDATE nelyo_relationship.relationship
         SET verification_method = $2, updated_at = $3
-      WHERE relationship_id = $1`,
-    [input.relationshipId, input.verificationMethod, input.updatedAt]
+      WHERE relationship_id = $1 AND organization_ref = $4`,
+    [
+      input.relationshipId,
+      input.verificationMethod,
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "setRelationshipVerificationMethod")
+    ]
   );
+  assertScopedMutation(result.rowCount, "setRelationshipVerificationMethod");
 }
 
 export async function markRelationshipRevoked(
   client: ClientBase,
   input: {
     relationshipId: string;
+    organizationRef: string;
     revokedAt: string;
     revokedByActorRef: string;
     revocationReason: string;
     updatedAt: string;
   }
 ): Promise<void> {
-  await client.query(
+  const result = await client.query(
     `UPDATE nelyo_relationship.relationship
         SET status = 'revoked',
             revoked_at = $2,
             revoked_by_actor_ref = $3,
             revocation_reason = $4,
             updated_at = $5
-      WHERE relationship_id = $1`,
+      WHERE relationship_id = $1 AND organization_ref = $6`,
     [
       input.relationshipId,
       input.revokedAt,
       input.revokedByActorRef,
       input.revocationReason,
-      input.updatedAt
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "markRelationshipRevoked")
     ]
   );
+  assertScopedMutation(result.rowCount, "markRelationshipRevoked");
 }
 
 // ---------- Reads ----------

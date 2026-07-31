@@ -274,6 +274,7 @@ export async function bookAppointment(
     work: async (ctx): Promise<{ result: BookAppointmentOutcome; audit: CommandAuditOutcome }> => {
       const claimed = await transitionSlotStatusIf(ctx.client, {
         slotId: input.slotId,
+        organizationRef: slot.organizationRef,
         expected: "open",
         next: "booked",
         updatedAt: nowIso
@@ -410,6 +411,7 @@ export async function rescheduleAppointment(
     ): Promise<{ result: RescheduleAppointmentOutcome; audit: CommandAuditOutcome }> => {
       const claimed = await transitionSlotStatusIf(ctx.client, {
         slotId: input.newSlotId,
+        organizationRef: newSlot.organizationRef,
         expected: "open",
         next: "booked",
         updatedAt: nowIso
@@ -423,6 +425,7 @@ export async function rescheduleAppointment(
       if (appointment.slotRef) {
         await transitionSlotStatusIf(ctx.client, {
           slotId: appointment.slotRef,
+          organizationRef: appointment.organizationRef,
           expected: "booked",
           next: "open",
           updatedAt: nowIso
@@ -430,6 +433,7 @@ export async function rescheduleAppointment(
       }
       await setAppointmentSchedule(ctx.client, {
         appointmentId: input.appointmentId,
+        organizationRef: appointment.organizationRef,
         slotRef: input.newSlotId,
         scheduledStart: newSlot.startAt,
         scheduledEnd: newSlot.endAt,
@@ -538,6 +542,7 @@ export async function cancelAppointment(
     work: async (ctx) => {
       await setAppointmentStatus(ctx.client, {
         appointmentId: input.appointmentId,
+        organizationRef: appointment.organizationRef,
         status: "cancelled",
         cancellationReasonCode: input.cancellationReasonCode,
         updatedAt: nowIso
@@ -545,6 +550,7 @@ export async function cancelAppointment(
       if (appointment.slotRef) {
         await transitionSlotStatusIf(ctx.client, {
           slotId: appointment.slotRef,
+          organizationRef: appointment.organizationRef,
           expected: "booked",
           next: "open",
           updatedAt: nowIso
@@ -672,6 +678,7 @@ export async function transitionAppointmentStatus(
     work: async (ctx) => {
       await setAppointmentStatus(ctx.client, {
         appointmentId: input.appointmentId,
+        organizationRef: appointment.organizationRef,
         status: input.toStatus,
         updatedAt: nowIso
       });

@@ -1,4 +1,5 @@
 import type { ClientBase } from "pg";
+import { assertScopedMutation, requireOrganizationScope } from "./scope-guard.js";
 
 /**
  * Consultation repository (roadmap M5.3 — Consultations).
@@ -146,14 +147,20 @@ export async function insertConsultation(
 
 export async function markConsultationStarted(
   client: ClientBase,
-  input: { consultationId: string; startedAt: string; updatedAt: string }
+  input: { consultationId: string; organizationRef: string; startedAt: string; updatedAt: string }
 ): Promise<void> {
-  await client.query(
+  const result = await client.query(
     `UPDATE nelyo_consultation.consultation
         SET status = 'in-progress', started_at = $2, updated_at = $3
-      WHERE consultation_id = $1`,
-    [input.consultationId, input.startedAt, input.updatedAt]
+      WHERE consultation_id = $1 AND organization_ref = $4`,
+    [
+      input.consultationId,
+      input.startedAt,
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "markConsultationStarted")
+    ]
   );
+  assertScopedMutation(result.rowCount, "markConsultationStarted");
 }
 
 /**
@@ -162,13 +169,25 @@ export async function markConsultationStarted(
  */
 export async function markConsultationCompleted(
   client: ClientBase,
-  input: { consultationId: string; endedAt: string; clinicalNotes?: string; updatedAt: string }
+  input: {
+    consultationId: string;
+    organizationRef: string;
+    endedAt: string;
+    clinicalNotes?: string;
+    updatedAt: string;
+  }
 ): Promise<boolean> {
   const result = await client.query(
     `UPDATE nelyo_consultation.consultation
         SET status = 'completed', ended_at = $2, clinical_notes = $3, updated_at = $4
-      WHERE consultation_id = $1 AND status = 'in-progress'`,
-    [input.consultationId, input.endedAt, input.clinicalNotes ?? null, input.updatedAt]
+      WHERE consultation_id = $1 AND status = 'in-progress' AND organization_ref = $5`,
+    [
+      input.consultationId,
+      input.endedAt,
+      input.clinicalNotes ?? null,
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "markConsultationCompleted")
+    ]
   );
   return (result.rowCount ?? 0) > 0;
 }
@@ -179,13 +198,23 @@ export async function markConsultationCompleted(
  */
 export async function markConsultationCancelled(
   client: ClientBase,
-  input: { consultationId: string; cancellationReasonCode: string; updatedAt: string }
+  input: {
+    consultationId: string;
+    organizationRef: string;
+    cancellationReasonCode: string;
+    updatedAt: string;
+  }
 ): Promise<boolean> {
   const result = await client.query(
     `UPDATE nelyo_consultation.consultation
         SET status = 'cancelled', cancellation_reason_code = $2, updated_at = $3
-      WHERE consultation_id = $1 AND status IN ('scheduled', 'in-progress')`,
-    [input.consultationId, input.cancellationReasonCode, input.updatedAt]
+      WHERE consultation_id = $1 AND status IN ('scheduled', 'in-progress') AND organization_ref = $4`,
+    [
+      input.consultationId,
+      input.cancellationReasonCode,
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "markConsultationCancelled")
+    ]
   );
   return (result.rowCount ?? 0) > 0;
 }

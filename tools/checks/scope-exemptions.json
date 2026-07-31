@@ -1,0 +1,149 @@
+{
+  "description": "Governed exemptions from the repository tenant-scope coverage gate (M8.2, AM-7). Each entry waives ONE genuinely cross-scope repository statement. Two classes: (1) DISCOVERY LOAD — a load-by-primary-key that ESTABLISHES the scope for an immediate PDP decision (it cannot filter by an organization it exists to discover); the loaded row's organization is fed to the PDP, which denies cross-organization access before any disclosure, and every subsequent mutation is scope-belted. (2) CROSS-ORGANIZATION READ — a subject reading their own record across organizations, or the relationship-graph capacity resolution that deliberately spans organizations; scoped by subject/actor, not by organization. Every entry names its module, a distinctive SQL substring (sqlIncludes), the class, the reason, the boundary that keeps it safe, and an owner. The gate prints this table on every run and fails on stale entries (no matching statement) — visible debt, not hidden debt.",
+  "exemptions": [
+    {
+      "module": "appointment-repository.ts",
+      "sqlIncludes": "availability_slot WHERE slot_id = $1",
+      "class": "discovery-load",
+      "reason": "loadAvailabilitySlot: load-by-PK to establish the slot's organization for the booking decision.",
+      "boundary": "PDP decides on the discovered organization; the slot claim (transitionSlotStatusIf) is scope-belted.",
+      "owner": "Lead Platform Engineer",
+      "dateIntroduced": "2026-07-31"
+    },
+    {
+      "module": "appointment-repository.ts",
+      "sqlIncludes": "appointment WHERE appointment_id = $1",
+      "class": "discovery-load",
+      "reason": "loadAppointment: load-by-PK to establish the appointment's organization for the access decision.",
+      "boundary": "PDP decides on the discovered organization; all appointment mutations are scope-belted.",
+      "owner": "Lead Platform Engineer",
+      "dateIntroduced": "2026-07-31"
+    },
+    {
+      "module": "appointment-repository.ts",
+      "sqlIncludes": "(scheduled_start, appointment_id) <",
+      "class": "cross-organization-self",
+      "reason": "listPatientAppointments (keyset page): a patient's OWN appointments span organizations (the self-scoped /api/me/appointments read).",
+      "boundary": "Scoped by patient_ref = the authenticated self; the self-access decision governs it, not an organization.",
+      "owner": "Lead Platform Engineer",
+      "dateIntroduced": "2026-07-31"
+    },
+    {
+      "module": "appointment-repository.ts",
+      "sqlIncludes": "patient_ref = $1 ORDER BY scheduled_start DESC, appointment_id DESC LIMIT $2",
+      "class": "cross-organization-self",
+      "reason": "listPatientAppointments (first page): a patient's OWN appointments span organizations.",
+      "boundary": "Scoped by patient_ref = the authenticated self; the self-access decision governs it.",
+      "owner": "Lead Platform Engineer",
+      "dateIntroduced": "2026-07-31"
+    },
+    {
+      "module": "break-glass-repository.ts",
+      "sqlIncludes": "break_glass_access WHERE access_id = $1",
+      "class": "discovery-load",
+      "reason": "loadBreakGlassAccess: load-by-PK to establish the record's organization for the review/activation decision.",
+      "boundary": "PDP decides on the discovered organization; activate/expire/review mutations are scope-belted.",
+      "owner": "Lead Platform Engineer",
+      "dateIntroduced": "2026-07-31"
+    },
+    {
+      "module": "consent-repository.ts",
+      "sqlIncludes": "consent_record WHERE consent_id = $1",
+      "class": "discovery-load",
+      "reason": "loadConsentRecord: load-by-PK to establish the consent's organization for the grant/withdraw decision.",
+      "boundary": "PDP decides on the discovered organization; consent_record mutations are scope-belted.",
+      "owner": "Lead Platform Engineer",
+      "dateIntroduced": "2026-07-31"
+    },
+    {
+      "module": "consultation-repository.ts",
+      "sqlIncludes": "consultation WHERE consultation_id = $1",
+      "class": "discovery-load",
+      "reason": "loadConsultation: load-by-PK to establish the consultation's organization for the access decision.",
+      "boundary": "PDP decides on the discovered organization; start/complete/cancel mutations are scope-belted.",
+      "owner": "Lead Platform Engineer",
+      "dateIntroduced": "2026-07-31"
+    },
+    {
+      "module": "document-repository.ts",
+      "sqlIncludes": "document WHERE document_id = $1",
+      "class": "discovery-load",
+      "reason": "loadDocument: load-by-PK to establish the document's organization for the access decision.",
+      "boundary": "PDP decides on the discovered organization; document mutations are scope-belted.",
+      "owner": "Lead Platform Engineer",
+      "dateIntroduced": "2026-07-31"
+    },
+    {
+      "module": "laboratory-repository.ts",
+      "sqlIncludes": "lab_order WHERE order_id = $1",
+      "class": "discovery-load",
+      "reason": "loadLabOrder: load-by-PK to establish the order's organization for the access decision.",
+      "boundary": "PDP decides on the discovered organization; lab_order mutations are scope-belted.",
+      "owner": "Lead Platform Engineer",
+      "dateIntroduced": "2026-07-31"
+    },
+    {
+      "module": "medical-record-repository.ts",
+      "sqlIncludes": "medical_record WHERE record_id = $1",
+      "class": "discovery-load",
+      "reason": "loadMedicalRecord: load-by-PK to establish the record's organization for the access decision.",
+      "boundary": "PDP decides on the discovered organization; entry mutations are keyed via the parent record.",
+      "owner": "Lead Platform Engineer",
+      "dateIntroduced": "2026-07-31"
+    },
+    {
+      "module": "messaging-repository.ts",
+      "sqlIncludes": "message_thread WHERE thread_id = $1",
+      "class": "discovery-load",
+      "reason": "loadMessageThread: load-by-PK to establish the thread's organization for the access decision.",
+      "boundary": "PDP decides on the discovered organization; thread mutations are scope-belted.",
+      "owner": "Lead Platform Engineer",
+      "dateIntroduced": "2026-07-31"
+    },
+    {
+      "module": "patient-profile-repository.ts",
+      "sqlIncludes": "patient_profile WHERE patient_id = $1",
+      "class": "discovery-load",
+      "reason": "loadPatientProfile: load-by-PK to establish the profile's organization for the access decision.",
+      "boundary": "PDP decides on the discovered organization; profile mutation is scope-belted.",
+      "owner": "Lead Platform Engineer",
+      "dateIntroduced": "2026-07-31"
+    },
+    {
+      "module": "patient-profile-repository.ts",
+      "sqlIncludes": "patient_identifier WHERE patient_id = $1",
+      "class": "discovery-load",
+      "reason": "Identifier sub-read of loadPatientProfile, keyed by the already-scope-loaded profile PK.",
+      "boundary": "Reached only via the profile discovery load above; never a standalone cross-organization scan.",
+      "owner": "Lead Platform Engineer",
+      "dateIntroduced": "2026-07-31"
+    },
+    {
+      "module": "prescription-repository.ts",
+      "sqlIncludes": "prescription WHERE prescription_id = $1",
+      "class": "discovery-load",
+      "reason": "loadPrescription: load-by-PK to establish the prescription's organization for the access decision.",
+      "boundary": "PDP decides on the discovered organization; dispense/cancel mutations are scope-belted.",
+      "owner": "Lead Platform Engineer",
+      "dateIntroduced": "2026-07-31"
+    },
+    {
+      "module": "relationship-repository.ts",
+      "sqlIncludes": "relationship WHERE relationship_id = $1",
+      "class": "discovery-load",
+      "reason": "loadRelationship: load-by-PK to establish the relationship's organization for the verify/revoke decision.",
+      "boundary": "PDP decides on the discovered organization; relationship mutations are scope-belted.",
+      "owner": "Lead Platform Engineer",
+      "dateIntroduced": "2026-07-31"
+    },
+    {
+      "module": "relationship-repository.ts",
+      "sqlIncludes": "actor_ref = $1 AND patient_ref = $2 AND status = 'active'",
+      "class": "cross-organization-capacity",
+      "reason": "listActiveRelationshipsForActorPatient: relationship-graph capacity resolution deliberately spans organizations (a caregiver may hold delegations at several facilities).",
+      "boundary": "Scoped by actor_ref + patient_ref; the capacity resolver then selects ONE organization-bound capacity, which becomes the scope for the ensuing decision.",
+      "owner": "Lead Platform Engineer",
+      "dateIntroduced": "2026-07-31"
+    }
+  ]
+}

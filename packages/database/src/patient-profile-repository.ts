@@ -1,4 +1,5 @@
 import type { ClientBase } from "pg";
+import { assertScopedMutation, requireOrganizationScope } from "./scope-guard.js";
 
 /**
  * Patient-profile repository (roadmap M5.1 — Patient Profiles).
@@ -127,6 +128,7 @@ export async function updatePatientProfileDemographics(
   client: ClientBase,
   input: {
     patientId: string;
+    organizationRef: string;
     status: PatientProfileStatus;
     preferredName?: string;
     biologicalSex?: PatientBiologicalSex;
@@ -137,7 +139,7 @@ export async function updatePatientProfileDemographics(
     updatedAt: string;
   }
 ): Promise<void> {
-  await client.query(
+  const result = await client.query(
     `UPDATE nelyo_patient.patient_profile
         SET status = $2,
             preferred_name = $3,
@@ -147,7 +149,7 @@ export async function updatePatientProfileDemographics(
             contact_points = $7::jsonb,
             emergency_contacts = $8::jsonb,
             updated_at = $9
-      WHERE patient_id = $1`,
+      WHERE patient_id = $1 AND organization_ref = $10`,
     [
       input.patientId,
       input.status,
@@ -157,9 +159,11 @@ export async function updatePatientProfileDemographics(
       input.preferredLanguage ?? null,
       JSON.stringify(input.contactPoints),
       JSON.stringify(input.emergencyContacts),
-      input.updatedAt
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "updatePatientProfileDemographics")
     ]
   );
+  assertScopedMutation(result.rowCount, "updatePatientProfileDemographics");
 }
 
 export async function insertPatientIdentifier(

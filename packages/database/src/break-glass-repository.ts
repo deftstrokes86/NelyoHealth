@@ -1,4 +1,5 @@
 import type { ClientBase } from "pg";
+import { assertScopedMutation, requireOrganizationScope } from "./scope-guard.js";
 
 /**
  * Break-glass repository (roadmap M4.3 — Persisted Emergency Access).
@@ -136,46 +137,55 @@ export async function activateBreakGlassAccess(
   client: ClientBase,
   input: {
     accessId: string;
+    organizationRef: string;
     activatedAt: string;
     complianceNotifiedAt: string;
     complianceNotificationRef: string;
     updatedAt: string;
   }
 ): Promise<void> {
-  await client.query(
+  const result = await client.query(
     `UPDATE nelyo_break_glass.break_glass_access
         SET status = 'active',
             activated_at = $2,
             compliance_notified_at = $3,
             compliance_notification_ref = $4,
             updated_at = $5
-      WHERE access_id = $1`,
+      WHERE access_id = $1 AND organization_ref = $6`,
     [
       input.accessId,
       input.activatedAt,
       input.complianceNotifiedAt,
       input.complianceNotificationRef,
-      input.updatedAt
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "activateBreakGlassAccess")
     ]
   );
+  assertScopedMutation(result.rowCount, "activateBreakGlassAccess");
 }
 
 export async function markBreakGlassExpired(
   client: ClientBase,
-  input: { accessId: string; updatedAt: string }
+  input: { accessId: string; organizationRef: string; updatedAt: string }
 ): Promise<void> {
-  await client.query(
+  const result = await client.query(
     `UPDATE nelyo_break_glass.break_glass_access
         SET status = 'expired', updated_at = $2
-      WHERE access_id = $1`,
-    [input.accessId, input.updatedAt]
+      WHERE access_id = $1 AND organization_ref = $3`,
+    [
+      input.accessId,
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "markBreakGlassExpired")
+    ]
   );
+  assertScopedMutation(result.rowCount, "markBreakGlassExpired");
 }
 
 export async function recordBreakGlassReview(
   client: ClientBase,
   input: {
     accessId: string;
+    organizationRef: string;
     reviewedAt: string;
     reviewedByActorRef: string;
     reviewOutcome: BreakGlassReviewOutcome;
@@ -183,7 +193,7 @@ export async function recordBreakGlassReview(
     updatedAt: string;
   }
 ): Promise<void> {
-  await client.query(
+  const result = await client.query(
     `UPDATE nelyo_break_glass.break_glass_access
         SET status = 'review-completed',
             reviewed_at = $2,
@@ -191,16 +201,18 @@ export async function recordBreakGlassReview(
             review_outcome = $4,
             review_notes = $5,
             updated_at = $6
-      WHERE access_id = $1`,
+      WHERE access_id = $1 AND organization_ref = $7`,
     [
       input.accessId,
       input.reviewedAt,
       input.reviewedByActorRef,
       input.reviewOutcome,
       input.reviewNotes ?? null,
-      input.updatedAt
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "recordBreakGlassReview")
     ]
   );
+  assertScopedMutation(result.rowCount, "recordBreakGlassReview");
 }
 
 // ---------- Reads ----------

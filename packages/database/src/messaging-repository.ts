@@ -1,4 +1,5 @@
 import type { ClientBase } from "pg";
+import { assertScopedMutation, requireOrganizationScope } from "./scope-guard.js";
 
 /**
  * Messaging repository (roadmap M5.7 — Messages).
@@ -153,12 +154,18 @@ export async function insertMessage(
 
 export async function touchMessageThread(
   client: ClientBase,
-  input: { threadId: string; updatedAt: string }
+  input: { threadId: string; organizationRef: string; updatedAt: string }
 ): Promise<void> {
-  await client.query(
-    `UPDATE nelyo_messaging.message_thread SET updated_at = $2 WHERE thread_id = $1`,
-    [input.threadId, input.updatedAt]
+  const result = await client.query(
+    `UPDATE nelyo_messaging.message_thread SET updated_at = $2
+      WHERE thread_id = $1 AND organization_ref = $3`,
+    [
+      input.threadId,
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "touchMessageThread")
+    ]
   );
+  assertScopedMutation(result.rowCount, "touchMessageThread");
 }
 
 export async function markMessageRead(
@@ -176,12 +183,24 @@ export async function markMessageRead(
 
 export async function setMessageThreadStatus(
   client: ClientBase,
-  input: { threadId: string; status: MessageThreadStatus; updatedAt: string }
+  input: {
+    threadId: string;
+    organizationRef: string;
+    status: MessageThreadStatus;
+    updatedAt: string;
+  }
 ): Promise<void> {
-  await client.query(
-    `UPDATE nelyo_messaging.message_thread SET status = $2, updated_at = $3 WHERE thread_id = $1`,
-    [input.threadId, input.status, input.updatedAt]
+  const result = await client.query(
+    `UPDATE nelyo_messaging.message_thread SET status = $2, updated_at = $3
+      WHERE thread_id = $1 AND organization_ref = $4`,
+    [
+      input.threadId,
+      input.status,
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "setMessageThreadStatus")
+    ]
   );
+  assertScopedMutation(result.rowCount, "setMessageThreadStatus");
 }
 
 // ---------- Reads ----------

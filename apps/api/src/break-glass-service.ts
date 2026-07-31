@@ -255,7 +255,11 @@ export async function activateBreakGlassAccess(
 
       // Requested: honor the time bound. Activation past expiry records an expiry.
       if (Date.parse(nowIso) > Date.parse(current.expiresAt)) {
-        await markBreakGlassExpired(ctx.client, { accessId: input.accessId, updatedAt: nowIso });
+        await markBreakGlassExpired(ctx.client, {
+          accessId: input.accessId,
+          organizationRef: current.organizationRef,
+          updatedAt: nowIso
+        });
         await ctx.enqueueDomainEvent(
           createDomainEventEnvelope({
             eventType: "BreakGlassExpired",
@@ -281,6 +285,7 @@ export async function activateBreakGlassAccess(
       const complianceNotificationRef = `bg-notify-${input.accessId}`;
       await activateBreakGlassRow(ctx.client, {
         accessId: input.accessId,
+        organizationRef: current.organizationRef,
         activatedAt: nowIso,
         complianceNotifiedAt: nowIso,
         complianceNotificationRef,
@@ -371,6 +376,7 @@ export async function reviewBreakGlassAccess(
     work: async (ctx) => {
       await recordBreakGlassReview(ctx.client, {
         accessId: input.accessId,
+        organizationRef: existing.organizationRef,
         reviewedAt: nowIso,
         reviewedByActorRef: input.reviewedByActorRef,
         reviewOutcome: input.outcome,

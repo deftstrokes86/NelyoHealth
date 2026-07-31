@@ -454,6 +454,7 @@ export async function updatePatientProfile(
       const status = input.status ?? existing.status;
       await updatePatientProfileDemographics(ctx.client, {
         patientId: input.patientId,
+        organizationRef: existing.organizationRef,
         status,
         preferredName: input.preferredName ?? existing.preferredName,
         biologicalSex: input.biologicalSex ?? existing.biologicalSex,

@@ -1,4 +1,5 @@
 import type { ClientBase } from "pg";
+import { requireOrganizationScope } from "./scope-guard.js";
 
 /**
  * Document repository (roadmap M5.8 — Documents).
@@ -123,11 +124,17 @@ export async function insertDocument(
 
 export async function setDocumentStatus(
   client: ClientBase,
-  input: { documentId: string; status: DocumentStatus; updatedAt: string }
+  input: { documentId: string; organizationRef: string; status: DocumentStatus; updatedAt: string }
 ): Promise<boolean> {
   const result = await client.query(
-    `UPDATE nelyo_document.document SET status = $2, updated_at = $3 WHERE document_id = $1`,
-    [input.documentId, input.status, input.updatedAt]
+    `UPDATE nelyo_document.document SET status = $2, updated_at = $3
+      WHERE document_id = $1 AND organization_ref = $4`,
+    [
+      input.documentId,
+      input.status,
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "setDocumentStatus")
+    ]
   );
   return (result.rowCount ?? 0) > 0;
 }
@@ -139,12 +146,24 @@ export async function setDocumentStatus(
  */
 export async function transitionDocumentStatusIf(
   client: ClientBase,
-  input: { documentId: string; expected: DocumentStatus[]; next: DocumentStatus; updatedAt: string }
+  input: {
+    documentId: string;
+    organizationRef: string;
+    expected: DocumentStatus[];
+    next: DocumentStatus;
+    updatedAt: string;
+  }
 ): Promise<boolean> {
   const result = await client.query(
     `UPDATE nelyo_document.document SET status = $2, updated_at = $3
-      WHERE document_id = $1 AND status = ANY($4::text[])`,
-    [input.documentId, input.next, input.updatedAt, input.expected]
+      WHERE document_id = $1 AND status = ANY($4::text[]) AND organization_ref = $5`,
+    [
+      input.documentId,
+      input.next,
+      input.updatedAt,
+      input.expected,
+      requireOrganizationScope(input.organizationRef, "transitionDocumentStatusIf")
+    ]
   );
   return (result.rowCount ?? 0) > 0;
 }

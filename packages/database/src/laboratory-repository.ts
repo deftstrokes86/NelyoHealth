@@ -1,4 +1,5 @@
 import type { ClientBase } from "pg";
+import { assertScopedMutation, requireOrganizationScope } from "./scope-guard.js";
 
 /**
  * Laboratory repository (roadmap M5.6 — Laboratories).
@@ -182,17 +183,25 @@ export async function setLabOrderStatus(
   client: ClientBase,
   input: {
     orderId: string;
+    organizationRef: string;
     status: LabOrderStatus;
     cancellationReasonCode?: string;
     updatedAt: string;
   }
 ): Promise<void> {
-  await client.query(
+  const result = await client.query(
     `UPDATE nelyo_laboratory.lab_order
         SET status = $2, cancellation_reason_code = $3, updated_at = $4
-      WHERE order_id = $1`,
-    [input.orderId, input.status, input.cancellationReasonCode ?? null, input.updatedAt]
+      WHERE order_id = $1 AND organization_ref = $5`,
+    [
+      input.orderId,
+      input.status,
+      input.cancellationReasonCode ?? null,
+      input.updatedAt,
+      requireOrganizationScope(input.organizationRef, "setLabOrderStatus")
+    ]
   );
+  assertScopedMutation(result.rowCount, "setLabOrderStatus");
 }
 
 /**
@@ -205,6 +214,7 @@ export async function transitionLabOrderStatusIf(
   client: ClientBase,
   input: {
     orderId: string;
+    organizationRef: string;
     expected: LabOrderStatus[];
     next: LabOrderStatus;
     cancellationReasonCode?: string;
@@ -214,13 +224,14 @@ export async function transitionLabOrderStatusIf(
   const result = await client.query(
     `UPDATE nelyo_laboratory.lab_order
         SET status = $2, cancellation_reason_code = $3, updated_at = $4
-      WHERE order_id = $1 AND status = ANY($5::text[])`,
+      WHERE order_id = $1 AND status = ANY($5::text[]) AND organization_ref = $6`,
     [
       input.orderId,
       input.next,
       input.cancellationReasonCode ?? null,
       input.updatedAt,
-      input.expected
+      input.expected,
+      requireOrganizationScope(input.organizationRef, "transitionLabOrderStatusIf")
     ]
   );
   return (result.rowCount ?? 0) > 0;

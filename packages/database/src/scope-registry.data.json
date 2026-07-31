@@ -1,0 +1,154 @@
+{
+  "description": "The Scope Registry — the single source of truth for which persistence tables are SCOPE-OWNED (belong to a bounded scope such as an organization) versus intentionally global. The repository tenant-scope guard (roadmap M8.2, AM-7) and its CI gate read this file. Tables NOT listed are global and carry no scope predicate (identity, sessions, credentials, tenancy, audit, outbox). Extensible by design: a table declares a list of `scopes` (scopeType + soft-ref column), so future scope types (facility, department, care-circle, household, employer, insurer, government-region, research-cohort, future workspace types) are additive — add a scopeType and the scope binding, no redesign. Today the only live scopeType is `organization`.",
+  "scopeTypes": {
+    "live": ["organization"],
+    "reserved": [
+      "facility",
+      "department",
+      "care-circle",
+      "household",
+      "employer",
+      "insurer",
+      "government-region",
+      "research-cohort"
+    ]
+  },
+  "tables": [
+    {
+      "schema": "nelyo_consent",
+      "table": "consent_record",
+      "primaryKey": ["consent_id"],
+      "scopes": [{ "type": "organization", "column": "organization_ref" }]
+    },
+    {
+      "schema": "nelyo_consent",
+      "table": "consent_version",
+      "primaryKey": ["consent_id", "version"],
+      "scopes": [],
+      "parent": { "schema": "nelyo_consent", "table": "consent_record", "foreignKey": "consent_id" }
+    },
+    {
+      "schema": "nelyo_relationship",
+      "table": "relationship",
+      "primaryKey": ["relationship_id"],
+      "scopes": [{ "type": "organization", "column": "organization_ref" }]
+    },
+    {
+      "schema": "nelyo_break_glass",
+      "table": "break_glass_access",
+      "primaryKey": ["access_id"],
+      "scopes": [{ "type": "organization", "column": "organization_ref" }]
+    },
+    {
+      "schema": "nelyo_patient",
+      "table": "patient_profile",
+      "primaryKey": ["patient_id"],
+      "scopes": [{ "type": "organization", "column": "organization_ref" }]
+    },
+    {
+      "schema": "nelyo_patient",
+      "table": "patient_identifier",
+      "primaryKey": ["patient_id", "system"],
+      "scopes": [{ "type": "organization", "column": "organization_ref" }]
+    },
+    {
+      "schema": "nelyo_appointment",
+      "table": "availability_slot",
+      "primaryKey": ["slot_id"],
+      "scopes": [{ "type": "organization", "column": "organization_ref" }]
+    },
+    {
+      "schema": "nelyo_appointment",
+      "table": "appointment",
+      "primaryKey": ["appointment_id"],
+      "scopes": [{ "type": "organization", "column": "organization_ref" }]
+    },
+    {
+      "schema": "nelyo_consultation",
+      "table": "consultation",
+      "primaryKey": ["consultation_id"],
+      "scopes": [{ "type": "organization", "column": "organization_ref" }]
+    },
+    {
+      "schema": "nelyo_consultation",
+      "table": "consultation_participant",
+      "primaryKey": ["consultation_id", "participant_ref"],
+      "scopes": [],
+      "parent": {
+        "schema": "nelyo_consultation",
+        "table": "consultation",
+        "foreignKey": "consultation_id"
+      }
+    },
+    {
+      "schema": "nelyo_medical_record",
+      "table": "medical_record",
+      "primaryKey": ["record_id"],
+      "scopes": [{ "type": "organization", "column": "organization_ref" }]
+    },
+    {
+      "schema": "nelyo_medical_record",
+      "table": "medical_record_entry",
+      "primaryKey": ["entry_id"],
+      "scopes": [],
+      "parent": {
+        "schema": "nelyo_medical_record",
+        "table": "medical_record",
+        "foreignKey": "record_id"
+      }
+    },
+    {
+      "schema": "nelyo_prescription",
+      "table": "prescription",
+      "primaryKey": ["prescription_id"],
+      "scopes": [{ "type": "organization", "column": "organization_ref" }]
+    },
+    {
+      "schema": "nelyo_prescription",
+      "table": "prescription_dispense",
+      "primaryKey": ["dispense_id"],
+      "scopes": [],
+      "parent": {
+        "schema": "nelyo_prescription",
+        "table": "prescription",
+        "foreignKey": "prescription_ref"
+      }
+    },
+    {
+      "schema": "nelyo_laboratory",
+      "table": "lab_order",
+      "primaryKey": ["order_id"],
+      "scopes": [{ "type": "organization", "column": "organization_ref" }]
+    },
+    {
+      "schema": "nelyo_laboratory",
+      "table": "lab_result_observation",
+      "primaryKey": ["observation_id"],
+      "scopes": [],
+      "parent": { "schema": "nelyo_laboratory", "table": "lab_order", "foreignKey": "order_ref" }
+    },
+    {
+      "schema": "nelyo_messaging",
+      "table": "message_thread",
+      "primaryKey": ["thread_id"],
+      "scopes": [{ "type": "organization", "column": "organization_ref" }]
+    },
+    {
+      "schema": "nelyo_messaging",
+      "table": "message",
+      "primaryKey": ["message_id"],
+      "scopes": [],
+      "parent": {
+        "schema": "nelyo_messaging",
+        "table": "message_thread",
+        "foreignKey": "thread_ref"
+      }
+    },
+    {
+      "schema": "nelyo_document",
+      "table": "document",
+      "primaryKey": ["document_id"],
+      "scopes": [{ "type": "organization", "column": "organization_ref" }]
+    }
+  ]
+}

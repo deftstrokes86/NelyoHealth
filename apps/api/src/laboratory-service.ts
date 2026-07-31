@@ -256,6 +256,7 @@ export async function recordLabResult(
       // too (idempotent stay-at-resulted); only 'cancelled' is refused.
       const advanced = await transitionLabOrderStatusIf(ctx.client, {
         orderId: input.orderId,
+        organizationRef: order.organizationRef,
         expected: ["ordered", "collected", "resulted"],
         next: "resulted",
         updatedAt: nowIso
@@ -371,6 +372,7 @@ export async function cancelLabOrder(
       // zero rows -> stale-artifact-state deny; nothing written.
       const cancelled = await transitionLabOrderStatusIf(ctx.client, {
         orderId: input.orderId,
+        organizationRef: order.organizationRef,
         expected: ["ordered", "collected"],
         next: "cancelled",
         cancellationReasonCode: input.cancellationReasonCode,

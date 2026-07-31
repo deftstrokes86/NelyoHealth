@@ -155,6 +155,25 @@ export {
 } from "./client.js";
 
 export {
+  LIVE_SCOPE_TYPES,
+  SCOPE_OWNED_TABLES,
+  findScopeOwnedTable,
+  isScopeOwned,
+  type ParentScope,
+  type ScopeBinding,
+  type ScopeOwnedTable,
+  type ScopeType
+} from "./scope-registry.js";
+
+export {
+  ScopeIntegrityError,
+  assertScopedMutation,
+  requireOrganizationScope,
+  requireScopeRef,
+  type ScopeRef
+} from "./scope-guard.js";
+
+export {
   elevateSession,
   createSession,
   getDeviceById,
