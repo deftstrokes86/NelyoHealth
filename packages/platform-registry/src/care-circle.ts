@@ -61,6 +61,14 @@ export const careCircleRoleSchema = z.object({
    */
   composesAsPersona: z.string().nullable().default(null),
   composesInWorkspace: z.string().nullable().default(null),
+  /**
+   * EXPLICIT composition precedence when an actor holds several relationships to the same
+   * subject — lower wins. Declared per role rather than inferred from array position, so
+   * reordering this catalog for readability can never change runtime behaviour. The
+   * validation gate requires it to be unique among roles that compose, so precedence is
+   * always total and deterministic.
+   */
+  compositionPriority: z.number().int().min(0).nullable().default(null),
   /** Declared capacity (composition). `null` = declared but not authz-mapped (PDP default-denies). */
   capacity: careCircleCapacitySchema.nullable().default(null),
   /** Capability refs this role collaborates with (composition). */
@@ -85,6 +93,7 @@ export const CARE_CIRCLE_ROLES: readonly CareCircleRole[] = [
     description: "A guardian acting for a dependent — full care collaboration.",
     composesAsPersona: "guardian",
     composesInWorkspace: "personal",
+    compositionPriority: 0,
     // Mirrors RELATIONSHIP_CAPACITY (guardian, priority 0) — declaration only.
     capacity: { actorRole: "guardian", actorType: "guardian", priority: 0 },
     capabilities: [
@@ -112,6 +121,7 @@ export const CARE_CIRCLE_ROLES: readonly CareCircleRole[] = [
     description: "A delegated caregiver — day-to-day care coordination.",
     composesAsPersona: "caregiver",
     composesInWorkspace: "personal",
+    compositionPriority: 10,
     // Mirrors RELATIONSHIP_CAPACITY (caregiver, priority 1) — declaration only.
     capacity: { actorRole: "caregiver", actorType: "caregiver", priority: 1 },
     capabilities: ["timeline.read", "care-circle.read", "appointment.book", "message.send"],
@@ -147,6 +157,7 @@ export const CARE_CIRCLE_ROLES: readonly CareCircleRole[] = [
     relationshipType: "sponsor",
     composesAsPersona: "diaspora-sponsor",
     composesInWorkspace: "diaspora-household",
+    compositionPriority: 20,
     description:
       "A relative abroad sponsoring care — financial sponsorship + emergency escalation.",
     // capacity stays null BY DESIGN: the PDP separates a sponsor's payment relationship
@@ -224,12 +235,14 @@ export function findCareCircleRoleByRelationshipType(
 }
 
 /**
- * Composition precedence when an actor holds several relationships to the same subject.
- * Declaration order in `CARE_CIRCLE_ROLES` IS the precedence — guardian outranks
- * caregiver outranks sponsor — so reordering the catalog reorders precedence, with no
- * code change. Mirrors (but never substitutes for) the PDP's own capacity ordering.
+ * Composition precedence when an actor holds several relationships to the same subject —
+ * lower wins. Read from each role's EXPLICIT `compositionPriority`, never from catalog
+ * position, so the catalog can be reordered or extended without changing which capacity
+ * an actor composes under. A role that declares no priority sorts last.
+ *
+ * Mirrors, but never substitutes for, the PDP's own capacity ordering
+ * (`RELATIONSHIP_CAPACITY`), which is resolved independently at the resource door.
  */
 export function careCircleCompositionPriority(roleId: string): number {
-  const index = CARE_CIRCLE_ROLES.findIndex((entry) => entry.id === roleId);
-  return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+  return findCareCircleRole(roleId)?.compositionPriority ?? Number.MAX_SAFE_INTEGER;
 }

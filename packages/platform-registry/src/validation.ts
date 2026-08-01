@@ -218,6 +218,11 @@ export function validatePlatformRegistry(): RegistryValidationIssue[] {
         "composesAsPersona and composesInWorkspace must be declared together"
       );
     }
+    // Precedence must be explicit for anything that composes, or two capacities toward
+    // the same subject would resolve by accident.
+    if (composesAsPersona !== null && role.compositionPriority === null) {
+      add("care-circle-role", role.id, "a composing role must declare compositionPriority");
+    }
     const persona = composesAsPersona ? findPersona(composesAsPersona) : undefined;
     const workspace = composesInWorkspace ? findWorkspace(composesInWorkspace) : undefined;
     if (persona && workspace) {
@@ -245,6 +250,14 @@ export function validatePlatformRegistry(): RegistryValidationIssue[] {
   assertUnique(
     "care-circle-role-relationship-type",
     CARE_CIRCLE_ROLES.map((role) => careCircleRelationshipType(role))
+  );
+  // Precedence must be TOTAL among composing roles: two roles sharing a priority would
+  // make the selected capacity depend on iteration order.
+  assertUnique(
+    "care-circle-role-composition-priority",
+    CARE_CIRCLE_ROLES.filter((role) => role.compositionPriority !== null).map((role) =>
+      String(role.compositionPriority)
+    )
   );
 
   // 4. Referential integrity — events, workflows, notifications.
