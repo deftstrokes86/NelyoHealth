@@ -240,6 +240,14 @@ exactly what the PDP would then refuse. This is a design decision, not an omissi
 authorization decision point; the relationship graph is read here only to select a COMPOSITION
 capacity, and an empty surface is a UX outcome, never a security boundary.
 
+### Deferred registry decisions
+
+Every registry proposed, audited, superseded, or deliberately rejected across M8.x — and the milestone
+at which each should be reconsidered — is recorded in
+[`docs/architecture/future-platform-registries.md`](../architecture/future-platform-registries.md).
+Consult it before proposing any new registry: seventeen already exist, and two (Resource, persisted
+Capability) were removed on purpose.
+
 ### Roadmap (not implemented) — Platform Templates
 Platform Templates (Hospital, Employer, Insurer, NGO, Government, Research, Diaspora Family, …) are the
 **composition layer above the registries** — a template selects and configures workspaces, personas,
