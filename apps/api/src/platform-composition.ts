@@ -1,5 +1,6 @@
 import type { Pool } from "pg";
 import {
+  listActiveRelationshipsForActor,
   listActiveRelationshipsForActorPatient,
   type PersistedRelationship
 } from "@nelyohealth/database";
@@ -50,18 +51,23 @@ export interface CompositionPorts {
     actorRef: string;
     patientRef: string;
   }): Promise<PersistedRelationship[]>;
+  listActiveRelationshipsForActor(input: { actorRef: string }): Promise<PersistedRelationship[]>;
 }
 
 export function createPgCompositionPorts(pool: Pool): CompositionPorts {
-  return {
-    listActiveRelationshipsForActorPatient: async (input) => {
-      const client = await pool.connect();
-      try {
-        return await listActiveRelationshipsForActorPatient(client, input);
-      } finally {
-        client.release();
-      }
+  const withClient = async <T>(fn: (client: import("pg").PoolClient) => Promise<T>): Promise<T> => {
+    const client = await pool.connect();
+    try {
+      return await fn(client);
+    } finally {
+      client.release();
     }
+  };
+  return {
+    listActiveRelationshipsForActorPatient: (input) =>
+      withClient((client) => listActiveRelationshipsForActorPatient(client, input)),
+    listActiveRelationshipsForActor: (input) =>
+      withClient((client) => listActiveRelationshipsForActor(client, input))
   };
 }
 
@@ -203,6 +209,81 @@ export async function resolveCompositionTarget(
     careCircleRoleId: selected.role.id,
     reason: "delegated"
   };
+}
+
+/** One subject an actor may act for, with the capacity they would act under. */
+export interface DiscoverableSubject {
+  subjectRef: string;
+  /** Care Circle Registry role id. */
+  careCircleRoleId: string;
+  /** The persisted relationship type behind it. */
+  relationshipType: string;
+  relationshipRef: string;
+  /** Workspace + persona this subject composes as — pass `subjectRef` to /me/surface. */
+  workspaceId: string;
+  personaId: string;
+  label: string;
+  effectiveDate: string | null;
+  expiryDate: string | null;
+}
+
+/**
+ * Subject discovery (roadmap M8.3f) — "who may I act for?".
+ *
+ * Self-scoped: it reads the CALLER's own delegations, never a patient's care circle, so
+ * it discloses nothing about who else supports a given patient. Each subject is returned
+ * with the workspace + persona it composes as, so a client populates a subject switcher
+ * and calls `/api/me/surface?subject=` without knowing a single relationship type.
+ *
+ * Where an actor holds several capacities toward the same subject, the one with the
+ * best composition priority wins — the same selection `resolveCompositionTarget` makes,
+ * so the switcher can never offer a capacity the surface would not compose.
+ */
+export async function discoverSubjects(
+  ports: CompositionPorts,
+  actingContext: ActingContext,
+  now: () => Date = () => new Date()
+): Promise<DiscoverableSubject[]> {
+  const relationships = await ports.listActiveRelationshipsForActor({
+    actorRef: actingContext.identity.accountId
+  });
+
+  const bySubject = new Map<string, PersistedRelationship[]>();
+  for (const relationship of relationships) {
+    const existing = bySubject.get(relationship.patientRef);
+    if (existing) existing.push(relationship);
+    else bySubject.set(relationship.patientRef, [relationship]);
+  }
+
+  const nowMs = now().getTime();
+  const subjects: DiscoverableSubject[] = [];
+  for (const [subjectRef, forSubject] of bySubject) {
+    const selected = selectCompositionRole(forSubject, nowMs);
+    // A subject whose relationships compose nothing is not offered at all.
+    if (!selected) continue;
+    const relationship = forSubject.find(
+      (entry) => entry.relationshipId === selected.relationshipRef
+    )!;
+    subjects.push({
+      subjectRef,
+      careCircleRoleId: selected.role.id,
+      relationshipType: relationship.relationshipType,
+      relationshipRef: selected.relationshipRef,
+      workspaceId: selected.role.composesInWorkspace!,
+      personaId: selected.role.composesAsPersona!,
+      label: selected.role.label,
+      effectiveDate: relationship.effectiveDate ?? null,
+      expiryDate: relationship.expiryDate ?? null
+    });
+  }
+
+  // Stable ordering: strongest capacity first, then subject ref.
+  return subjects.sort((a, b) => {
+    const priority =
+      careCircleCompositionPriority(a.careCircleRoleId) -
+      careCircleCompositionPriority(b.careCircleRoleId);
+    return priority !== 0 ? priority : a.subjectRef.localeCompare(b.subjectRef);
+  });
 }
 
 export interface RuntimeComposition<T> {

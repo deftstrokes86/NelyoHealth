@@ -28,7 +28,7 @@ function rel(overrides: Partial<PersistedRelationship>): PersistedRelationship {
 }
 
 describe("selectCapacityFromRelationships (M7.2)", () => {
-  it("maps guardian and caregiver-delegation; nothing else", () => {
+  it("maps guardian, caregiver-delegation and sponsor; nothing else", () => {
     expect(
       selectCapacityFromRelationships([rel({ relationshipType: "guardian" })], NOW)?.actorRole
     ).toBe("guardian");
@@ -36,10 +36,28 @@ describe("selectCapacityFromRelationships (M7.2)", () => {
       selectCapacityFromRelationships([rel({ relationshipType: "caregiver-delegation" })], NOW)
         ?.actorRole
     ).toBe("caregiver");
-    // Deferred / excluded types confer NO routine capacity (default-deny).
-    for (const type of ["sponsor", "emergency-contact", "household", "clinical-proxy", "none"]) {
+    // M8.3f (ADR-0007 extension): sponsor resolves capacity, but its policy grant is
+    // funding + coordination only — every clinical read still default-denies.
+    expect(
+      selectCapacityFromRelationships([rel({ relationshipType: "sponsor" })], NOW)?.actorRole
+    ).toBe("sponsor");
+    // Excluded types confer NO routine capacity (default-deny).
+    for (const type of ["emergency-contact", "household", "clinical-proxy", "none"]) {
       expect(selectCapacityFromRelationships([rel({ relationshipType: type })], NOW)).toBeNull();
     }
+  });
+
+  it("ranks guardian over caregiver over sponsor when an actor holds several", () => {
+    const chosen = selectCapacityFromRelationships(
+      [
+        rel({ relationshipId: "spon", relationshipType: "sponsor" }),
+        rel({ relationshipId: "care", relationshipType: "caregiver-delegation" })
+      ],
+      NOW
+    );
+    // The wider clinical capacity wins over the narrower funding one.
+    expect(chosen?.actorRole).toBe("caregiver");
+    expect(chosen?.relationshipRef).toBe("care");
   });
 
   it("prioritizes guardian over caregiver when the actor holds both", () => {

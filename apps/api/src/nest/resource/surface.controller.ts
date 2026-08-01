@@ -1,10 +1,23 @@
-import { Controller, Get, Inject, Query, Req } from "@nestjs/common";
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Query,
+  Req
+} from "@nestjs/common";
 import { ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { randomUUID } from "node:crypto";
 import type { Pool } from "pg";
 import {
+  createSubjectDto,
   createSurfaceDto,
   createToolContractDto,
   type ApiEnvelope,
+  type SubjectsDto,
   type SurfaceDashboardDto,
   type SurfaceDto,
   type SurfaceExperienceDto,
@@ -25,6 +38,7 @@ import {
 import {
   composeRuntimeSurface,
   createPgCompositionPorts,
+  discoverSubjects,
   resolveRuntimeToolContract,
   type CompositionTarget
 } from "../../platform-composition.js";
@@ -32,7 +46,10 @@ import { createMeta } from "../api-envelope.js";
 import { Authorize } from "../authorization/authorization-metadata.js";
 import type { AuthenticatedRequest } from "../authorization/authorization.guard.js";
 import { projectExact } from "../../projection.js";
+import { invokeTool } from "../../tool-invocation.js";
+import { ResourceUnavailableException } from "./resource-http.js";
 import {
+  SUBJECT_CLASSIFICATION,
   SURFACE_CLASSIFICATION,
   TOOL_CONTRACT_CLASSIFICATION,
   authorizedReaderContext
@@ -90,6 +107,59 @@ export class SurfaceController {
     };
   }
 
+  @Get("me/subjects")
+  @Authorize()
+  @ApiOperation({ summary: "List every subject the caller may currently act for" })
+  @ApiOkResponse({ description: "Subjects envelope" })
+  async mySubjects(@Req() req: AuthenticatedRequest): Promise<ApiEnvelope<SubjectsDto>> {
+    const actingContext = req.actingContext!;
+    const discovered = await discoverSubjects(createPgCompositionPorts(this.pool), actingContext);
+    const context = authorizedReaderContext("api.surface.subjects");
+
+    // The caller is always their own first subject: a client needs no special case for
+    // "me" in the switcher, and no knowledge that self-composition exists.
+    const self = projectExact(
+      createSubjectDto({
+        subjectRef: actingContext.identity.personId,
+        careCircleRoleId: "self",
+        relationshipType: "self",
+        workspaceId: actingContext.workspaceId ?? "",
+        personaId: actingContext.persona.actorRole,
+        label: "Myself",
+        effectiveDate: null,
+        expiryDate: null
+      }),
+      SUBJECT_CLASSIFICATION,
+      context
+    );
+
+    return {
+      data: {
+        subjects: [
+          self,
+          ...discovered.map((subject) =>
+            projectExact(
+              createSubjectDto({
+                subjectRef: subject.subjectRef,
+                careCircleRoleId: subject.careCircleRoleId,
+                relationshipType: subject.relationshipType,
+                workspaceId: subject.workspaceId,
+                personaId: subject.personaId,
+                label: subject.label,
+                effectiveDate: subject.effectiveDate,
+                expiryDate: subject.expiryDate
+              }),
+              SUBJECT_CLASSIFICATION,
+              context
+            )
+          )
+        ]
+      },
+      meta: this.meta(req, "api.surface.subjects", "self"),
+      errors: []
+    };
+  }
+
   @Get("me/tools")
   @Authorize()
   @ApiOperation({ summary: "Resolve the caller's Tool Registry contract for a consumer" })
@@ -125,6 +195,58 @@ export class SurfaceController {
     return {
       data: this.toToolContractDto(composed, target),
       meta: this.meta(req, "api.surface.tools", target.reason),
+      errors: []
+    };
+  }
+
+  @Post("tools/:toolId/invoke")
+  @Authorize()
+  @ApiOperation({ summary: "Invoke a Tool Registry tool for the caller's acting context" })
+  @ApiOkResponse({ description: "Tool invocation envelope" })
+  async invoke(
+    @Req() req: AuthenticatedRequest,
+    @Param("toolId") toolId: string,
+    @Body() body: { subject?: string; input?: Record<string, unknown> }
+  ): Promise<ApiEnvelope<{ toolId: string; status: string; data: unknown }>> {
+    const actingContext = req.actingContext!;
+    // The contract is re-resolved server-side for THIS acting context and subject: a
+    // client cannot widen what it may invoke by asserting a tool it was not offered.
+    const { target, composed } = await resolveRuntimeToolContract(
+      createPgCompositionPorts(this.pool),
+      actingContext,
+      "api",
+      body?.subject ?? null
+    );
+
+    const result = await invokeTool({
+      pool: this.pool,
+      actingContext,
+      toolId,
+      subjectRef: target.subjectPersonRef,
+      input: body?.input ?? {},
+      offeredToolIds: composed.tools.map((offered) => offered.tool.id),
+      command: {
+        requestId: req.requestId ?? "missing-request-id",
+        correlationId: req.correlationId ?? "missing-correlation-id",
+        idempotencyKey: req.header("idempotency-key") ?? randomUUID()
+      }
+    });
+
+    if (result.status === "input-invalid") {
+      throw new BadRequestException({
+        code: "tool-input-invalid",
+        invalidFields: result.invalidFields ?? []
+      });
+    }
+    // Unknown, not-offered, not-implemented, and denied all surface as the same uniform
+    // unavailability, so probing cannot map the registry or another actor's capacity.
+    if (result.status !== "ok") {
+      throw new ResourceUnavailableException();
+    }
+
+    return {
+      data: { toolId: result.toolId, status: result.status, data: result.data ?? null },
+      meta: this.meta(req, `api.tools.invoke.${toolId}`, target.reason),
       errors: []
     };
   }

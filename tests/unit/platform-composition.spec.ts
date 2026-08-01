@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { PersistedRelationship } from "@nelyohealth/database";
 import {
   composeRuntimeSurface,
+  discoverSubjects,
   resolveCompositionTarget,
   resolveRuntimeToolContract,
   selectCompositionRole,
@@ -51,7 +52,8 @@ function relationship(overrides: Partial<PersistedRelationship> = {}): Persisted
 }
 
 const portsWith = (relationships: PersistedRelationship[]): CompositionPorts => ({
-  listActiveRelationshipsForActorPatient: async () => relationships
+  listActiveRelationshipsForActorPatient: async () => relationships,
+  listActiveRelationshipsForActor: async () => relationships
 });
 
 const NO_RELATIONSHIPS = portsWith([]);
@@ -318,6 +320,66 @@ describe("runtime tool contract (M8.3e)", () => {
     expect(contract.composed.active).toBe(false);
     expect(contract.composed.tools).toEqual([]);
     expect(contract.composed.withheld.every((w) => w.reason === "composition-inactive")).toBe(true);
+  });
+});
+
+describe("subject discovery (M8.3f)", () => {
+  const subjectRel = (patientRef: string, relationshipType: string, id: string) =>
+    relationship({ relationshipId: id, relationshipType, patientRef } as never);
+
+  it("lists every subject the actor may act for, with its composition target", async () => {
+    const subjects = await discoverSubjects(
+      portsWith([
+        subjectRel("person-ward", "guardian", "rel-g"),
+        subjectRel("person-sponsored", "sponsor", "rel-s"),
+        subjectRel("person-cared", "caregiver-delegation", "rel-c")
+      ]),
+      actingContext()
+    );
+
+    // Ordered by composition priority: guardian(0) < caregiver(10) < sponsor(20).
+    expect(subjects.map((s) => s.careCircleRoleId)).toEqual([
+      "guardian",
+      "caregiver-delegation",
+      "diaspora-sponsor"
+    ]);
+    // Each carries the workspace + persona its surface will compose as, so a client
+    // needs no knowledge of relationship types.
+    expect(subjects[2]).toMatchObject({
+      subjectRef: "person-sponsored",
+      relationshipType: "sponsor",
+      workspaceId: "diaspora-household",
+      personaId: "diaspora-sponsor"
+    });
+  });
+
+  it("omits subjects whose relationships compose nothing", async () => {
+    const subjects = await discoverSubjects(
+      portsWith([subjectRel("person-x", "emergency-contact", "rel-e")]),
+      actingContext()
+    );
+    expect(subjects).toEqual([]);
+  });
+
+  it("offers only the strongest capacity per subject", async () => {
+    const subjects = await discoverSubjects(
+      portsWith([
+        subjectRel("person-both", "sponsor", "rel-s"),
+        subjectRel("person-both", "guardian", "rel-g")
+      ]),
+      actingContext()
+    );
+    expect(subjects).toHaveLength(1);
+    expect(subjects[0].careCircleRoleId).toBe("guardian");
+  });
+
+  it("agrees with what composeSurface would actually compose", async () => {
+    const ports = portsWith([subjectRel("person-sponsored", "sponsor", "rel-s")]);
+    const [subject] = await discoverSubjects(ports, actingContext());
+    const { target } = await composeRuntimeSurface(ports, actingContext(), subject.subjectRef);
+    // The switcher can never offer a capacity the surface would not compose.
+    expect(target.workspaceId).toBe(subject.workspaceId);
+    expect(target.personaId).toBe(subject.personaId);
   });
 });
 

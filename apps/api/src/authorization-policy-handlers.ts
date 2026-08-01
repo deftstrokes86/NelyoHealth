@@ -639,6 +639,18 @@ const policyRules: AuthorizationPolicyRule[] = [
     action: "void-entry",
     purposes: ["care-delivery", "emergency-care"]
   },
+  // ---------- Sponsor (ADR-0007, extended M8.3f) ----------
+  //
+  // A sponsor FUNDS care; they are not a clinician and not a legal decision-maker. The
+  // rules below are the complete sponsor grant, each scoped to the narrowest resource,
+  // action, and purpose that makes the funded care coordinable. Every sponsor read is
+  // additionally gated on the `sponsor-participation` consent domain and on a live
+  // `sponsor` relationship, so the patient can end all of it by withdrawing either.
+  //
+  // Deliberately ABSENT, and default-denied: clinical-record-summary, consultation,
+  // prescription, laboratory (any action); document read; consent-preferences update;
+  // every clinician and organization-admin resource. A sponsor funding a procedure never
+  // acquires the right to read its result.
   {
     actorRole: "sponsor",
     resource: "billing-ledger",
@@ -649,6 +661,67 @@ const policyRules: AuthorizationPolicyRule[] = [
     actorRole: "sponsor",
     resource: "payment-status",
     action: "read-payment-status",
+    purposes: ["payment-operations"]
+  },
+  {
+    // Appointment STATUS only — when care is happening, so it can be funded and planned
+    // around. No book / reschedule / cancel: scheduling is the patient's or their
+    // guardian's decision, never the payer's.
+    actorRole: "sponsor",
+    resource: "appointment",
+    action: "read",
+    purposes: ["care-coordination", "payment-operations"]
+  },
+  {
+    // Care logistics: who is in the circle, so a sponsor abroad can coordinate with them.
+    // Read-only — no care-circle management, which is guardian authority.
+    actorRole: "sponsor",
+    resource: "care-circle",
+    action: "read",
+    purposes: ["care-coordination"]
+  },
+  {
+    actorRole: "sponsor",
+    resource: "message",
+    action: "read",
+    purposes: ["care-coordination"]
+  },
+  {
+    // Communicate with the care team. No close-thread / add-participant: a sponsor may
+    // take part in a conversation, not control who else is in it.
+    actorRole: "sponsor",
+    resource: "message",
+    action: "send",
+    purposes: ["care-coordination"]
+  },
+  {
+    // Upload insurance / payment documentation. UPLOAD ONLY — there is deliberately no
+    // sponsor `document`/`read` rule, so a sponsor may submit a funding letter and still
+    // cannot open the patient's clinical documents.
+    actorRole: "sponsor",
+    resource: "document",
+    action: "upload",
+    purposes: ["payment-operations"]
+  },
+  {
+    actorRole: "sponsor",
+    resource: "sponsorship",
+    action: "read",
+    purposes: ["payment-operations", "care-coordination"]
+  },
+  {
+    // Fund a consultation, medication, investigation, or procedure. This is a FINANCIAL
+    // act against a sponsorship record: it commits money to an item, and confers no read
+    // of the clinical item funded.
+    actorRole: "sponsor",
+    resource: "sponsorship",
+    action: "fund",
+    purposes: ["payment-operations"]
+  },
+  {
+    actorRole: "sponsor",
+    resource: "sponsorship",
+    action: "manage-preferences",
     purposes: ["payment-operations"]
   },
   {

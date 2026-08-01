@@ -390,6 +390,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/me/subjects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List every subject the caller may currently act for */
+        get: operations["SurfaceController_mySubjects"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/me/tools": {
         parameters: {
             query?: never;
@@ -401,6 +418,23 @@ export interface paths {
         get: operations["SurfaceController_myTools"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tools/{toolId}/invoke": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Invoke a Tool Registry tool for the caller's acting context */
+        post: operations["SurfaceController_invoke"];
         delete?: never;
         options?: never;
         head?: never;
@@ -857,6 +891,24 @@ export interface operations {
             };
         };
     };
+    SurfaceController_mySubjects: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Subjects envelope */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     SurfaceController_myTools: {
         parameters: {
             query?: {
@@ -872,6 +924,26 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Tool contract envelope */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SurfaceController_invoke: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                toolId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Tool invocation envelope */
             200: {
                 headers: {
                     [name: string]: unknown;

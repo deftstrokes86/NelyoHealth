@@ -293,10 +293,93 @@ describe.skipIf(!shouldRun)("runtime surface HTTP (M8.3e)", () => {
     expect(data.navigation).toEqual([]);
   });
 
-  it("requires authentication on both composition endpoints", async () => {
-    for (const path of ["/api/me/surface", "/api/me/tools"]) {
+  it("requires authentication on every composition endpoint", async () => {
+    for (const path of ["/api/me/surface", "/api/me/tools", "/api/me/subjects"]) {
       const response = await fetch(`http://127.0.0.1:${port}${path}`);
       expect(response.status).toBe(401);
     }
+  });
+
+  // ---------- M8.3f ----------
+
+  it("GET /api/me/subjects discovers every subject the caller may act for", async () => {
+    const data = await surface("/api/me/subjects", personalSessionId);
+    const subjects = data.subjects as Record<string, string>[];
+
+    // The caller is always their own first subject — no client-side special case.
+    expect(subjects[0]).toMatchObject({
+      subjectRef: actorPersonId,
+      careCircleRoleId: "self",
+      workspaceId: "personal",
+      personaId: "patient"
+    });
+
+    const byRef = new Map(subjects.map((s) => [s.subjectRef, s]));
+    expect(byRef.get(wardPersonId)).toMatchObject({
+      careCircleRoleId: "guardian",
+      relationshipType: "guardian",
+      workspaceId: "personal",
+      personaId: "guardian"
+    });
+    expect(byRef.get(sponsoredPersonId)).toMatchObject({
+      careCircleRoleId: "diaspora-sponsor",
+      relationshipType: "sponsor",
+      workspaceId: "diaspora-household",
+      personaId: "diaspora-sponsor"
+    });
+    // A subject with no declared capacity is never offered.
+    expect(byRef.has(strangerPersonId)).toBe(false);
+  });
+
+  it("every discovered subject composes the surface the switcher promised", async () => {
+    const data = await surface("/api/me/subjects", personalSessionId);
+    for (const subject of (data.subjects as Record<string, string>[]).slice(1)) {
+      const composed = await surface(
+        `/api/me/surface?subject=${subject.subjectRef}`,
+        personalSessionId
+      );
+      expect(composed.workspaceId).toBe(subject.workspaceId);
+      expect(composed.personaId).toBe(subject.personaId);
+      expect(composed.active).toBe(true);
+    }
+  });
+
+  it("POST /api/tools/:toolId/invoke executes a read tool through the pipeline", async () => {
+    const response = await fetch(`http://127.0.0.1:${port}/api/tools/view-timeline/invoke`, {
+      method: "POST",
+      headers: { authorization: `Bearer ${personalSessionId}`, "content-type": "application/json" },
+      body: JSON.stringify({ input: {} })
+    });
+    expect(response.status).toBe(201);
+    const body = (await response.json()) as { data: { toolId: string; status: string } };
+    expect(body.data.toolId).toBe("view-timeline");
+    expect(body.data.status).toBe("ok");
+  });
+
+  it("refuses a tool the caller's contract does not offer, without disclosing why", async () => {
+    // `send-message` is offered on ui/api but NOT to a sponsor acting for a sponsored
+    // person under the composed contract; an unknown tool id behaves identically.
+    for (const toolId of ["not-a-real-tool", "view-care-circle"]) {
+      const response = await fetch(`http://127.0.0.1:${port}/api/tools/${toolId}/invoke`, {
+        method: "POST",
+        headers: {
+          authorization: `Bearer ${personalSessionId}`,
+          "content-type": "application/json"
+        },
+        body: JSON.stringify({ subject: strangerPersonId, input: {} })
+      });
+      // Composition is inactive toward a stranger, so nothing is offered at all.
+      expect(response.status).toBe(404);
+    }
+  });
+
+  it("validates tool input against the registry's declared contract", async () => {
+    const response = await fetch(`http://127.0.0.1:${port}/api/tools/book-appointment/invoke`, {
+      method: "POST",
+      headers: { authorization: `Bearer ${personalSessionId}`, "content-type": "application/json" },
+      // `slotId` is declared required; omitting it must fail before any service runs.
+      body: JSON.stringify({ input: { reasonForVisit: "check-up" } })
+    });
+    expect(response.status).toBe(400);
   });
 });

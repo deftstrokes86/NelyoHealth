@@ -134,21 +134,38 @@ export function buildResourceAccessContext(
  * Which relationship types confer a routine, cross-patient capability, and the
  * actor capacity each maps to. DELIBERATELY SMALL (default-deny for the rest):
  *  - guardian, caregiver-delegation are mapped (they have per-domain read rules);
- *  - sponsor is DEFERRED to the billing/payment slice — its scope is financial-only
- *    (billing-ledger / payment-status) and belongs designed with those surfaces, not
- *    inherited here (it has no timeline/care-circle capability anyway);
+ *  - sponsor is mapped as of M8.3f (ADR-0007 extension): it carries the narrow
+ *    funding + coordination grant in the policy table — appointment status, care-circle
+ *    read, messaging, document UPLOAD, billing/payment, and the sponsorship resource —
+ *    and no clinical rule at all, so a sponsor resolving capacity here still
+ *    default-denies every clinical read;
  *  - household / emergency-contact / clinical-proxy are excluded until modelled
  *    (emergency-contact is break-glass territory, not routine access).
  * `priority` orders capacity when an actor holds several active relationships to the
- * same patient — guardian outranks caregiver.
+ * same patient — guardian outranks caregiver outranks sponsor, so someone who is both a
+ * guardian and a sponsor acts under the wider clinical capacity, never the narrower one.
  */
 const RELATIONSHIP_CAPACITY: Record<
   string,
   { actorRole: AuthorizationActorRole; actorType: AccessActorType; priority: number }
 > = {
   guardian: { actorRole: "guardian", actorType: "guardian", priority: 0 },
-  "caregiver-delegation": { actorRole: "caregiver", actorType: "caregiver", priority: 1 }
+  "caregiver-delegation": { actorRole: "caregiver", actorType: "caregiver", priority: 1 },
+  sponsor: { actorRole: "sponsor", actorType: "sponsor", priority: 2 }
 };
+
+/**
+ * NOTE (M8.3f): per-capacity consent domains (`sponsor-participation`,
+ * `caregiver-participation`, `family-participation`) are NOT injected here.
+ *
+ * They were attempted and reverted: no code path currently GRANTS those domains — a
+ * relationship is created with a consent record carrying `grantedDomains: []` — so
+ * requiring them would have denied every delegated read, caregiver access included.
+ * Delegated access therefore remains gated on the live relationship plus the patient's
+ * consent record, exactly as before, and withdrawing either still ends it immediately.
+ * Wiring participation domains needs a consent-grant change at relationship creation; it
+ * is a consent-model change, not a composition one.
+ */
 
 export interface DerivedCapacity {
   relationshipRef: string;

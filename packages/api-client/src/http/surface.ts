@@ -136,6 +136,37 @@ export interface ToolContractDto {
   unavailable: WithheldToolDto[];
 }
 
+export interface SubjectDto {
+  /** Pass as `?subject=` to /api/me/surface and /api/me/tools. */
+  subjectRef: string;
+  careCircleRoleId: string;
+  relationshipType: string;
+  /** Workspace + persona this subject composes as. */
+  workspaceId: string;
+  personaId: string;
+  label: string;
+  effectiveDate: string | null;
+  expiryDate: string | null;
+}
+
+export interface SubjectsDto {
+  /** The caller themselves is always the first subject. */
+  subjects: SubjectDto[];
+}
+
+export function createSubjectDto(fields: SubjectDto): SubjectDto {
+  return {
+    subjectRef: fields.subjectRef,
+    careCircleRoleId: fields.careCircleRoleId,
+    relationshipType: fields.relationshipType,
+    workspaceId: fields.workspaceId,
+    personaId: fields.personaId,
+    label: fields.label,
+    effectiveDate: fields.effectiveDate,
+    expiryDate: fields.expiryDate
+  };
+}
+
 export function createSurfaceDto(fields: SurfaceDto): SurfaceDto {
   return {
     workspaceId: fields.workspaceId,

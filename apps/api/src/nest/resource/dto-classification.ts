@@ -3,6 +3,7 @@ import type {
   AppointmentSummaryDto,
   CareCircleMemberDto,
   NotificationDto,
+  SubjectDto,
   SurfaceDto,
   TimelineEntryDto,
   ToolContractDto,
@@ -106,6 +107,21 @@ export const SURFACE_CLASSIFICATION: ClassificationMap<SurfaceDto> = {
   experienceProfile: "INTERNAL",
   search: "INTERNAL",
   reports: "INTERNAL"
+};
+
+/**
+ * Subject discovery (M8.3f). `subjectRef` identifies a human being the caller supports;
+ * the capacity fields describe the caller's OWN delegation, not the subject's condition.
+ */
+export const SUBJECT_CLASSIFICATION: ClassificationMap<SubjectDto> = {
+  subjectRef: "SENSITIVE-PERSONAL-DATA",
+  careCircleRoleId: "INTERNAL",
+  relationshipType: "INTERNAL",
+  workspaceId: "INTERNAL",
+  personaId: "INTERNAL",
+  label: "INTERNAL",
+  effectiveDate: "INTERNAL",
+  expiryDate: "INTERNAL"
 };
 
 export const TOOL_CONTRACT_CLASSIFICATION: ClassificationMap<ToolContractDto> = {

@@ -460,6 +460,21 @@
         ]
       }
     },
+    "/api/me/subjects": {
+      "get": {
+        "operationId": "SurfaceController_mySubjects",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Subjects envelope"
+          }
+        },
+        "summary": "List every subject the caller may currently act for",
+        "tags": [
+          "surface"
+        ]
+      }
+    },
     "/api/me/tools": {
       "get": {
         "operationId": "SurfaceController_myTools",
@@ -489,6 +504,30 @@
           }
         },
         "summary": "Resolve the caller's Tool Registry contract for a consumer",
+        "tags": [
+          "surface"
+        ]
+      }
+    },
+    "/api/tools/{toolId}/invoke": {
+      "post": {
+        "operationId": "SurfaceController_invoke",
+        "parameters": [
+          {
+            "name": "toolId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool invocation envelope"
+          }
+        },
+        "summary": "Invoke a Tool Registry tool for the caller's acting context",
         "tags": [
           "surface"
         ]

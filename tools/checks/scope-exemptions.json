@@ -138,6 +138,15 @@
     },
     {
       "module": "relationship-repository.ts",
+      "sqlIncludes": "expiry_date IS NULL OR expiry_date > NOW()",
+      "class": "cross-organization-capacity",
+      "reason": "listActiveRelationshipsForActor: subject discovery — the actor reads their OWN delegations across every organization, so it cannot be organization-scoped.",
+      "boundary": "Scoped by actor_ref, i.e. the caller themselves; it discloses only the caller's own relationships and never another patient's care circle. Each discovered subject is then composed and authorized independently.",
+      "owner": "Lead Platform Engineer",
+      "dateIntroduced": "2026-08-01"
+    },
+    {
+      "module": "relationship-repository.ts",
       "sqlIncludes": "actor_ref = $1 AND patient_ref = $2 AND status = 'active'",
       "class": "cross-organization-capacity",
       "reason": "listActiveRelationshipsForActorPatient: relationship-graph capacity resolution deliberately spans organizations (a caregiver may hold delegations at several facilities).",

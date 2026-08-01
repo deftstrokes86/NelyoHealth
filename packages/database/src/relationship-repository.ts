@@ -300,3 +300,29 @@ export async function listActiveRelationshipsForActorPatient(
   );
   return result.rows.map(mapRelationship);
 }
+
+/**
+ * Every active relationship an actor holds, across ALL patients and organizations
+ * (roadmap M8.3f — subject discovery).
+ *
+ * This is the self-scoped read behind "who may I act for": the actor is the subject of
+ * the query (`actor_ref = $1`), so it discloses only the actor's own delegations. It is
+ * deliberately NOT a care-circle read of any patient — it never reveals who else is in a
+ * patient's circle. Ordered so capacity selection per subject stays deterministic.
+ */
+export async function listActiveRelationshipsForActor(
+  client: ClientBase,
+  input: { actorRef: string }
+): Promise<PersistedRelationship[]> {
+  const result = await client.query<RelationshipRow>(
+    `SELECT ${RELATIONSHIP_COLUMNS}
+       FROM nelyo_relationship.relationship
+      WHERE actor_ref = $1
+        AND status = 'active'
+        AND (expiry_date IS NULL OR expiry_date > NOW())
+        AND effective_date <= NOW()
+      ORDER BY patient_ref ASC, effective_date DESC, relationship_id ASC`,
+    [input.actorRef]
+  );
+  return result.rows.map(mapRelationship);
+}

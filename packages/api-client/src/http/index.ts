@@ -44,8 +44,11 @@ export {
 } from "./appointments.js";
 export type { SessionContextDto } from "./session.js";
 export {
+  createSubjectDto,
   createSurfaceDto,
   createToolContractDto,
+  type SubjectDto,
+  type SubjectsDto,
   type SurfaceDto,
   type SurfaceNavigationItemDto,
   type SurfaceWidgetDto,
