@@ -80,10 +80,11 @@ export const personaSchema = z.object({
 export type Persona = z.infer<typeof personaSchema>;
 
 /**
- * The persona catalog. `patient`, `clinician`, `organization-admin`, `caregiver`, and
- * `guardian` carry a full composition; the organization sub-type personas are declared
- * for the planned workspaces and compose nothing until their workspace is enabled and
- * their surfaces are authored.
+ * The persona catalog. As of M8.3e EVERY persona carries a full composition — personal
+ * (patient, caregiver, guardian), diaspora (diaspora-sponsor), and one per organization
+ * type (clinician, organization-admin, pharmacist, lab-technician, employer-admin,
+ * program-administrator, insurer-agent). An organization type differs from another only
+ * in the registry data its persona points at; the runtime selects none of it in code.
  */
 export const PERSONAS: readonly Persona[] = [
   personaSchema.parse({
@@ -230,32 +231,110 @@ export const PERSONAS: readonly Persona[] = [
     interactionPatterns: { density: "compact", primaryActions: [] }
   }),
   personaSchema.parse({
+    id: "diaspora-sponsor",
+    label: "Diaspora sponsor",
+    description:
+      "A relative abroad funding and coordinating care for family at home. NON-CLINICAL: the PDP separates a sponsor's payment relationship from clinical access.",
+    appliesToWorkspaceKinds: ["personal"],
+    capabilities: [
+      "care-circle.read",
+      "appointment.read",
+      "notification.read",
+      "message.read",
+      "message.send",
+      "sponsorship.read",
+      "sponsorship.fund"
+    ],
+    defaultDashboards: ["sponsor-home"],
+    navigation: ["sponsor-home-nav", "sponsored-people", "sponsor-funding", "messages"],
+    onboardingFlows: ["diaspora-sponsor-onboarding"],
+    homepageComposition: ["sponsored-care-summary", "funding-summary"],
+    searchScopes: ["sponsored-care", "provider-directory"],
+    reports: ["sponsorship-statement"],
+    interactionPatterns: {
+      density: "comfortable",
+      primaryActions: ["sponsorship.fund", "message.send"]
+    },
+    behavior: {
+      communicationStyle: "supportive",
+      notificationStrategy: "proactive",
+      aiInteractionProfile: "assistive",
+      preferredLandingExperience: "diaspora-sponsor-profile"
+    }
+  }),
+  personaSchema.parse({
     id: "pharmacist",
     label: "Pharmacist",
-    description: "A dispensing provider (planned).",
+    description: "A dispensing provider within a pharmacy organization.",
     appliesToWorkspaceKinds: ["organization"],
-    capabilities: ["prescription.read", "prescription.dispense"]
+    capabilities: ["prescription.read", "prescription.dispense", "message.read", "message.send"],
+    defaultDashboards: ["pharmacy-home"],
+    navigation: ["org-home", "pharmacy-dispensing", "org-messages"],
+    onboardingFlows: ["pharmacy-onboarding"],
+    homepageComposition: ["dispensing-queue-summary"],
+    searchScopes: ["pharmacy-prescriptions", "my-messages"],
+    reports: ["dispensing-activity"],
+    interactionPatterns: { density: "compact", primaryActions: ["prescription.dispense"] },
+    behavior: { communicationStyle: "clinical", notificationStrategy: "balanced" }
   }),
   personaSchema.parse({
     id: "lab-technician",
     label: "Laboratory technician",
-    description: "A diagnostics provider (planned).",
+    description: "A diagnostics provider within a laboratory organization.",
     appliesToWorkspaceKinds: ["organization"],
-    capabilities: ["laboratory.read", "laboratory.record-result"]
+    capabilities: ["laboratory.read", "laboratory.record-result", "message.read", "message.send"],
+    defaultDashboards: ["laboratory-home"],
+    navigation: ["org-home", "lab-worklist", "org-messages"],
+    onboardingFlows: ["laboratory-onboarding"],
+    homepageComposition: ["lab-worklist-summary"],
+    searchScopes: ["lab-orders", "my-messages"],
+    reports: ["lab-turnaround"],
+    interactionPatterns: { density: "compact", primaryActions: ["laboratory.record-result"] },
+    behavior: { communicationStyle: "clinical", notificationStrategy: "balanced" }
   }),
   personaSchema.parse({
     id: "employer-admin",
     label: "Employer administrator",
-    description: "An employer program administrator (planned).",
+    description: "An employer administering a sponsored health programme for employees.",
     appliesToWorkspaceKinds: ["organization"],
-    capabilities: []
+    capabilities: ["program.administer", "population-health.read"],
+    defaultDashboards: ["programme-home"],
+    navigation: ["org-home", "programme-members", "programme-reporting"],
+    onboardingFlows: ["programme-onboarding"],
+    homepageComposition: ["programme-overview-section"],
+    searchScopes: ["programme-members-search"],
+    reports: ["programme-population-health"],
+    interactionPatterns: { density: "compact", primaryActions: ["program.administer"] },
+    behavior: { communicationStyle: "concise", notificationStrategy: "minimal" }
+  }),
+  personaSchema.parse({
+    id: "program-administrator",
+    label: "Programme administrator",
+    description: "An NGO or government officer administering a sponsored health programme.",
+    appliesToWorkspaceKinds: ["organization"],
+    capabilities: ["program.administer", "population-health.read"],
+    defaultDashboards: ["programme-home"],
+    navigation: ["org-home", "programme-members", "programme-reporting"],
+    onboardingFlows: ["programme-onboarding"],
+    homepageComposition: ["programme-overview-section"],
+    searchScopes: ["programme-members-search"],
+    reports: ["programme-population-health"],
+    interactionPatterns: { density: "compact", primaryActions: ["program.administer"] },
+    behavior: { communicationStyle: "concise", notificationStrategy: "minimal" }
   }),
   personaSchema.parse({
     id: "insurer-agent",
     label: "Insurer agent",
-    description: "An insurance organization agent (planned).",
+    description: "An insurance organization agent administering coverage and eligibility.",
     appliesToWorkspaceKinds: ["organization"],
-    capabilities: []
+    capabilities: ["coverage.read"],
+    defaultDashboards: ["coverage-home"],
+    navigation: ["org-home", "coverage-members"],
+    onboardingFlows: ["coverage-onboarding"],
+    homepageComposition: ["coverage-overview-section"],
+    searchScopes: ["coverage-search"],
+    interactionPatterns: { density: "compact", primaryActions: ["coverage.read"] },
+    behavior: { communicationStyle: "concise", notificationStrategy: "minimal" }
   })
 ] as const;
 

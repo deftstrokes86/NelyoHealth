@@ -203,20 +203,25 @@ describe("composeSurface — dashboards and experiences (M8.3c)", () => {
 });
 
 describe("composeSurface — invariants (M8.3c)", () => {
-  it("fails CLOSED: a disabled workspace or non-applicable persona composes nothing", () => {
-    const disabled = composeSurface("pharmacy", "pharmacist");
-    expect(disabled.active).toBe(false);
-    expect(disabled.reasonCode).toBe("workspace-disabled");
-    expect(disabled.navigation).toEqual([]);
-    expect(disabled.dashboards).toEqual([]);
-    expect(disabled.onboarding).toEqual([]);
-    expect(disabled.homepage).toEqual([]);
-    expect(disabled.landingDashboard).toBeNull();
-    expect(disabled.experienceProfile).toBeNull();
-    expect(disabled.capabilities).toEqual([]);
+  it("fails CLOSED: an unknown workspace or non-applicable persona composes nothing", () => {
+    const unknown = composeSurface("nope", "patient");
+    expect(unknown.active).toBe(false);
+    expect(unknown.reasonCode).toBe("workspace-unknown");
+    expect(unknown.navigation).toEqual([]);
+    expect(unknown.dashboards).toEqual([]);
+    expect(unknown.onboarding).toEqual([]);
+    expect(unknown.homepage).toEqual([]);
+    expect(unknown.landingDashboard).toBeNull();
+    expect(unknown.experienceProfile).toBeNull();
+    expect(unknown.capabilities).toEqual([]);
+    expect(unknown.search).toEqual([]);
+    expect(unknown.reports).toEqual([]);
 
-    expect(composeSurface("nope", "patient").reasonCode).toBe("workspace-unknown");
     expect(composeSurface("hospital", "patient").reasonCode).toBe("persona-not-applicable");
+    // M8.3e: a subject the actor holds no declared capacity toward.
+    expect(composeSurface("personal", "patient", { isSelf: false }).reasonCode).toBe(
+      "subject-no-capacity"
+    );
   });
 
   it("is composition-only: the surface is filtered BY the capability set, never adding to it", () => {

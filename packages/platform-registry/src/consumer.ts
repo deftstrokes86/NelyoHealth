@@ -1,5 +1,6 @@
 import { TOOLS, type Tool } from "./tool.js";
 import {
+  type CompositionSubject,
   type ResolvedComposition,
   compositionHasCapability,
   resolveComposition
@@ -50,6 +51,9 @@ export interface ResolvedToolContract {
   workspaceId: string;
   personaId: string;
   consumer: ConsumerSurface;
+  /** The care-circle role narrowing this contract, when acting for another. */
+  careCircleRoleId: string | null;
+  subjectIsSelf: boolean;
   active: boolean;
   reasonCode: ResolvedComposition["reasonCode"];
   tools: OfferedTool[];
@@ -74,15 +78,18 @@ const SURFACE_SUPPORT: Record<ConsumerSurface, (tool: Tool) => boolean> = {
 export function resolveToolContract(
   workspaceId: string,
   personaId: string,
-  consumer: ConsumerSurface
+  consumer: ConsumerSurface,
+  subject?: CompositionSubject
 ): ResolvedToolContract {
-  const composition = resolveComposition(workspaceId, personaId);
+  const composition = resolveComposition(workspaceId, personaId, subject);
 
   if (!composition.active) {
     return {
       workspaceId,
       personaId,
       consumer,
+      careCircleRoleId: composition.careCircleRoleId,
+      subjectIsSelf: composition.subjectIsSelf,
       active: false,
       reasonCode: composition.reasonCode,
       tools: [],
@@ -120,6 +127,8 @@ export function resolveToolContract(
     workspaceId,
     personaId,
     consumer,
+    careCircleRoleId: composition.careCircleRoleId,
+    subjectIsSelf: composition.subjectIsSelf,
     active: true,
     reasonCode: composition.reasonCode,
     tools,

@@ -191,21 +191,54 @@ gained homepage sections, moving both from Partial to Implemented; `clinician` g
 `composeSurface` nor `resolveToolContract` is called by any app, controller, or worker, and no
 `GET /api/me/surface` exists. See "Known gaps" below.
 
-### Known gaps after M8.3d (recorded, not deferred silently)
+### Known gaps after M8.3d — ALL CLOSED in M8.3e
 
-1. **No HTTP surface endpoint** — the layer is unreachable from outside the process.
-2. **Persona resolution is hardcoded** — `acting-context-resolver.ts` returns `actorRole: "patient"`
-   for every personal context, so the caregiver and guardian surfaces are unreachable at runtime.
-3. **Care Circle is not an input to composition** — `resolveComposition` reads workspace ∪ persona
-   only; `RELATIONSHIP_CAPACITY` remains a separate imperative path. There is no subject dimension, so
-   acting for oneself and acting for a ward compose identically.
-4. **Workspace id mapping is hardcoded** to `hospital`, so organization sub-types cannot resolve.
-5. **Diaspora is a taxonomy entry only** — `diaspora-sponsor`, `family-member`, and `household` exist
-   in the Care Circle Registry with `capacity: null`; there is **no** diaspora workspace, persona,
-   navigation, dashboard, or experience.
+1. ~~No HTTP surface endpoint~~ → `GET /api/me/surface` and `GET /api/me/tools`.
+2. ~~Persona resolution is hardcoded~~ → derived from membership role codes and, for a subject, from
+   the relationship graph via the care-circle role's declared `composesAsPersona`.
+3. ~~Care Circle is not an input to composition~~ → `resolveComposition` takes a subject and narrows
+   by the care-circle role's capabilities.
+4. ~~Workspace id mapping is hardcoded~~ → `organization.organization_type` (migration 0025) resolves
+   the workspace by lookup; an untyped organization composes nothing.
+5. ~~Diaspora is a taxonomy entry only~~ → a full runtime participant: workspace, persona,
+   navigation, dashboard, onboarding, homepage, profile, search, report, and tool access.
 
-Gaps 1–4 are the "surface wiring" milestone; gap 5 is a product-scope decision that should be made
-explicitly rather than inherited.
+## M8.3e increment — the runtime
+
+The registry layer stops being declarative data and becomes the composition engine. One pipeline:
+**Platform Registry → Context Engine → `composeSurface` / `resolveToolContract` → API → client.**
+There is no second composition implementation and no hardcoded fallback.
+
+- **Two endpoints.** `GET /api/me/surface` returns navigation, dashboards, widgets, landing dashboard,
+  homepage, onboarding, experience profile, search scopes, and reports. `GET /api/me/tools?consumer=`
+  returns the Tool Registry contract with available **and** withheld tools plus reasons. Both accept
+  `?subject=`; both resolve the composition target through the **same** service, so they cannot
+  disagree about who is acting as what. Both are PEP-protected and pass through the M8.1 projection
+  layer with declared classifications.
+- **Persona is derived.** Organization contexts map the active role code to a Persona Registry id;
+  personal contexts are `patient` for self and, for another subject, whatever the care-circle role
+  declares. An unmapped role composes nothing.
+- **Subject-aware composition.** Acting for another **narrows by intersection** with the care-circle
+  role's capabilities — a guardian composes 5 capabilities where the patient composes 16, and every
+  one is a subset. No capacity toward a subject composes nothing.
+- **Organization type is data.** `organization_type` (a Workspace Registry id) resolves the workspace
+  by lookup. Seven types compose distinct navigation, dashboards, search, reports, and tools with no
+  code branch; an organization whose type cannot be resolved composes nothing rather than defaulting
+  to a hospital.
+- **Care Circle is a first-class composition input.** Roles declare `relationshipType`,
+  `composesAsPersona`, and `composesInWorkspace`; composition precedence is the registry's own
+  declaration order. The gate rejects a half-declared mapping or a role that shares no capability with
+  the persona it composes as.
+
+**Diaspora is deliberately NON-CLINICAL.** The PDP separates a sponsor's payment relationship from
+clinical access (`sponsorPaymentOnly`, `sponsor-payment-no-clinical-access`). The sponsor therefore
+composes funding and coordination surfaces — sponsored people, funding, statements, messaging — and
+the Care Circle role keeps `capacity: null`. Composing a clinical surface for a sponsor would offer
+exactly what the PDP would then refuse. This is a design decision, not an omission.
+
+**Invariant unchanged.** Composition decides what may be OFFERED. The PDP remains the sole
+authorization decision point; the relationship graph is read here only to select a COMPOSITION
+capacity, and an empty surface is a UX outcome, never a security boundary.
 
 ### Roadmap (not implemented) — Platform Templates
 Platform Templates (Hospital, Employer, Insurer, NGO, Government, Research, Diaspora Family, …) are the

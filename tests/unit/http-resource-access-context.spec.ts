@@ -18,6 +18,7 @@ function actingContext(overrides: Partial<ActingContext> = {}): ActingContext {
     activeTenantValid: false,
     activeTenantReasonCode: "personal-context",
     workspace: "personal",
+    workspaceId: "personal",
     persona: { kind: "personal", actorRole: "patient", actorRoles: ["patient"] },
     memberships: [],
     resolvedAt: new Date().toISOString(),

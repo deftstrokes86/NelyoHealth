@@ -12,6 +12,7 @@ import {
   findWorkspace,
   isKnownCapability,
   isKnownEvent,
+  isWorkspaceComposable,
   resolveComposition,
   validatePlatformRegistry,
   workflowSchema
@@ -112,10 +113,22 @@ describe("platform registry (M8.3a)", () => {
   it("carries workspace lifecycle so org types are data, not code branches", () => {
     expect(findWorkspace("personal")?.lifecycle.status).toBe("active");
     expect(findWorkspace("hospital")?.lifecycle.status).toBe("active");
-    expect(findWorkspace("pharmacy")?.lifecycle.enablementState).toBe("disabled");
-    for (const id of ["employer", "insurer", "government"]) {
+    // M8.3e: every organization type is supported and composable; enablement is the
+    // rollout control, and `invite-only` still composes for those who hold one.
+    expect(findWorkspace("pharmacy")?.lifecycle.enablementState).toBe("enabled");
+    expect(findWorkspace("government")?.lifecycle.enablementState).toBe("invite-only");
+    for (const id of ["employer", "insurer", "government", "ngo", "laboratory"]) {
       expect(findWorkspace(id)?.kind).toBe("organization");
     }
+    // The disabled rule itself is still enforced, independently of today's catalog.
+    expect(isWorkspaceComposable({ lifecycle: { ...findWorkspace("pharmacy")!.lifecycle } })).toBe(
+      true
+    );
+    expect(
+      isWorkspaceComposable({
+        lifecycle: { ...findWorkspace("pharmacy")!.lifecycle, enablementState: "disabled" }
+      })
+    ).toBe(false);
   });
 
   it("resolves the patient composition set for the personal workspace", () => {
@@ -128,14 +141,17 @@ describe("platform registry (M8.3a)", () => {
     expect(compositionHasCapability(resolved, "clinical-record.amend")).toBe(false);
   });
 
-  it("fails CLOSED: unknown / disabled workspace or non-applicable persona composes nothing", () => {
+  it("fails CLOSED: unknown workspace / persona or non-applicable persona composes nothing", () => {
     expect(resolveComposition("nope", "patient").reasonCode).toBe("workspace-unknown");
     expect(resolveComposition("personal", "nope").reasonCode).toBe("persona-unknown");
-    const disabled = resolveComposition("pharmacy", "pharmacist");
-    expect(disabled.active).toBe(false);
-    expect(disabled.reasonCode).toBe("workspace-disabled");
-    expect(disabled.capabilities).toEqual([]);
     expect(resolveComposition("hospital", "patient").reasonCode).toBe("persona-not-applicable");
+    const unknown = resolveComposition("nope", "patient");
+    expect(unknown.active).toBe(false);
+    expect(unknown.capabilities).toEqual([]);
+    // M8.3e: acting for a subject with no declared capacity composes nothing either.
+    const stranger = resolveComposition("personal", "patient", { isSelf: false });
+    expect(stranger.reasonCode).toBe("subject-no-capacity");
+    expect(stranger.capabilities).toEqual([]);
   });
 
   it("resolves every composition reference on a live persona (no forward refs left)", () => {
@@ -145,7 +161,11 @@ describe("platform registry (M8.3a)", () => {
     expect(patient?.navigation).toContain("appointments");
     expect(patient?.searchScopes).toContain("my-appointments");
     expect(patient?.reports).toContain("my-care-summary");
-    // Planned personas stay declarable with empty composition — valid, not invalid.
-    expect(PERSONAS.find((p) => p.id === "insurer-agent")?.searchScopes).toEqual([]);
+    // M8.3e: every persona in the catalog now carries a real composition — an org type
+    // differs from another only in the registry data its persona points at.
+    for (const persona of PERSONAS) {
+      expect(persona.defaultDashboards.length, `${persona.id} dashboards`).toBeGreaterThan(0);
+      expect(persona.navigation.length, `${persona.id} navigation`).toBeGreaterThan(0);
+    }
   });
 });

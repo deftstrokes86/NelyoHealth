@@ -3,7 +3,9 @@ import type {
   AppointmentSummaryDto,
   CareCircleMemberDto,
   NotificationDto,
+  SurfaceDto,
   TimelineEntryDto,
+  ToolContractDto,
   WardDto
 } from "@nelyohealth/api-client";
 import type { ClassificationMap, ProjectionContext } from "../../projection.js";
@@ -73,6 +75,50 @@ export const APPOINTMENT_CLASSIFICATION: ClassificationMap<AppointmentDto> = {
   status: "INTERNAL",
   reasonForVisit: "PROTECTED-CLINICAL-DATA",
   cancellationReasonCode: "INTERNAL"
+};
+
+/**
+ * Composition-surface classifications (roadmap M8.3e).
+ *
+ * A surface is STRUCTURE, not data: registry ids, labels, routes, ordering — nothing
+ * clinical crosses this boundary, which is why almost every field is INTERNAL. The two
+ * exceptions are the person refs (`subjectRef`, and the `organizationRef` of the active
+ * tenant), which identify a human being and a tenant respectively and are classified
+ * accordingly. Routing the surface through the projection layer keeps ONE disclosure
+ * path for every read, so a future field that does carry meaning cannot be added without
+ * declaring what it is.
+ */
+export const SURFACE_CLASSIFICATION: ClassificationMap<SurfaceDto> = {
+  workspaceId: "INTERNAL",
+  personaId: "INTERNAL",
+  organizationRef: "INTERNAL",
+  subjectRef: "SENSITIVE-PERSONAL-DATA",
+  subjectIsSelf: "INTERNAL",
+  careCircleRoleId: "INTERNAL",
+  active: "INTERNAL",
+  reasonCode: "INTERNAL",
+  capabilities: "INTERNAL",
+  navigation: "INTERNAL",
+  dashboards: "INTERNAL",
+  landingDashboardId: "INTERNAL",
+  homepage: "INTERNAL",
+  onboarding: "INTERNAL",
+  experienceProfile: "INTERNAL",
+  search: "INTERNAL",
+  reports: "INTERNAL"
+};
+
+export const TOOL_CONTRACT_CLASSIFICATION: ClassificationMap<ToolContractDto> = {
+  workspaceId: "INTERNAL",
+  personaId: "INTERNAL",
+  consumer: "INTERNAL",
+  subjectRef: "SENSITIVE-PERSONAL-DATA",
+  subjectIsSelf: "INTERNAL",
+  careCircleRoleId: "INTERNAL",
+  active: "INTERNAL",
+  reasonCode: "INTERNAL",
+  available: "INTERNAL",
+  unavailable: "INTERNAL"
 };
 
 /**

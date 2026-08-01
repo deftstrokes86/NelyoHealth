@@ -187,6 +187,39 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     requiresCapability: "notification.read"
   }),
 
+  // Diaspora household (personal kind)
+  navigationItemSchema.parse({
+    id: "sponsor-home-nav",
+    label: "Home",
+    description: "The diaspora sponsor's landing surface.",
+    route: "/",
+    icon: "house",
+    order: 10,
+    workspaceKinds: ["personal"]
+  }),
+  navigationItemSchema.parse({
+    id: "sponsored-people",
+    label: "Who I support",
+    description: "The family members this sponsor funds care for.",
+    route: "/sponsored",
+    icon: "heart-handshake",
+    order: 20,
+    workspaceKinds: ["personal"],
+    requiresCapability: "care-circle.read",
+    requiresFeature: "care-circle"
+  }),
+  navigationItemSchema.parse({
+    id: "sponsor-funding",
+    label: "Funding",
+    description: "Sponsored care balances, top-ups, and statements.",
+    route: "/funding",
+    icon: "wallet",
+    order: 30,
+    workspaceKinds: ["personal"],
+    requiresCapability: "sponsorship.read",
+    requiresFeature: "diaspora-sponsorship"
+  }),
+
   // Organization workspace
   navigationItemSchema.parse({
     id: "org-home",
@@ -251,6 +284,61 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     requiresCapability: "message.read",
     requiresFeature: "messaging",
     badgeSource: "message-received"
+  }),
+  navigationItemSchema.parse({
+    id: "pharmacy-dispensing",
+    label: "Dispensing",
+    description: "The prescription dispensing queue.",
+    route: "/dispensing",
+    icon: "pill",
+    order: 20,
+    workspaceKinds: ["organization"],
+    requiresCapability: "prescription.dispense",
+    requiresFeature: "pharmacy"
+  }),
+  navigationItemSchema.parse({
+    id: "lab-worklist",
+    label: "Worklist",
+    description: "Specimens and results awaiting recording.",
+    route: "/worklist",
+    icon: "flask-conical",
+    order: 20,
+    workspaceKinds: ["organization"],
+    requiresCapability: "laboratory.record-result",
+    requiresFeature: "labs"
+  }),
+  navigationItemSchema.parse({
+    id: "programme-members",
+    label: "Members",
+    description: "People enrolled in the sponsored health programme.",
+    route: "/programme/members",
+    icon: "users",
+    order: 20,
+    workspaceKinds: ["organization"],
+    requiresCapability: "program.administer",
+    requiresFeature: "programmes"
+  }),
+  navigationItemSchema.parse({
+    id: "programme-reporting",
+    label: "Population reporting",
+    description: "De-identified population health reporting for the programme.",
+    route: "/programme/reporting",
+    icon: "chart-line",
+    order: 30,
+    workspaceKinds: ["organization"],
+    requiresCapability: "population-health.read",
+    requiresFeature: "programmes"
+  }),
+  navigationItemSchema.parse({
+    id: "coverage-members",
+    label: "Coverage",
+    description: "Plan coverage and member eligibility.",
+    route: "/coverage",
+    icon: "shield-check",
+    order: 20,
+    workspaceKinds: ["organization"],
+    requiresCapability: "coverage.read",
+    requiresFeature: "coverage"
   }),
   navigationItemSchema.parse({
     id: "org-admin",

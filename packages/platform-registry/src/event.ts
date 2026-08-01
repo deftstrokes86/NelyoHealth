@@ -147,6 +147,16 @@ export const EVENTS: readonly PlatformEvent[] = [
     subscribers: ["care-circle", "notification"]
   }),
   eventSchema.parse({
+    id: "CareSponsorshipFunded",
+    domain: "care-coordination",
+    description: "A sponsor funded or topped up sponsored care for a person.",
+    classification: "PAYMENT-DATA",
+    publishers: ["sponsorship"],
+    subscribers: ["timeline", "notification"],
+    retention: "extended",
+    analyticsVisible: true
+  }),
+  eventSchema.parse({
     id: "NotificationDeadLettered",
     domain: "communication",
     description: "A notification exhausted its delivery attempts.",

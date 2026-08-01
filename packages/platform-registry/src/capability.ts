@@ -296,6 +296,55 @@ export const CAPABILITIES: readonly Capability[] = [
     "administrative",
     "organization",
     "Administer an organization workspace."
+  ),
+  // Diaspora sponsorship (M8.3e). Deliberately NON-CLINICAL: the PDP separates a
+  // sponsor's payment relationship from clinical access (`sponsorPaymentOnly` /
+  // `sponsor-payment-no-clinical-access`), so a sponsor composes funding and
+  // coordination surfaces only — never a clinical record.
+  capability(
+    "sponsorship",
+    "read",
+    "finance",
+    "financial",
+    "care-circle",
+    "View sponsored care and its funding status.",
+    ["diaspora", "sponsorship"]
+  ),
+  capability(
+    "sponsorship",
+    "fund",
+    "finance",
+    "financial",
+    "care-circle",
+    "Fund or top up sponsored care.",
+    ["diaspora", "sponsorship"]
+  ),
+  capability(
+    "coverage",
+    "read",
+    "finance",
+    "financial",
+    "organization",
+    "View plan coverage and eligibility.",
+    ["payer"]
+  ),
+  capability(
+    "program",
+    "administer",
+    "administrative",
+    "administrative",
+    "organization",
+    "Administer a sponsored health programme (employer, NGO, or government).",
+    ["programme"]
+  ),
+  capability(
+    "population-health",
+    "read",
+    "government",
+    "analytics",
+    "organization",
+    "View de-identified population health reporting.",
+    ["programme", "analytics"]
   )
 ] as const;
 

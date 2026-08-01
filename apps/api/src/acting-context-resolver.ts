@@ -13,6 +13,7 @@ import {
   listMembershipsForPerson,
   listRoleAssignmentsForMembership
 } from "@nelyohealth/database";
+import { isKnownPersona } from "@nelyohealth/platform-registry";
 import type { RoleScope, TenancyAccessDecisionDraft, TenantMembershipDraft } from "./tenancy.js";
 import { createTenancyAccessDraft } from "./tenancy.js";
 import { evaluateTenancyAccessDecision } from "./tenancy-handlers.js";
@@ -43,7 +44,12 @@ export type ResolvedSessionStatus = "active" | "stale" | "revoked";
 export interface ResolvedPersona {
   /** Personal = self-capacity; Organization = acting within a tenant. */
   kind: WorkspaceKind;
-  /** Primary capacity: "patient" in Personal, the primary active role otherwise. */
+  /**
+   * Primary capacity, and the Persona Registry id the runtime composes with. In the
+   * personal workspace this is derived from the acting capacity toward the SUBJECT
+   * (patient for self, guardian/caregiver/diaspora-sponsor for another); in an
+   * organization it is the primary active role code.
+   */
   actorRole: string;
   /** All active role codes held in the active tenant (empty in Personal). */
   actorRoles: string[];
@@ -67,6 +73,14 @@ export interface ActingContext {
     | "membership-missing"
     | "membership-not-active";
   workspace: WorkspaceKind;
+  /**
+   * The Workspace Registry id this context composes as (M8.3e). Personal contexts
+   * resolve to `personal`; an organization context resolves to the active tenant's
+   * `organizationType`, so a pharmacy composes as a pharmacy without a code branch.
+   * Null when an organization context could not be typed — the composition layer then
+   * fails closed rather than defaulting to a hospital.
+   */
+  workspaceId: string | null;
   persona: ResolvedPersona;
   /** Derived read model of every tenant membership the person holds. */
   memberships: TenantMembershipDraft[];
@@ -176,6 +190,7 @@ export async function resolveActingContext(
   let activeTenantId: string | null = null;
   let activeTenantValid = false;
   let activeTenantReasonCode: ActingContext["activeTenantReasonCode"] = "personal-context";
+  let organizationType: string | null = null;
 
   if (claimedTenantId) {
     const membership = memberships.find((candidate) => candidate.tenantId === claimedTenantId);
@@ -193,6 +208,8 @@ export async function resolveActingContext(
         activeTenantId = claimedTenantId;
         activeTenantValid = true;
         activeTenantReasonCode = "tenant-valid";
+        // The organization's own type decides which workspace it composes as.
+        organizationType = organization.organizationType;
       }
     }
   }
@@ -209,12 +226,52 @@ export async function resolveActingContext(
     activeTenantValid,
     activeTenantReasonCode,
     workspace,
+    workspaceId: workspace === "personal" ? "personal" : organizationType,
     persona,
     memberships,
     resolvedAt: now.toISOString()
   };
 }
 
+/**
+ * Map an organization role code to a Persona Registry id (M8.3e).
+ *
+ * Role codes are tenancy data; persona ids are registry data. The mapping is a lookup
+ * over the registry's own persona ids plus a small set of historical role-code aliases,
+ * so adding a persona is a registry change. An unmapped role composes NOTHING (the
+ * registry resolver fails closed) rather than inheriting a default surface.
+ */
+const ROLE_CODE_PERSONA_ALIASES: Record<string, string> = {
+  admin: "organization-admin",
+  "org-admin": "organization-admin",
+  doctor: "clinician",
+  nurse: "clinician",
+  pharmacy: "pharmacist",
+  lab: "lab-technician",
+  "lab-tech": "lab-technician",
+  employer: "employer-admin",
+  insurer: "insurer-agent",
+  ngo: "program-administrator",
+  government: "program-administrator"
+};
+
+export function personaIdForRoleCode(roleCode: string): string {
+  if (isKnownPersona(roleCode)) return roleCode;
+  return ROLE_CODE_PERSONA_ALIASES[roleCode] ?? roleCode;
+}
+
+/**
+ * Resolve the persona for the workspace (M8.3e).
+ *
+ * Personal: the BASE capacity is `patient` — acting on your own record. Acting for
+ * another person resolves a different persona per request from the relationship graph
+ * (`resolveSubjectPersona`), because capacity is a property of the actor-subject pair,
+ * not of the session.
+ *
+ * Organization: the primary active role code, mapped to a Persona Registry id. A
+ * membership with no active role yields `member`, which is not a registry persona and
+ * therefore composes nothing.
+ */
 function resolvePersona(
   workspace: WorkspaceKind,
   activeTenantId: string | null,
@@ -226,7 +283,7 @@ function resolvePersona(
   const membership = memberships.find((candidate) => candidate.tenantId === activeTenantId);
   const actorRoles = (membership?.roleScopes ?? [])
     .filter((scope) => scope.status === "active")
-    .map((scope) => scope.roleCode);
+    .map((scope) => personaIdForRoleCode(scope.roleCode));
   return {
     kind: "organization",
     // Fall back to "member" when the membership carries no active role yet.

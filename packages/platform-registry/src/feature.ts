@@ -114,6 +114,31 @@ export const FEATURES: readonly Feature[] = [
     status: "planned"
   }),
   featureSchema.parse({
+    id: "diaspora-sponsorship",
+    name: "Diaspora Sponsorship",
+    description: "Fund and coordinate care for family at home from abroad. Non-clinical by design.",
+    domain: "finance",
+    capabilities: ["sponsorship.read", "sponsorship.fund", "care-circle.read"],
+    events: { produces: ["CareSponsorshipFunded"] },
+    status: "active"
+  }),
+  featureSchema.parse({
+    id: "coverage",
+    name: "Coverage & Eligibility",
+    description: "Plan coverage, eligibility, and benefit administration.",
+    domain: "finance",
+    capabilities: ["coverage.read"],
+    status: "planned"
+  }),
+  featureSchema.parse({
+    id: "programmes",
+    name: "Health Programmes",
+    description: "Sponsored health programme administration and population reporting.",
+    domain: "administrative",
+    capabilities: ["program.administer", "population-health.read"],
+    status: "planned"
+  }),
+  featureSchema.parse({
     id: "employer-portal",
     name: "Employer Portal",
     description: "Employer-sponsored health program administration.",

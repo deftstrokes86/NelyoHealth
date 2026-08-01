@@ -61,8 +61,11 @@ export { FEATURES, featureSchema, findFeature, isKnownFeature, type Feature } fr
 export {
   CARE_CIRCLE_ROLES,
   careCircleCollaborationSchema,
+  careCircleCompositionPriority,
+  careCircleRelationshipType,
   careCircleRoleSchema,
   findCareCircleRole,
+  findCareCircleRoleByRelationshipType,
   isKnownCareCircleRole,
   type CareCircleCollaboration,
   type CareCircleRole
@@ -88,8 +91,10 @@ export {
 } from "./workflow.js";
 
 export {
+  ORGANIZATION_TYPES,
   WORKSPACES,
   enablementStateSchema,
+  findOrganizationWorkspace,
   findWorkspace,
   isKnownWorkspace,
   lifecycleStatusSchema,
@@ -153,7 +158,9 @@ export {
 
 export {
   compositionHasCapability,
+  isWorkspaceComposable,
   resolveComposition,
+  type CompositionSubject,
   type ResolvedComposition
 } from "./resolve.js";
 

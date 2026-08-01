@@ -43,11 +43,28 @@ export interface Address {
   postalCode?: string;
 }
 
+/**
+ * The organization types the platform composes for (M8.3e). Each value is a Workspace
+ * Registry id of kind `organization`, so workspace resolution is a lookup rather than a
+ * code branch. Extending the platform to a new organization type is a registry entry
+ * plus a value here — no composition logic changes.
+ */
+export type OrganizationType =
+  | "hospital"
+  | "pharmacy"
+  | "laboratory"
+  | "employer"
+  | "insurer"
+  | "ngo"
+  | "government";
+
 export interface Organization {
   id: TenantId;
   legalName: string;
   displayName: string;
   status: "active" | "suspended" | "offboarded";
+  /** Workspace Registry id this organization composes as. */
+  organizationType: OrganizationType;
 }
 
 export interface Facility {

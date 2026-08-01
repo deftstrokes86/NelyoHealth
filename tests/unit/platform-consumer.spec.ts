@@ -180,9 +180,9 @@ describe("tool contract — AI and automation as consumers (M8.3d)", () => {
   });
 
   it("fails CLOSED: an inactive composition offers nothing and says why", () => {
-    const contract = resolveToolContract("pharmacy", "pharmacist", "ai");
+    const contract = resolveToolContract("nope", "pharmacist", "ai");
     expect(contract.active).toBe(false);
-    expect(contract.reasonCode).toBe("workspace-disabled");
+    expect(contract.reasonCode).toBe("workspace-unknown");
     expect(contract.tools).toEqual([]);
     // Every tool is reported withheld, so "no tools" is distinguishable from "unresolved".
     expect(contract.withheld).toHaveLength(TOOLS.length);

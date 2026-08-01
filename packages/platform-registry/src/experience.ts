@@ -281,7 +281,215 @@ export const EXPERIENCES: readonly Experience[] = [
     order: 20
   }),
 
+  // --- Diaspora + organization-type experiences (M8.3e) ---
+  experienceSchema.parse({
+    id: "diaspora-sponsor-onboarding",
+    kind: "onboarding",
+    label: "Supporting family at home",
+    description: "Bring a diaspora sponsor into their household workspace.",
+    appliesToWorkspaceKinds: ["personal"],
+    steps: [
+      {
+        id: "verify-sponsor-identity",
+        label: "Verify your identity",
+        description: "Confirm who you are before you can be linked to family at home.",
+        order: 10
+      },
+      {
+        id: "link-family",
+        label: "Link your family",
+        description: "Connect to the people whose care you will support.",
+        requiresCapability: "care-circle.read",
+        order: 20
+      },
+      {
+        id: "set-up-funding",
+        label: "Set up funding",
+        description: "Add a funding method so care can be paid for from abroad.",
+        requiresCapability: "sponsorship.fund",
+        order: 30
+      }
+    ]
+  }),
+  experienceSchema.parse({
+    id: "pharmacy-onboarding",
+    kind: "onboarding",
+    label: "Pharmacy setup",
+    description: "Bring a pharmacy into the platform.",
+    appliesToWorkspaceKinds: ["organization"],
+    tone: "clinical",
+    density: "compact",
+    steps: [
+      {
+        id: "verify-pharmacy-licence",
+        label: "Verify your licence",
+        description: "Confirm the pharmacy licence before dispensing is enabled.",
+        order: 10
+      },
+      {
+        id: "configure-dispensing",
+        label: "Configure dispensing",
+        description: "Set up the dispensing queue and stock handling.",
+        requiresCapability: "prescription.dispense",
+        order: 20
+      }
+    ]
+  }),
+  experienceSchema.parse({
+    id: "laboratory-onboarding",
+    kind: "onboarding",
+    label: "Laboratory setup",
+    description: "Bring a laboratory into the platform.",
+    appliesToWorkspaceKinds: ["organization"],
+    tone: "clinical",
+    density: "compact",
+    steps: [
+      {
+        id: "verify-accreditation",
+        label: "Verify accreditation",
+        description: "Confirm laboratory accreditation before results may be recorded.",
+        order: 10
+      },
+      {
+        id: "configure-result-recording",
+        label: "Configure result recording",
+        description: "Set up the worklist and result-recording workflow.",
+        requiresCapability: "laboratory.record-result",
+        order: 20
+      }
+    ]
+  }),
+  experienceSchema.parse({
+    id: "programme-onboarding",
+    kind: "onboarding",
+    label: "Programme setup",
+    description: "Bring an employer, NGO, or government programme into the platform.",
+    appliesToWorkspaceKinds: ["organization"],
+    tone: "neutral",
+    density: "compact",
+    steps: [
+      {
+        id: "verify-programme-sponsor",
+        label: "Verify the sponsoring organization",
+        description: "Complete organization verification before enrolment opens.",
+        order: 10
+      },
+      {
+        id: "define-programme",
+        label: "Define the programme",
+        description: "Set the services, eligibility, and enrolment rules.",
+        requiresCapability: "program.administer",
+        order: 20
+      }
+    ]
+  }),
+  experienceSchema.parse({
+    id: "coverage-onboarding",
+    kind: "onboarding",
+    label: "Coverage setup",
+    description: "Bring an insurer into the platform.",
+    appliesToWorkspaceKinds: ["organization"],
+    tone: "neutral",
+    density: "compact",
+    steps: [
+      {
+        id: "verify-payer",
+        label: "Verify the payer",
+        description: "Complete payer verification before coverage is exposed.",
+        order: 10
+      },
+      {
+        id: "configure-plans",
+        label: "Configure plans",
+        description: "Define the plans and eligibility rules this insurer offers.",
+        requiresCapability: "coverage.read",
+        order: 20
+      }
+    ]
+  }),
+  experienceSchema.parse({
+    id: "sponsored-care-summary",
+    kind: "homepage-section",
+    label: "Care you support",
+    description: "How the people this sponsor supports are doing — coordination, not clinical.",
+    appliesToWorkspaceKinds: ["personal"],
+    requiresCapability: "care-circle.read",
+    requiresFeature: "care-circle",
+    order: 10
+  }),
+  experienceSchema.parse({
+    id: "funding-summary",
+    kind: "homepage-section",
+    label: "Funding",
+    description: "Balance, recent top-ups, and upcoming costs.",
+    appliesToWorkspaceKinds: ["personal"],
+    requiresCapability: "sponsorship.read",
+    requiresFeature: "diaspora-sponsorship",
+    order: 20
+  }),
+  experienceSchema.parse({
+    id: "dispensing-queue-summary",
+    kind: "homepage-section",
+    label: "Dispensing queue",
+    description: "Prescriptions awaiting dispensing.",
+    appliesToWorkspaceKinds: ["organization"],
+    requiresCapability: "prescription.dispense",
+    requiresFeature: "pharmacy",
+    order: 10
+  }),
+  experienceSchema.parse({
+    id: "lab-worklist-summary",
+    kind: "homepage-section",
+    label: "Worklist",
+    description: "Specimens and results awaiting recording.",
+    appliesToWorkspaceKinds: ["organization"],
+    requiresCapability: "laboratory.record-result",
+    requiresFeature: "labs",
+    order: 10
+  }),
+  experienceSchema.parse({
+    id: "programme-overview-section",
+    kind: "homepage-section",
+    label: "Programme at a glance",
+    description: "Enrolment and utilisation headlines for the programme.",
+    appliesToWorkspaceKinds: ["organization"],
+    requiresCapability: "program.administer",
+    requiresFeature: "programmes",
+    order: 10
+  }),
+  experienceSchema.parse({
+    id: "coverage-overview-section",
+    kind: "homepage-section",
+    label: "Coverage at a glance",
+    description: "Active plans and member eligibility.",
+    appliesToWorkspaceKinds: ["organization"],
+    requiresCapability: "coverage.read",
+    requiresFeature: "coverage",
+    order: 10
+  }),
+
   // Experience profiles
+  experienceSchema.parse({
+    id: "diaspora-sponsor-profile",
+    kind: "profile",
+    label: "Supportive, from afar",
+    description:
+      "A warm, reassuring posture for someone coordinating care across a distance and a time zone.",
+    appliesToWorkspaceKinds: ["personal"],
+    tone: "warm",
+    density: "comfortable",
+    motion: "reduced"
+  }),
+  experienceSchema.parse({
+    id: "administrative-focus",
+    kind: "profile",
+    label: "Administrative",
+    description: "A dense, low-distraction posture for programme and coverage administration.",
+    appliesToWorkspaceKinds: ["organization"],
+    tone: "neutral",
+    density: "compact",
+    motion: "reduced"
+  }),
   experienceSchema.parse({
     id: "warm-care-personal",
     kind: "profile",

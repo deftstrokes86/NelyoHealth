@@ -44,6 +44,21 @@ export {
 } from "./appointments.js";
 export type { SessionContextDto } from "./session.js";
 export {
+  createSurfaceDto,
+  createToolContractDto,
+  type SurfaceDto,
+  type SurfaceNavigationItemDto,
+  type SurfaceWidgetDto,
+  type SurfaceDashboardDto,
+  type SurfaceExperienceDto,
+  type SurfaceExperienceStepDto,
+  type SurfaceSearchScopeDto,
+  type SurfaceReportDto,
+  type ToolContractDto,
+  type ToolContractEntryDto,
+  type WithheldToolDto
+} from "./surface.js";
+export {
   createPatientApiClient,
   type PatientApiClient,
   type PatientApiClientConfig,

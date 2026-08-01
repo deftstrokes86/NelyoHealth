@@ -10,6 +10,7 @@ import {
 import { findPersona } from "./persona.js";
 import { type Report, findReport } from "./report.js";
 import {
+  type CompositionSubject,
   type ResolvedComposition,
   compositionHasCapability,
   resolveComposition
@@ -50,6 +51,10 @@ export interface ComposedNavigationItem extends NavigationItem {
 export interface ComposedSurface {
   workspaceId: string;
   personaId: string;
+  /** The care-circle role this surface was narrowed by, when acting for another. */
+  careCircleRoleId: string | null;
+  /** Whether this surface was composed for the actor's own record. */
+  subjectIsSelf: boolean;
   active: boolean;
   reasonCode: ResolvedComposition["reasonCode"];
   lifecycle: WorkspaceLifecycle | null;
@@ -79,6 +84,8 @@ const emptySurface = (
 ): ComposedSurface => ({
   workspaceId,
   personaId,
+  careCircleRoleId: composition.careCircleRoleId,
+  subjectIsSelf: composition.subjectIsSelf,
   active: false,
   reasonCode: composition.reasonCode,
   lifecycle: composition.lifecycle,
@@ -109,8 +116,12 @@ function makeFilters(workspace: Workspace, composition: ResolvedComposition) {
  * Compose the full surface for a workspace + persona. The workspace-kind, capability, and
  * feature filters are applied uniformly to navigation, dashboards, and experiences.
  */
-export function composeSurface(workspaceId: string, personaId: string): ComposedSurface {
-  const composition = resolveComposition(workspaceId, personaId);
+export function composeSurface(
+  workspaceId: string,
+  personaId: string,
+  subject?: CompositionSubject
+): ComposedSurface {
+  const composition = resolveComposition(workspaceId, personaId, subject);
   if (!composition.active) return emptySurface(workspaceId, personaId, composition);
 
   // resolveComposition only reports `active` for a known workspace and persona.
@@ -217,6 +228,8 @@ export function composeSurface(workspaceId: string, personaId: string): Composed
   return {
     workspaceId,
     personaId,
+    careCircleRoleId: composition.careCircleRoleId,
+    subjectIsSelf: composition.subjectIsSelf,
     active: true,
     reasonCode: composition.reasonCode,
     lifecycle: composition.lifecycle,

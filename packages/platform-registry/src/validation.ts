@@ -1,10 +1,21 @@
 import { CAPABILITIES, capabilitySchema, findCapability, isKnownCapability } from "./capability.js";
 import { TOOLS, toolSchema, findTool, isKnownTool } from "./tool.js";
-import { WORKSPACES, workspaceSchema, type WorkspaceKind } from "./workspace.js";
-import { PERSONAS, personaSchema, isKnownPersona } from "./persona.js";
+import {
+  WORKSPACES,
+  workspaceSchema,
+  findWorkspace,
+  isKnownWorkspace,
+  type WorkspaceKind
+} from "./workspace.js";
+import { PERSONAS, personaSchema, findPersona, isKnownPersona } from "./persona.js";
 import { EVENTS, eventSchema, isKnownEvent } from "./event.js";
 import { FEATURES, featureSchema, isKnownFeature } from "./feature.js";
-import { CARE_CIRCLE_ROLES, careCircleRoleSchema, isKnownCareCircleRole } from "./care-circle.js";
+import {
+  CARE_CIRCLE_ROLES,
+  careCircleRelationshipType,
+  careCircleRoleSchema,
+  isKnownCareCircleRole
+} from "./care-circle.js";
 import {
   NOTIFICATION_ROUTES,
   notificationRouteSchema,
@@ -191,7 +202,50 @@ export function validatePlatformRegistry(): RegistryValidationIssue[] {
   for (const role of CARE_CIRCLE_ROLES) {
     cap("care-circle-role", role.id, role.capabilities);
     evt("care-circle-role", role.id, [...role.events.produces, ...role.events.consumes]);
+    // M8.3e: the composition mapping the runtime resolves against must be coherent, and
+    // must be declared as a PAIR — a persona with no workspace composes nowhere.
+    const { composesAsPersona, composesInWorkspace } = role;
+    if (composesAsPersona !== null && !isKnownPersona(composesAsPersona)) {
+      add("care-circle-role", role.id, `unknown composesAsPersona '${composesAsPersona}'`);
+    }
+    if (composesInWorkspace !== null && !isKnownWorkspace(composesInWorkspace)) {
+      add("care-circle-role", role.id, `unknown composesInWorkspace '${composesInWorkspace}'`);
+    }
+    if ((composesAsPersona === null) !== (composesInWorkspace === null)) {
+      add(
+        "care-circle-role",
+        role.id,
+        "composesAsPersona and composesInWorkspace must be declared together"
+      );
+    }
+    const persona = composesAsPersona ? findPersona(composesAsPersona) : undefined;
+    const workspace = composesInWorkspace ? findWorkspace(composesInWorkspace) : undefined;
+    if (persona && workspace) {
+      if (!workspace.personas.includes(persona.id)) {
+        add(
+          "care-circle-role",
+          role.id,
+          `persona '${persona.id}' is not declared on workspace '${workspace.id}'`
+        );
+      }
+      // A role narrows composition by intersection, so a role sharing no capability with
+      // the persona it composes as would always compose an empty surface.
+      const shared = role.capabilities.filter((id) => persona.capabilities.includes(id));
+      if (role.capabilities.length > 0 && shared.length === 0) {
+        add(
+          "care-circle-role",
+          role.id,
+          `shares no capability with persona '${persona.id}' — it could only ever compose an empty surface`
+        );
+      }
+    }
   }
+  // The persisted relationship type each role maps to must be unique, or the runtime
+  // lookup from a relationship to a role would be ambiguous.
+  assertUnique(
+    "care-circle-role-relationship-type",
+    CARE_CIRCLE_ROLES.map((role) => careCircleRelationshipType(role))
+  );
 
   // 4. Referential integrity — events, workflows, notifications.
   for (const workflow of WORKFLOWS) {

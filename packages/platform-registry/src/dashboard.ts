@@ -231,6 +231,165 @@ export const DASHBOARDS: readonly Dashboard[] = [
         order: 30
       }
     ]
+  }),
+  // --- Diaspora + organization-type dashboards (M8.3e) ---
+  dashboardSchema.parse({
+    id: "sponsor-home",
+    label: "Care I support",
+    description: "The diaspora sponsor's home dashboard — funding and coordination only.",
+    appliesToWorkspaceKinds: ["personal"],
+    layout: "grid",
+    widgets: [
+      {
+        id: "sponsored-people-widget",
+        kind: "list",
+        title: "Who I support",
+        description: "Family members this sponsor funds care for.",
+        requiresCapability: "care-circle.read",
+        requiresFeature: "care-circle",
+        tool: "view-care-circle",
+        size: "medium",
+        order: 10
+      },
+      {
+        id: "funding-status",
+        kind: "metric",
+        title: "Funding",
+        description: "Balance and recent top-ups for sponsored care.",
+        requiresCapability: "sponsorship.read",
+        requiresFeature: "diaspora-sponsorship",
+        size: "medium",
+        order: 20
+      },
+      {
+        id: "sponsored-appointments",
+        kind: "list",
+        title: "Upcoming care",
+        description: "Appointments for the people this sponsor supports.",
+        requiresCapability: "appointment.read",
+        requiresFeature: "appointments",
+        tool: "list-appointments",
+        size: "large",
+        order: 30
+      },
+      {
+        id: "sponsor-message-panel",
+        kind: "action-panel",
+        title: "Stay in touch",
+        description: "Message the care circle at home.",
+        requiresCapability: "message.send",
+        requiresFeature: "messaging",
+        tool: "send-message",
+        size: "small",
+        order: 40
+      }
+    ]
+  }),
+  dashboardSchema.parse({
+    id: "pharmacy-home",
+    label: "Dispensing",
+    description: "The pharmacy working dashboard.",
+    appliesToWorkspaceKinds: ["organization"],
+    layout: "columns",
+    widgets: [
+      {
+        id: "dispensing-queue",
+        kind: "list",
+        title: "Dispensing queue",
+        description: "Prescriptions awaiting dispensing.",
+        requiresCapability: "prescription.dispense",
+        requiresFeature: "pharmacy",
+        size: "large",
+        order: 10
+      },
+      {
+        id: "pharmacy-messages",
+        kind: "list",
+        title: "Messages",
+        description: "Unread secure messages.",
+        requiresCapability: "message.read",
+        requiresFeature: "messaging",
+        size: "small",
+        order: 20
+      }
+    ]
+  }),
+  dashboardSchema.parse({
+    id: "laboratory-home",
+    label: "Laboratory",
+    description: "The laboratory working dashboard.",
+    appliesToWorkspaceKinds: ["organization"],
+    layout: "columns",
+    widgets: [
+      {
+        id: "lab-worklist-widget",
+        kind: "list",
+        title: "Worklist",
+        description: "Specimens and results awaiting recording.",
+        requiresCapability: "laboratory.record-result",
+        requiresFeature: "labs",
+        size: "large",
+        order: 10
+      },
+      {
+        id: "lab-recent-results",
+        kind: "list",
+        title: "Recent results",
+        description: "Recently recorded laboratory results.",
+        requiresCapability: "laboratory.read",
+        requiresFeature: "labs",
+        size: "medium",
+        order: 20
+      }
+    ]
+  }),
+  dashboardSchema.parse({
+    id: "programme-home",
+    label: "Programme overview",
+    description: "The sponsored health programme dashboard (employer, NGO, government).",
+    appliesToWorkspaceKinds: ["organization"],
+    layout: "grid",
+    widgets: [
+      {
+        id: "programme-overview",
+        kind: "metric",
+        title: "Programme at a glance",
+        description: "Enrolment and utilisation headlines.",
+        requiresCapability: "program.administer",
+        requiresFeature: "programmes",
+        size: "medium",
+        order: 10
+      },
+      {
+        id: "programme-population",
+        kind: "chart",
+        title: "Population health",
+        description: "De-identified population health reporting.",
+        requiresCapability: "population-health.read",
+        requiresFeature: "programmes",
+        size: "large",
+        order: 20
+      }
+    ]
+  }),
+  dashboardSchema.parse({
+    id: "coverage-home",
+    label: "Coverage",
+    description: "The insurer's coverage and eligibility dashboard.",
+    appliesToWorkspaceKinds: ["organization"],
+    layout: "grid",
+    widgets: [
+      {
+        id: "coverage-overview",
+        kind: "metric",
+        title: "Coverage at a glance",
+        description: "Active plans and member eligibility.",
+        requiresCapability: "coverage.read",
+        requiresFeature: "coverage",
+        size: "medium",
+        order: 10
+      }
+    ]
   })
 ] as const;
 

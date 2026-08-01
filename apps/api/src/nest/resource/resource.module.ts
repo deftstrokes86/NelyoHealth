@@ -8,6 +8,7 @@ import { createPgAppointmentServiceDeps } from "../../appointment-service.js";
 import { AppointmentsController } from "./appointments.controller.js";
 import { CareCircleController } from "./care-circle.controller.js";
 import { NotificationsController } from "./notifications.controller.js";
+import { SurfaceController } from "./surface.controller.js";
 import { TimelineController } from "./timeline.controller.js";
 import {
   APPOINTMENT_SERVICE_DEPS,
@@ -29,7 +30,8 @@ import {
     TimelineController,
     CareCircleController,
     NotificationsController,
-    AppointmentsController
+    AppointmentsController,
+    SurfaceController
   ],
   providers: [
     { provide: RESOURCE_DATABASE_POOL, useFactory: (): Pool => createDatabasePool() },

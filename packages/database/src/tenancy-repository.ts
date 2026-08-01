@@ -1,4 +1,4 @@
-import type { ClientBase } from "pg";
+﻿import type { ClientBase } from "pg";
 import type {
   Facility,
   Invitation,
@@ -36,6 +36,7 @@ interface OrganizationRow {
   legal_name: string;
   display_name: string;
   status: Organization["status"];
+  organization_type: Organization["organizationType"];
 }
 
 interface FacilityRow {
@@ -91,7 +92,8 @@ function mapOrganization(row: OrganizationRow): Organization {
     id: row.id,
     legalName: row.legal_name,
     displayName: row.display_name,
-    status: row.status
+    status: row.status,
+    organizationType: row.organization_type
   };
 }
 
@@ -141,13 +143,18 @@ function mapInvitation(row: InvitationRow): Invitation {
 
 export async function createOrganization(
   client: ClientBase,
-  input: { legalName: string; displayName: string; status?: Organization["status"] }
+  input: {
+    legalName: string;
+    displayName: string;
+    status?: Organization["status"];
+    organizationType?: Organization["organizationType"];
+  }
 ): Promise<Organization> {
   const result = await client.query<OrganizationRow>(
-    `INSERT INTO nelyo_tenancy.organization (legal_name, display_name, status)
-     VALUES ($1, $2, COALESCE($3, 'active'))
-     RETURNING id, legal_name, display_name, status`,
-    [input.legalName, input.displayName, input.status ?? null]
+    `INSERT INTO nelyo_tenancy.organization (legal_name, display_name, status, organization_type)
+     VALUES ($1, $2, COALESCE($3, 'active'), COALESCE($4, 'hospital'))
+     RETURNING id, legal_name, display_name, status, organization_type`,
+    [input.legalName, input.displayName, input.status ?? null, input.organizationType ?? null]
   );
   return mapOrganization(result.rows[0]);
 }
@@ -157,7 +164,7 @@ export async function getOrganizationById(
   organizationId: string
 ): Promise<Organization | null> {
   const result = await client.query<OrganizationRow>(
-    `SELECT id, legal_name, display_name, status
+    `SELECT id, legal_name, display_name, status, organization_type
      FROM nelyo_tenancy.organization WHERE id = $1`,
     [organizationId]
   );
@@ -173,7 +180,7 @@ export async function updateOrganizationStatus(
     `UPDATE nelyo_tenancy.organization
      SET status = $2, updated_at = NOW()
      WHERE id = $1
-     RETURNING id, legal_name, display_name, status`,
+     RETURNING id, legal_name, display_name, status, organization_type`,
     [organizationId, status]
   );
   return result.rows[0] ? mapOrganization(result.rows[0]) : null;

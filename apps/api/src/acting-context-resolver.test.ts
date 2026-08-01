@@ -46,7 +46,8 @@ const org: Organization = {
   id: "org-1",
   legalName: "Clinic Group Ltd",
   displayName: "Clinic Group",
-  status: "active"
+  status: "active",
+  organizationType: "hospital"
 };
 
 function activeSession(overrides: Partial<Session> = {}): Session {
@@ -297,7 +298,8 @@ describe("resolveTenancyAccess — resolver feeding the tenancy decision", () =>
       id: "org-2",
       legalName: "Second Ltd",
       displayName: "Second",
-      status: "active"
+      status: "active",
+      organizationType: "pharmacy"
     });
     state.memberships.push({
       id: "mem-2",

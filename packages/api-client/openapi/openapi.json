@@ -434,6 +434,65 @@
           "appointments"
         ]
       }
+    },
+    "/api/me/surface": {
+      "get": {
+        "operationId": "SurfaceController_mySurface",
+        "parameters": [
+          {
+            "name": "subject",
+            "required": false,
+            "in": "query",
+            "description": "Person ref to compose for; defaults to the caller",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Composed surface envelope"
+          }
+        },
+        "summary": "Compose the caller's runtime surface for a subject",
+        "tags": [
+          "surface"
+        ]
+      }
+    },
+    "/api/me/tools": {
+      "get": {
+        "operationId": "SurfaceController_myTools",
+        "parameters": [
+          {
+            "name": "consumer",
+            "required": false,
+            "in": "query",
+            "description": "ui | mobile | ai | automation | api | offline (default: ui)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "subject",
+            "required": false,
+            "in": "query",
+            "description": "Person ref to resolve for; defaults to the caller",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tool contract envelope"
+          }
+        },
+        "summary": "Resolve the caller's Tool Registry contract for a consumer",
+        "tags": [
+          "surface"
+        ]
+      }
     }
   },
   "info": {

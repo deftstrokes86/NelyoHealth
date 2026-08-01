@@ -201,6 +201,94 @@ export const SEARCH_SCOPES: readonly SearchScope[] = [
     ],
     order: 200,
     status: "active"
+  }),
+
+  // --- Diaspora + organization-type scopes (M8.3e) ---
+  searchScopeSchema.parse({
+    id: "sponsored-care",
+    label: "Sponsored care",
+    description: "Search appointments for the people a sponsor supports.",
+    resource: "appointment",
+    appliesToWorkspaceKinds: ["personal"],
+    requiresCapability: "appointment.read",
+    requiresFeature: "appointments",
+    reach: "care-circle",
+    resultClassification: "INTERNAL",
+    fields: [
+      { name: "sponsoredPerson", match: "text" },
+      { name: "scheduledAt", match: "exact", ranked: false }
+    ],
+    tool: "list-appointments",
+    order: 40,
+    status: "active"
+  }),
+  searchScopeSchema.parse({
+    id: "pharmacy-prescriptions",
+    label: "Prescriptions",
+    description: "Search prescriptions presented to this pharmacy.",
+    resource: "prescription",
+    appliesToWorkspaceKinds: ["organization"],
+    requiresCapability: "prescription.read",
+    requiresFeature: "pharmacy",
+    reach: "organization",
+    resultClassification: "PROTECTED-CLINICAL-DATA",
+    fields: [
+      { name: "prescriptionReference", match: "exact", ranked: false },
+      { name: "medicationName", match: "text" }
+    ],
+    order: 140,
+    status: "active"
+  }),
+  searchScopeSchema.parse({
+    id: "lab-orders",
+    label: "Laboratory orders",
+    description: "Search laboratory orders and results held by this laboratory.",
+    resource: "laboratory",
+    appliesToWorkspaceKinds: ["organization"],
+    requiresCapability: "laboratory.read",
+    requiresFeature: "labs",
+    reach: "organization",
+    resultClassification: "PROTECTED-CLINICAL-DATA",
+    fields: [
+      { name: "orderReference", match: "exact", ranked: false },
+      { name: "testName", match: "text" }
+    ],
+    order: 150,
+    status: "active"
+  }),
+  searchScopeSchema.parse({
+    id: "programme-members-search",
+    label: "Programme members",
+    description: "Search people enrolled in this sponsored health programme.",
+    resource: "program",
+    appliesToWorkspaceKinds: ["organization"],
+    requiresCapability: "program.administer",
+    requiresFeature: "programmes",
+    reach: "organization",
+    resultClassification: "CONFIDENTIAL",
+    fields: [
+      { name: "memberReference", match: "exact", ranked: false },
+      { name: "enrolmentStatus", match: "exact", ranked: false }
+    ],
+    order: 160,
+    status: "active"
+  }),
+  searchScopeSchema.parse({
+    id: "coverage-search",
+    label: "Coverage",
+    description: "Search plan coverage and member eligibility.",
+    resource: "coverage",
+    appliesToWorkspaceKinds: ["organization"],
+    requiresCapability: "coverage.read",
+    requiresFeature: "coverage",
+    reach: "organization",
+    resultClassification: "CONFIDENTIAL",
+    fields: [
+      { name: "planName", match: "text" },
+      { name: "memberReference", match: "exact", ranked: false }
+    ],
+    order: 170,
+    status: "active"
   })
 ] as const;
 

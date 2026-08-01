@@ -1,4 +1,4 @@
-import { z } from "zod";
+﻿import { z } from "zod";
 
 /**
  * Care Circle Registry (roadmap M8.3b, refinement 6) — Care Circle as a first-class
@@ -43,10 +43,24 @@ export const careCircleCapacitySchema = z.object({
 });
 
 export const careCircleRoleSchema = z.object({
-  /** The relationship type, e.g. `guardian`, `caregiver-delegation`, `diaspora-sponsor`. */
+  /** The registry role id, e.g. `guardian`, `caregiver-delegation`, `diaspora-sponsor`. */
   id: z.string().regex(/^[a-z][a-z0-9-]*$/),
   label: z.string().min(1),
   description: z.string().min(1),
+  /**
+   * The PERSISTED relationship type this role corresponds to in the relationship graph.
+   * Defaults to the role id; `diaspora-sponsor` maps to the stored type `sponsor`. This
+   * is what lets the runtime map a relationship to a role by lookup, not by a hardcoded
+   * table (M8.3e).
+   */
+  relationshipType: z.string().min(1).optional(),
+  /**
+   * The Persona Registry id an actor COMPOSES AS when acting for a subject through this
+   * role, and the Workspace Registry id they compose in. Null means the role is declared
+   * but composes nothing — the runtime then offers no surface for that subject.
+   */
+  composesAsPersona: z.string().nullable().default(null),
+  composesInWorkspace: z.string().nullable().default(null),
   /** Declared capacity (composition). `null` = declared but not authz-mapped (PDP default-denies). */
   capacity: careCircleCapacitySchema.nullable().default(null),
   /** Capability refs this role collaborates with (composition). */
@@ -69,6 +83,8 @@ export const CARE_CIRCLE_ROLES: readonly CareCircleRole[] = [
     id: "guardian",
     label: "Guardian",
     description: "A guardian acting for a dependent — full care collaboration.",
+    composesAsPersona: "guardian",
+    composesInWorkspace: "personal",
     // Mirrors RELATIONSHIP_CAPACITY (guardian, priority 0) — declaration only.
     capacity: { actorRole: "guardian", actorType: "guardian", priority: 0 },
     capabilities: [
@@ -94,6 +110,8 @@ export const CARE_CIRCLE_ROLES: readonly CareCircleRole[] = [
     id: "caregiver-delegation",
     label: "Caregiver",
     description: "A delegated caregiver — day-to-day care coordination.",
+    composesAsPersona: "caregiver",
+    composesInWorkspace: "personal",
     // Mirrors RELATIONSHIP_CAPACITY (caregiver, priority 1) — declaration only.
     capacity: { actorRole: "caregiver", actorType: "caregiver", priority: 1 },
     capabilities: ["timeline.read", "care-circle.read", "appointment.book", "message.send"],
@@ -126,19 +144,35 @@ export const CARE_CIRCLE_ROLES: readonly CareCircleRole[] = [
   careCircleRoleSchema.parse({
     id: "diaspora-sponsor",
     label: "Diaspora sponsor",
+    relationshipType: "sponsor",
+    composesAsPersona: "diaspora-sponsor",
+    composesInWorkspace: "diaspora-household",
     description:
       "A relative abroad sponsoring care — financial sponsorship + emergency escalation.",
+    // capacity stays null BY DESIGN: the PDP separates a sponsor's payment relationship
+    // from clinical access (`sponsorPaymentOnly` / `sponsor-payment-no-clinical-access`).
+    // The capabilities below are the NON-CLINICAL set a sponsor composes when acting for
+    // a sponsored person — funding and coordination, never a clinical record.
     capacity: null,
-    capabilities: ["care-circle.read"],
+    capabilities: [
+      "care-circle.read",
+      "appointment.read",
+      "notification.read",
+      "message.read",
+      "message.send",
+      "sponsorship.read",
+      "sponsorship.fund"
+    ],
     collaboration: {
       responsibilities: ["sponsorship"],
       communicationRules: "summary",
-      sharedResources: ["appointments"],
+      sharedResources: ["appointments", "messaging"],
       financialSponsorship: true,
       emergencyEscalation: true,
       aiCollaboration: true
     },
-    status: "planned"
+    events: { produces: ["CareSponsorshipFunded"] },
+    status: "active"
   }),
   careCircleRoleSchema.parse({
     id: "household",
@@ -171,4 +205,31 @@ export function isKnownCareCircleRole(id: string): boolean {
 
 export function findCareCircleRole(id: string): CareCircleRole | undefined {
   return CARE_CIRCLE_ROLES.find((entry) => entry.id === id);
+}
+
+/** The persisted relationship type a role corresponds to (defaults to the role id). */
+export function careCircleRelationshipType(role: CareCircleRole): string {
+  return role.relationshipType ?? role.id;
+}
+
+/**
+ * Find the role a PERSISTED relationship type composes as (M8.3e). This is the lookup
+ * that replaces a hardcoded relationship→persona table in the runtime: the registry
+ * declares the correspondence, the runtime reads it.
+ */
+export function findCareCircleRoleByRelationshipType(
+  relationshipType: string
+): CareCircleRole | undefined {
+  return CARE_CIRCLE_ROLES.find((entry) => careCircleRelationshipType(entry) === relationshipType);
+}
+
+/**
+ * Composition precedence when an actor holds several relationships to the same subject.
+ * Declaration order in `CARE_CIRCLE_ROLES` IS the precedence — guardian outranks
+ * caregiver outranks sponsor — so reordering the catalog reorders precedence, with no
+ * code change. Mirrors (but never substitutes for) the PDP's own capacity ordering.
+ */
+export function careCircleCompositionPriority(roleId: string): number {
+  const index = CARE_CIRCLE_ROLES.findIndex((entry) => entry.id === roleId);
+  return index === -1 ? Number.MAX_SAFE_INTEGER : index;
 }
