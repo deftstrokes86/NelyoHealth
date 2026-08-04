@@ -148,6 +148,16 @@ For each: current implementation · current documentation · recommended canonic
   `composeSurface`** (M8.3c). Resource and Capability registries remain **removed** as decided.
   Cross-registry referential integrity is enforced by the `gates:registry` CI gate. Remaining under
   AM-4: nothing — M8.3d (Search / Report) is an extension, not a freeze condition.
+- **ACTIVATION SCHEDULE (M8.3g).** Every registry that does **not** yet exist — planned, deferred, or
+  permanently rejected — is governed by
+  [`docs/architecture/future-platform-registries.md`](./future-platform-registries.md), the
+  **canonical activation schedule for all future registries**. It is authoritative for registry
+  sequencing: each entry records its purpose, why it does not exist today, prerequisites, activating
+  milestone, dependencies, an `ACTIVATE WHEN` trigger, expected runtime/API/frontend consumers, and
+  acceptance criteria before and after activation. Fifteen registries are recorded as **permanently
+  rejected** there — including Resource and persisted Capability (removed by AM-4 below), Analytics,
+  Webhook, and the AI Tool Policy and Mobile Capability registries. **No registry may be proposed,
+  built, or activated without first clearing that document's checklist.**
 
 ### AM-5 — Platform Runtime / compute
 - **Implementation.** NestJS modular monolith + a persistent worker running the outbox dispatcher and queue consumer.
@@ -278,6 +288,7 @@ The modular monolith (ADR-0005) with clean bounded contexts, an outbox-driven ev
 - **Kernel Blueprint.** Rewrite to the **thin kernel**: remove Resource/Capability registries; state derived Workspace/Persona/Care-Circle; align PDP naming to the implemented dimensions; make the outbox the mandatory single path; add the Projection layer; correct the runtime to containers.
 - **ADRs.** Ratify 0005–0011. Add: **Runtime & compute (containers)**; **Mandatory outbox event/audit emission**; **Derived context model (Workspace/Persona/Care-Circle)**; **Central Projection layer**; **Video transport (decide 0009)**; **Notification orchestration**.
 - **Architecture docs.** Update `source-of-truth-matrix.md` and `domain-boundaries.md` to name the derived read models (Care Circle, Timeline, Activity Stream) and the Projection layer; add a **runtime/deployment** architecture doc.
+- **Registry activation schedule.** [`future-platform-registries.md`](./future-platform-registries.md) is the canonical schedule for every registry that does not yet exist (M8.3g). Consult it before any milestone that proposes, builds, or activates a registry; it also records the permanently rejected ones so they are never recreated.
 - **README / developer docs.** One canonical model: the request pipeline, the transactional-command convention, the registry pattern, and the "derive-don't-persist" rule.
 
 ---
@@ -317,6 +328,7 @@ The modular monolith (ADR-0005) with clean bounded contexts, an outbox-driven ev
 | Notification Architecture | ❌ | Build orchestration module. |
 | Navigation / Dashboard Registries | ✅ | Delivered as the Platform Registry Layer (M8.3a–c, ADR-0016) with a `gates:registry` integrity gate. |
 | Resource / Capability Registries | ✅ | Frozen by **removal**. |
+| Future registries (not yet built) | ✅ | Frozen by **schedule** — [`future-platform-registries.md`](./future-platform-registries.md) (M8.3g) is the canonical activation schedule; 15 rejected, each with an `ACTIVATE WHEN` trigger for the rest. |
 | Platform Services (DB/queue/storage/observability) | ✅ | Production vendor hardening tracked separately. |
 | Platform Runtime / Deployment | ❌ | Retarget to containers (AM-5). |
 | API Architecture | ✅ | Formalize Public/Internal boundary. |
